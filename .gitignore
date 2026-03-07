@@ -1,6 +1,6 @@
 # Data and models (large files - NEVER commit)
 data/
-models/
+/models/
 *.pth
 *.pt
 *.onnx
