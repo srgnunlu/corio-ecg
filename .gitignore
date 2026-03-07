@@ -32,6 +32,9 @@ env/
 .ipynb_checkpoints/
 *.ipynb_metadata/
 
+# Claude Code local settings
+.claude/
+
 # OS
 .DS_Store
 Thumbs.db
