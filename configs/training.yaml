@@ -1,0 +1,48 @@
+# Corio ECG - Training Configuration
+
+# Base model
+model:
+  name: "ecgfounder"
+  checkpoint: "models/ecgfounder/base/12_lead_ECGFounder.pth"
+  num_classes: 150
+  input_length: 5000  # 10 seconds x 500 Hz
+  num_leads: 12
+
+# Data
+data:
+  dataset: "ptbxl"  # ptbxl, mimic-iv-ecg, or combined
+  data_dir: "data/raw/ptb-xl"
+  sample_rate: 500
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+# Training hyperparameters
+training:
+  batch_size: 64
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  epochs: 50
+  early_stopping_patience: 10
+  scheduler: "cosine"  # cosine, step, plateau
+  optimizer: "adamw"
+
+# Fine-tuning strategy
+fine_tuning:
+  freeze_backbone: false  # true for head-only training
+  learning_rate_backbone: 0.00001  # lower LR for pretrained layers
+  learning_rate_head: 0.0001  # higher LR for new layers
+
+# Digitization noise augmentation (Phase 2)
+augmentation:
+  noise_injection: false
+  noise_std: 0.05
+  baseline_wander: false
+  signal_dropout: 0.0
+
+# Output
+output:
+  save_dir: "models/ecgfounder/finetuned"
+  log_dir: "results/metrics"
+  save_best_only: true
+  metric: "auroc_macro"  # metric to monitor for best model

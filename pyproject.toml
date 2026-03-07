@@ -1,0 +1,81 @@
+[project]
+name = "corio-ecg"
+version = "0.1.0"
+description = "AI-powered paper ECG photograph interpretation pipeline"
+requires-python = ">=3.11"
+license = { text = "TBD" }
+
+dependencies = [
+    # Core ML
+    "torch>=2.4.0",
+    "torchvision>=0.19.0",
+
+    # ECG processing
+    "wfdb>=4.2.0",
+
+    # Data science
+    "numpy>=1.26.4",
+    "pandas>=2.2.3",
+    "scipy>=1.10.1",
+    "scikit-learn>=1.6.1",
+
+    # Image processing
+    "opencv-python>=4.9.0",
+    "Pillow>=10.3.0",
+
+    # Visualization
+    "matplotlib>=3.10.1",
+
+    # Utilities
+    "tqdm>=4.66.5",
+    "h5py>=3.14.0",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+digitiser = [
+    # ECG-Digitiser specific dependencies
+    "tensorflow>=2.14.0",
+    "scikit-image>=0.23.2",
+    "imgaug>=0.4.0",
+    "imutils>=0.5.4",
+    "beautifulsoup4>=4.12.2",
+    "librosa>=0.10.2",
+]
+
+web = [
+    # Test UI
+    "gradio>=4.0.0",
+]
+
+notebooks = [
+    "jupyter>=1.0.0",
+    "ipywidgets>=8.0.0",
+]
+
+dev = [
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+    "pytest>=8.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true

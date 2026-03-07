@@ -1,0 +1,60 @@
+# Data and models (large files - NEVER commit)
+data/
+models/
+*.pth
+*.pt
+*.onnx
+*.h5
+*.hdf5
+*.dat
+*.hea
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+.env.local
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_metadata/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Results (optional - may want to commit metrics but not large files)
+results/figures/*.png
+results/figures/*.pdf
+results/reports/*.txt
+results/reports/*.json
+
+# Logs
+*.log
+logs/
+wandb/
+mlruns/
+
+# Temporary
+tmp/
+temp/
+*.tmp

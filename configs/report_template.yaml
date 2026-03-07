@@ -1,0 +1,133 @@
+# Corio ECG - Structured Report Template
+
+# Report fields and their possible values
+# Used by LLM report engine to generate structured output
+
+report_fields:
+  rhythm:
+    label_tr: "Ritim"
+    label_en: "Rhythm"
+    options:
+      - "Sinus ritmi"
+      - "Sinus bradikardisi"
+      - "Sinus tasikardisi"
+      - "Atriyal fibrilasyon"
+      - "Atriyal flutter"
+      - "Supraventrikuler tasikardi"
+      - "Ventrikuler tasikardi"
+      - "Ventrikuler fibrilasyon"
+      - "Nodal/junctional ritim"
+      - "Idioventrikuler ritim"
+      - "Diger"
+
+  rate:
+    label_tr: "Hiz"
+    label_en: "Rate"
+    unit: "bpm"
+
+  axis:
+    label_tr: "Aks"
+    label_en: "Axis"
+    options:
+      - "Normal"
+      - "Sol aks deviasyonu"
+      - "Sag aks deviasyonu"
+      - "Ekstream aks deviasyonu"
+
+  pr_interval:
+    label_tr: "PR Intervali"
+    label_en: "PR Interval"
+    options:
+      - "Normal"
+      - "Uzamis (1. derece AV blok)"
+      - "Kisa (pre-excitation)"
+      - "Degisken"
+
+  qrs_duration:
+    label_tr: "QRS Suresi"
+    label_en: "QRS Duration"
+    options:
+      - "Normal (<120 ms)"
+      - "Genis (>=120 ms)"
+
+  qt_qtc:
+    label_tr: "QT/QTc"
+    label_en: "QT/QTc"
+    options:
+      - "Normal"
+      - "Uzamis"
+      - "Kisa"
+
+  st_segment:
+    label_tr: "ST Segmenti"
+    label_en: "ST Segment"
+    options:
+      - "Normal"
+      - "Elevasyon"
+      - "Depresyon"
+    derivation_specific: true
+
+  t_wave:
+    label_tr: "T Dalgasi"
+    label_en: "T Wave"
+    options:
+      - "Normal"
+      - "Inversiyon"
+      - "Sivri (peaked)"
+      - "Duzlesme"
+    derivation_specific: true
+
+  conduction:
+    label_tr: "Iletim Bozuklugu"
+    label_en: "Conduction Abnormality"
+    options:
+      - "Yok"
+      - "Sag dal blogu (RBBB)"
+      - "Sol dal blogu (LBBB)"
+      - "Sol anterior fasikuler blok"
+      - "Sol posterior fasikuler blok"
+      - "Bifasikuler blok"
+      - "2. derece AV blok Tip I (Wenckebach)"
+      - "2. derece AV blok Tip II"
+      - "3. derece (tam) AV blok"
+
+  hypertrophy:
+    label_tr: "Hipertrofi"
+    label_en: "Hypertrophy"
+    options:
+      - "Yok"
+      - "Sol ventrikul hipertrofisi (LVH)"
+      - "Sag ventrikul hipertrofisi (RVH)"
+      - "Biatriyal genisleme"
+      - "Sol atriyal genisleme"
+      - "Sag atriyal genisleme"
+
+  special_findings:
+    label_tr: "Ozel Bulgular"
+    label_en: "Special Findings"
+    multi_select: true
+    options:
+      - "Yok"
+      - "WPW (Wolff-Parkinson-White)"
+      - "Brugada paterni"
+      - "Perikardit"
+      - "Hiperkalemi bulgulari"
+      - "Hipokalemi bulgulari"
+      - "Dijital etkisi"
+      - "Pacemaker ritmi"
+      - "Patolojik Q dalgalari"
+      - "Erken repolarizasyon"
+      - "Dusuk voltaj"
+
+  assessment:
+    label_tr: "Genel Degerlendirme"
+    label_en: "Overall Assessment"
+    free_text: true
+
+# ECG lead groups for localization
+lead_groups:
+  anterior: ["V1", "V2", "V3", "V4"]
+  lateral: ["I", "aVL", "V5", "V6"]
+  inferior: ["II", "III", "aVF"]
+  right_ventricular: ["V1", "V3R", "V4R"]
+  posterior: ["V7", "V8", "V9"]
