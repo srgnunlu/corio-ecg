@@ -32,14 +32,18 @@ _NUMPY_COMPAT_LAUNCHER = (
     "np.complex = np.complex128; "
     "np.object = np.object_; "
     "np.str = np.str_; "
-    # Mock the entire HandwrittenText package so its heavy imports
-    # (tensorflow, seaborn, etc.) never run. We don't use --hw_text.
+    # Mock unused ECG-Image-Kit subpackages that have heavy/unavailable deps.
+    # HandwrittenText needs tensorflow+seaborn, CreasesWrinkles needs imutils
+    # and crashes on OpenCV 4.13+. We don't use --hw_text or --wrinkles.
     "import types, sys; "
-    "ht = types.ModuleType('HandwrittenText'); "
+    "sys.modules['HandwrittenText'] = types.ModuleType('HandwrittenText'); "
     "ht_gen = types.ModuleType('HandwrittenText.generate'); "
     "ht_gen.get_handwritten = lambda *a, **k: None; "
-    "sys.modules['HandwrittenText'] = ht; "
     "sys.modules['HandwrittenText.generate'] = ht_gen; "
+    "sys.modules['CreasesWrinkles'] = types.ModuleType('CreasesWrinkles'); "
+    "cw = types.ModuleType('CreasesWrinkles.creases'); "
+    "cw.get_creased = lambda *a, **k: None; "
+    "sys.modules['CreasesWrinkles.creases'] = cw; "
     f"import runpy; runpy.run_path('{_GENERATOR_SCRIPT}', run_name='__main__')"
 )
 
