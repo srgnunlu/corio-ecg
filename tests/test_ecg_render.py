@@ -79,16 +79,20 @@ class TestBuildCliArgs:
             seed=7,
         )
         assert "--augment" in args
-        assert "--hw_text" in args
-        assert "--wrinkles" in args
+        assert "--hw_text" not in args
+        assert "--wrinkles" not in args
+        assert "--random_grid_color" in args
         assert "-noise" in args
         assert args[args.index("-noise") + 1] == "50"
         assert "-rot" in args
-        assert args[args.index("-rot") + 1] == "5"
-        assert "-nv" in args
-        assert args[args.index("-nv") + 1] == "5"
-        assert "-nh" in args
-        assert args[args.index("-nh") + 1] == "5"
+        assert args[args.index("-rot") + 1] == "8"
+        # Find the crop -c flag (not the python -c flag which comes first)
+        c_indices = [i for i, a in enumerate(args) if a == "-c"]
+        assert len(c_indices) >= 2, "Expected at least 2 '-c' flags (python -c and crop -c)"
+        crop_idx = c_indices[-1]  # last one is the crop parameter
+        assert args[crop_idx + 1] == "0.03"
+        assert "-t" in args
+        assert args[args.index("-t") + 1] == "3000"
 
     def test_seed_is_passed(self) -> None:
         args = _build_cli_args(

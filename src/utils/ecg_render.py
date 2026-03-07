@@ -32,6 +32,11 @@ _NUMPY_COMPAT_LAUNCHER = (
     "np.complex = np.complex128; "
     "np.object = np.object_; "
     "np.str = np.str_; "
+    # Mock tensorflow so HandwrittenText/generate.py import doesn't crash
+    # (we never use --hw_text, but the top-level import runs regardless)
+    "import types; "
+    "tf_mock = types.ModuleType('tensorflow'); "
+    "import sys; sys.modules['tensorflow'] = tf_mock; "
     f"import runpy; runpy.run_path('{_GENERATOR_SCRIPT}', run_name='__main__')"
 )
 
