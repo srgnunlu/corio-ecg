@@ -15,7 +15,14 @@
 set -euo pipefail
 
 # --- Configuration ---
-MAX_SAMPLES="${1:-}"  # optional: pass --max-samples N
+# Parse --max-samples N argument
+MAX_SAMPLES=""
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --max-samples) MAX_SAMPLES="$2"; shift 2 ;;
+        *) MAX_SAMPLES="$1"; shift ;;  # bare number
+    esac
+done
 PYTHON="${PYTHON:-python3}"
 VENV_DIR=".venv"
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -93,7 +100,7 @@ pip install --quiet -e ".[dev]"
 
 # Phase 2 extra deps (Open-ECG-Digitizer needs these)
 echo "[INSTALL] Phase 2 extras..."
-pip install --quiet yacs torch-tps scikit-image kaggle
+pip install --quiet yacs torch-tps scikit-image kaggle qrcode imgaug
 
 echo "[OK] All Python packages installed"
 
