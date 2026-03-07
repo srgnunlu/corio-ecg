@@ -1,0 +1,35 @@
+{
+  "n_records": 5,
+  "threshold": 0.5,
+  "scenarios": {
+    "baseline": {
+      "description": "Clean PTB-XL WFDB signals",
+      "n_successful": 5,
+      "mean_probability": 0.2488316729586028
+    },
+    "clean_roundtrip": {
+      "description": "Synthetic image (clean difficulty) -> digitized",
+      "n_successful": 3,
+      "mean_cosine_similarity_vs_baseline": 0.9297,
+      "mean_abs_prob_diff_vs_baseline": 0.103828,
+      "agreement_rate_vs_baseline": 0.86,
+      "mean_pearson_correlation": NaN
+    },
+    "moderate_roundtrip": {
+      "description": "Synthetic image (moderate difficulty) -> digitized",
+      "n_successful": 4,
+      "mean_cosine_similarity_vs_baseline": 0.9365,
+      "mean_abs_prob_diff_vs_baseline": 0.097797,
+      "agreement_rate_vs_baseline": 0.8733,
+      "mean_pearson_correlation": NaN
+    },
+    "hard_roundtrip": {
+      "description": "Synthetic image (hard difficulty) -> digitized",
+      "n_successful": 5,
+      "mean_cosine_similarity_vs_baseline": 0.9477,
+      "mean_abs_prob_diff_vs_baseline": 0.088586,
+      "agreement_rate_vs_baseline": 0.896,
+      "mean_pearson_correlation": NaN
+    }
+  }
+}

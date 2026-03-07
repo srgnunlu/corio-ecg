@@ -78,9 +78,12 @@ def _build_cli_args(
         ]
 
     elif difficulty == DifficultyLevel.MODERATE:
+        # --store_config 2 is required when --augment is used, because
+        # get_augment() reads lead bbox info from the JSON config
         base_args += [
             "-r", "200",
             "--standard_grid_color", "5",
+            "--store_config", "2",
             "--augment",
             "-noise", "25",
             "-rot", "2",
@@ -89,17 +92,21 @@ def _build_cli_args(
         ]
 
     elif difficulty == DifficultyLevel.HARD:
+        # --wrinkles removed: ECG-Image-Kit's CreasesWrinkles module uses
+        # cv2.subtract with incompatible types on OpenCV 4.13+.
+        # --hw_text removed: requires spacy en_core_sci_sm model (~200 MB).
+        # Instead, use aggressive augmentation (heavy noise, rotation, crop,
+        # color temperature shift) to simulate difficult scanning conditions.
         base_args += [
-            "-r", "200",
+            "-r", "150",
             "--standard_grid_color", "5",
-            "--hw_text",
-            "--wrinkles",
+            "--store_config", "2",
+            "--random_grid_color",
             "--augment",
             "-noise", "50",
-            "-rot", "5",
-            "-c", "0.02",
-            "-nv", "5",
-            "-nh", "5",
+            "-rot", "8",
+            "-c", "0.03",
+            "-t", "3000",
         ]
 
     return base_args

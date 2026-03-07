@@ -23,120 +23,79 @@ DEFAULT_THRESHOLD = 0.5
 DIFFICULTY_LEVELS = ["clean", "moderate", "hard"]
 
 
-def step_generate(data_dir: Path, image_dir: Path, max_samples: int | None) -> None:
-    """Step 1: Generate synthetic ECG images at all difficulty levels.
+def _run_script(cmd: list[str], description: str) -> None:
+    """Run a Python script as a subprocess, streaming output to stdout.
 
     Args:
-        data_dir: Path to PTB-XL dataset root.
-        image_dir: Output directory for generated images.
-        max_samples: Optional limit on number of records.
+        cmd: Command list to execute.
+        description: Human-readable name for error messages.
+
+    Raises:
+        RuntimeError: If the subprocess exits with non-zero code.
     """
-    from scripts.generate_synthetic_images import generate_images, print_summary
+    import subprocess
+    import sys
+
+    result = subprocess.run(cmd, cwd=str(Path(__file__).resolve().parents[1]))
+    if result.returncode != 0:
+        raise RuntimeError(f"{description} failed with exit code {result.returncode}")
+
+
+def step_generate(data_dir: Path, image_dir: Path, max_samples: int | None) -> None:
+    """Step 1: Generate synthetic ECG images at all difficulty levels."""
+    import sys
 
     print("\n" + "=" * 60)
     print("STEP 1: GENERATING SYNTHETIC ECG IMAGES")
     print("=" * 60)
 
-    start = time.time()
-    summary = generate_images(
-        data_dir=data_dir,
-        output_dir=image_dir,
-        difficulties=DIFFICULTY_LEVELS,
-        max_samples=max_samples,
-    )
-    print_summary(summary, time.time() - start)
+    cmd = [sys.executable, "scripts/generate_synthetic_images.py"]
+    if max_samples is not None:
+        cmd += ["--max-samples", str(max_samples)]
+    _run_script(cmd, "Image generation")
 
 
 def step_digitize(
     image_dir: Path, signal_dir: Path, max_samples: int | None
 ) -> None:
-    """Step 2: Digitize synthetic images back to numpy signals.
-
-    Args:
-        image_dir: Directory containing synthetic ECG images.
-        signal_dir: Output directory for digitized signal files.
-        max_samples: Optional limit on number of images per level.
-    """
-    from scripts.digitize_synthetic_images import (
-        collect_image_paths,
-        digitize_batch,
-        print_summary,
-    )
-    from src.pipeline.digitize import ECGDigitiser
+    """Step 2: Digitize synthetic images back to numpy signals."""
+    import sys
 
     print("\n" + "=" * 60)
     print("STEP 2: DIGITIZING SYNTHETIC IMAGES")
     print("=" * 60)
 
-    # Load model once, reuse across all difficulty levels
-    print("Loading ECGDigitiser model...")
-    digitiser = ECGDigitiser()
-
     for level in DIFFICULTY_LEVELS:
         print(f"\n--- Digitizing [{level}] ---")
-        start = time.time()
-
-        try:
-            image_paths = collect_image_paths(image_dir, level, max_samples)
-        except FileNotFoundError as error:
-            print(f"  Skipping {level}: {error}")
+        level_dir = image_dir / level
+        if not level_dir.exists():
+            print(f"  Skipping {level}: directory not found")
             continue
-
-        summary = digitize_batch(
-            digitiser=digitiser,
-            image_paths=image_paths,
-            output_dir=signal_dir,
-            level=level,
-        )
-        print_summary(summary, time.time() - start)
+        cmd = [sys.executable, "scripts/digitize_synthetic_images.py", "--level", level]
+        if max_samples is not None:
+            cmd += ["--max-samples", str(max_samples)]
+        try:
+            _run_script(cmd, f"Digitization [{level}]")
+        except RuntimeError as error:
+            print(f"  Warning: {error} — continuing with next level")
 
 
 def step_evaluate(
-    data_dir: Path,
-    signal_dir: Path,
-    model_path: Path,
-    threshold: float,
     max_samples: int | None,
-    results_path: Path,
-) -> dict:
-    """Step 3: Run round-trip evaluation comparing clean vs digitized diagnoses.
-
-    Args:
-        data_dir: Path to PTB-XL dataset root.
-        signal_dir: Path to digitized signals directory.
-        model_path: Path to ECGFounder checkpoint.
-        threshold: Probability threshold for agreement rate.
-        max_samples: Optional limit on number of records.
-        results_path: Where to save the results JSON.
-
-    Returns:
-        Results dictionary.
-    """
-    from src.training.evaluate_roundtrip import evaluate_roundtrip, _print_comparison_table
+    threshold: float,
+) -> None:
+    """Step 3: Run round-trip evaluation comparing clean vs digitized diagnoses."""
+    import sys
 
     print("\n" + "=" * 60)
     print("STEP 3: ROUND-TRIP EVALUATION")
     print("=" * 60)
 
-    start = time.time()
-    results = evaluate_roundtrip(
-        data_dir=data_dir,
-        digitized_dir=signal_dir,
-        model_path=model_path,
-        threshold=threshold,
-        max_samples=max_samples,
-    )
-    elapsed = time.time() - start
-
-    # Save results
-    results_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(results_path, "w") as f:
-        json.dump(results, f, indent=2)
-    print(f"\nResults saved to {results_path}")
-    print(f"Evaluation time: {elapsed:.1f} sec")
-
-    _print_comparison_table(results)
-    return results
+    cmd = [sys.executable, "-m", "src.training.evaluate_roundtrip"]
+    if max_samples is not None:
+        cmd += ["--max-samples", str(max_samples)]
+    cmd += ["--threshold", str(threshold)]
+    _run_script(cmd, "Round-trip evaluation")
 
 
 def step_plot(results_path: Path, plots_dir: Path) -> None:
@@ -230,14 +189,7 @@ def main() -> None:
 
     # Step 3: Run round-trip evaluation
     if not args.skip_evaluation:
-        step_evaluate(
-            data_dir=DEFAULT_DATA_DIR,
-            signal_dir=DEFAULT_SIGNAL_DIR,
-            model_path=DEFAULT_MODEL_PATH,
-            threshold=args.threshold,
-            max_samples=args.max_samples,
-            results_path=DEFAULT_RESULTS_PATH,
-        )
+        step_evaluate(max_samples=args.max_samples, threshold=args.threshold)
     else:
         print("[SKIP] Evaluation (--skip-evaluation)")
 
