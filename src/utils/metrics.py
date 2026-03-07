@@ -87,6 +87,10 @@ def compute_pearson_per_lead(
     """
     correlations: list[float] = []
     for lead_idx in range(clean.shape[0]):
+        # Skip constant leads (e.g. zero-padded) — pearsonr is undefined
+        if np.std(clean[lead_idx]) == 0.0 or np.std(digitized[lead_idx]) == 0.0:
+            correlations.append(0.0)
+            continue
         r, _ = pearsonr(clean[lead_idx], digitized[lead_idx])
         correlations.append(float(r))
     return correlations

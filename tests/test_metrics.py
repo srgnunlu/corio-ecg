@@ -65,3 +65,13 @@ class TestComputePearsonPerLead:
         assert len(correlations) == 12, (
             f"Expected 12 values, got {len(correlations)}"
         )
+
+    def test_pearson_constant_lead_returns_zero(self) -> None:
+        """Constant (zero-padded) leads should return 0.0 instead of NaN."""
+        signal_with_constant = CLEAN_SIGNAL.copy()
+        signal_with_constant[0] = 0.0  # zero out first lead
+        correlations = compute_pearson_per_lead(signal_with_constant, CLEAN_SIGNAL)
+        assert correlations[0] == 0.0, (
+            f"Expected 0.0 for constant lead, got {correlations[0]}"
+        )
+        assert not np.isnan(correlations[0]), "Should not be NaN"
