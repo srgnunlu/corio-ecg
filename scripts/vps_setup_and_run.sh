@@ -5,8 +5,11 @@
 #   ssh into VPS, then:
 #     git clone https://github.com/<your-repo>/corio-ecg.git
 #     cd corio-ecg
+#     export KAGGLE_USERNAME="your_kaggle_username"
+#     export KAGGLE_KEY="your_kaggle_api_key"
 #     bash scripts/vps_setup_and_run.sh [--max-samples N]
 #
+# Kaggle credentials: Go to kaggle.com → Settings → API → Create New Token
 # Requirements: Ubuntu 22.04+, NVIDIA GPU with CUDA, git-lfs, Python 3.11+
 
 set -euo pipefail
@@ -24,6 +27,14 @@ echo "Corio ECG — VPS Phase 2 Setup & Evaluation"
 echo "============================================================"
 echo "Project root: $PROJECT_ROOT"
 echo "Python:       $($PYTHON --version 2>&1)"
+
+# Check Kaggle credentials
+if [ -n "${KAGGLE_USERNAME:-}" ] && [ -n "${KAGGLE_KEY:-}" ]; then
+    echo "Kaggle:       $KAGGLE_USERNAME (credentials set)"
+else
+    echo "Kaggle:       NOT SET — will fall back to PhysioNet (slow)"
+    echo "  Tip: export KAGGLE_USERNAME=xxx KAGGLE_KEY=xxx"
+fi
 echo ""
 
 # --- Step 1: System dependencies ---
@@ -82,7 +93,7 @@ pip install --quiet -e ".[dev]"
 
 # Phase 2 extra deps (Open-ECG-Digitizer needs these)
 echo "[INSTALL] Phase 2 extras..."
-pip install --quiet yacs torch-tps scikit-image
+pip install --quiet yacs torch-tps scikit-image kaggle
 
 echo "[OK] All Python packages installed"
 
