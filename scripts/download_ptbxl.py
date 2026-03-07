@@ -76,9 +76,10 @@ def download_from_kaggle(data_directory: Path) -> bool:
         )
 
     print(f"[INFO] Downloading PTB-XL from Kaggle ({KAGGLE_DATASET})...")
+    # Use kaggle CLI directly (not python -m kaggle which fails on some installs)
     result = subprocess.run(
         [
-            sys.executable, "-m", "kaggle", "datasets", "download",
+            "kaggle", "datasets", "download",
             "-d", KAGGLE_DATASET,
             "-p", str(data_directory),
             "--unzip",
