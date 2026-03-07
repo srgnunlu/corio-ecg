@@ -32,8 +32,9 @@ env/
 .ipynb_checkpoints/
 *.ipynb_metadata/
 
-# Claude Code local settings
-.claude/
+# Claude Code local settings (keep skills tracked in git)
+.claude/*
+!.claude/skills/
 
 # OS
 .DS_Store

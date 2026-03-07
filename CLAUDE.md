@@ -71,12 +71,21 @@ Paper ECG photograph interpretation AI pipeline. Takes a photo of a paper ECG, d
 # Activate environment
 source .venv/bin/activate
 
-# Run full pipeline on a single ECG image
-python -m src.pipeline.run --image path/to/ecg.png --output results/reports/
+# Run diagnosis on a WFDB signal file
+python -m src.pipeline.run --signal data/raw/ptb-xl/records500/00000/00001_hr --threshold 0.5
 
-# Run evaluation on PTB-XL
-python -m src.training.evaluate --dataset ptbxl --model models/ecgfounder/finetuned/
+# Run baseline evaluation on PTB-XL (quick test with 20 samples)
+python -m src.training.evaluate --max-samples 20
+
+# Download model and data
+python scripts/download_models.py
+python scripts/download_ptbxl.py
 ```
+
+## Session History
+- Session summaries are saved to `docs/sessions/` after each work session
+- Use `/session-summary` or say "oturumu özetle" to create one
+- Read previous session summaries to understand project history and pick up where left off
 
 ## Development Notes
 - Mac Mini M4 (24GB RAM) is sufficient for inference and light fine-tuning
