@@ -63,9 +63,14 @@ def verify_installation() -> None:
     """Quick smoke test to verify everything works."""
     print("\n[VERIFY] Running smoke tests...")
 
-    # Test PyTorch + MPS
+    # Test PyTorch + best available device
     import torch
-    device = "mps" if torch.backends.mps.is_available() else "cpu"
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
     print(f"  PyTorch {torch.__version__} — device: {device}")
 
     # Test Open-ECG-Digitizer UNet loads
