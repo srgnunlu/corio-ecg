@@ -32,11 +32,14 @@ _NUMPY_COMPAT_LAUNCHER = (
     "np.complex = np.complex128; "
     "np.object = np.object_; "
     "np.str = np.str_; "
-    # Mock tensorflow so HandwrittenText/generate.py import doesn't crash
-    # (we never use --hw_text, but the top-level import runs regardless)
-    "import types; "
-    "tf_mock = types.ModuleType('tensorflow'); "
-    "import sys; sys.modules['tensorflow'] = tf_mock; "
+    # Mock the entire HandwrittenText package so its heavy imports
+    # (tensorflow, seaborn, etc.) never run. We don't use --hw_text.
+    "import types, sys; "
+    "ht = types.ModuleType('HandwrittenText'); "
+    "ht_gen = types.ModuleType('HandwrittenText.generate'); "
+    "ht_gen.get_handwritten = lambda *a, **k: None; "
+    "sys.modules['HandwrittenText'] = ht; "
+    "sys.modules['HandwrittenText.generate'] = ht_gen; "
     f"import runpy; runpy.run_path('{_GENERATOR_SCRIPT}', run_name='__main__')"
 )
 
