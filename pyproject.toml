@@ -26,6 +26,9 @@ dependencies = [
     # Visualization
     "matplotlib>=3.10.1",
 
+    # Model downloads
+    "huggingface_hub>=0.20.0",
+
     # Utilities
     "tqdm>=4.66.5",
     "h5py>=3.14.0",
