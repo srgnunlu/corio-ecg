@@ -24,6 +24,11 @@ TARGET_SAMPLE_RATE: int = 500
 TARGET_LENGTH: int = 5000  # 10 seconds at 500 Hz
 NUM_LEADS: int = 12
 
+# MPS (Apple Silicon) has limited GPU buffers that overflow on large images.
+# CUDA GPUs (e.g. RTX 4090) handle any reasonable ECG image size fine.
+# This limit only applies on MPS — keeps local Mac testing functional.
+MPS_MAX_IMAGE_DIMENSION: int = 1600
+
 # Repo root of the cloned Open-ECG-Digitizer, needed for its internal imports
 _DIGITIZER_REPO_ROOT: Path = (
     Path(__file__).resolve().parents[2] / "external" / "open-ecg-digitizer"
@@ -133,10 +138,30 @@ class ECGDigitiser:
         return signal
 
     def _load_image(self, image_path: Path) -> torch.Tensor:
-        """Load image as (1, 3, H, W) float tensor."""
+        """Load image as (1, 3, H, W) float tensor.
+
+        On MPS devices, large images cause AcceleratorError (buffer overflow).
+        We downscale to MPS_MAX_IMAGE_DIMENSION to prevent this. CUDA devices
+        process at full resolution — no quality loss on GPU servers.
+        """
         from torchvision.io import decode_image
+        from torchvision.transforms.functional import resize
 
         image = decode_image(str(image_path), mode="RGB")
+
+        # Downscale only on MPS to avoid GPU buffer overflow
+        if self.device.type == "mps":
+            _, height, width = image.shape
+            max_dim = max(height, width)
+            if max_dim > MPS_MAX_IMAGE_DIMENSION:
+                scale = MPS_MAX_IMAGE_DIMENSION / max_dim
+                new_h = int(height * scale)
+                new_w = int(width * scale)
+                image = resize(image, [new_h, new_w], antialias=True)
+                logger.debug(
+                    "MPS resize: %dx%d -> %dx%d", width, height, new_w, new_h
+                )
+
         return image.unsqueeze(0)
 
     def _run_inference(self, image_tensor: torch.Tensor) -> dict:
