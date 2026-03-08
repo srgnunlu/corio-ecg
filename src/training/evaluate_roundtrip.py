@@ -184,7 +184,7 @@ def evaluate_roundtrip(
                 per_lead_r = compute_pearson_per_lead(
                     baseline_signals[ecg_id], digitized_signal
                 )
-                pearson_correlations.append(float(np.mean(per_lead_r)))
+                pearson_correlations.append(float(np.nanmean(per_lead_r)))
 
                 # Run diagnosis on the digitized signal
                 roundtrip_probs = _extract_probabilities(diagnoser, digitized_signal)
@@ -220,7 +220,7 @@ def evaluate_roundtrip(
                 float(np.mean(agreement_rates)), 4
             )
             scenario_result["mean_pearson_correlation"] = round(
-                float(np.mean(pearson_correlations)), 4
+                float(np.nanmean(pearson_correlations)), 4
             )
 
         results["scenarios"][scenario_name] = scenario_result

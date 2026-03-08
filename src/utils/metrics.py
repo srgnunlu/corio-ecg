@@ -92,5 +92,6 @@ def compute_pearson_per_lead(
             correlations.append(0.0)
             continue
         r, _ = pearsonr(clean[lead_idx], digitized[lead_idx])
-        correlations.append(float(r))
+        # Guard against NaN from near-constant signals
+        correlations.append(0.0 if np.isnan(r) else float(r))
     return correlations
