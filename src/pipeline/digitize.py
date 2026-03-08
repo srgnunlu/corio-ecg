@@ -83,6 +83,33 @@ class DigitizeInfo:
         ]
         return "\n".join(lines)
 
+def _mock_ray_tune_if_missing() -> None:
+    """Inject a fake ray.tune module if ray is not installed.
+
+    Open-ECG-Digitizer's utils.py imports ray.tune.Stopper for its
+    EarlyStopper training class. We never use training — only inference —
+    so a minimal mock prevents the ImportError without installing ray
+    (which pulls in pyarrow and many heavy dependencies).
+    """
+    if "ray" not in sys.modules:
+        try:
+            import ray  # noqa: F401
+        except ImportError:
+            import types
+
+            ray_mod = types.ModuleType("ray")
+            tune_mod = types.ModuleType("ray.tune")
+
+            class _FakeStopper:
+                pass
+
+            tune_mod.Stopper = _FakeStopper  # type: ignore[attr-defined]
+            ray_mod.tune = tune_mod  # type: ignore[attr-defined]
+            sys.modules["ray"] = ray_mod
+            sys.modules["ray.tune"] = tune_mod
+            logger.debug("Injected ray.tune mock (training-only dependency)")
+
+
 def _select_digitiser_device(requested: torch.device | None) -> torch.device:
     """Pick the best device for the digitiser.
 
@@ -172,6 +199,10 @@ class ECGDigitiser:
         try:
             repo_str = str(_DIGITIZER_REPO_ROOT)
             sys.path = [repo_str] + [p for p in sys.path if p != repo_str]
+
+            # Mock ray.tune — Open-ECG-Digitizer imports it for training only
+            # (EarlyStopper class), not needed for inference
+            _mock_ray_tune_if_missing()
 
             from src.config.default import get_cfg  # type: ignore[import-untyped]
             from src.model.inference_wrapper import InferenceWrapper  # type: ignore[import-untyped]
