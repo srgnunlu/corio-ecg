@@ -97,6 +97,13 @@ class ECGDigitiser:
             cfg.MODEL.KWARGS.device = device_str
             cfg.MODEL.KWARGS.config.LAYOUT_IDENTIFIER.KWARGS.device = device_str
 
+            # Use the full layout library instead of the reduced one.
+            # The reduced config only has 6×1 layouts (precordial + cabrera),
+            # which cannot split standard 3×4 paper ECG rows into columns.
+            cfg.MODEL.KWARGS.config.LAYOUT_IDENTIFIER.config_path = (
+                "src/config/lead_layouts_all.yml"
+            )
+
             wrapper: InferenceWrapper = InferenceWrapper(**cfg.MODEL.KWARGS)
             # Skip wrapper.eval() — the InferenceWrapper stores non-Module
             # objects (Dewarper, Cropper) as attributes, which breaks PyTorch's
