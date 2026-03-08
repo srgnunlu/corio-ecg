@@ -98,9 +98,13 @@ fi
 echo "[INSTALL] Project dependencies..."
 pip install --quiet -e ".[dev]"
 
-# Phase 2 extra deps (Open-ECG-Digitizer needs these)
-echo "[INSTALL] Phase 2 extras..."
-pip install --quiet yacs torch-tps scikit-image kaggle qrcode imgaug
+# Phase 2 extra deps — install requirements from external repos
+echo "[INSTALL] Open-ECG-Digitizer dependencies..."
+pip install --quiet yacs torch-tps scikit-image "ray[data,train,tune]" tensorboard \
+    transformers plotly ipywidgets torchaudio kaggle
+
+echo "[INSTALL] ECG-Image-Kit dependencies..."
+pip install --quiet qrcode imgaug imageio imutils
 
 echo "[OK] All Python packages installed"
 
