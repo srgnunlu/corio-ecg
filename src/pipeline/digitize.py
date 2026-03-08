@@ -217,6 +217,15 @@ class ECGDigitiser:
             cfg.MODEL.KWARGS.device = device_str
             cfg.MODEL.KWARGS.config.LAYOUT_IDENTIFIER.KWARGS.device = device_str
 
+            # Disable wrapper's internal resampling — our _load_image already
+            # upscales small images to MIN_IMAGE_DIMENSION. The config default
+            # (resample_size=3000) would double-upscale, making images ~5000px
+            # and causing 4+ minute processing times.
+            cfg.MODEL.KWARGS.resample_size = None
+
+            # Enable timing to log per-stage durations
+            cfg.MODEL.KWARGS.enable_timing = True
+
             # Ensure full layout library is used. The george-moody-2024 config
             # already has good 3×4 layouts, but fall back to all if needed.
             layout_cfg = cfg.MODEL.KWARGS.config.LAYOUT_IDENTIFIER
@@ -340,8 +349,13 @@ class ECGDigitiser:
 
     def _run_inference(self, image_tensor: torch.Tensor) -> dict:
         """Run Open-ECG-Digitizer forward pass."""
+        import time
+
+        start = time.time()
         # layout_should_include_substring=None means auto-detect layout
         result: dict = self._wrapper(image_tensor, layout_should_include_substring=None)
+        elapsed = time.time() - start
+        logger.info("Digitization inference took %.1f seconds", elapsed)
         return result
 
     def _extract_canonical(self, result: dict) -> torch.Tensor:
