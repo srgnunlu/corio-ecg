@@ -83,6 +83,34 @@ class DigitizeInfo:
         ]
         return "\n".join(lines)
 
+def _select_digitiser_device(requested: torch.device | None) -> torch.device:
+    """Pick the best device for the digitiser.
+
+    CUDA works correctly at full image resolution. MPS has a resize bug that
+    destroys lead label text detail, so it falls back to CPU.
+    """
+    if requested and requested.type == "cuda":
+        if torch.cuda.is_available():
+            logger.info("Digitiser using CUDA (full GPU acceleration)")
+            return requested
+        logger.warning("CUDA requested but not available — falling back to CPU")
+        return torch.device("cpu")
+
+    if requested and requested.type == "mps":
+        logger.info("MPS requested but breaks lead detection — forcing CPU")
+        return torch.device("cpu")
+
+    # Auto-detect: prefer CUDA > CPU (skip MPS)
+    if requested is None:
+        if torch.cuda.is_available():
+            logger.info("Auto-detected CUDA — digitiser will use GPU")
+            return torch.device("cuda")
+        logger.info("No CUDA available — digitiser using CPU")
+        return torch.device("cpu")
+
+    return requested
+
+
 # Repo root of the cloned Open-ECG-Digitizer, needed for its internal imports
 _DIGITIZER_REPO_ROOT: Path = (
     Path(__file__).resolve().parents[2] / "external" / "open-ecg-digitizer"
@@ -99,9 +127,10 @@ class ECGDigitiser:
     identification -> canonical 12-lead signal in mV -> resample to 500 Hz
     -> z-score normalize -> (12, 5000) numpy array.
 
-    Always runs on CPU: MPS image resize destroys lead label text detail,
-    causing the Lead Name U-Net to fail at detecting lead boundaries.
-    CPU at full resolution produces correct 12-lead output (layout cost ~0.17).
+    Device policy:
+    - CUDA: full GPU acceleration (works correctly at full resolution)
+    - MPS: forced to CPU (MPS image resize destroys lead label text detail)
+    - CPU: always works, slowest option
     """
 
     def __init__(
@@ -114,17 +143,14 @@ class ECGDigitiser:
         Args:
             config_path: Path to inference_wrapper.yml. Defaults to the one
                 shipped with the cloned repo.
-            device: Torch device override. Forced to CPU for digitization
-                accuracy — MPS resize degrades lead detection quality.
+            device: Torch device override. MPS is forced to CPU because its
+                image resize operation degrades lead detection quality.
+                CUDA works correctly at full resolution.
         """
-        # Force CPU: MPS requires image downscaling which breaks lead label
-        # detection. CPU processes at full resolution → accurate layout matching.
-        self.device = torch.device("cpu")
-        if device and device.type != "cpu":
-            logger.info("Ignoring device=%s — digitiser forced to CPU for accuracy", device)
+        self.device = _select_digitiser_device(device)
         self.config_path = Path(config_path) if config_path else _DIGITIZER_CONFIG_PATH
         self._wrapper = self._load_wrapper()
-        logger.info("ECGDigitiser ready — device=%s (forced CPU for lead detection)", self.device)
+        logger.info("ECGDigitiser ready — device=%s", self.device)
 
     def _load_wrapper(self) -> torch.nn.Module:
         """Load InferenceWrapper with device overrides applied.

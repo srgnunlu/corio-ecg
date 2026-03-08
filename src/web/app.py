@@ -350,13 +350,22 @@ def create_app() -> gr.Blocks:
 
 
 def main() -> None:
-    """Launch the Gradio app."""
+    """Launch the Gradio app.
+
+    Pass --share to create a public Gradio tunnel (useful for VPS access).
+    """
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Corio ECG Web UI")
+    parser.add_argument("--share", action="store_true", help="Create a public Gradio share link")
+    args, _ = parser.parse_known_args()
+
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     app = create_app()
     app.launch(
         server_name="0.0.0.0",
         server_port=7860,
-        share=False,
+        share=args.share,
         theme=gr.themes.Soft(),
     )
 
