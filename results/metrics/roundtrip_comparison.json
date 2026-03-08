@@ -1,34 +1,34 @@
 {
-  "n_records": 5,
+  "n_records": 50,
   "threshold": 0.5,
   "scenarios": {
     "baseline": {
       "description": "Clean PTB-XL WFDB signals",
-      "n_successful": 5,
-      "mean_probability": 0.2488316729586028
+      "n_successful": 50,
+      "mean_probability": 0.24595648664134304
     },
     "clean_roundtrip": {
       "description": "Synthetic image (clean difficulty) -> digitized",
-      "n_successful": 3,
-      "mean_cosine_similarity_vs_baseline": 0.9297,
-      "mean_abs_prob_diff_vs_baseline": 0.103828,
-      "agreement_rate_vs_baseline": 0.86,
+      "n_successful": 28,
+      "mean_cosine_similarity_vs_baseline": 0.9041,
+      "mean_abs_prob_diff_vs_baseline": 0.117983,
+      "agreement_rate_vs_baseline": 0.8564,
       "mean_pearson_correlation": NaN
     },
     "moderate_roundtrip": {
       "description": "Synthetic image (moderate difficulty) -> digitized",
-      "n_successful": 4,
-      "mean_cosine_similarity_vs_baseline": 0.9365,
-      "mean_abs_prob_diff_vs_baseline": 0.097797,
-      "agreement_rate_vs_baseline": 0.8733,
+      "n_successful": 28,
+      "mean_cosine_similarity_vs_baseline": 0.9054,
+      "mean_abs_prob_diff_vs_baseline": 0.117936,
+      "agreement_rate_vs_baseline": 0.8555,
       "mean_pearson_correlation": NaN
     },
     "hard_roundtrip": {
       "description": "Synthetic image (hard difficulty) -> digitized",
-      "n_successful": 5,
-      "mean_cosine_similarity_vs_baseline": 0.9477,
-      "mean_abs_prob_diff_vs_baseline": 0.088586,
-      "agreement_rate_vs_baseline": 0.896,
+      "n_successful": 50,
+      "mean_cosine_similarity_vs_baseline": 0.9069,
+      "mean_abs_prob_diff_vs_baseline": 0.122226,
+      "agreement_rate_vs_baseline": 0.856,
       "mean_pearson_correlation": NaN
     }
   }
