@@ -58,6 +58,9 @@ logs/
 wandb/
 mlruns/
 
+# External repos (cloned, not committed)
+external/
+
 # Temporary
 tmp/
 temp/
