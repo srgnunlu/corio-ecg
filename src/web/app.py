@@ -13,7 +13,7 @@ import numpy as np
 from PIL import Image
 
 from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser
-from src.pipeline.digitize import ECGDigitiser
+from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
 from src.utils.ecg_labels import CRITICAL_DIAGNOSIS_INDICES, ECG_FOUNDER_LABELS
 from src.web.ecg_plot import fig_to_pil, plot_ecg_paper
 
@@ -47,14 +47,15 @@ def _get_diagnoser() -> ECGDiagnoser:
 def analyze_ecg(
     image: Image.Image | None,
     threshold: float,
-) -> tuple[Image.Image | None, str, str]:
+) -> tuple[Image.Image | None, str, str, str]:
     """Full pipeline: image -> digitize -> diagnose -> display.
 
     Returns:
-        Tuple of (ecg_visualization, critical_findings_html, all_diagnoses_html).
+        Tuple of (ecg_visualization, critical_findings_html,
+                  all_diagnoses_html, debug_info_html).
     """
     if image is None:
-        return None, _info_html("Upload an ECG image to begin analysis."), ""
+        return None, _info_html("Upload an ECG image to begin analysis."), "", ""
 
     # Save uploaded image to temp file (digitiser needs a file path)
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
@@ -65,6 +66,7 @@ def analyze_ecg(
         # Step 1: Digitize image to signal
         digitiser = _get_digitiser()
         signal = digitiser.digitize(tmp_path)
+        debug_info = digitiser.last_info
 
         # Step 2: Diagnose signal
         diagnoser = _get_diagnoser()
@@ -78,8 +80,9 @@ def analyze_ecg(
         # Step 4: Format results
         critical_html = _format_critical(results)
         diagnoses_html = _format_diagnoses(all_results, threshold)
+        debug_html = _format_debug_info(debug_info)
 
-        return ecg_image, critical_html, diagnoses_html
+        return ecg_image, critical_html, diagnoses_html, debug_html
 
     except RuntimeError as exc:
         error_msg = (
@@ -87,7 +90,7 @@ def analyze_ecg(
             f"border-left:4px solid #EF4444;'>"
             f"<b>Analysis Failed</b><br>{exc}</div>"
         )
-        return None, error_msg, ""
+        return None, error_msg, "", ""
     finally:
         tmp_path.unlink(missing_ok=True)
 
@@ -164,6 +167,105 @@ def _format_diagnoses(
     )
 
 
+def _format_debug_info(info: DigitizeInfo) -> str:
+    """Format diagnostic info as HTML for the debug panel."""
+    # Quality indicator based on layout cost
+    if info.layout_cost < 0.5:
+        quality_badge = (
+            "<span style='background:#22C55E; color:white; padding:2px 8px; "
+            "border-radius:4px; font-size:12px;'>GOOD</span>"
+        )
+    elif info.layout_cost < 1.5:
+        quality_badge = (
+            "<span style='background:#F59E0B; color:white; padding:2px 8px; "
+            "border-radius:4px; font-size:12px;'>FAIR</span>"
+        )
+    else:
+        quality_badge = (
+            "<span style='background:#EF4444; color:white; padding:2px 8px; "
+            "border-radius:4px; font-size:12px;'>POOR</span>"
+        )
+
+    # Warnings
+    warnings = []
+    if info.layout_cost > 1.0:
+        warnings.append("Layout matching cost is high — leads may be misassigned")
+    if info.detected_leads_count < 4:
+        warnings.append(
+            f"Only {info.detected_leads_count} lead labels detected "
+            "(expected 8+) — U-Net may have failed on this image"
+        )
+    if info.avg_pixel_per_mm < 1.0 and info.avg_pixel_per_mm > 0:
+        warnings.append(
+            f"Very low pixel density ({info.avg_pixel_per_mm:.1f} px/mm) "
+            "— grid detection may have failed, causing amplitude distortion"
+        )
+    if info.avg_pixel_per_mm > 30.0:
+        warnings.append(
+            f"Very high pixel density ({info.avg_pixel_per_mm:.1f} px/mm) "
+            "— grid detection may have failed"
+        )
+    if info.raw_lines_count < 3:
+        warnings.append(
+            f"Only {info.raw_lines_count} signal traces extracted "
+            "(expected 4+) — signal segmentation may have failed"
+        )
+
+    warnings_html = ""
+    if warnings:
+        items = "".join(
+            f"<div style='padding:6px 10px; margin-bottom:4px; background:#FEF3C7; "
+            f"border-radius:4px; border-left:3px solid #F59E0B; font-size:13px;'>"
+            f"&#9888; {w}</div>"
+            for w in warnings
+        )
+        warnings_html = f"<div style='margin-bottom:12px;'>{items}</div>"
+
+    # Per-lead energy table
+    lead_names = [
+        "I", "II", "III", "aVR", "aVL", "aVF",
+        "V1", "V2", "V3", "V4", "V5", "V6",
+    ]
+    energy_cells = ""
+    for i, energy in enumerate(info.per_lead_energy):
+        name = lead_names[i] if i < len(lead_names) else f"L{i}"
+        # Flag leads with very low or very high energy
+        if energy < 0.05:
+            color = "#EF4444"  # red — nearly flat/dead lead
+        elif energy > 3.0:
+            color = "#F59E0B"  # amber — possibly distorted
+        else:
+            color = "#166534"  # green — normal
+        energy_cells += (
+            f"<td style='padding:4px 8px; text-align:center;'>"
+            f"<b>{name}</b><br>"
+            f"<span style='color:{color}; font-family:monospace;'>{energy:.2f}</span>"
+            f"</td>"
+        )
+
+    return (
+        f"{warnings_html}"
+        f"<div style='background:#F8FAFC; border:1px solid #E2E8F0; "
+        f"border-radius:8px; padding:16px; font-size:13px;'>"
+        f"<div style='display:flex; gap:24px; flex-wrap:wrap; margin-bottom:12px;'>"
+        f"<div><b>Quality:</b> {quality_badge}</div>"
+        f"<div><b>Image:</b> {info.image_size[1]}x{info.image_size[0]} px</div>"
+        f"<div><b>Layout:</b> {info.layout_name}</div>"
+        f"<div><b>Layout cost:</b> {info.layout_cost:.2f}</div>"
+        f"<div><b>Flipped:</b> {'Yes' if info.layout_flipped else 'No'}</div>"
+        f"<div><b>Signal traces:</b> {info.raw_lines_count}</div>"
+        f"<div><b>Detected leads:</b> {info.detected_leads_count}/12</div>"
+        f"<div><b>Pixel density:</b> {info.avg_pixel_per_mm:.1f} px/mm</div>"
+        f"</div>"
+        f"<div style='margin-bottom:8px;'><b>Detected:</b> "
+        f"{', '.join(info.detected_leads) if info.detected_leads else '<i>none</i>'}</div>"
+        f"<div><b>Per-lead energy (RMS after z-score):</b></div>"
+        f"<table style='width:100%; border-collapse:collapse; margin-top:4px;'>"
+        f"<tr>{energy_cells}</tr></table>"
+        f"</div>"
+    )
+
+
 def _info_html(message: str) -> str:
     """Wrap a message in a styled info box."""
     return (
@@ -225,11 +327,16 @@ def create_app() -> gr.Blocks:
         gr.Markdown("### All Diagnoses (Top 20)")
         diagnoses_output = gr.HTML()
 
+        with gr.Accordion("Digitization Debug Info", open=False):
+            debug_output = gr.HTML(
+                value=_info_html("Debug info will appear after analysis."),
+            )
+
         # Wire up the analyze button
         analyze_btn.click(
             fn=analyze_ecg,
             inputs=[image_input, threshold_slider],
-            outputs=[ecg_output, critical_output, diagnoses_output],
+            outputs=[ecg_output, critical_output, diagnoses_output, debug_output],
         )
 
         # Mirror uploaded image to Original tab
