@@ -13,8 +13,6 @@ import numpy as np
 import torch
 from scipy.interpolate import interp1d
 
-from src.pipeline.diagnose import get_device
-
 logger = logging.getLogger(__name__)
 
 # Open-ECG-Digitizer outputs signal in microvolts — ECGFounder expects mV
@@ -23,13 +21,6 @@ UV_TO_MV: float = 1000.0
 TARGET_SAMPLE_RATE: int = 500
 TARGET_LENGTH: int = 5000  # 10 seconds at 500 Hz
 NUM_LEADS: int = 12
-
-# MPS (Apple Silicon) has limited GPU buffers that overflow on large images.
-# CUDA GPUs (e.g. RTX 4090) handle any reasonable ECG image size fine.
-# This limit only applies on MPS — keeps local Mac testing functional.
-# Raised from 1600 to 2000 for better signal detection.
-# 2400+ causes indexing errors in some images on MPS.
-MPS_MAX_IMAGE_DIMENSION: int = 2000
 
 # Repo root of the cloned Open-ECG-Digitizer, needed for its internal imports
 _DIGITIZER_REPO_ROOT: Path = (
@@ -46,6 +37,10 @@ class ECGDigitiser:
     The pipeline: image -> U-Net segmentation -> signal extraction -> lead
     identification -> canonical 12-lead signal in mV -> resample to 500 Hz
     -> z-score normalize -> (12, 5000) numpy array.
+
+    Always runs on CPU: MPS image resize destroys lead label text detail,
+    causing the Lead Name U-Net to fail at detecting lead boundaries.
+    CPU at full resolution produces correct 12-lead output (layout cost ~0.17).
     """
 
     def __init__(
@@ -58,12 +53,17 @@ class ECGDigitiser:
         Args:
             config_path: Path to inference_wrapper.yml. Defaults to the one
                 shipped with the cloned repo.
-            device: Torch device override. Auto-detected if None.
+            device: Torch device override. Forced to CPU for digitization
+                accuracy — MPS resize degrades lead detection quality.
         """
-        self.device = device or get_device()
+        # Force CPU: MPS requires image downscaling which breaks lead label
+        # detection. CPU processes at full resolution → accurate layout matching.
+        self.device = torch.device("cpu")
+        if device and device.type != "cpu":
+            logger.info("Ignoring device=%s — digitiser forced to CPU for accuracy", device)
         self.config_path = Path(config_path) if config_path else _DIGITIZER_CONFIG_PATH
         self._wrapper = self._load_wrapper()
-        logger.info("ECGDigitiser ready — device=%s", self.device)
+        logger.info("ECGDigitiser ready — device=%s (forced CPU for lead detection)", self.device)
 
     def _load_wrapper(self) -> torch.nn.Module:
         """Load InferenceWrapper with device overrides applied.
@@ -147,30 +147,15 @@ class ECGDigitiser:
         return signal
 
     def _load_image(self, image_path: Path) -> torch.Tensor:
-        """Load image as (1, 3, H, W) float tensor.
+        """Load image as (1, 3, H, W) float tensor at full resolution.
 
-        On MPS devices, large images cause AcceleratorError (buffer overflow).
-        We downscale to MPS_MAX_IMAGE_DIMENSION to prevent this. CUDA devices
-        process at full resolution — no quality loss on GPU servers.
+        CPU processes all image sizes without buffer overflow issues.
+        Full resolution is critical for lead label text detection.
         """
         from torchvision.io import decode_image
-        from torchvision.transforms.functional import resize
 
         image = decode_image(str(image_path), mode="RGB")
-
-        # Downscale only on MPS to avoid GPU buffer overflow
-        if self.device.type == "mps":
-            _, height, width = image.shape
-            max_dim = max(height, width)
-            if max_dim > MPS_MAX_IMAGE_DIMENSION:
-                scale = MPS_MAX_IMAGE_DIMENSION / max_dim
-                new_h = int(height * scale)
-                new_w = int(width * scale)
-                image = resize(image, [new_h, new_w], antialias=True)
-                logger.debug(
-                    "MPS resize: %dx%d -> %dx%d", width, height, new_w, new_h
-                )
-
+        logger.debug("Image loaded: %dx%d", image.shape[2], image.shape[1])
         return image.unsqueeze(0)
 
     def _run_inference(self, image_tensor: torch.Tensor) -> dict:

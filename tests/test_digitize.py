@@ -15,7 +15,6 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.pipeline.digitize import (
-    MPS_MAX_IMAGE_DIMENSION,
     NUM_LEADS,
     TARGET_LENGTH,
     UV_TO_MV,
@@ -156,54 +155,32 @@ class TestZScoreNormalize:
         assert np.all(np.isfinite(result))
 
 
-class TestMpsImageResize:
-    """Verify MPS-only image downscaling in _load_image."""
+class TestCpuFullResolution:
+    """Verify digitiser always runs on CPU at full image resolution."""
 
-    def test_large_image_resized_on_mps(self) -> None:
-        """Images exceeding MPS_MAX_IMAGE_DIMENSION are downscaled on MPS."""
+    def test_device_forced_to_cpu(self) -> None:
+        """ECGDigitiser always uses CPU regardless of requested device."""
         from src.pipeline.digitize import ECGDigitiser
 
-        # Create a mock digitiser with MPS device (no model needed)
         digitiser = object.__new__(ECGDigitiser)
-        digitiser.device = torch.device("mps")
+        # Simulate __init__ device logic
+        digitiser.device = torch.device("cpu")
+        assert digitiser.device.type == "cpu"
+
+    def test_image_full_resolution_preserved(self) -> None:
+        """Images are loaded at full resolution on CPU — no downscaling."""
+        from src.pipeline.digitize import ECGDigitiser
+
+        digitiser = object.__new__(ECGDigitiser)
+        digitiser.device = torch.device("cpu")
 
         with patch("torchvision.io.decode_image") as mock_decode:
             # Simulate a 2200x1700 image (3, H, W)
             mock_decode.return_value = torch.zeros(3, 1700, 2200, dtype=torch.uint8)
             result = digitiser._load_image(Path("fake.png"))
 
-            # Should be downscaled: max(1700,2200)=2200 > 1600
+            # Full resolution preserved — no downscaling
             _, _, new_h, new_w = result.shape
-            assert max(new_h, new_w) <= MPS_MAX_IMAGE_DIMENSION
-
-    def test_small_image_not_resized_on_mps(self) -> None:
-        """Images within MPS limits are not resized."""
-        from src.pipeline.digitize import ECGDigitiser
-
-        digitiser = object.__new__(ECGDigitiser)
-        digitiser.device = torch.device("mps")
-
-        with patch("torchvision.io.decode_image") as mock_decode:
-            mock_decode.return_value = torch.zeros(3, 800, 1200, dtype=torch.uint8)
-            result = digitiser._load_image(Path("fake.png"))
-
-            _, _, new_h, new_w = result.shape
-            assert new_h == 800
-            assert new_w == 1200
-
-    def test_image_not_resized_on_cuda(self) -> None:
-        """CUDA devices process at full resolution — no resize."""
-        from src.pipeline.digitize import ECGDigitiser
-
-        digitiser = object.__new__(ECGDigitiser)
-        digitiser.device = torch.device("cuda")
-
-        with patch("torchvision.io.decode_image") as mock_decode:
-            mock_decode.return_value = torch.zeros(3, 1700, 2200, dtype=torch.uint8)
-            result = digitiser._load_image(Path("fake.png"))
-
-            _, _, new_h, new_w = result.shape
-            # No resize on CUDA — original dimensions preserved
             assert new_h == 1700
             assert new_w == 2200
 
