@@ -27,14 +27,16 @@ NUM_LEADS: int = 12
 # MPS (Apple Silicon) has limited GPU buffers that overflow on large images.
 # CUDA GPUs (e.g. RTX 4090) handle any reasonable ECG image size fine.
 # This limit only applies on MPS — keeps local Mac testing functional.
-MPS_MAX_IMAGE_DIMENSION: int = 1600
+# Raised from 1600 to 2000 for better signal detection.
+# 2400+ causes indexing errors in some images on MPS.
+MPS_MAX_IMAGE_DIMENSION: int = 2000
 
 # Repo root of the cloned Open-ECG-Digitizer, needed for its internal imports
 _DIGITIZER_REPO_ROOT: Path = (
     Path(__file__).resolve().parents[2] / "external" / "open-ecg-digitizer"
 )
 _DIGITIZER_CONFIG_PATH: Path = (
-    _DIGITIZER_REPO_ROOT / "src" / "config" / "inference_wrapper.yml"
+    _DIGITIZER_REPO_ROOT / "src" / "config" / "inference_wrapper_george-moody-2024.yml"
 )
 
 
@@ -97,12 +99,12 @@ class ECGDigitiser:
             cfg.MODEL.KWARGS.device = device_str
             cfg.MODEL.KWARGS.config.LAYOUT_IDENTIFIER.KWARGS.device = device_str
 
-            # Use the full layout library instead of the reduced one.
-            # The reduced config only has 6×1 layouts (precordial + cabrera),
-            # which cannot split standard 3×4 paper ECG rows into columns.
-            cfg.MODEL.KWARGS.config.LAYOUT_IDENTIFIER.config_path = (
-                "src/config/lead_layouts_all.yml"
-            )
+            # Ensure full layout library is used. The george-moody-2024 config
+            # already has good 3×4 layouts, but fall back to all if needed.
+            layout_cfg = cfg.MODEL.KWARGS.config.LAYOUT_IDENTIFIER
+            current_path = getattr(layout_cfg, "config_path", "")
+            if "reduced" in str(current_path):
+                layout_cfg.config_path = "src/config/lead_layouts_all.yml"
 
             wrapper: InferenceWrapper = InferenceWrapper(**cfg.MODEL.KWARGS)
             # Skip wrapper.eval() — the InferenceWrapper stores non-Module
