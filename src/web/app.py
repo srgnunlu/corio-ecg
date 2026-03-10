@@ -44,9 +44,26 @@ def _get_diagnoser() -> ECGDiagnoser:
     return _diagnoser
 
 
+LAYOUT_CHOICES: list[str] = [
+    "Auto-detect",
+    "3x4 (standard)",
+    "3x4+1R (with rhythm strip)",
+    "6x2",
+]
+
+# Map UI labels to layout_should_include_substring values
+_LAYOUT_MAP: dict[str, str | None] = {
+    "Auto-detect": None,
+    "3x4 (standard)": "3x4",
+    "3x4+1R (with rhythm strip)": "3x4+1R",
+    "6x2": "6x2",
+}
+
+
 def analyze_ecg(
     image: Image.Image | None,
     threshold: float,
+    layout_choice: str,
 ) -> tuple[Image.Image | None, str, str, str]:
     """Full pipeline: image -> digitize -> diagnose -> display.
 
@@ -54,8 +71,13 @@ def analyze_ecg(
         Tuple of (ecg_visualization, critical_findings_html,
                   all_diagnoses_html, debug_info_html).
     """
+    import time as _time
+
     if image is None:
         return None, _info_html("Upload an ECG image to begin analysis."), "", ""
+
+    layout_hint = _LAYOUT_MAP.get(layout_choice)
+    total_start = _time.time()
 
     # Save uploaded image to temp file (digitiser needs a file path)
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
@@ -65,7 +87,7 @@ def analyze_ecg(
     try:
         # Step 1: Digitize image to signal
         digitiser = _get_digitiser()
-        signal = digitiser.digitize(tmp_path)
+        signal = digitiser.digitize(tmp_path, layout_hint=layout_hint)
         debug_info = digitiser.last_info
 
         # Step 2: Diagnose signal
@@ -77,10 +99,14 @@ def analyze_ecg(
         fig = plot_ecg_paper(signal)
         ecg_image = fig_to_pil(fig)
 
-        # Step 4: Format results
+        # Step 4: Collect timing from the wrapper
+        wrapper_times = getattr(digitiser._wrapper, "times", {})
+        wrapper_times["Total (end-to-end)"] = _time.time() - total_start
+
+        # Step 5: Format results
         critical_html = _format_critical(results)
         diagnoses_html = _format_diagnoses(all_results, threshold)
-        debug_html = _format_debug_info(debug_info)
+        debug_html = _format_debug_info(debug_info, wrapper_times)
 
         return ecg_image, critical_html, diagnoses_html, debug_html
 
@@ -167,7 +193,10 @@ def _format_diagnoses(
     )
 
 
-def _format_debug_info(info: DigitizeInfo) -> str:
+def _format_debug_info(
+    info: DigitizeInfo,
+    timing: dict[str, float] | None = None,
+) -> str:
     """Format diagnostic info as HTML for the debug panel."""
     # Quality indicator based on layout cost
     if info.layout_cost < 0.5:
@@ -243,6 +272,26 @@ def _format_debug_info(info: DigitizeInfo) -> str:
             f"</td>"
         )
 
+    # Timing breakdown
+    timing_html = ""
+    if timing:
+        total = sum(timing.values())
+        timing_rows = "".join(
+            f"<tr><td style='padding:2px 8px;'>{name}</td>"
+            f"<td style='padding:2px 8px; text-align:right; font-family:monospace;'>"
+            f"{duration:.1f}s</td></tr>"
+            for name, duration in timing.items()
+        )
+        timing_html = (
+            f"<div style='margin-top:12px;'><b>Timing breakdown:</b>"
+            f"<table style='border-collapse:collapse; font-size:12px; margin-top:4px;'>"
+            f"{timing_rows}"
+            f"<tr style='border-top:1px solid #CBD5E1; font-weight:bold;'>"
+            f"<td style='padding:4px 8px;'>Total</td>"
+            f"<td style='padding:4px 8px; text-align:right; font-family:monospace;'>"
+            f"{total:.1f}s</td></tr></table></div>"
+        )
+
     return (
         f"{warnings_html}"
         f"<div style='background:#F8FAFC; border:1px solid #E2E8F0; "
@@ -262,6 +311,7 @@ def _format_debug_info(info: DigitizeInfo) -> str:
         f"<div><b>Per-lead energy (RMS after z-score):</b></div>"
         f"<table style='width:100%; border-collapse:collapse; margin-top:4px;'>"
         f"<tr>{energy_cells}</tr></table>"
+        f"{timing_html}"
         f"</div>"
     )
 
@@ -291,6 +341,12 @@ def create_app() -> gr.Blocks:
                     label="Upload ECG Image",
                     type="pil",
                     height=300,
+                )
+                layout_dropdown = gr.Dropdown(
+                    choices=LAYOUT_CHOICES,
+                    value="Auto-detect",
+                    label="ECG Layout",
+                    info="Select layout format or let the AI auto-detect",
                 )
                 threshold_slider = gr.Slider(
                     minimum=0.1,
@@ -332,10 +388,27 @@ def create_app() -> gr.Blocks:
                 value=_info_html("Debug info will appear after analysis."),
             )
 
+        # Example images for quick testing
+        example_dir = Path("data/processed/images")
+        example_images = []
+        for category in ["clean", "moderate", "hard"]:
+            cat_dir = example_dir / category
+            if cat_dir.exists():
+                imgs = sorted(cat_dir.glob("*.png"))[:3]
+                for img in imgs:
+                    example_images.append([str(img), 0.5, "Auto-detect"])
+
+        if example_images:
+            gr.Examples(
+                examples=example_images,
+                inputs=[image_input, threshold_slider, layout_dropdown],
+                label="Sample ECG Images",
+            )
+
         # Wire up the analyze button
         analyze_btn.click(
             fn=analyze_ecg,
-            inputs=[image_input, threshold_slider],
+            inputs=[image_input, threshold_slider, layout_dropdown],
             outputs=[ecg_output, critical_output, diagnoses_output, debug_output],
         )
 

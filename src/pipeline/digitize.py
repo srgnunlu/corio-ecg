@@ -234,10 +234,13 @@ class ECGDigitiser:
                 layout_cfg.config_path = "src/config/lead_layouts_all.yml"
 
             wrapper: InferenceWrapper = InferenceWrapper(**cfg.MODEL.KWARGS)
-            # Skip wrapper.eval() — the InferenceWrapper stores non-Module
-            # objects (Dewarper, Cropper) as attributes, which breaks PyTorch's
-            # recursive eval(). The segmentation UNet is already set to eval
-            # mode inside _load_segmentation_model().
+
+            # On CPU, cap segmentation input to 2000px width to avoid 100s+
+            # U-Net inference on large images. 2000px keeps enough detail for
+            # real-world ECG photos where grid and signal overlap at QRS peaks.
+            # CUDA is fast enough at full resolution.
+            if self.device.type != "cuda":
+                wrapper._max_segmentation_width = 2000
         finally:
             os.chdir(original_cwd)
             sys.path = original_path
@@ -249,11 +252,17 @@ class ECGDigitiser:
 
         return wrapper
 
-    def digitize(self, image_path: str | Path) -> np.ndarray:
+    def digitize(
+        self,
+        image_path: str | Path,
+        layout_hint: str | None = None,
+    ) -> np.ndarray:
         """Convert a paper ECG image to a 12-lead digital signal.
 
         Args:
             image_path: Path to ECG image (PNG/JPG).
+            layout_hint: Optional layout substring filter (e.g. "3x4", "6x2").
+                When None, the digitizer auto-detects layout.
 
         Returns:
             Z-score normalized numpy array of shape (12, 5000) at 500 Hz,
@@ -272,7 +281,7 @@ class ECGDigitiser:
         image_tensor = self._load_image(image_path)
         self.last_info.image_size = (image_tensor.shape[2], image_tensor.shape[3])
 
-        raw_result = self._run_inference(image_tensor)
+        raw_result = self._run_inference(image_tensor, layout_hint=layout_hint)
         self._populate_diagnostics(raw_result)
 
         canonical = self._extract_canonical(raw_result)
@@ -347,13 +356,24 @@ class ECGDigitiser:
         logger.debug("Image for processing: %dx%d", image.shape[2], image.shape[1])
         return image.unsqueeze(0)
 
-    def _run_inference(self, image_tensor: torch.Tensor) -> dict:
-        """Run Open-ECG-Digitizer forward pass."""
+    def _run_inference(
+        self,
+        image_tensor: torch.Tensor,
+        layout_hint: str | None = None,
+    ) -> dict:
+        """Run Open-ECG-Digitizer forward pass.
+
+        Args:
+            image_tensor: Preprocessed image tensor.
+            layout_hint: Optional substring to filter layout candidates
+                (e.g. "3x4" restricts to 3x4 layouts only).
+        """
         import time
 
         start = time.time()
-        # layout_should_include_substring=None means auto-detect layout
-        result: dict = self._wrapper(image_tensor, layout_should_include_substring=None)
+        result: dict = self._wrapper(
+            image_tensor, layout_should_include_substring=layout_hint,
+        )
         elapsed = time.time() - start
         logger.info("Digitization inference took %.1f seconds", elapsed)
         return result
