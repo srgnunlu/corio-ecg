@@ -26,7 +26,7 @@ MODEL_CONFIG: dict = {
     "stride": 2,
     "groups_width": 16,
     "n_classes": 150,
-    "use_bn": False,
+    "use_bn": True,
     "use_do": False,
 }
 
@@ -94,7 +94,7 @@ class ECGDiagnoser:
             clean_key = key.removeprefix("module.")
             cleaned_state_dict[clean_key] = value
 
-        model.load_state_dict(cleaned_state_dict, strict=False)
+        model.load_state_dict(cleaned_state_dict, strict=True)
         model.to(self.device)
         # Set model to inference mode (no dropout, frozen batch norm)
         model.train(False)

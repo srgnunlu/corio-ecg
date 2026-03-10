@@ -77,12 +77,15 @@ def _reorder_leads(
     n_samples = signal.shape[0]
     reordered = np.zeros((n_samples, len(ECGFOUNDER_LEAD_ORDER)), dtype=signal.dtype)
 
-    # Build a lookup from cleaned lead name to column index
-    cleaned_leads = {name.strip(): idx for idx, name in enumerate(source_leads)}
+    # Build a case-insensitive lookup from lead name to column index.
+    # PTB-XL uses uppercase (AVR, AVL, AVF) while ECGFounder expects
+    # mixed case (aVR, aVL, aVF) — matching must ignore case.
+    cleaned_leads = {name.strip().upper(): idx for idx, name in enumerate(source_leads)}
 
     for target_idx, lead_name in enumerate(ECGFOUNDER_LEAD_ORDER):
-        if lead_name in cleaned_leads:
-            reordered[:, target_idx] = signal[:, cleaned_leads[lead_name]]
+        key = lead_name.upper()
+        if key in cleaned_leads:
+            reordered[:, target_idx] = signal[:, cleaned_leads[key]]
         # Missing leads remain zero-filled
 
     return reordered

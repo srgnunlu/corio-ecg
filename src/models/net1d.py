@@ -1,7 +1,7 @@
 # Net1D architecture from ECGFounder (PKUDigitalHealth)
 # Source: https://github.com/PKUDigitalHealth/ECGFounder
 # License: MIT
-# Adapted for Corio ECG pipeline — removed MyDataset, added type hints
+# Reconstructed from checkpoint weight shapes to match the original architecture
 
 import torch
 import torch.nn as nn
@@ -59,10 +59,16 @@ class Swish(nn.Module):
 
 
 class BasicBlock(nn.Module):
-    """Bottleneck block with squeeze-and-excitation attention."""
+    """Pre-activation residual block with squeeze-and-excitation.
 
-    def __init__(self, in_channels: int, out_channels: int, ratio: int,
-                 kernel_size: int, stride: int, groups: int,
+    Architecture (from checkpoint analysis):
+        bn1(in) -> act -> conv1(in->out, 1x1) ->
+        bn2(out) -> act -> conv2(out->out, kxk, grouped) ->
+        SE attention -> residual add
+    """
+
+    def __init__(self, in_channels: int, out_channels: int,
+                 kernel_size: int, stride: int, groups_width: int,
                  downsample: bool, is_first_block: bool = False,
                  use_bn: bool = True, use_do: bool = True) -> None:
         super().__init__()
@@ -70,67 +76,74 @@ class BasicBlock(nn.Module):
         self.is_first_block = is_first_block
         self.in_channels = in_channels
         self.out_channels = out_channels
-        self.use_bn = use_bn
-        self.use_do = use_do
 
-        mid_channels = out_channels // ratio
-        # 1x1 down
-        self.conv1 = MyConv1dPadSame(in_channels, mid_channels, 1, 1)
-        self.bn1 = nn.BatchNorm1d(mid_channels) if use_bn else nn.Identity()
+        # Pre-activation + 1x1 channel projection (in -> out)
+        self.bn1 = nn.BatchNorm1d(in_channels) if use_bn else nn.Identity()
         self.act1 = Swish()
         self.do1 = nn.Dropout(p=0.5) if use_do else nn.Identity()
-        # kxk conv
-        self.convk = MyConv1dPadSame(mid_channels, mid_channels, kernel_size,
-                                     stride, groups=mid_channels // groups)
-        self.bnk = nn.BatchNorm1d(mid_channels) if use_bn else nn.Identity()
-        self.actk = Swish()
-        self.dok = nn.Dropout(p=0.5) if use_do else nn.Identity()
-        # 1x1 up
-        self.conv2 = MyConv1dPadSame(mid_channels, out_channels, 1, 1)
+        self.conv1 = MyConv1dPadSame(in_channels, out_channels, 1, 1)
+
+        # Pre-activation + grouped kxk convolution (spatial)
+        n_groups = out_channels // groups_width
         self.bn2 = nn.BatchNorm1d(out_channels) if use_bn else nn.Identity()
         self.act2 = Swish()
         self.do2 = nn.Dropout(p=0.5) if use_do else nn.Identity()
-        # SE attention (reduction ratio 2)
+        self.conv2 = MyConv1dPadSame(out_channels, out_channels, kernel_size,
+                                     stride, groups=n_groups)
+
+        # Pre-activation + 1x1 mixing convolution (out -> out)
+        self.bn3 = nn.BatchNorm1d(out_channels) if use_bn else nn.Identity()
+        self.act3 = Swish()
+        self.do3 = nn.Dropout(p=0.5) if use_do else nn.Identity()
+        self.conv3 = MyConv1dPadSame(out_channels, out_channels, 1, 1)
+
+        # Squeeze-and-excitation (reduction ratio 2)
         self.se_fc1 = nn.Linear(out_channels, out_channels // 2)
         self.se_fc2 = nn.Linear(out_channels // 2, out_channels)
         self.se_act = Swish()
+
         # Downsample for residual path
         if downsample:
             self.max_pool = MyMaxPool1dPadSame(stride)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         identity = x
-        # Main path
-        out = self.do1(self.act1(self.bn1(self.conv1(x))))
-        out = self.dok(self.actk(self.bnk(self.convk(out))))
-        out = self.do2(self.act2(self.bn2(self.conv2(out))))
-        # SE attention
+
+        # 1x1 channel projection
+        out = self.do1(self.act1(self.bn1(x)))
+        out = self.conv1(out)
+
+        # Grouped kxk spatial convolution
+        out = self.do2(self.act2(self.bn2(out)))
+        out = self.conv2(out)
+
+        # 1x1 mixing convolution
+        out = self.do3(self.act3(self.bn3(out)))
+        out = self.conv3(out)
+
+        # Squeeze-and-excitation attention
         se = out.mean(dim=-1)  # global avg pool -> (B, C)
         se = self.se_act(self.se_fc1(se))
         se = torch.sigmoid(self.se_fc2(se))
         out = torch.einsum('abc,ab->abc', out, se)
+
         # Residual connection
         if self.downsample:
             identity = self.max_pool(identity)
         if self.out_channels != self.in_channels:
-            # Pad channels: (B, C, T) -> transpose -> pad -> transpose back
             identity = identity.transpose(-1, -2)
             ch_diff = self.out_channels - self.in_channels
             identity = F.pad(identity, (0, ch_diff), "constant", 0)
             identity = identity.transpose(-1, -2)
-        # Skip first block residual when channels mismatch at very start
-        if self.is_first_block:
-            out = out + identity
-        else:
-            out = out + identity
-        return out
+
+        return out + identity
 
 
 class BasicStage(nn.Module):
     """A stage of multiple BasicBlocks."""
 
-    def __init__(self, in_channels: int, out_channels: int, ratio: int,
-                 kernel_size: int, stride: int, groups: int,
+    def __init__(self, in_channels: int, out_channels: int,
+                 kernel_size: int, stride: int, groups_width: int,
                  n_blocks: int, is_first_stage: bool = False,
                  use_bn: bool = True, use_do: bool = True) -> None:
         super().__init__()
@@ -140,19 +153,18 @@ class BasicStage(nn.Module):
             layers.append(BasicBlock(
                 in_channels=in_channels if is_first else out_channels,
                 out_channels=out_channels,
-                ratio=ratio,
                 kernel_size=kernel_size,
                 stride=stride if is_first else 1,
-                groups=groups,
+                groups_width=groups_width,
                 downsample=is_first,
                 is_first_block=(is_first and is_first_stage),
                 use_bn=use_bn,
                 use_do=use_do,
             ))
-        self.blocks = nn.Sequential(*layers)
+        self.block_list = nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.blocks(x)
+        return self.block_list(x)
 
 
 class Net1D(nn.Module):
@@ -169,31 +181,30 @@ class Net1D(nn.Module):
                                           kernel_size, stride=2)
         self.first_bn = nn.BatchNorm1d(base_filters) if use_bn else nn.Identity()
         self.first_act = Swish()
+
         # Build stages
-        self.stages = nn.ModuleList()
+        self.stage_list = nn.ModuleList()
         in_ch = base_filters
         for i, (out_ch, n_blocks) in enumerate(zip(filter_list, m_blocks_list)):
-            self.stages.append(BasicStage(
+            self.stage_list.append(BasicStage(
                 in_channels=in_ch,
                 out_channels=out_ch,
-                ratio=ratio,
                 kernel_size=kernel_size,
                 stride=stride,
-                groups=groups_width,
+                groups_width=groups_width,
                 n_blocks=n_blocks,
                 is_first_stage=(i == 0),
                 use_bn=use_bn,
                 use_do=use_do,
             ))
             in_ch = out_ch
+
         # Classification head
         self.dense = nn.Linear(in_ch, n_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # x shape: (batch, in_channels, seq_len)
         out = self.first_act(self.first_bn(self.first_conv(x)))
-        for stage in self.stages:
+        for stage in self.stage_list:
             out = stage(out)
-        # Global average pooling over time dimension
-        out = out.mean(dim=-1)
+        out = out.mean(dim=-1)  # global average pooling
         return self.dense(out)
