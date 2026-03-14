@@ -41,36 +41,15 @@ COLOR_BG: str = "#FDF6F0"
 
 
 def _extract_lead_segment(signal: np.ndarray, lead_idx: int, col_idx: int) -> np.ndarray:
-    """Extract a lead's data for visualization.
+    """Extract the 5-second segment of a lead from its column position.
 
-    Finds the active data region in the lead and returns it for display.
-    After digitization, each lead has data at its column offset (e.g.
-    col 0 at [0:2500], col 1 at [2500:5000] in 6x2). This function
-    finds wherever the data actually is.
+    After _align_leads_to_origin() in the digitize pipeline, all leads
+    have data starting at sample 0 (tiled to fill 5000 samples). Simple
+    column-based slicing is sufficient: col 0 → [0:2500], col 1 → [2500:5000].
     """
-    lead = signal[lead_idx]
-
-    # Find the active region (non-trivial signal)
-    abs_lead = np.abs(lead)
-    peak = np.max(abs_lead)
-    if peak < 1e-6:
-        return lead[:SAMPLES_PER_COLUMN]
-
-    threshold = peak * 0.02
-    active = np.where(abs_lead > threshold)[0]
-    if len(active) == 0:
-        return lead[:SAMPLES_PER_COLUMN]
-
-    start = active[0]
-    end = min(active[-1] + 1, start + SAMPLES_PER_COLUMN)
-    segment = lead[start:end]
-
-    # Pad to SAMPLES_PER_COLUMN if shorter
-    if len(segment) < SAMPLES_PER_COLUMN:
-        padded = np.zeros(SAMPLES_PER_COLUMN, dtype=segment.dtype)
-        padded[:len(segment)] = segment
-        return padded
-    return segment[:SAMPLES_PER_COLUMN]
+    start = col_idx * SAMPLES_PER_COLUMN
+    end = start + SAMPLES_PER_COLUMN
+    return signal[lead_idx, start:end]
 
 
 def plot_ecg_paper(

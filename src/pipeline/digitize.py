@@ -624,8 +624,8 @@ class ECGDigitiser:
     def _postprocess(canonical: torch.Tensor) -> np.ndarray:
         """Convert raw canonical_lines to ECGFounder-ready format.
 
-        Steps: NaN->0, uV->mV, resample to 500Hz/5000pts, bandpass filter,
-        pad/truncate, z-score.
+        Steps: NaN->0, uV->mV, resample to 500Hz/5000pts, pad/truncate,
+        align+tile leads, bandpass filter, z-score.
         """
         signal = canonical.cpu().numpy().astype(np.float64)
 
@@ -645,6 +645,13 @@ class ECGDigitiser:
 
         # Pad or truncate time axis to exactly 5000 samples
         signal = _pad_or_truncate_time(signal, TARGET_LENGTH)
+
+        # Shift each lead's active data to sample 0 and tile to fill.
+        # Paper ECG layouts place leads at different time offsets (e.g.
+        # Lead I at [0:1250], V1 at [2500:3750] in 3x4+1R). Aligning
+        # before bandpass lets the filter smooth tile boundaries, and
+        # z-score then operates on fully-populated data for correct scaling.
+        signal = _align_leads_to_origin(signal)
 
         # Remove grid artifacts and high-frequency noise from digitization.
         # ECGFounder was trained on clean WFDB signals; residual grid lines
