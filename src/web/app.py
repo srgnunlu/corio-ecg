@@ -4,13 +4,16 @@
 
 from __future__ import annotations
 
+import gc
 import logging
+import os
 import tempfile
 from pathlib import Path
 
 import gradio as gr
 import numpy as np
 from PIL import Image
+import torch
 
 from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser
 from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
@@ -26,12 +29,23 @@ _digitiser: ECGDigitiser | None = None
 _diagnoser: ECGDiagnoser | None = None
 
 
+def _env_flag(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() not in {"0", "false", "no", "off"}
+
+
 def _get_digitiser() -> ECGDigitiser:
     """Get or create the digitiser singleton."""
     global _digitiser
     if _digitiser is None:
         logger.info("Loading ECGDigitiser (first request)...")
-        _digitiser = ECGDigitiser()
+        _digitiser = ECGDigitiser(
+            # Dewarping retry runs the entire pipeline twice, doubling peak
+            # memory (15+ GB extra). Disabled by default on 24 GB Macs.
+            enable_dewarping_retry=_env_flag("CORIO_GRADIO_ENABLE_DEWARP_RETRY", False),
+        )
     return _digitiser
 
 
@@ -46,17 +60,19 @@ def _get_diagnoser() -> ECGDiagnoser:
 
 LAYOUT_CHOICES: list[str] = [
     "Auto-detect",
-    "3x4 (standard)",
-    "3x4+1R (with rhythm strip)",
+    "3x4+1R (standard)",
+    "3x4+3R",
     "6x2",
+    "6x2+1R",
 ]
 
 # Map UI labels to layout_should_include_substring values
 _LAYOUT_MAP: dict[str, str | None] = {
     "Auto-detect": None,
-    "3x4 (standard)": "3x4",
-    "3x4+1R (with rhythm strip)": "3x4+1R",
-    "6x2": "6x2",
+    "3x4+1R (standard)": "3x4+1R",
+    "3x4+3R": "3x4+3R",
+    "6x2": "standard_6x2",
+    "6x2+1R": "standard_6x2+1R",
 }
 
 
@@ -78,37 +94,66 @@ def analyze_ecg(
 
     layout_hint = _LAYOUT_MAP.get(layout_choice)
     total_start = _time.time()
+    timing_breakdown: dict[str, float] = {}
 
     # Save uploaded image to temp file (digitiser needs a file path)
+    save_start = _time.time()
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
         image.save(tmp, format="PNG")
         tmp_path = Path(tmp.name)
+    timing_breakdown["Save upload"] = _time.time() - save_start
+    response: tuple[Image.Image | None, str, str, str]
 
     try:
         # Step 1: Digitize image to signal
+        digitiser_load_start = _time.time()
+        digitiser_was_loaded = _digitiser is not None
         digitiser = _get_digitiser()
+        if not digitiser_was_loaded:
+            timing_breakdown["Load digitizer"] = _time.time() - digitiser_load_start
+
+        digitize_start = _time.time()
         signal = digitiser.digitize(tmp_path, layout_hint=layout_hint)
+        timing_breakdown["Digitization"] = _time.time() - digitize_start
         debug_info = digitiser.last_info
 
         # Step 2: Diagnose signal
+        diagnoser_load_start = _time.time()
+        diagnoser_was_loaded = _diagnoser is not None
         diagnoser = _get_diagnoser()
-        results = diagnoser.diagnose(signal, threshold=threshold)
+        if not diagnoser_was_loaded:
+            timing_breakdown["Load diagnoser"] = _time.time() - diagnoser_load_start
+
+        diagnose_start = _time.time()
         all_results = diagnoser.diagnose_all(signal)
+        timing_breakdown["Diagnosis inference"] = _time.time() - diagnose_start
+        results = [r for r in all_results if r.probability >= threshold]
+        estimated_hr = diagnoser.last_estimated_hr_bpm
 
         # Step 3: Generate ECG paper visualization
+        plot_start = _time.time()
         fig = plot_ecg_paper(signal)
         ecg_image = fig_to_pil(fig)
+        timing_breakdown["Plot rendering"] = _time.time() - plot_start
 
         # Step 4: Collect timing from the wrapper
-        wrapper_times = getattr(digitiser._wrapper, "times", {})
+        wrapper_times = dict(getattr(digitiser._wrapper, "times", {}))
+        wrapper_times.update(timing_breakdown)
         wrapper_times["Total (end-to-end)"] = _time.time() - total_start
 
         # Step 5: Format results
-        critical_html = _format_critical(results)
+        critical_html = _format_critical(
+            results=results,
+            all_results=all_results,
+            threshold=threshold,
+            estimated_hr=estimated_hr,
+        )
         diagnoses_html = _format_diagnoses(all_results, threshold)
-        debug_html = _format_debug_info(debug_info, wrapper_times)
+        debug_html = _format_debug_info(debug_info, wrapper_times, estimated_hr)
 
-        return ecg_image, critical_html, diagnoses_html, debug_html
+        response = (ecg_image, critical_html, diagnoses_html, debug_html)
+        del signal, all_results, results, debug_info, wrapper_times, fig
+        return response
 
     except RuntimeError as exc:
         error_msg = (
@@ -116,17 +161,44 @@ def analyze_ecg(
             f"border-left:4px solid #EF4444;'>"
             f"<b>Analysis Failed</b><br>{exc}</div>"
         )
-        return None, error_msg, "", ""
+        logger.exception("ECG analysis failed")
+        response = (None, error_msg, "", "")
+        return response
+    except Exception:
+        logger.exception("Unexpected exception during ECG analysis")
+        response = (
+            None,
+            (
+                "<div style='padding:16px; background:#FEF2F2; border-radius:8px; "
+                "border-left:4px solid #EF4444;'>"
+                "<b>Analysis Failed</b><br>Unexpected internal error. "
+                "Check /tmp/corio-gradio.log for details.</div>"
+            ),
+            "",
+            "",
+        )
+        return response
     finally:
         tmp_path.unlink(missing_ok=True)
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        elif torch.backends.mps.is_available():
+            torch.mps.empty_cache()
+        gc.collect()
 
 
-def _format_critical(results: list[DiagnosisResult]) -> str:
+def _format_critical(
+    results: list[DiagnosisResult],
+    all_results: list[DiagnosisResult],
+    threshold: float,
+    estimated_hr: float | None,
+) -> str:
     """Format critical findings as HTML alert boxes."""
     critical = [r for r in results if r.index in CRITICAL_DIAGNOSIS_INDICES]
+    rhythm_alerts = _format_rhythm_considerations(all_results, threshold, estimated_hr)
 
     if not critical:
-        return (
+        return rhythm_alerts + (
             "<div style='padding:12px 16px; background:#F0FDF4; border-radius:8px; "
             "border-left:4px solid #22C55E; color:#166534;'>"
             "<b>No critical findings detected</b></div>"
@@ -142,7 +214,84 @@ def _format_critical(results: list[DiagnosisResult]) -> str:
             f"<span style='float:right; color:#666; font-size:14px;'>"
             f"prob: {r.probability:.2f}</span></div>"
         )
-    return "\n".join(items)
+    return rhythm_alerts + "\n".join(items)
+
+
+def _format_rhythm_considerations(
+    all_results: list[DiagnosisResult],
+    threshold: float,
+    estimated_hr: float | None,
+) -> str:
+    """Show rhythm-specific differential when HR is clearly abnormal."""
+    if estimated_hr is None or estimated_hr < 110.0:
+        return ""
+
+    label_to_result = {result.label: result for result in all_results}
+    if estimated_hr >= 150.0:
+        labels = [
+            "VENTRICULAR TACHYCARDIA",
+            "WIDE QRS TACHYCARDIA",
+            "SUPRAVENTRICULAR TACHYCARDIA",
+            "SINUS TACHYCARDIA",
+            "ATRIAL FLUTTER",
+            "ATRIAL FIBRILLATION",
+            "IDIOVENTRICULAR RHYTHM",
+        ]
+        title = "Tachyarrhythmia Considerations"
+        accent = "#F59E0B"
+        bg = "#FFF7ED"
+        fg = "#9A3412"
+        message = (
+            f"Estimated heart rate is {estimated_hr:.0f} bpm. "
+            "ECGFounder scores rhythm labels independently, so tachy subtypes can "
+            "remain below the main display threshold on digitized signals."
+        )
+    else:
+        labels = [
+            "SINUS TACHYCARDIA",
+            "SUPRAVENTRICULAR TACHYCARDIA",
+            "ATRIAL FLUTTER",
+            "ATRIAL FIBRILLATION",
+        ]
+        title = "Fast Rhythm Considerations"
+        accent = "#3B82F6"
+        bg = "#EFF6FF"
+        fg = "#1D4ED8"
+        message = (
+            f"Estimated heart rate is {estimated_hr:.0f} bpm. "
+            "Review rhythm-specific labels separately from the main thresholded list."
+        )
+
+    ranked = [
+        label_to_result[label]
+        for label in labels
+        if label in label_to_result
+    ]
+    ranked.sort(key=lambda result: result.probability, reverse=True)
+    ranked = ranked[:4]
+    if not ranked:
+        return ""
+
+    rows = "".join(
+        "<tr>"
+        f"<td style='padding:4px 8px;'>{result.label}</td>"
+        f"<td style='padding:4px 8px; text-align:right; font-family:monospace;'>{result.probability:.3f}</td>"
+        f"<td style='padding:4px 8px; text-align:right;'>{'above threshold' if result.probability >= threshold else 'below threshold'}</td>"
+        "</tr>"
+        for result in ranked
+    )
+
+    return (
+        f"<div style='padding:12px 16px; margin-bottom:12px; background:{bg}; "
+        f"border-radius:8px; border-left:4px solid {accent}; color:{fg};'>"
+        f"<b>{title}</b><br>{message}"
+        f"<table style='width:100%; border-collapse:collapse; font-size:13px; margin-top:8px;'>"
+        f"<thead><tr>"
+        f"<th style='text-align:left; padding:4px 8px;'>Label</th>"
+        f"<th style='text-align:right; padding:4px 8px;'>Probability</th>"
+        f"<th style='text-align:right; padding:4px 8px;'>Threshold</th>"
+        f"</tr></thead><tbody>{rows}</tbody></table></div>"
+    )
 
 
 def _format_diagnoses(
@@ -196,6 +345,7 @@ def _format_diagnoses(
 def _format_debug_info(
     info: DigitizeInfo,
     timing: dict[str, float] | None = None,
+    estimated_hr: float | None = None,
 ) -> str:
     """Format diagnostic info as HTML for the debug panel."""
     # Quality indicator based on layout cost
@@ -275,12 +425,13 @@ def _format_debug_info(
     # Timing breakdown
     timing_html = ""
     if timing:
-        total = sum(timing.values())
+        total = timing.get("Total (end-to-end)")
         timing_rows = "".join(
             f"<tr><td style='padding:2px 8px;'>{name}</td>"
             f"<td style='padding:2px 8px; text-align:right; font-family:monospace;'>"
             f"{duration:.1f}s</td></tr>"
             for name, duration in timing.items()
+            if name != "Total (end-to-end)"
         )
         timing_html = (
             f"<div style='margin-top:12px;'><b>Timing breakdown:</b>"
@@ -305,6 +456,8 @@ def _format_debug_info(
         f"<div><b>Signal traces:</b> {info.raw_lines_count}</div>"
         f"<div><b>Detected leads:</b> {info.detected_leads_count}/12</div>"
         f"<div><b>Pixel density:</b> {info.avg_pixel_per_mm:.1f} px/mm</div>"
+        f"<div><b>Estimated HR:</b> "
+        f"{f'{estimated_hr:.0f} bpm' if estimated_hr is not None else 'n/a'}</div>"
         f"</div>"
         f"<div style='margin-bottom:8px;'><b>Detected:</b> "
         f"{', '.join(info.detected_leads) if info.detected_leads else '<i>none</i>'}</div>"
@@ -344,17 +497,17 @@ def create_app() -> gr.Blocks:
                 )
                 layout_dropdown = gr.Dropdown(
                     choices=LAYOUT_CHOICES,
-                    value="Auto-detect",
+                    value="3x4+1R (standard)",
                     label="ECG Layout",
-                    info="Select layout format or let the AI auto-detect",
+                    info="Most standard paper ECGs are 3x4+1R; switch if your printout differs",
                 )
                 threshold_slider = gr.Slider(
                     minimum=0.1,
                     maximum=0.9,
-                    value=0.5,
+                    value=0.7,
                     step=0.05,
                     label="Diagnosis Threshold",
-                    info="Higher = fewer but more confident diagnoses",
+                    info="For digitized photos, 0.65-0.75 usually gives cleaner results",
                 )
                 analyze_btn = gr.Button(
                     "Analyze ECG",
@@ -396,7 +549,7 @@ def create_app() -> gr.Blocks:
             if cat_dir.exists():
                 imgs = sorted(cat_dir.glob("*.png"))[:3]
                 for img in imgs:
-                    example_images.append([str(img), 0.5, "Auto-detect"])
+                    example_images.append([str(img), 0.7, "3x4+1R (standard)"])
 
         if example_images:
             gr.Examples(

@@ -13,8 +13,31 @@ import torch
 
 from src.models.net1d import Net1D
 from src.utils.ecg_labels import DEFAULT_THRESHOLD, ECG_FOUNDER_LABELS, NUM_CLASSES
+from src.utils.rhythm import estimate_heart_rate_bpm
 
 logger = logging.getLogger(__name__)
+
+_LABEL_TO_INDEX: dict[str, int] = {
+    label: index for index, label in enumerate(ECG_FOUNDER_LABELS)
+}
+_BRADYCARDIA_LABELS: tuple[str, ...] = (
+    "SINUS BRADYCARDIA",
+    "MARKED SINUS BRADYCARDIA",
+    "JUNCTIONAL BRADYCARDIA",
+)
+_TACHYCARDIA_LABELS: tuple[str, ...] = (
+    "SINUS TACHYCARDIA",
+    "SUPRAVENTRICULAR TACHYCARDIA",
+    "WIDE QRS TACHYCARDIA",
+    "VENTRICULAR TACHYCARDIA",
+    "MULTIFOCAL ATRIAL TACHYCARDIA",
+)
+_NORMALISH_LABELS: tuple[str, ...] = (
+    "NORMAL SINUS RHYTHM",
+    "SINUS RHYTHM",
+    "NORMAL ECG",
+    "OTHERWISE NORMAL ECG",
+)
 
 MODEL_CONFIG: dict = {
     "in_channels": 12,
@@ -60,6 +83,7 @@ class ECGDiagnoser:
     ) -> None:
         self.device = device or get_device()
         self.threshold = threshold
+        self.last_estimated_hr_bpm: float | None = None
         self.model = self._load_model(Path(checkpoint_path))
         logger.info(
             "ECGDiagnoser ready — device=%s, threshold=%.2f",
@@ -126,6 +150,7 @@ class ECGDiagnoser:
         with torch.no_grad():
             logits = self.model(tensor)
             probabilities = torch.sigmoid(logits).squeeze(0).cpu().numpy()
+        probabilities = self._apply_rate_consistency_adjustments(probabilities, signal)
 
         # Collect results above threshold
         results: list[DiagnosisResult] = []
@@ -154,3 +179,46 @@ class ECGDiagnoser:
             All 150 diagnosis results sorted by probability descending.
         """
         return self.diagnose(signal, threshold=0.0)
+
+    def _apply_rate_consistency_adjustments(
+        self,
+        probabilities: np.ndarray,
+        signal: np.ndarray,
+    ) -> np.ndarray:
+        """Down-weight diagnoses that contradict an obvious heart-rate regime."""
+        adjusted = probabilities.copy()
+        estimated_hr = estimate_heart_rate_bpm(signal)
+        self.last_estimated_hr_bpm = estimated_hr
+        if estimated_hr is None:
+            return adjusted
+
+        if estimated_hr >= 110.0:
+            self._scale_labels(adjusted, _BRADYCARDIA_LABELS, factor=0.05)
+            self._scale_labels(adjusted, ("NORMAL ECG", "OTHERWISE NORMAL ECG"), factor=0.1)
+            if estimated_hr >= 130.0:
+                self._scale_labels(adjusted, ("NORMAL SINUS RHYTHM",), factor=0.1)
+                self._scale_labels(adjusted, ("SINUS RHYTHM",), factor=0.2)
+
+        if estimated_hr <= 55.0:
+            self._scale_labels(adjusted, _TACHYCARDIA_LABELS, factor=0.05)
+            self._scale_labels(adjusted, ("NORMAL ECG", "OTHERWISE NORMAL ECG"), factor=0.1)
+            if estimated_hr <= 45.0:
+                self._scale_labels(adjusted, ("NORMAL SINUS RHYTHM",), factor=0.2)
+                self._scale_labels(adjusted, ("SINUS RHYTHM",), factor=0.3)
+
+        if estimated_hr < 50.0 or estimated_hr > 100.0:
+            self._scale_labels(adjusted, _NORMALISH_LABELS, factor=0.25)
+
+        return adjusted
+
+    @staticmethod
+    def _scale_labels(
+        probabilities: np.ndarray,
+        labels: tuple[str, ...],
+        factor: float,
+    ) -> None:
+        """Scale selected diagnosis probabilities in-place."""
+        for label in labels:
+            label_index = _LABEL_TO_INDEX.get(label)
+            if label_index is not None:
+                probabilities[label_index] *= factor

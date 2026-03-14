@@ -167,22 +167,20 @@ class TestCpuFullResolution:
         digitiser.device = torch.device("cpu")
         assert digitiser.device.type == "cpu"
 
-    def test_image_full_resolution_preserved(self) -> None:
-        """Images are loaded at full resolution on CPU — no downscaling."""
-        from src.pipeline.digitize import ECGDigitiser
+    def test_image_upscaled_to_min_dimension(self) -> None:
+        """Small images are upscaled so shortest side reaches MIN_IMAGE_DIMENSION."""
+        from src.pipeline.digitize import ECGDigitiser, MIN_IMAGE_DIMENSION
 
         digitiser = object.__new__(ECGDigitiser)
         digitiser.device = torch.device("cpu")
 
         with patch("torchvision.io.decode_image") as mock_decode:
-            # Simulate a 2200x1700 image (3, H, W)
+            # Simulate a 2200x1700 image — shortest side < MIN_IMAGE_DIMENSION
             mock_decode.return_value = torch.zeros(3, 1700, 2200, dtype=torch.uint8)
             result = digitiser._load_image(Path("fake.png"))
 
-            # Full resolution preserved — no downscaling
             _, _, new_h, new_w = result.shape
-            assert new_h == 1700
-            assert new_w == 2200
+            assert min(new_h, new_w) == MIN_IMAGE_DIMENSION
 
 
 class TestPostprocessEndToEnd:
@@ -210,6 +208,101 @@ class TestPostprocessEndToEnd:
         result = ECGDigitiser._postprocess(canonical)
         # A random signal should not normalize to all zeros
         assert np.any(result != 0.0)
+
+
+class TestQualityGuards:
+    """Verify silent digitization failures are rejected."""
+
+    def test_extract_canonical_raises_for_all_nan(self) -> None:
+        from src.pipeline.digitize import ECGDigitiser
+
+        result = {
+            "signal": {
+                "canonical_lines": torch.full((12, 1000), float("nan")),
+            }
+        }
+
+        digitiser = object.__new__(ECGDigitiser)
+        with pytest.raises(RuntimeError, match="no finite canonical signal values"):
+            digitiser._extract_canonical(result)
+
+    def test_count_nonzero_leads(self) -> None:
+        from src.pipeline.digitize import ECGDigitiser
+
+        signal = np.zeros((12, 5000), dtype=np.float32)
+        signal[:9] = 0.5
+
+        assert ECGDigitiser._count_nonzero_leads(signal) == 9
+
+    def test_validate_signal_rejects_sparse_output(self) -> None:
+        from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
+
+        digitiser = object.__new__(ECGDigitiser)
+        digitiser.last_info = DigitizeInfo(raw_lines_count=1, nonzero_leads_count=4)
+
+        signal = np.zeros((12, 5000), dtype=np.float32)
+        signal[:4] = 1.0
+
+        with pytest.raises(RuntimeError, match="failed quality checks"):
+            digitiser._validate_digitized_signal(signal, layout_hint="3x4+1R")
+
+
+class TestRetryLogic:
+    """Verify poor-quality results trigger fallback attempts."""
+
+    def test_should_retry_on_high_layout_cost(self) -> None:
+        from src.pipeline.digitize import ECGDigitiser
+
+        digitiser = object.__new__(ECGDigitiser)
+        digitiser._wrapper = MagicMock(apply_dewarping=False)
+
+        result = {
+            "signal": {
+                "layout_matching_cost": 1.55,
+                "raw_lines": torch.zeros(4, 100),
+                "n_detected": 11,
+            }
+        }
+
+        assert digitiser._should_retry_with_dewarping(result) is True
+
+    def test_score_prefers_finite_canonical_signal(self) -> None:
+        from src.pipeline.digitize import ECGDigitiser
+
+        digitiser = object.__new__(ECGDigitiser)
+
+        poor = {
+            "signal": {
+                "layout_matching_cost": 1.55,
+                "raw_lines": torch.zeros(4, 100),
+                "n_detected": 11,
+                "canonical_lines": torch.full((12, 100), float("nan")),
+            }
+        }
+        good = {
+            "signal": {
+                "layout_matching_cost": 0.44,
+                "raw_lines": torch.zeros(4, 100),
+                "n_detected": 11,
+                "canonical_lines": torch.randn(12, 100),
+            }
+        }
+
+        assert digitiser._score_raw_result(good) > digitiser._score_raw_result(poor)
+
+    def test_run_best_inference_skips_retry_when_disabled(self) -> None:
+        from src.pipeline.digitize import ECGDigitiser
+
+        digitiser = object.__new__(ECGDigitiser)
+        digitiser.enable_dewarping_retry = False
+        digitiser._run_inference = MagicMock(return_value={"signal": {}})
+        digitiser._score_raw_result = MagicMock(return_value=1.0)
+        digitiser._should_retry_with_dewarping = MagicMock(return_value=True)
+
+        result = digitiser._run_best_inference(torch.zeros(1, 3, 10, 10))
+
+        assert result["processing_mode"] == "default"
+        assert digitiser._run_inference.call_count == 1
 
 
 # ---------------------------------------------------------------------------

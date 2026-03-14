@@ -3,6 +3,7 @@
 
 import os
 import struct
+import sys
 from pathlib import Path
 from unittest.mock import patch
 
@@ -43,6 +44,7 @@ class TestBuildCliArgs:
             difficulty=DifficultyLevel.CLEAN,
             seed=42,
         )
+        assert args[0] == sys.executable
         assert "-r" in args
         assert args[args.index("-r") + 1] == "200"
         assert "--standard_grid_color" in args

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.sergenunlu.corio-ecg.gradio</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/sergenunlu/Developer/active/apps/Corio ECG/scripts/run_gradio_service.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/sergenunlu/Developer/active/apps/Corio ECG</string>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>ProcessType</key>
+    <string>Interactive</string>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/corio-gradio.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/corio-gradio.log</string>
+</dict>
+</plist>

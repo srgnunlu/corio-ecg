@@ -4,6 +4,7 @@
 
 import shutil
 import subprocess
+import sys
 import tempfile
 from enum import Enum
 from pathlib import Path
@@ -74,7 +75,7 @@ def _build_cli_args(
     is reproducible and consistent across the dataset.
     """
     base_args = [
-        "python", "-c", _NUMPY_COMPAT_LAUNCHER,
+        sys.executable, "-c", _NUMPY_COMPAT_LAUNCHER,
         "-i", dat_path,
         "-hea", hea_path,
         "-o", output_dir,

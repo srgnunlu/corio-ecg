@@ -94,8 +94,9 @@ def plot_ecg_paper(
             seg = _extract_lead_segment(signal, lead_idx, col_idx)
             all_segments.append(seg)
 
-    all_values = np.concatenate([s for s in all_segments if np.std(s) > 0.01])
-    if len(all_values) > 0:
+    nonflat_segments = [s for s in all_segments if np.std(s) > 0.01]
+    if nonflat_segments:
+        all_values = np.concatenate(nonflat_segments)
         y_margin = np.percentile(np.abs(all_values), 98) * 1.3
     else:
         y_margin = 4.0
@@ -200,4 +201,7 @@ def fig_to_pil(fig: Figure) -> Image.Image:
     fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
     plt.close(fig)
     buf.seek(0)
-    return Image.open(buf)
+    image = Image.open(buf)
+    image.load()
+    buf.close()
+    return image

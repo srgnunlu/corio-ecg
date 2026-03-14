@@ -79,6 +79,33 @@ python -m src.training.evaluate --dataset ptbxl
 python src/web/app.py
 ```
 
+### Persistent Gradio Service (macOS)
+
+Use `launchd` if you want the local Gradio UI to survive terminal disconnects.
+
+```bash
+# Install the LaunchAgent into ~/Library/LaunchAgents
+./scripts/install_gradio_launch_agent.sh
+
+# Start or restart the service
+launchctl kickstart -k gui/$(id -u)/com.sergenunlu.corio-ecg.gradio
+
+# Check service status
+launchctl print gui/$(id -u)/com.sergenunlu.corio-ecg.gradio
+
+# Stop and unload the service
+launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/com.sergenunlu.corio-ecg.gradio.plist
+```
+
+Notes:
+
+- The service keeps running even if you close the browser tab.
+- If the Python process exits unexpectedly, `launchd` restarts it.
+- Logs are written to `/tmp/corio-gradio.log`.
+- The service does not start automatically at login; it only runs after manual install/load.
+- The LaunchAgent runs as an interactive user service, not a background daemon.
+- The local Gradio service disables dewarping retry by default to reduce runaway CPU/memory cases on macOS.
+
 ## Project Structure
 
 ```

@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_IMAGE_DIR = Path("data/processed/images")
 DEFAULT_SIGNAL_DIR = Path("data/processed/signals")
 VALID_LEVELS = ["clean", "moderate", "hard"]
+DEFAULT_LAYOUT_HINT = "3x4+1R"
 
 
 def collect_image_paths(
@@ -60,6 +61,7 @@ def digitize_batch(
     image_paths: list[Path],
     output_dir: Path,
     level: str,
+    layout_hint: str | None = DEFAULT_LAYOUT_HINT,
 ) -> dict[str, int]:
     """Digitize a batch of ECG images and save as .npy files.
 
@@ -68,6 +70,7 @@ def digitize_batch(
         image_paths: List of PNG image paths to process.
         output_dir: Base output directory for signal files.
         level: Difficulty level name (used for subdirectory).
+        layout_hint: Optional layout constraint for the digitizer.
 
     Returns:
         Summary dict with counts: digitized, skipped, failed.
@@ -98,7 +101,7 @@ def digitize_batch(
             continue
 
         try:
-            signal = digitiser.digitize(image_path)
+            signal = digitiser.digitize(image_path, layout_hint=layout_hint)
             np.save(output_path, signal)
             summary["digitized"] += 1
         except Exception as error:
@@ -163,6 +166,15 @@ def main() -> None:
         default=None,
         help="Limit number of images to process (default: all)",
     )
+    parser.add_argument(
+        "--layout-hint",
+        type=str,
+        default=DEFAULT_LAYOUT_HINT,
+        help=(
+            "Layout substring to constrain the digitizer "
+            f"(default: {DEFAULT_LAYOUT_HINT}). Use 'auto' to disable."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -182,6 +194,7 @@ def main() -> None:
         image_paths=image_paths,
         output_dir=args.output_dir,
         level=args.level,
+        layout_hint=None if args.layout_hint.lower() == "auto" else args.layout_hint,
     )
 
     elapsed = time.time() - start_time
