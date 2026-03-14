@@ -624,7 +624,8 @@ class ECGDigitiser:
     def _postprocess(canonical: torch.Tensor) -> np.ndarray:
         """Convert raw canonical_lines to ECGFounder-ready format.
 
-        Steps: NaN->0, uV->mV, resample to 500Hz/5000pts, pad/truncate, z-score.
+        Steps: NaN->0, uV->mV, resample to 500Hz/5000pts, bandpass filter,
+        pad/truncate, z-score.
         """
         signal = canonical.cpu().numpy().astype(np.float64)
 
@@ -644,6 +645,11 @@ class ECGDigitiser:
 
         # Pad or truncate time axis to exactly 5000 samples
         signal = _pad_or_truncate_time(signal, TARGET_LENGTH)
+
+        # Remove grid artifacts and high-frequency noise from digitization.
+        # ECGFounder was trained on clean WFDB signals; residual grid lines
+        # from paper ECG photos cause false positives (AF, PVCs).
+        signal = _bandpass_filter(signal, TARGET_SAMPLE_RATE)
 
         # Global z-score normalization (same as wfdb_helpers)
         signal = _z_score_normalize(signal)
@@ -708,6 +714,36 @@ def _pad_or_truncate_time(signal: np.ndarray, target_length: int) -> np.ndarray:
     padded = np.zeros((signal.shape[0], target_length), dtype=signal.dtype)
     padded[:, :n_points] = signal
     return padded
+
+
+def _bandpass_filter(
+    signal: np.ndarray,
+    sample_rate: int,
+    low_hz: float = 0.5,
+    high_hz: float = 40.0,
+) -> np.ndarray:
+    """Remove grid artifacts and baseline wander from digitized ECG.
+
+    Paper ECG photos contain residual grid line patterns (typically at
+    frequencies above 40 Hz) and baseline drift (below 0.5 Hz). Both
+    cause false positive diagnoses in ECGFounder, which was trained on
+    clean WFDB recordings. The 0.5-40 Hz band preserves diagnostic
+    ECG morphology (P, QRS, T, ST) while removing digitization noise.
+    """
+    from scipy.signal import butter, sosfiltfilt
+
+    nyquist = sample_rate / 2.0
+    low = low_hz / nyquist
+    high = high_hz / nyquist
+    sos = butter(N=3, Wn=[low, high], btype="bandpass", output="sos")
+    filtered = np.zeros_like(signal)
+    for i in range(signal.shape[0]):
+        lead = signal[i]
+        if np.std(lead) < 1e-6:
+            filtered[i] = lead
+            continue
+        filtered[i] = sosfiltfilt(sos, lead)
+    return filtered
 
 
 def _z_score_normalize(signal: np.ndarray) -> np.ndarray:
