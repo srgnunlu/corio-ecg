@@ -17,6 +17,8 @@ import torch
 import torch.nn.functional as F_torch
 from scipy.interpolate import interp1d
 
+from src.utils.signal_clean import einthoven_consistency, highpass_filter, wavelet_denoise
+
 logger = logging.getLogger(__name__)
 
 # Open-ECG-Digitizer outputs signal in microvolts — ECGFounder expects mV
@@ -65,6 +67,7 @@ class DigitizeInfo:
     canonical_shape: tuple[int, ...] = (0, 0)
     per_lead_energy: list[float] = field(default_factory=list)
     nonzero_leads_count: int = 0
+    einthoven_score: float = -1.0  # Pearson corr: II vs I+III (-1=not computed)
     processing_mode: str = "default"
 
     @property
@@ -77,6 +80,7 @@ class DigitizeInfo:
             or self.avg_pixel_per_mm > 30.0
             or self.raw_lines_count < MIN_REQUIRED_RAW_LINES
             or (self.nonzero_leads_count > 0 and self.nonzero_leads_count < MIN_REQUIRED_NONZERO_LEADS)
+            or (self.einthoven_score >= 0 and self.einthoven_score < 0.7)
         )
 
     def summary(self) -> str:
@@ -94,6 +98,7 @@ class DigitizeInfo:
             f"y={self.pixel_spacing_y_mm:.3f} mm/px "
             f"(avg={self.avg_pixel_per_mm:.1f} px/mm)",
             f"Canonical shape: {self.canonical_shape}",
+            f"Einthoven consistency: {self.einthoven_score:.2f}",
         ]
         return "\n".join(lines)
 
@@ -332,6 +337,14 @@ class ECGDigitiser:
         for i in range(min(signal.shape[0], NUM_LEADS)):
             rms = float(np.sqrt(np.mean(signal[i] ** 2)))
             self.last_info.per_lead_energy.append(round(rms, 3))
+
+        # Verify lead assignment via Einthoven's law (II ≈ I + III)
+        self.last_info.einthoven_score = einthoven_consistency(signal)
+        if self.last_info.einthoven_score < 0.7:
+            logger.warning(
+                "Einthoven consistency low (%.2f) — lead assignment may be incorrect",
+                self.last_info.einthoven_score,
+            )
 
         logger.info("Digitization diagnostics:\n%s", self.last_info.summary())
         if self.last_info.has_warnings:
@@ -625,7 +638,7 @@ class ECGDigitiser:
         """Convert raw canonical_lines to ECGFounder-ready format.
 
         Steps: NaN->0, uV->mV, resample to 500Hz/5000pts, pad/truncate,
-        align+tile leads, bandpass filter, z-score.
+        align+tile leads, highpass 0.5Hz, wavelet denoise, z-score.
         """
         signal = canonical.cpu().numpy().astype(np.float64)
 
@@ -653,10 +666,17 @@ class ECGDigitiser:
         # z-score then operates on fully-populated data for correct scaling.
         signal = _align_leads_to_origin(signal)
 
-        # Remove grid artifacts and high-frequency noise from digitization.
-        # ECGFounder was trained on clean WFDB signals; residual grid lines
-        # from paper ECG photos cause false positives (AF, PVCs).
-        signal = _bandpass_filter(signal, TARGET_SAMPLE_RATE)
+        # Remove baseline wander (< 0.5 Hz) from paper curvature and
+        # lighting gradients. High-pass only — no upper cutoff, so QRS
+        # high-frequency content (40-150 Hz) is preserved. ECGFounder
+        # was trained on unfiltered WFDB signals with full 0-250 Hz spectrum.
+        signal = highpass_filter(signal, TARGET_SAMPLE_RATE)
+
+        # Remove digitization noise (grid artifacts, trace jitter) while
+        # preserving QRS/P/T morphology. Wavelet denoising thresholds
+        # only high-frequency detail coefficients (> ~30 Hz), leaving
+        # diagnostic waveform content untouched.
+        signal = wavelet_denoise(signal, TARGET_SAMPLE_RATE)
 
         # Global z-score normalization (same as wfdb_helpers)
         signal = _z_score_normalize(signal)

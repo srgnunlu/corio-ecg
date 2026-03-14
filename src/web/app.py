@@ -458,6 +458,8 @@ def _format_debug_info(
         f"<div><b>Pixel density:</b> {info.avg_pixel_per_mm:.1f} px/mm</div>"
         f"<div><b>Estimated HR:</b> "
         f"{f'{estimated_hr:.0f} bpm' if estimated_hr is not None else 'n/a'}</div>"
+        f"<div><b>Einthoven:</b> {info.einthoven_score:.2f}"
+        f"{'  ⚠️' if info.einthoven_score >= 0 and info.einthoven_score < 0.7 else ''}</div>"
         f"</div>"
         f"<div style='margin-bottom:8px;'><b>Detected:</b> "
         f"{', '.join(info.detected_leads) if info.detected_leads else '<i>none</i>'}</div>"
