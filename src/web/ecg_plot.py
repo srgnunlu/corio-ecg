@@ -1,6 +1,6 @@
 # ECG paper-style visualization for digitized 12-lead signals
 # Renders signals on a medical-standard grid (25mm/s, 10mm/mV)
-# Layout: 4 columns x 3 rows + rhythm strip
+# Layout: 6 rows x 2 columns + Lead II rhythm strip (6x2+1R)
 
 from __future__ import annotations
 
@@ -19,14 +19,18 @@ PAPER_SPEED_MM_S: float = 25.0
 VOLTAGE_GAIN_MM_MV: float = 10.0
 SAMPLE_RATE: int = 500
 
-# Standard 12-lead ECG paper layout (4 columns x 3 rows)
+# 6x2+1R layout: limb leads left column, precordial leads right column
+# Each lead shows 5 seconds (half of the 10-second recording)
 ROW_TO_LEADS: list[list[int]] = [
-    [0, 3, 6, 9],     # Row 0: I, aVR, V1, V4
-    [1, 4, 7, 10],    # Row 1: II, aVL, V2, V5
-    [2, 5, 8, 11],    # Row 2: III, aVF, V3, V6
+    [0, 6],    # Row 0: I,   V1
+    [1, 7],    # Row 1: II,  V2
+    [2, 8],    # Row 2: III, V3
+    [3, 9],    # Row 3: aVR, V4
+    [4, 10],   # Row 4: aVL, V5
+    [5, 11],   # Row 5: aVF, V6
 ]
 
-SAMPLES_PER_COLUMN: int = int(2.5 * SAMPLE_RATE)  # 1250
+SAMPLES_PER_COLUMN: int = int(5.0 * SAMPLE_RATE)  # 2500 (5 seconds per column)
 
 # Colors matching real ECG paper
 COLOR_GRID_MAJOR: str = "#E8B4B4"
@@ -37,22 +41,18 @@ COLOR_BG: str = "#FDF6F0"
 
 
 def _extract_lead_segment(signal: np.ndarray, lead_idx: int, col_idx: int) -> np.ndarray:
-    """Extract the 2.5-second segment of a lead from its column position.
+    """Extract the 5-second segment of a lead from its column position.
 
-    The canonical format places each lead's data at its column offset:
-    column 0 → samples 0-1249, column 1 → 1250-2499, etc.
+    In 6x2 layout, column 0 gets samples 0-2499 (first 5 seconds),
+    column 1 gets samples 2500-4999 (last 5 seconds).
     """
     start = col_idx * SAMPLES_PER_COLUMN
     end = start + SAMPLES_PER_COLUMN
     segment = signal[lead_idx, start:end]
 
     # If this segment is mostly zero/NaN, try finding data elsewhere
-    # (fallback for partially-split signals)
     if np.std(segment) < 0.01 and np.std(signal[lead_idx]) > 0.01:
-        # Find where the actual data is in this lead
         full_lead = signal[lead_idx]
-        abs_vals = np.abs(full_lead)
-        # Find the 1250-sample window with max energy
         best_start = 0
         best_energy = 0.0
         for s in range(0, len(full_lead) - SAMPLES_PER_COLUMN + 1, SAMPLES_PER_COLUMN // 4):
@@ -70,7 +70,7 @@ def plot_ecg_paper(
     signal: np.ndarray,
     title: str = "Corio ECG — Digitized Signal",
 ) -> Figure:
-    """Render a 12-lead ECG signal on paper-style grid.
+    """Render a 12-lead ECG signal in 6x2+1R paper-style layout.
 
     Args:
         signal: Shape (12, 5000) — z-score normalized signal.
@@ -79,17 +79,18 @@ def plot_ecg_paper(
     Returns:
         matplotlib Figure ready for display.
     """
+    n_rows = 6
     fig, axes = plt.subplots(
-        4, 1,
-        figsize=(14, 10),
-        gridspec_kw={"height_ratios": [1, 1, 1, 0.8]},
+        n_rows + 1, 1,
+        figsize=(14, 14),
+        gridspec_kw={"height_ratios": [1, 1, 1, 1, 1, 1, 0.8]},
     )
     fig.patch.set_facecolor(COLOR_BG)
-    fig.suptitle(title, fontsize=13, fontweight="bold", y=0.98)
+    fig.suptitle(title, fontsize=13, fontweight="bold", y=0.99)
 
     # Collect all segments to compute global amplitude range
     all_segments: list[np.ndarray] = []
-    for row_idx in range(3):
+    for row_idx in range(n_rows):
         for col_idx, lead_idx in enumerate(ROW_TO_LEADS[row_idx]):
             seg = _extract_lead_segment(signal, lead_idx, col_idx)
             all_segments.append(seg)
@@ -102,11 +103,11 @@ def plot_ecg_paper(
         y_margin = 4.0
     y_margin = max(y_margin, 1.0)
 
-    total_width = SAMPLES_PER_COLUMN * 4  # 5000 samples total
+    total_width = SAMPLES_PER_COLUMN * 2  # 5000 samples total
 
-    # Draw 3 rows of 4 leads each
+    # Draw 6 rows of 2 leads each
     seg_idx = 0
-    for row_idx in range(3):
+    for row_idx in range(n_rows):
         ax = axes[row_idx]
         lead_indices = ROW_TO_LEADS[row_idx]
 
@@ -133,11 +134,9 @@ def plot_ecg_paper(
         _setup_grid(ax, x_max=total_width, y_range=y_margin)
 
     # Rhythm strip: Lead II full 10 seconds
-    ax_rhythm = axes[3]
+    ax_rhythm = axes[n_rows]
     rhythm = signal[1, :]  # Lead II
-    # If Lead II data is only in column 0 (1250 samples), use what we have
     if np.std(rhythm) < 0.01:
-        # Try to find any lead with full-length data for rhythm strip
         for i in range(12):
             if np.std(signal[i]) > 0.01:
                 rhythm = signal[i]
@@ -154,18 +153,18 @@ def plot_ecg_paper(
 
     # Footer
     fig.text(
-        0.02, 0.01,
+        0.02, 0.005,
         f"Paper speed: {PAPER_SPEED_MM_S:.0f} mm/s, "
         f"Voltage gain: {VOLTAGE_GAIN_MM_MV:.0f} mm/mV",
         fontsize=7, color="#666666",
     )
     fig.text(
-        0.98, 0.01,
+        0.98, 0.005,
         "Visualization by Corio ECG",
         fontsize=7, color="#666666", ha="right",
     )
 
-    plt.tight_layout(rect=[0, 0.03, 1, 0.96])
+    plt.tight_layout(rect=[0, 0.02, 1, 0.97])
     return fig
 
 
