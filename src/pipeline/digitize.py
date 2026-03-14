@@ -716,6 +716,51 @@ def _pad_or_truncate_time(signal: np.ndarray, target_length: int) -> np.ndarray:
     return padded
 
 
+def _align_leads_to_origin(signal: np.ndarray) -> np.ndarray:
+    """Shift each lead's active data to sample 0 and tile to fill.
+
+    Paper ECG layouts (3x4, 6x2) place each lead at a different time
+    offset in the canonical array. ECGFounder needs all leads aligned
+    to the same time window for cross-lead correlation.
+
+    After shifting, the active segment is REPEATED (tiled) to fill the
+    full signal length. This prevents ECGFounder from interpreting the
+    zero-padded tail as sinus arrest, and it's physiologically valid
+    since ECG morphology repeats with each heartbeat.
+    """
+    total_len = signal.shape[1]
+    aligned = np.zeros_like(signal)
+    for i in range(signal.shape[0]):
+        lead = signal[i]
+        abs_lead = np.abs(lead)
+        peak_val = np.max(abs_lead)
+        if peak_val < 1e-8:
+            continue
+
+        # Find active region using adaptive threshold
+        threshold = peak_val * 0.01
+        active_indices = np.where(abs_lead > threshold)[0]
+        if len(active_indices) == 0:
+            aligned[i] = lead
+            continue
+
+        start = active_indices[0]
+        end = active_indices[-1] + 1
+        segment = lead[start:end]
+        seg_len = len(segment)
+
+        if seg_len >= total_len:
+            # Active data fills entire signal — no shift needed
+            aligned[i] = segment[:total_len]
+        else:
+            # Tile the segment to fill the full signal length
+            repeats = (total_len // seg_len) + 1
+            tiled = np.tile(segment, repeats)[:total_len]
+            aligned[i] = tiled
+
+    return aligned
+
+
 def _bandpass_filter(
     signal: np.ndarray,
     sample_rate: int,

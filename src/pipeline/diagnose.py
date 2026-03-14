@@ -142,8 +142,13 @@ class ECGDiagnoser:
         """
         effective_threshold = threshold if threshold is not None else self.threshold
 
+        # Align leads so all 12 have data in the same time window.
+        # Paper ECG layouts place leads at different time offsets;
+        # ECGFounder needs them aligned for cross-lead features.
+        model_signal = _align_leads_for_model(signal)
+
         # Prepare input tensor: (12, 5000) -> (1, 12, 5000)
-        tensor = torch.tensor(signal, dtype=torch.float32, device=self.device)
+        tensor = torch.tensor(model_signal, dtype=torch.float32, device=self.device)
         tensor = tensor.unsqueeze(0)
 
         # Inference — multi-label so we use sigmoid, not softmax
@@ -222,3 +227,35 @@ class ECGDiagnoser:
             label_index = _LABEL_TO_INDEX.get(label)
             if label_index is not None:
                 probabilities[label_index] *= factor
+
+
+def _align_leads_for_model(signal: np.ndarray) -> np.ndarray:
+    """Shift each lead's active data to start at sample 0 (zero-padded).
+
+    Paper ECG layouts place leads at different time offsets in the
+    canonical array (e.g. Lead I at [0:1250], V1 at [2500:3750] in
+    3x4+1R). ECGFounder needs all leads aligned to compute cross-lead
+    features like axis deviation and bundle branch blocks.
+
+    Only shifts — no tiling/repeating. The zero-padded tail is
+    preferable to tiling because tile boundaries create artificial
+    discontinuities that ECGFounder misinterprets as arrhythmia.
+    """
+    total_len = signal.shape[1]
+    aligned = np.zeros_like(signal)
+    for i in range(signal.shape[0]):
+        lead = signal[i]
+        abs_lead = np.abs(lead)
+        peak_val = np.max(abs_lead)
+        if peak_val < 1e-8:
+            continue
+        threshold = peak_val * 0.01
+        active_indices = np.where(abs_lead > threshold)[0]
+        if len(active_indices) == 0:
+            aligned[i] = lead
+            continue
+        start = active_indices[0]
+        end = active_indices[-1] + 1
+        segment = lead[start:end]
+        aligned[i, :min(len(segment), total_len)] = segment[:total_len]
+    return aligned
