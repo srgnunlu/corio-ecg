@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 # Wavelet denoising parameters tuned for 500 Hz ECG signals
 _WAVELET: str = "db4"            # Daubechies-4: standard for ECG
 _DECOMPOSITION_LEVEL: int = 6    # 6 levels at 500 Hz covers 0-250 Hz
-_NOISE_LEVELS: int = 3           # Only threshold top 3 detail levels (>~30 Hz)
+_NOISE_LEVELS: int = 2           # Only threshold top 2 detail levels (>~62 Hz)
 # Level 1: 125-250 Hz (muscle artifact, digitization noise) -> THRESHOLD
-# Level 2: 62.5-125 Hz (some QRS high-freq, mostly noise) -> THRESHOLD
-# Level 3: 31.25-62.5 Hz (QRS edge content, grid artifacts) -> THRESHOLD
+# Level 2: 62.5-125 Hz (mostly noise, some QRS harmonics) -> THRESHOLD
+# Level 3: 31.25-62.5 Hz (QRS slope content) -> PRESERVE
 # Levels 4-6: P wave, T wave, QRS body -> PRESERVE (no thresholding)
 
 

@@ -60,9 +60,21 @@ def _autocorrelation_hr(
     T-waves (gentle slopes). Squaring makes all values positive, and
     autocorrelation finds the dominant RR interval. This is inspired by
     the Pan-Tompkins QRS detection algorithm.
+
+    A 5-30 Hz bandpass is applied internally to isolate QRS energy
+    regardless of upstream signal processing (wavelet, etc.).
     """
+    from scipy.signal import butter, sosfiltfilt
+
+    # Pre-filter to isolate QRS energy (Pan-Tompkins inspired).
+    # This makes HR estimation robust regardless of upstream processing.
+    # 5 Hz removes baseline/P/T waves, 30 Hz removes noise.
+    nyquist = sample_rate / 2.0
+    sos = butter(N=3, Wn=[5.0 / nyquist, 30.0 / nyquist], btype="bandpass", output="sos")
+    filtered = sosfiltfilt(sos, lead)
+
     # Derivative + square: steep QRS slopes dominate, T-waves suppressed
-    diff = np.diff(lead)
+    diff = np.diff(filtered)
     squared = diff ** 2
     squared = squared - np.mean(squared)
 
