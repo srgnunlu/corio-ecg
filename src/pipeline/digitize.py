@@ -329,16 +329,6 @@ class ECGDigitiser:
         self._populate_diagnostics(raw_result)
 
         canonical = self._extract_canonical(raw_result)
-
-        # Override lead assignment using known layout geometry when the
-        # user has selected a specific layout. Position-based assignment
-        # is more reliable than the Lead Name U-Net which often fails
-        # to read text labels (detected_leads_count < 12).
-        if layout_hint:
-            raw_lines = raw_result.get("signal", {}).get("raw_lines")
-            canonical = override_lead_assignment(
-                canonical, raw_lines, layout_hint,
-            )
         self.last_info.canonical_shape = tuple(canonical.shape)
 
         signal = self._postprocess(canonical)
