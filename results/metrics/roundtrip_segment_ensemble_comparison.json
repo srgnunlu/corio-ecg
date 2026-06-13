@@ -3,6 +3,10 @@
   "threshold": 0.5,
   "rate_adjustments_applied": false,
   "official_labels_available": true,
+  "segment_ensemble": {
+    "paper_layout": "3x4",
+    "aggregation": "mean"
+  },
   "scenarios": {
     "baseline": {
       "description": "Clean PTB-XL WFDB signals",
@@ -265,6 +269,183 @@
         "macro_average_precision": -0.171535,
         "micro_f1": -0.203183,
         "macro_f1": -0.418872
+      },
+      "segment_ensemble": {
+        "description": "Independent 3x4 paper-column inference with mean probability aggregation",
+        "n_successful": 50,
+        "mean_cosine_similarity_vs_baseline": 0.7657,
+        "mean_abs_prob_diff_vs_baseline": 0.049348,
+        "agreement_rate_vs_baseline": 0.9756,
+        "semantic_scp_subset_evaluation": {
+          "mapping_version": 1,
+          "mapped_scp_codes": 42,
+          "mapped_model_outputs": 39,
+          "records_with_mapped_labels": 50,
+          "mapped_label_assignments": 116,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 36,
+            "macro_auroc": 0.8543657013484599,
+            "macro_average_precision": 0.8368570458380846,
+            "micro_f1": 0.7218045112781954,
+            "macro_f1": 0.5778050778050777,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8144499178981937,
+                "average_precision": 0.7822811849768052,
+                "f1": 0.32432432432432434
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.7827380952380952,
+                "average_precision": 0.9536867779342739,
+                "f1": 0.9090909090909091
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9659090909090909,
+                "average_precision": 0.7746031746031745,
+                "f1": 0.5
+              }
+            }
+          }
+        },
+        "matched_baseline_semantic_scp_subset_evaluation": {
+          "mapping_version": 1,
+          "mapped_scp_codes": 42,
+          "mapped_model_outputs": 39,
+          "records_with_mapped_labels": 50,
+          "mapped_label_assignments": 116,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 36,
+            "macro_auroc": 0.8457761108623177,
+            "macro_average_precision": 0.8791596322476579,
+            "micro_f1": 0.8322147651006712,
+            "macro_f1": 0.7143267298306059,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8801313628899835,
+                "average_precision": 0.9032737450987762,
+                "f1": 0.8148148148148148
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.6875,
+                "average_precision": 0.9272607071997534,
+                "f1": 0.8837209302325582
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9696969696969697,
+                "average_precision": 0.8069444444444444,
+                "f1": 0.4444444444444444
+              }
+            }
+          }
+        },
+        "semantic_scp_metric_delta_vs_matched_baseline": {
+          "macro_auroc": 0.00859,
+          "macro_average_precision": -0.042303,
+          "micro_f1": -0.11041,
+          "macro_f1": -0.136522
+        },
+        "official_ground_truth_evaluation": {
+          "source": "PKUDigitalHealth/ECGFounder csv/ptbxl_label.csv",
+          "source_commit": "04edac702b61c91face519774ddcc0cd712fef23",
+          "matched_records": 50,
+          "records_missing_labels": 0,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 147,
+            "macro_auroc": 0.8543657013484599,
+            "macro_average_precision": 0.8368570458380846,
+            "micro_f1": 0.7218045112781954,
+            "macro_f1": 0.5778050778050777,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8144499178981937,
+                "average_precision": 0.7822811849768052,
+                "f1": 0.32432432432432434
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.7827380952380952,
+                "average_precision": 0.9536867779342739,
+                "f1": 0.9090909090909091
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9659090909090909,
+                "average_precision": 0.7746031746031745,
+                "f1": 0.5
+              }
+            }
+          }
+        },
+        "matched_baseline_official_ground_truth_evaluation": {
+          "source": "PKUDigitalHealth/ECGFounder csv/ptbxl_label.csv",
+          "source_commit": "04edac702b61c91face519774ddcc0cd712fef23",
+          "matched_records": 50,
+          "records_missing_labels": 0,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 147,
+            "macro_auroc": 0.8457761108623177,
+            "macro_average_precision": 0.8791596322476579,
+            "micro_f1": 0.8322147651006712,
+            "macro_f1": 0.7143267298306059,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8801313628899835,
+                "average_precision": 0.9032737450987762,
+                "f1": 0.8148148148148148
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.6875,
+                "average_precision": 0.9272607071997534,
+                "f1": 0.8837209302325582
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9696969696969697,
+                "average_precision": 0.8069444444444444,
+                "f1": 0.4444444444444444
+              }
+            }
+          }
+        },
+        "official_metric_delta_vs_matched_baseline": {
+          "macro_auroc": 0.00859,
+          "macro_average_precision": -0.042303,
+          "micro_f1": -0.11041,
+          "macro_f1": -0.136522
+        }
       }
     },
     "moderate_roundtrip": {
@@ -443,6 +624,183 @@
         "macro_average_precision": -0.132435,
         "micro_f1": -0.192215,
         "macro_f1": -0.323634
+      },
+      "segment_ensemble": {
+        "description": "Independent 3x4 paper-column inference with mean probability aggregation",
+        "n_successful": 50,
+        "mean_cosine_similarity_vs_baseline": 0.7689,
+        "mean_abs_prob_diff_vs_baseline": 0.049633,
+        "agreement_rate_vs_baseline": 0.9767,
+        "semantic_scp_subset_evaluation": {
+          "mapping_version": 1,
+          "mapped_scp_codes": 42,
+          "mapped_model_outputs": 39,
+          "records_with_mapped_labels": 50,
+          "mapped_label_assignments": 116,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 36,
+            "macro_auroc": 0.8610053739364084,
+            "macro_average_precision": 0.8443164136964167,
+            "micro_f1": 0.7022900763358778,
+            "macro_f1": 0.5573593073593074,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8292282430213465,
+                "average_precision": 0.8120160275094386,
+                "f1": 0.2857142857142857
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.7916666666666667,
+                "average_precision": 0.9574411500877484,
+                "f1": 0.8863636363636364
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.962121212121212,
+                "average_precision": 0.7634920634920634,
+                "f1": 0.5
+              }
+            }
+          }
+        },
+        "matched_baseline_semantic_scp_subset_evaluation": {
+          "mapping_version": 1,
+          "mapped_scp_codes": 42,
+          "mapped_model_outputs": 39,
+          "records_with_mapped_labels": 50,
+          "mapped_label_assignments": 116,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 36,
+            "macro_auroc": 0.8457761108623177,
+            "macro_average_precision": 0.8791596322476579,
+            "micro_f1": 0.8322147651006712,
+            "macro_f1": 0.7143267298306059,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8801313628899835,
+                "average_precision": 0.9032737450987762,
+                "f1": 0.8148148148148148
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.6875,
+                "average_precision": 0.9272607071997534,
+                "f1": 0.8837209302325582
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9696969696969697,
+                "average_precision": 0.8069444444444444,
+                "f1": 0.4444444444444444
+              }
+            }
+          }
+        },
+        "semantic_scp_metric_delta_vs_matched_baseline": {
+          "macro_auroc": 0.015229,
+          "macro_average_precision": -0.034843,
+          "micro_f1": -0.129925,
+          "macro_f1": -0.156967
+        },
+        "official_ground_truth_evaluation": {
+          "source": "PKUDigitalHealth/ECGFounder csv/ptbxl_label.csv",
+          "source_commit": "04edac702b61c91face519774ddcc0cd712fef23",
+          "matched_records": 50,
+          "records_missing_labels": 0,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 147,
+            "macro_auroc": 0.8610053739364084,
+            "macro_average_precision": 0.8443164136964167,
+            "micro_f1": 0.7022900763358778,
+            "macro_f1": 0.5573593073593074,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8292282430213465,
+                "average_precision": 0.8120160275094386,
+                "f1": 0.2857142857142857
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.7916666666666667,
+                "average_precision": 0.9574411500877484,
+                "f1": 0.8863636363636364
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.962121212121212,
+                "average_precision": 0.7634920634920634,
+                "f1": 0.5
+              }
+            }
+          }
+        },
+        "matched_baseline_official_ground_truth_evaluation": {
+          "source": "PKUDigitalHealth/ECGFounder csv/ptbxl_label.csv",
+          "source_commit": "04edac702b61c91face519774ddcc0cd712fef23",
+          "matched_records": 50,
+          "records_missing_labels": 0,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 147,
+            "macro_auroc": 0.8457761108623177,
+            "macro_average_precision": 0.8791596322476579,
+            "micro_f1": 0.8322147651006712,
+            "macro_f1": 0.7143267298306059,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8801313628899835,
+                "average_precision": 0.9032737450987762,
+                "f1": 0.8148148148148148
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.6875,
+                "average_precision": 0.9272607071997534,
+                "f1": 0.8837209302325582
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9696969696969697,
+                "average_precision": 0.8069444444444444,
+                "f1": 0.4444444444444444
+              }
+            }
+          }
+        },
+        "official_metric_delta_vs_matched_baseline": {
+          "macro_auroc": 0.015229,
+          "macro_average_precision": -0.034843,
+          "micro_f1": -0.129925,
+          "macro_f1": -0.156967
+        }
       }
     },
     "hard_roundtrip": {
@@ -621,6 +979,183 @@
         "macro_average_precision": -0.143848,
         "micro_f1": -0.192215,
         "macro_f1": -0.414701
+      },
+      "segment_ensemble": {
+        "description": "Independent 3x4 paper-column inference with mean probability aggregation",
+        "n_successful": 50,
+        "mean_cosine_similarity_vs_baseline": 0.7532,
+        "mean_abs_prob_diff_vs_baseline": 0.052193,
+        "agreement_rate_vs_baseline": 0.9737,
+        "semantic_scp_subset_evaluation": {
+          "mapping_version": 1,
+          "mapped_scp_codes": 42,
+          "mapped_model_outputs": 39,
+          "records_with_mapped_labels": 50,
+          "mapped_label_assignments": 116,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 36,
+            "macro_auroc": 0.8530595362491914,
+            "macro_average_precision": 0.8577995471273109,
+            "micro_f1": 0.7121212121212122,
+            "macro_f1": 0.5615302300695558,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8029556650246306,
+                "average_precision": 0.7774433364923828,
+                "f1": 0.2857142857142857
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.7827380952380953,
+                "average_precision": 0.9546854636197087,
+                "f1": 0.898876404494382
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9734848484848485,
+                "average_precision": 0.8412698412698412,
+                "f1": 0.5
+              }
+            }
+          }
+        },
+        "matched_baseline_semantic_scp_subset_evaluation": {
+          "mapping_version": 1,
+          "mapped_scp_codes": 42,
+          "mapped_model_outputs": 39,
+          "records_with_mapped_labels": 50,
+          "mapped_label_assignments": 116,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 36,
+            "macro_auroc": 0.8457761108623177,
+            "macro_average_precision": 0.8791596322476579,
+            "micro_f1": 0.8322147651006712,
+            "macro_f1": 0.7143267298306059,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8801313628899835,
+                "average_precision": 0.9032737450987762,
+                "f1": 0.8148148148148148
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.6875,
+                "average_precision": 0.9272607071997534,
+                "f1": 0.8837209302325582
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9696969696969697,
+                "average_precision": 0.8069444444444444,
+                "f1": 0.4444444444444444
+              }
+            }
+          }
+        },
+        "semantic_scp_metric_delta_vs_matched_baseline": {
+          "macro_auroc": 0.007283,
+          "macro_average_precision": -0.02136,
+          "micro_f1": -0.120094,
+          "macro_f1": -0.152796
+        },
+        "official_ground_truth_evaluation": {
+          "source": "PKUDigitalHealth/ECGFounder csv/ptbxl_label.csv",
+          "source_commit": "04edac702b61c91face519774ddcc0cd712fef23",
+          "matched_records": 50,
+          "records_missing_labels": 0,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 147,
+            "macro_auroc": 0.8530595362491914,
+            "macro_average_precision": 0.8577995471273109,
+            "micro_f1": 0.7121212121212122,
+            "macro_f1": 0.5615302300695558,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8029556650246306,
+                "average_precision": 0.7774433364923828,
+                "f1": 0.2857142857142857
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.7827380952380953,
+                "average_precision": 0.9546854636197087,
+                "f1": 0.898876404494382
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9734848484848485,
+                "average_precision": 0.8412698412698412,
+                "f1": 0.5
+              }
+            }
+          }
+        },
+        "matched_baseline_official_ground_truth_evaluation": {
+          "source": "PKUDigitalHealth/ECGFounder csv/ptbxl_label.csv",
+          "source_commit": "04edac702b61c91face519774ddcc0cd712fef23",
+          "matched_records": 50,
+          "records_missing_labels": 0,
+          "classification": {
+            "threshold": 0.5,
+            "minimum_positive_examples": 5,
+            "evaluated_classes": 3,
+            "skipped_classes": 147,
+            "macro_auroc": 0.8457761108623177,
+            "macro_average_precision": 0.8791596322476579,
+            "micro_f1": 0.8322147651006712,
+            "macro_f1": 0.7143267298306059,
+            "per_class": {
+              "NORMAL ECG": {
+                "positives": 29,
+                "negatives": 21,
+                "auroc": 0.8801313628899835,
+                "average_precision": 0.9032737450987762,
+                "f1": 0.8148148148148148
+              },
+              "SINUS RHYTHM": {
+                "positives": 42,
+                "negatives": 8,
+                "auroc": 0.6875,
+                "average_precision": 0.9272607071997534,
+                "f1": 0.8837209302325582
+              },
+              "LEFT VENTRICULAR HYPERTROPHY": {
+                "positives": 6,
+                "negatives": 44,
+                "auroc": 0.9696969696969697,
+                "average_precision": 0.8069444444444444,
+                "f1": 0.4444444444444444
+              }
+            }
+          }
+        },
+        "official_metric_delta_vs_matched_baseline": {
+          "macro_auroc": 0.007283,
+          "macro_average_precision": -0.02136,
+          "micro_f1": -0.120094,
+          "macro_f1": -0.152796
+        }
       }
     }
   }

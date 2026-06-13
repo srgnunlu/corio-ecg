@@ -1,0 +1,2480 @@
+{
+  "generated_at_utc": "2026-06-13T12:48:19.163445+00:00",
+  "threshold": 0.5,
+  "selection_manifest": {
+    "manifest_version": 1,
+    "manifest_id": "22b4fbf08c7358bd68ecfe5f978609b9c446996a116de87af1fa5c6ab376e65d",
+    "selection_seed": 20260613,
+    "selection": {
+      "image_ids": [
+        4,
+        10,
+        14,
+        40,
+        42,
+        43,
+        80,
+        81,
+        82,
+        92
+      ],
+      "categories": [
+        "photos_bents",
+        "photos_crumbles",
+        "photos_doogee",
+        "photos_iphone",
+        "photos_samsung",
+        "photos_scans",
+        "photos_screens"
+      ],
+      "layout": [
+        "3x4+1R"
+      ],
+      "images": 70,
+      "images_per_category": {
+        "photos_bents": 10,
+        "photos_crumbles": 10,
+        "photos_doogee": 10,
+        "photos_iphone": 10,
+        "photos_samsung": 10,
+        "photos_scans": 10,
+        "photos_screens": 10
+      }
+    },
+    "records": [
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_bents/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_crumbles/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_doogee/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_iphone/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_samsung/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_scans/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_screens/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_bents/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_crumbles/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_doogee/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_iphone/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_samsung/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_scans/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_screens/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_bents/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_crumbles/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_doogee/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_iphone/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_samsung/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_scans/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_screens/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_bents/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_crumbles/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_doogee/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_iphone/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_samsung/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_scans/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_screens/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_bents/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_crumbles/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_doogee/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_iphone/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_samsung/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_scans/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_screens/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_bents/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_crumbles/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_doogee/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_iphone/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_samsung/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_scans/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_screens/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_bents/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_crumbles/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_doogee/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_iphone/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_samsung/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_scans/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_screens/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_bents/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_crumbles/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_doogee/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_iphone/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_samsung/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_scans/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_screens/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_bents/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_crumbles/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_doogee/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_iphone/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_samsung/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_scans/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_screens/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_bents/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_crumbles/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_doogee/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_iphone/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_samsung/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_scans/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_screens/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      }
+    ]
+  },
+  "limitations": "This compares ECGFounder output consistency between matched reference and digitized signals. It is not a clinical-accuracy evaluation.",
+  "aggregate": {
+    "total": 70,
+    "successful": 70,
+    "failed": 0,
+    "methods": {
+      "tiled": {
+        "n": 70,
+        "mean_cosine_similarity": 0.8939165728432792,
+        "median_cosine_similarity": 0.9186253845691681,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.8758214080972331,
+          "high": 0.9126120375735419,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.04668994796063219,
+        "mean_agreement_rate": 0.9667619047619047,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9629499999999999,
+          "high": 0.9705714285714285,
+          "resamples": 2000
+        }
+      },
+      "segment_ensemble": {
+        "n": 70,
+        "mean_cosine_similarity": 0.9238097812448229,
+        "median_cosine_similarity": 0.9544467031955719,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.9053326214424202,
+          "high": 0.9413712503654617,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.03571903953062636,
+        "mean_agreement_rate": 0.9773333333333335,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9733333333333336,
+          "high": 0.9814285714285713,
+          "resamples": 2000
+        }
+      }
+    },
+    "categories": {
+      "photos_bents": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0,
+        "methods": {
+          "tiled": {
+            "n": 10,
+            "mean_cosine_similarity": 0.8140941560268402,
+            "median_cosine_similarity": 0.8132363557815552,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.7688265359401704,
+              "high": 0.8594888782501221,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.0669478178024292,
+            "mean_agreement_rate": 0.9513333333333334,
+            "mean_agreement_rate_ci95": {
+              "low": 0.942,
+              "high": 0.96,
+              "resamples": 2000
+            }
+          },
+          "segment_ensemble": {
+            "n": 10,
+            "mean_cosine_similarity": 0.8476860165596009,
+            "median_cosine_similarity": 0.8495100140571594,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.8058127178251744,
+              "high": 0.8893221260607242,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.05832222402095795,
+            "mean_agreement_rate": 0.962,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9526666666666668,
+              "high": 0.9693333333333334,
+              "resamples": 2000
+            }
+          }
+        }
+      },
+      "photos_crumbles": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0,
+        "methods": {
+          "tiled": {
+            "n": 10,
+            "mean_cosine_similarity": 0.8441473245620728,
+            "median_cosine_similarity": 0.8491958975791931,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.7997005119919777,
+              "high": 0.8831302644312382,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.06125608682632446,
+            "mean_agreement_rate": 0.96,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9493333333333333,
+              "high": 0.9686833333333333,
+              "resamples": 2000
+            }
+          },
+          "segment_ensemble": {
+            "n": 10,
+            "mean_cosine_similarity": 0.8586868584156037,
+            "median_cosine_similarity": 0.8703088462352753,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.8056952041387557,
+              "high": 0.9087313717603683,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.055135583877563475,
+            "mean_agreement_rate": 0.968,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9579999999999999,
+              "high": 0.9786666666666667,
+              "resamples": 2000
+            }
+          }
+        }
+      },
+      "photos_doogee": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0,
+        "methods": {
+          "tiled": {
+            "n": 10,
+            "mean_cosine_similarity": 0.9401152551174163,
+            "median_cosine_similarity": 0.9540530145168304,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.9167297104001045,
+              "high": 0.9622357879579067,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.03468577899038792,
+            "mean_agreement_rate": 0.9753333333333334,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9686666666666668,
+              "high": 0.9826666666666666,
+              "resamples": 2000
+            }
+          },
+          "segment_ensemble": {
+            "n": 10,
+            "mean_cosine_similarity": 0.9695219337940216,
+            "median_cosine_similarity": 0.9832627475261688,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.9435290287435055,
+              "high": 0.986706063747406,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.019894292671233417,
+            "mean_agreement_rate": 0.9860000000000001,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9773333333333334,
+              "high": 0.9933333333333334,
+              "resamples": 2000
+            }
+          }
+        }
+      },
+      "photos_iphone": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0,
+        "methods": {
+          "tiled": {
+            "n": 10,
+            "mean_cosine_similarity": 0.928605592250824,
+            "median_cosine_similarity": 0.9541405737400055,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.8915665580332279,
+              "high": 0.9585645350813865,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.03707939758896828,
+            "mean_agreement_rate": 0.9726666666666667,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9673333333333332,
+              "high": 0.9773333333333334,
+              "resamples": 2000
+            }
+          },
+          "segment_ensemble": {
+            "n": 10,
+            "mean_cosine_similarity": 0.9547305583953858,
+            "median_cosine_similarity": 0.9742881953716278,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.9295402431488037,
+              "high": 0.9765478852391243,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.027587215043604375,
+            "mean_agreement_rate": 0.9833333333333334,
+            "mean_agreement_rate_ci95": {
+              "low": 0.976,
+              "high": 0.9906666666666666,
+              "resamples": 2000
+            }
+          }
+        }
+      },
+      "photos_samsung": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0,
+        "methods": {
+          "tiled": {
+            "n": 10,
+            "mean_cosine_similarity": 0.9430276453495026,
+            "median_cosine_similarity": 0.9554869830608368,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.9239393073320389,
+              "high": 0.9598204152286053,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.03371044769883156,
+            "mean_agreement_rate": 0.9746666666666666,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9673333333333332,
+              "high": 0.9826666666666666,
+              "resamples": 2000
+            }
+          },
+          "segment_ensemble": {
+            "n": 10,
+            "mean_cosine_similarity": 0.9718407392501831,
+            "median_cosine_similarity": 0.9800398349761963,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.9548720024526118,
+              "high": 0.9844549545645714,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.021509763784706593,
+            "mean_agreement_rate": 0.9833333333333334,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9753333333333332,
+              "high": 0.99,
+              "resamples": 2000
+            }
+          }
+        }
+      },
+      "photos_scans": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0,
+        "methods": {
+          "tiled": {
+            "n": 10,
+            "mean_cosine_similarity": 0.9102641046047211,
+            "median_cosine_similarity": 0.9525842666625977,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.8478358094394207,
+              "high": 0.959690861403942,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.038325364142656325,
+            "mean_agreement_rate": 0.9713333333333333,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9593333333333331,
+              "high": 0.9813333333333333,
+              "resamples": 2000
+            }
+          },
+          "segment_ensemble": {
+            "n": 10,
+            "mean_cosine_similarity": 0.9432905316352844,
+            "median_cosine_similarity": 0.9832512736320496,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.8903846681118012,
+              "high": 0.9813392587006092,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.02795132203027606,
+            "mean_agreement_rate": 0.9866666666666667,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9766666666666668,
+              "high": 0.9953333333333333,
+              "resamples": 2000
+            }
+          }
+        }
+      },
+      "photos_screens": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0,
+        "methods": {
+          "tiled": {
+            "n": 10,
+            "mean_cosine_similarity": 0.8771619319915771,
+            "median_cosine_similarity": 0.8773485720157623,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.8453189228475094,
+              "high": 0.9067353484034538,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.05482474267482758,
+            "mean_agreement_rate": 0.9620000000000001,
+            "mean_agreement_rate_ci95": {
+              "low": 0.9533333333333334,
+              "high": 0.9706833333333332,
+              "resamples": 2000
+            }
+          },
+          "segment_ensemble": {
+            "n": 10,
+            "mean_cosine_similarity": 0.920911830663681,
+            "median_cosine_similarity": 0.9358311295509338,
+            "mean_cosine_similarity_ci95": {
+              "low": 0.8909324797987938,
+              "high": 0.9485760305821895,
+              "resamples": 2000
+            },
+            "mean_abs_probability_difference": 0.03963287528604269,
+            "mean_agreement_rate": 0.9719999999999999,
+            "mean_agreement_rate_ci95": {
+              "low": 0.962,
+              "high": 0.9813333333333333,
+              "resamples": 2000
+            }
+          }
+        }
+      }
+    }
+  },
+  "records": [
+    {
+      "category": "photos_bents",
+      "image_id": 4,
+      "image_path": "photos_bents/img_4_page_0.jpeg",
+      "ecg_id": "LPAE_20999_hr",
+      "reference_key": "LPAE_20999_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8841995000839233,
+          "mean_abs_probability_difference": 0.0526740662753582,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8469343781471252,
+          "mean_abs_probability_difference": 0.05248458683490753,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 4,
+      "image_path": "photos_crumbles/img_4_page_0.jpeg",
+      "ecg_id": "LPAE_20999_hr",
+      "reference_key": "LPAE_20999_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8327921032905579,
+          "mean_abs_probability_difference": 0.05886102840304375,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.7852580547332764,
+          "mean_abs_probability_difference": 0.06802164763212204,
+          "agreement_rate": 0.9466666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 4,
+      "image_path": "photos_doogee/img_4_page_0.jpeg",
+      "ecg_id": "LPAE_20999_hr",
+      "reference_key": "LPAE_20999_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8692169189453125,
+          "mean_abs_probability_difference": 0.05904441326856613,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8581658005714417,
+          "mean_abs_probability_difference": 0.0498400516808033,
+          "agreement_rate": 0.9533333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 4,
+      "image_path": "photos_iphone/img_4_page_0.jpeg",
+      "ecg_id": "LPAE_20999_hr",
+      "reference_key": "LPAE_20999_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9663546085357666,
+          "mean_abs_probability_difference": 0.02395700290799141,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9033946990966797,
+          "mean_abs_probability_difference": 0.040030211210250854,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 4,
+      "image_path": "photos_samsung/img_4_page_0.jpeg",
+      "ecg_id": "LPAE_20999_hr",
+      "reference_key": "LPAE_20999_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9613310694694519,
+          "mean_abs_probability_difference": 0.024502582848072052,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9034835696220398,
+          "mean_abs_probability_difference": 0.038718774914741516,
+          "agreement_rate": 0.9533333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 4,
+      "image_path": "photos_scans/img_4_page_0.jpeg",
+      "ecg_id": "LPAE_20999_hr",
+      "reference_key": "LPAE_20999_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.947961151599884,
+          "mean_abs_probability_difference": 0.02792012132704258,
+          "agreement_rate": 0.9866666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9108573198318481,
+          "mean_abs_probability_difference": 0.03648952767252922,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 4,
+      "image_path": "photos_screens/img_4_page_0.jpeg",
+      "ecg_id": "LPAE_20999_hr",
+      "reference_key": "LPAE_20999_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8469895720481873,
+          "mean_abs_probability_difference": 0.0617418996989727,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8247410655021667,
+          "mean_abs_probability_difference": 0.06158845126628876,
+          "agreement_rate": 0.9333333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 10,
+      "image_path": "photos_bents/img_10_page_0.jpeg",
+      "ecg_id": "LPAE_04827_hr",
+      "reference_key": "LPAE_04827_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8652796745300293,
+          "mean_abs_probability_difference": 0.054533950984478,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8520856499671936,
+          "mean_abs_probability_difference": 0.05666836351156235,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 10,
+      "image_path": "photos_crumbles/img_10_page_0.jpeg",
+      "ecg_id": "LPAE_04827_hr",
+      "reference_key": "LPAE_04827_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8392577767372131,
+          "mean_abs_probability_difference": 0.05297600477933884,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9448583722114563,
+          "mean_abs_probability_difference": 0.03485943377017975,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 10,
+      "image_path": "photos_doogee/img_10_page_0.jpeg",
+      "ecg_id": "LPAE_04827_hr",
+      "reference_key": "LPAE_04827_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9226869344711304,
+          "mean_abs_probability_difference": 0.0350409559905529,
+          "agreement_rate": 0.9866666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9825668931007385,
+          "mean_abs_probability_difference": 0.01865467242896557,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 10,
+      "image_path": "photos_iphone/img_10_page_0.jpeg",
+      "ecg_id": "LPAE_04827_hr",
+      "reference_key": "LPAE_04827_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8931115865707397,
+          "mean_abs_probability_difference": 0.0399320162832737,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9773100018501282,
+          "mean_abs_probability_difference": 0.022363033145666122,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 10,
+      "image_path": "photos_samsung/img_10_page_0.jpeg",
+      "ecg_id": "LPAE_04827_hr",
+      "reference_key": "LPAE_04827_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9510897397994995,
+          "mean_abs_probability_difference": 0.02544214017689228,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9823751449584961,
+          "mean_abs_probability_difference": 0.019852079451084137,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 10,
+      "image_path": "photos_scans/img_10_page_0.jpeg",
+      "ecg_id": "LPAE_04827_hr",
+      "reference_key": "LPAE_04827_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9635394215583801,
+          "mean_abs_probability_difference": 0.023546667769551277,
+          "agreement_rate": 0.9866666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9778704643249512,
+          "mean_abs_probability_difference": 0.020227890461683273,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 10,
+      "image_path": "photos_screens/img_10_page_0.jpeg",
+      "ecg_id": "LPAE_04827_hr",
+      "reference_key": "LPAE_04827_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.899478554725647,
+          "mean_abs_probability_difference": 0.039172518998384476,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9792308211326599,
+          "mean_abs_probability_difference": 0.021558701992034912,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 14,
+      "image_path": "photos_bents/img_14_page_0.jpeg",
+      "ecg_id": "LPAE_17226_hr",
+      "reference_key": "LPAE_17226_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.793267011642456,
+          "mean_abs_probability_difference": 0.07611461728811264,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.7885000109672546,
+          "mean_abs_probability_difference": 0.07403537631034851,
+          "agreement_rate": 0.96
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 14,
+      "image_path": "photos_crumbles/img_14_page_0.jpeg",
+      "ecg_id": "LPAE_17226_hr",
+      "reference_key": "LPAE_17226_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8327336311340332,
+          "mean_abs_probability_difference": 0.07378781586885452,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8156071305274963,
+          "mean_abs_probability_difference": 0.06660124659538269,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 14,
+      "image_path": "photos_doogee/img_14_page_0.jpeg",
+      "ecg_id": "LPAE_17226_hr",
+      "reference_key": "LPAE_17226_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8897503018379211,
+          "mean_abs_probability_difference": 0.057232413440942764,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9777783751487732,
+          "mean_abs_probability_difference": 0.01929054595530033,
+          "agreement_rate": 0.98
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 14,
+      "image_path": "photos_iphone/img_14_page_0.jpeg",
+      "ecg_id": "LPAE_17226_hr",
+      "reference_key": "LPAE_17226_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8080893754959106,
+          "mean_abs_probability_difference": 0.07484494894742966,
+          "agreement_rate": 0.9533333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8937253355979919,
+          "mean_abs_probability_difference": 0.05211455374956131,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 14,
+      "image_path": "photos_samsung/img_14_page_0.jpeg",
+      "ecg_id": "LPAE_17226_hr",
+      "reference_key": "LPAE_17226_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8951219916343689,
+          "mean_abs_probability_difference": 0.05493193864822388,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9842074513435364,
+          "mean_abs_probability_difference": 0.01629515551030636,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 14,
+      "image_path": "photos_scans/img_14_page_0.jpeg",
+      "ecg_id": "LPAE_17226_hr",
+      "reference_key": "LPAE_17226_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.680554986000061,
+          "mean_abs_probability_difference": 0.09499916434288025,
+          "agreement_rate": 0.9266666666666666
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.7437695860862732,
+          "mean_abs_probability_difference": 0.08334352821111679,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 14,
+      "image_path": "photos_screens/img_14_page_0.jpeg",
+      "ecg_id": "LPAE_17226_hr",
+      "reference_key": "LPAE_17226_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8312394618988037,
+          "mean_abs_probability_difference": 0.07132285833358765,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8975217342376709,
+          "mean_abs_probability_difference": 0.04762362688779831,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 40,
+      "image_path": "photos_bents/img_40_page_0.jpeg",
+      "ecg_id": "LPAE_09275_hr",
+      "reference_key": "LPAE_09275_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.7243828773498535,
+          "mean_abs_probability_difference": 0.07822512835264206,
+          "agreement_rate": 0.94
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8882609009742737,
+          "mean_abs_probability_difference": 0.05344831570982933,
+          "agreement_rate": 0.9533333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 40,
+      "image_path": "photos_crumbles/img_40_page_0.jpeg",
+      "ecg_id": "LPAE_09275_hr",
+      "reference_key": "LPAE_09275_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.7476407885551453,
+          "mean_abs_probability_difference": 0.07850538939237595,
+          "agreement_rate": 0.9466666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8208979964256287,
+          "mean_abs_probability_difference": 0.06331692636013031,
+          "agreement_rate": 0.9533333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 40,
+      "image_path": "photos_doogee/img_40_page_0.jpeg",
+      "ecg_id": "LPAE_09275_hr",
+      "reference_key": "LPAE_09275_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9566252827644348,
+          "mean_abs_probability_difference": 0.0263799000531435,
+          "agreement_rate": 0.9866666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9839586019515991,
+          "mean_abs_probability_difference": 0.015880417078733444,
+          "agreement_rate": 0.98
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 40,
+      "image_path": "photos_iphone/img_40_page_0.jpeg",
+      "ecg_id": "LPAE_09275_hr",
+      "reference_key": "LPAE_09275_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9649308919906616,
+          "mean_abs_probability_difference": 0.027698295190930367,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9867238402366638,
+          "mean_abs_probability_difference": 0.016245685517787933,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 40,
+      "image_path": "photos_samsung/img_40_page_0.jpeg",
+      "ecg_id": "LPAE_09275_hr",
+      "reference_key": "LPAE_09275_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9341290593147278,
+          "mean_abs_probability_difference": 0.033076558262109756,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9859630465507507,
+          "mean_abs_probability_difference": 0.01972644403576851,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 40,
+      "image_path": "photos_scans/img_40_page_0.jpeg",
+      "ecg_id": "LPAE_09275_hr",
+      "reference_key": "LPAE_09275_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9579287171363831,
+          "mean_abs_probability_difference": 0.026163211092352867,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.988632082939148,
+          "mean_abs_probability_difference": 0.01316557452082634,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 40,
+      "image_path": "photos_screens/img_40_page_0.jpeg",
+      "ecg_id": "LPAE_09275_hr",
+      "reference_key": "LPAE_09275_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.793706476688385,
+          "mean_abs_probability_difference": 0.07073195278644562,
+          "agreement_rate": 0.9533333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9509157538414001,
+          "mean_abs_probability_difference": 0.04164649173617363,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 42,
+      "image_path": "photos_bents/img_42_page_0.jpeg",
+      "ecg_id": "LPAE_09545_hr",
+      "reference_key": "LPAE_09545_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.7579329013824463,
+          "mean_abs_probability_difference": 0.07496191561222076,
+          "agreement_rate": 0.94
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8758267760276794,
+          "mean_abs_probability_difference": 0.05538603290915489,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 42,
+      "image_path": "photos_crumbles/img_42_page_0.jpeg",
+      "ecg_id": "LPAE_09545_hr",
+      "reference_key": "LPAE_09545_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9118127226829529,
+          "mean_abs_probability_difference": 0.0457456149160862,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9548936486244202,
+          "mean_abs_probability_difference": 0.033704932779073715,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 42,
+      "image_path": "photos_doogee/img_42_page_0.jpeg",
+      "ecg_id": "LPAE_09545_hr",
+      "reference_key": "LPAE_09545_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.976015567779541,
+          "mean_abs_probability_difference": 0.020419014617800713,
+          "agreement_rate": 1.0
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9958876967430115,
+          "mean_abs_probability_difference": 0.007685619406402111,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 42,
+      "image_path": "photos_iphone/img_42_page_0.jpeg",
+      "ecg_id": "LPAE_09545_hr",
+      "reference_key": "LPAE_09545_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9433502554893494,
+          "mean_abs_probability_difference": 0.030139895156025887,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9885498881340027,
+          "mean_abs_probability_difference": 0.01152544841170311,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 42,
+      "image_path": "photos_samsung/img_42_page_0.jpeg",
+      "ecg_id": "LPAE_09545_hr",
+      "reference_key": "LPAE_09545_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9882675409317017,
+          "mean_abs_probability_difference": 0.013712050393223763,
+          "agreement_rate": 1.0
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9951721429824829,
+          "mean_abs_probability_difference": 0.008728103712201118,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 42,
+      "image_path": "photos_scans/img_42_page_0.jpeg",
+      "ecg_id": "LPAE_09545_hr",
+      "reference_key": "LPAE_09545_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.7764880657196045,
+          "mean_abs_probability_difference": 0.06707198917865753,
+          "agreement_rate": 0.9533333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8746568560600281,
+          "mean_abs_probability_difference": 0.049989908933639526,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 42,
+      "image_path": "photos_screens/img_42_page_0.jpeg",
+      "ecg_id": "LPAE_09545_hr",
+      "reference_key": "LPAE_09545_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9271485209465027,
+          "mean_abs_probability_difference": 0.0357307605445385,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9762265086174011,
+          "mean_abs_probability_difference": 0.022407853975892067,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 43,
+      "image_path": "photos_bents/img_43_page_0.jpeg",
+      "ecg_id": "LPAE_09754_hr",
+      "reference_key": "LPAE_09754_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8977236747741699,
+          "mean_abs_probability_difference": 0.044289253652095795,
+          "agreement_rate": 0.9533333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9542924761772156,
+          "mean_abs_probability_difference": 0.031956396996974945,
+          "agreement_rate": 0.98
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 43,
+      "image_path": "photos_crumbles/img_43_page_0.jpeg",
+      "ecg_id": "LPAE_09754_hr",
+      "reference_key": "LPAE_09754_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9146245121955872,
+          "mean_abs_probability_difference": 0.03998412564396858,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9273655414581299,
+          "mean_abs_probability_difference": 0.04748943820595741,
+          "agreement_rate": 0.98
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 43,
+      "image_path": "photos_doogee/img_43_page_0.jpeg",
+      "ecg_id": "LPAE_09754_hr",
+      "reference_key": "LPAE_09754_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9826356172561646,
+          "mean_abs_probability_difference": 0.020546069368720055,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9951431751251221,
+          "mean_abs_probability_difference": 0.009144514799118042,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 43,
+      "image_path": "photos_iphone/img_43_page_0.jpeg",
+      "ecg_id": "LPAE_09754_hr",
+      "reference_key": "LPAE_09754_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9683985114097595,
+          "mean_abs_probability_difference": 0.027752120047807693,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9665772914886475,
+          "mean_abs_probability_difference": 0.027351796627044678,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 43,
+      "image_path": "photos_samsung/img_43_page_0.jpeg",
+      "ecg_id": "LPAE_09754_hr",
+      "reference_key": "LPAE_09754_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9606515765190125,
+          "mean_abs_probability_difference": 0.0284897331148386,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9756091237068176,
+          "mean_abs_probability_difference": 0.023801354691386223,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 43,
+      "image_path": "photos_scans/img_43_page_0.jpeg",
+      "ecg_id": "LPAE_09754_hr",
+      "reference_key": "LPAE_09754_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9572073817253113,
+          "mean_abs_probability_difference": 0.02870120294392109,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9888583421707153,
+          "mean_abs_probability_difference": 0.01812177337706089,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 43,
+      "image_path": "photos_screens/img_43_page_0.jpeg",
+      "ecg_id": "LPAE_09754_hr",
+      "reference_key": "LPAE_09754_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9226412773132324,
+          "mean_abs_probability_difference": 0.042333927005529404,
+          "agreement_rate": 0.9466666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9545420408248901,
+          "mean_abs_probability_difference": 0.03335922211408615,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 80,
+      "image_path": "photos_bents/img_80_page_0.jpeg",
+      "ecg_id": "LPAE_19394_hr",
+      "reference_key": "LPAE_19394_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.7746961116790771,
+          "mean_abs_probability_difference": 0.07995273172855377,
+          "agreement_rate": 0.9333333333333333
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.7923755645751953,
+          "mean_abs_probability_difference": 0.07690753787755966,
+          "agreement_rate": 0.9333333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 80,
+      "image_path": "photos_crumbles/img_80_page_0.jpeg",
+      "ecg_id": "LPAE_19394_hr",
+      "reference_key": "LPAE_19394_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8591340184211731,
+          "mean_abs_probability_difference": 0.055695127695798874,
+          "agreement_rate": 0.9533333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9337968826293945,
+          "mean_abs_probability_difference": 0.03375883772969246,
+          "agreement_rate": 0.96
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 80,
+      "image_path": "photos_doogee/img_80_page_0.jpeg",
+      "ecg_id": "LPAE_19394_hr",
+      "reference_key": "LPAE_19394_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9514807462692261,
+          "mean_abs_probability_difference": 0.03271404281258583,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9577251076698303,
+          "mean_abs_probability_difference": 0.02537696436047554,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 80,
+      "image_path": "photos_iphone/img_80_page_0.jpeg",
+      "ecg_id": "LPAE_19394_hr",
+      "reference_key": "LPAE_19394_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8615581393241882,
+          "mean_abs_probability_difference": 0.05350972339510918,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9712663888931274,
+          "mean_abs_probability_difference": 0.02187691628932953,
+          "agreement_rate": 0.98
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 80,
+      "image_path": "photos_samsung/img_80_page_0.jpeg",
+      "ecg_id": "LPAE_19394_hr",
+      "reference_key": "LPAE_19394_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.962835967540741,
+          "mean_abs_probability_difference": 0.030515221878886223,
+          "agreement_rate": 0.9866666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9862273931503296,
+          "mean_abs_probability_difference": 0.014624487608671188,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 80,
+      "image_path": "photos_scans/img_80_page_0.jpeg",
+      "ecg_id": "LPAE_19394_hr",
+      "reference_key": "LPAE_19394_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.91647869348526,
+          "mean_abs_probability_difference": 0.04270078241825104,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9749252796173096,
+          "mean_abs_probability_difference": 0.021131079643964767,
+          "agreement_rate": 0.98
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 80,
+      "image_path": "photos_screens/img_80_page_0.jpeg",
+      "ecg_id": "LPAE_19394_hr",
+      "reference_key": "LPAE_19394_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9321417808532715,
+          "mean_abs_probability_difference": 0.04298227280378342,
+          "agreement_rate": 0.9533333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9339600205421448,
+          "mean_abs_probability_difference": 0.03855123370885849,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 81,
+      "image_path": "photos_bents/img_81_page_0.jpeg",
+      "ecg_id": "LPAE_00232_hr",
+      "reference_key": "LPAE_00232_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.682758629322052,
+          "mean_abs_probability_difference": 0.09521260857582092,
+          "agreement_rate": 0.9266666666666666
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.7240261435508728,
+          "mean_abs_probability_difference": 0.06952764838933945,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 81,
+      "image_path": "photos_crumbles/img_81_page_0.jpeg",
+      "ecg_id": "LPAE_00232_hr",
+      "reference_key": "LPAE_00232_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.7014908194541931,
+          "mean_abs_probability_difference": 0.09889642149209976,
+          "agreement_rate": 0.92
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.713136613368988,
+          "mean_abs_probability_difference": 0.07541660964488983,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 81,
+      "image_path": "photos_doogee/img_81_page_0.jpeg",
+      "ecg_id": "LPAE_00232_hr",
+      "reference_key": "LPAE_00232_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9756116271018982,
+          "mean_abs_probability_difference": 0.024170957505702972,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9718170762062073,
+          "mean_abs_probability_difference": 0.016756443306803703,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 81,
+      "image_path": "photos_iphone/img_81_page_0.jpeg",
+      "ecg_id": "LPAE_00232_hr",
+      "reference_key": "LPAE_00232_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9826937913894653,
+          "mean_abs_probability_difference": 0.022429633885622025,
+          "agreement_rate": 0.9866666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9820442199707031,
+          "mean_abs_probability_difference": 0.012489516288042068,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 81,
+      "image_path": "photos_samsung/img_81_page_0.jpeg",
+      "ecg_id": "LPAE_00232_hr",
+      "reference_key": "LPAE_00232_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9248015880584717,
+          "mean_abs_probability_difference": 0.04364308714866638,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9543513655662537,
+          "mean_abs_probability_difference": 0.027655286714434624,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 81,
+      "image_path": "photos_scans/img_81_page_0.jpeg",
+      "ecg_id": "LPAE_00232_hr",
+      "reference_key": "LPAE_00232_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9803744554519653,
+          "mean_abs_probability_difference": 0.018185339868068695,
+          "agreement_rate": 0.9933333333333333
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9922491908073425,
+          "mean_abs_probability_difference": 0.007656973786652088,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 81,
+      "image_path": "photos_screens/img_81_page_0.jpeg",
+      "ecg_id": "LPAE_00232_hr",
+      "reference_key": "LPAE_00232_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8552185893058777,
+          "mean_abs_probability_difference": 0.07045019418001175,
+          "agreement_rate": 0.94
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8560823202133179,
+          "mean_abs_probability_difference": 0.04162030667066574,
+          "agreement_rate": 0.98
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 82,
+      "image_path": "photos_bents/img_82_page_0.jpeg",
+      "ecg_id": "LPAE_19269_hr",
+      "reference_key": "LPAE_19269_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8332056999206543,
+          "mean_abs_probability_difference": 0.06550327688455582,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.80885249376297,
+          "mean_abs_probability_difference": 0.07318482547998428,
+          "agreement_rate": 0.9466666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 82,
+      "image_path": "photos_crumbles/img_82_page_0.jpeg",
+      "ecg_id": "LPAE_19269_hr",
+      "reference_key": "LPAE_19269_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8693183064460754,
+          "mean_abs_probability_difference": 0.06295306980609894,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.7713346481323242,
+          "mean_abs_probability_difference": 0.08412915468215942,
+          "agreement_rate": 0.94
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 82,
+      "image_path": "photos_doogee/img_82_page_0.jpeg",
+      "ecg_id": "LPAE_19269_hr",
+      "reference_key": "LPAE_19269_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9101372957229614,
+          "mean_abs_probability_difference": 0.04398693889379501,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9844521880149841,
+          "mean_abs_probability_difference": 0.018488390371203423,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 82,
+      "image_path": "photos_iphone/img_82_page_0.jpeg",
+      "ecg_id": "LPAE_19269_hr",
+      "reference_key": "LPAE_19269_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9207720756530762,
+          "mean_abs_probability_difference": 0.04516680911183357,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8924494981765747,
+          "mean_abs_probability_difference": 0.052343614399433136,
+          "agreement_rate": 0.9666666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 82,
+      "image_path": "photos_samsung/img_82_page_0.jpeg",
+      "ecg_id": "LPAE_19269_hr",
+      "reference_key": "LPAE_19269_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8921636939048767,
+          "mean_abs_probability_difference": 0.04964105039834976,
+          "agreement_rate": 0.96
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9777045249938965,
+          "mean_abs_probability_difference": 0.022427642717957497,
+          "agreement_rate": 0.9866666666666667
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 82,
+      "image_path": "photos_scans/img_82_page_0.jpeg",
+      "ecg_id": "LPAE_19269_hr",
+      "reference_key": "LPAE_19269_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9412349462509155,
+          "mean_abs_probability_difference": 0.032920412719249725,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9893414974212646,
+          "mean_abs_probability_difference": 0.014339903369545937,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 82,
+      "image_path": "photos_screens/img_82_page_0.jpeg",
+      "ecg_id": "LPAE_19269_hr",
+      "reference_key": "LPAE_19269_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.8265239000320435,
+          "mean_abs_probability_difference": 0.07103177160024643,
+          "agreement_rate": 0.9533333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.8981958031654358,
+          "mean_abs_probability_difference": 0.05022550746798515,
+          "agreement_rate": 0.96
+        }
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 92,
+      "image_path": "photos_bents/img_92_page_0.jpeg",
+      "ecg_id": "LPAE_14680_hr",
+      "reference_key": "LPAE_14680_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9274954795837402,
+          "mean_abs_probability_difference": 0.048010628670454025,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.945705771446228,
+          "mean_abs_probability_difference": 0.03962315618991852,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 92,
+      "image_path": "photos_crumbles/img_92_page_0.jpeg",
+      "ecg_id": "LPAE_14680_hr",
+      "reference_key": "LPAE_14680_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9326685667037964,
+          "mean_abs_probability_difference": 0.045156270265579224,
+          "agreement_rate": 0.9666666666666667
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9197196960449219,
+          "mean_abs_probability_difference": 0.044057611376047134,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 92,
+      "image_path": "photos_doogee/img_92_page_0.jpeg",
+      "ecg_id": "LPAE_14680_hr",
+      "reference_key": "LPAE_14680_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9669922590255737,
+          "mean_abs_probability_difference": 0.027323083952069283,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9877244234085083,
+          "mean_abs_probability_difference": 0.017825307324528694,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 92,
+      "image_path": "photos_iphone/img_92_page_0.jpeg",
+      "ecg_id": "LPAE_14680_hr",
+      "reference_key": "LPAE_14680_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9767966866493225,
+          "mean_abs_probability_difference": 0.025363530963659286,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9852644205093384,
+          "mean_abs_probability_difference": 0.019531374797225,
+          "agreement_rate": 0.9933333333333333
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 92,
+      "image_path": "photos_samsung/img_92_page_0.jpeg",
+      "ecg_id": "LPAE_14680_hr",
+      "reference_key": "LPAE_14680_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9598842263221741,
+          "mean_abs_probability_difference": 0.03315011411905289,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9733136296272278,
+          "mean_abs_probability_difference": 0.023268308490514755,
+          "agreement_rate": 0.98
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 92,
+      "image_path": "photos_scans/img_92_page_0.jpeg",
+      "ecg_id": "LPAE_14680_hr",
+      "reference_key": "LPAE_14680_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9808732271194458,
+          "mean_abs_probability_difference": 0.02104474976658821,
+          "agreement_rate": 0.9733333333333334
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9917446970939636,
+          "mean_abs_probability_difference": 0.015047060325741768,
+          "agreement_rate": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 92,
+      "image_path": "photos_screens/img_92_page_0.jpeg",
+      "ecg_id": "LPAE_14680_hr",
+      "reference_key": "LPAE_14680_hr",
+      "layout": "3x4+1R",
+      "status": "success",
+      "error": null,
+      "methods": {
+        "tiled": {
+          "cosine_similarity": 0.9365311861038208,
+          "mean_abs_probability_difference": 0.04274927079677582,
+          "agreement_rate": 0.98
+        },
+        "segment_ensemble": {
+          "cosine_similarity": 0.9377022385597229,
+          "mean_abs_probability_difference": 0.03774735704064369,
+          "agreement_rate": 0.9733333333333334
+        }
+      }
+    }
+  ]
+}

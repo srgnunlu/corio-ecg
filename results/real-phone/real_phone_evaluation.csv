@@ -1,0 +1,21 @@
+source_image,mode,capture_variant,layout_hint,status,elapsed_seconds,has_warnings,error,layout_name,processing_mode,raw_lines_count,detected_leads_count,nonzero_leads_count,einthoven_score,layout_cost,avg_pixel_per_mm
+data/real-phone/photos/case001__front.jpg,default,front,,success,8.897421459005272,False,,standard_6x2,default,7,11,12,0.7030129624536788,0.7534963714060542,8.816656112670898
+data/real-phone/photos/case002__front.jpg,default,front,,success,7.733948250002868,False,,standard_6x2,default,7,10,12,0.9844535689981652,0.45189156042547474,9.162027359008789
+data/real-phone/photos/case003__front.jpg,default,front,,success,7.580380583000078,False,,standard_6x2,default,7,10,12,0.8426358444970758,0.1181125882896317,9.06234073638916
+data/real-phone/photos/case004__screen.jpg,default,screen,,success,8.599575792002724,True,,3x4+1R,default,7,6,12,-0.43676522782213134,0.5884128052700905,8.467976570129395
+data/real-phone/photos/case005__front.jpg,default,front,,success,8.38663295799779,True,,standard_6x2,default,7,9,12,0.6103538533744463,0.38129111794455645,9.232603073120117
+data/real-phone/photos/case006__front.jpg,default,front,,success,7.857960124994861,True,,3x4+1R,default,7,11,12,-0.941098094173959,1.8680949470719654,8.534741401672363
+data/real-phone/photos/case007__front.jpg,default,front,,success,8.272332082997309,True,,standard_6x2,default,7,10,12,0.5160718910947462,0.1582832283461798,8.865426063537598
+data/real-phone/photos/case008__screen.jpg,default,screen,,failed,11.994665833000909,True,RuntimeError: Open-ECG-Digitizer could not extract canonical leads. The image may be too noisy or not a standard ECG layout.,Unknown layout,default,0,2,0,-1.0,1.0,10.497718811035156
+data/real-phone/photos/case009__screen.jpg,default,screen,,failed,8.983813667000504,True,RuntimeError: Open-ECG-Digitizer could not extract canonical leads. The image may be too noisy or not a standard ECG layout.,Unknown layout,default,0,2,0,-1.0,1.0,13.859375
+data/real-phone/photos/case010__screen.jpg,default,screen,,success,10.472045458998764,True,,3x4+1R,default,10,7,12,-0.44871663190350863,5.327031742317167,7.877480506896973
+data/real-phone/photos/case001__front.jpg,retry,front,,success,8.211948916999972,False,,standard_6x2,default,7,11,12,0.7030129620618053,0.7534963714060542,8.816656112670898
+data/real-phone/photos/case002__front.jpg,retry,front,,success,7.828038333005679,False,,standard_6x2,default,7,10,12,0.9846154557709051,0.4719732258153754,9.162240982055664
+data/real-phone/photos/case003__front.jpg,retry,front,,failed,47.88903837500402,True,Worker exit code -9: Worker produced no report,,,,,,,,
+data/real-phone/photos/case004__screen.jpg,retry,screen,,failed,85.91175249999651,True,Worker exit code -9: Worker produced no report,,,,,,,,
+data/real-phone/photos/case005__front.jpg,retry,front,,failed,118.84945508400415,True,Worker exit code -9: Worker produced no report,,,,,,,,
+data/real-phone/photos/case006__front.jpg,retry,front,,failed,118.67380604200298,True,Worker exit code -9: Worker produced no report,,,,,,,,
+data/real-phone/photos/case007__front.jpg,retry,front,,success,10.388326083004358,True,,standard_6x2,default,7,10,12,0.5160718908034827,0.1582832283461798,8.865426063537598
+data/real-phone/photos/case008__screen.jpg,retry,screen,,failed,74.22480308300146,True,Worker exit code -9: Worker produced no report,,,,,,,,
+data/real-phone/photos/case009__screen.jpg,retry,screen,,failed,54.52509145899967,True,Worker exit code -9: Worker produced no report,,,,,,,,
+data/real-phone/photos/case010__screen.jpg,retry,screen,,timeout,181.6160400000008,True,Timed out after 180 seconds,,,,,,,,

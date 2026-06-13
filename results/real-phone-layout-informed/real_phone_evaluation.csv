@@ -1,0 +1,11 @@
+source_image,mode,capture_variant,layout_hint,status,elapsed_seconds,has_warnings,error,layout_name,processing_mode,raw_lines_count,detected_leads_count,nonzero_leads_count,einthoven_score,layout_cost,avg_pixel_per_mm
+data/real-phone/photos/case001__front.jpg,default,front,standard_6x2,success,8.550566333000006,False,,standard_6x2,default,7,11,12,0.7030129641973574,0.7534963714060542,8.816656112670898
+data/real-phone/photos/case002__front.jpg,default,front,standard_6x2,success,9.192723041000136,False,,standard_6x2,default,7,10,12,0.984468197410621,0.45347453723755654,9.163457870483398
+data/real-phone/photos/case003__front.jpg,default,front,standard_6x2,success,5.453220916000191,False,,standard_6x2,default,7,10,12,0.8426358444970758,0.1181125882896317,9.06234073638916
+data/real-phone/photos/case004__screen.jpg,default,screen,standard_6x2,success,11.680250082999919,True,,standard_6x2,default,7,6,12,0.7240506800051765,1.8247711581256878,8.467976570129395
+data/real-phone/photos/case005__front.jpg,default,front,standard_6x2,success,6.7326434159999735,True,,standard_6x2,default,7,9,12,0.6103538557537096,0.38129111794455645,9.232603073120117
+data/real-phone/photos/case006__front.jpg,default,front,standard_6x2,success,9.617714084,True,,standard_6x2,default,7,11,12,0.9903488096494347,2.979595506847297,8.534741401672363
+data/real-phone/photos/case007__front.jpg,default,front,standard_6x2,success,6.415184916999806,True,,standard_6x2,default,7,10,12,0.5160718912470093,0.1582832283461798,8.865426063537598
+data/real-phone/photos/case008__screen.jpg,default,screen,,success,8.316471083000124,True,,standard_6x2,default,5,4,10,-0.2638231171347957,1.722650403245121,4.524552345275879
+data/real-phone/photos/case009__screen.jpg,default,screen,,success,9.988479707999886,True,,standard_6x2,default,8,4,12,0.028966701925567006,2.9266692484769843,5.458406448364258
+data/real-phone/photos/case010__screen.jpg,default,screen,,success,18.168551290999858,True,,3x4+1R,rotated_180_retry,10,6,12,0.21718289614299155,0.6581376083483974,8.198579788208008

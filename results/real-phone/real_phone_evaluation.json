@@ -1,0 +1,947 @@
+{
+  "pipeline_version": 1,
+  "generated_at_utc": "2026-06-13T08:08:18.990455+00:00",
+  "reference_level": "photos_only",
+  "limitations": "Operational digitization quality only; no matched reference signal was provided, so signal fidelity and diagnostic accuracy were not measured.",
+  "acceptance_thresholds": {
+    "digitization_success_rate": 0.9,
+    "twelve_active_leads_rate": 0.9,
+    "median_einthoven_score": 0.7
+  },
+  "aggregate": {
+    "total_attempts": 20,
+    "modes": {
+      "default": {
+        "total": 10,
+        "successful": 8,
+        "failed": 2,
+        "timed_out": 0,
+        "with_warnings": 5,
+        "success_rate": 0.8,
+        "twelve_active_leads": 8,
+        "twelve_active_leads_rate": 1.0,
+        "median_einthoven_score": 0.5632128722345962,
+        "median_elapsed_seconds": 8.493104375000257,
+        "acceptance": {
+          "digitization_success_rate": false,
+          "twelve_active_leads_rate": true,
+          "median_einthoven_score": false
+        },
+        "acceptance_all_passed": false
+      },
+      "retry": {
+        "total": 10,
+        "successful": 3,
+        "failed": 6,
+        "timed_out": 1,
+        "with_warnings": 1,
+        "success_rate": 0.3,
+        "twelve_active_leads": 3,
+        "twelve_active_leads_rate": 1.0,
+        "median_einthoven_score": 0.7030129620618053,
+        "median_elapsed_seconds": 64.37494727100056,
+        "acceptance": {
+          "digitization_success_rate": false,
+          "twelve_active_leads_rate": true,
+          "median_einthoven_score": true
+        },
+        "acceptance_all_passed": false
+      }
+    },
+    "variants": {
+      "front": {
+        "modes": {
+          "default": {
+            "total": 6,
+            "successful": 6,
+            "failed": 0,
+            "timed_out": 0,
+            "with_warnings": 3,
+            "success_rate": 1.0,
+            "twelve_active_leads": 6,
+            "twelve_active_leads_rate": 1.0,
+            "median_einthoven_score": 0.6566834079140625,
+            "median_elapsed_seconds": 8.065146103996085,
+            "acceptance": {
+              "digitization_success_rate": true,
+              "twelve_active_leads_rate": true,
+              "median_einthoven_score": false
+            },
+            "acceptance_all_passed": false
+          },
+          "retry": {
+            "total": 6,
+            "successful": 3,
+            "failed": 3,
+            "timed_out": 0,
+            "with_warnings": 1,
+            "success_rate": 0.5,
+            "twelve_active_leads": 3,
+            "twelve_active_leads_rate": 1.0,
+            "median_einthoven_score": 0.7030129620618053,
+            "median_elapsed_seconds": 29.13868222900419,
+            "acceptance": {
+              "digitization_success_rate": false,
+              "twelve_active_leads_rate": true,
+              "median_einthoven_score": true
+            },
+            "acceptance_all_passed": false
+          }
+        }
+      },
+      "screen": {
+        "modes": {
+          "default": {
+            "total": 4,
+            "successful": 2,
+            "failed": 2,
+            "timed_out": 0,
+            "with_warnings": 2,
+            "success_rate": 0.5,
+            "twelve_active_leads": 2,
+            "twelve_active_leads_rate": 1.0,
+            "median_einthoven_score": -0.44274092986282,
+            "median_elapsed_seconds": 9.727929562999634,
+            "acceptance": {
+              "digitization_success_rate": false,
+              "twelve_active_leads_rate": true,
+              "median_einthoven_score": false
+            },
+            "acceptance_all_passed": false
+          },
+          "retry": {
+            "total": 4,
+            "successful": 0,
+            "failed": 3,
+            "timed_out": 1,
+            "with_warnings": 0,
+            "success_rate": 0.0,
+            "twelve_active_leads": 0,
+            "twelve_active_leads_rate": 0.0,
+            "median_einthoven_score": null,
+            "median_elapsed_seconds": 80.06827779149899,
+            "acceptance": {
+              "digitization_success_rate": false,
+              "twelve_active_leads_rate": false,
+              "median_einthoven_score": false
+            },
+            "acceptance_all_passed": false
+          }
+        }
+      }
+    }
+  },
+  "records": [
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case001__front.jpg",
+      "source_sha256": "f86c70ca6de6bdfa9c104db68a303ef10c3e4d6fc54a8cd60ff6d5cc7fa43c88",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "default",
+      "status": "success",
+      "elapsed_seconds": 8.897421459005272,
+      "has_warnings": false,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 11,
+        "layout_name": "standard_6x2",
+        "layout_cost": 0.7534963714060542,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.11174933612346649,
+        "pixel_spacing_y_mm": 0.11514484882354736,
+        "avg_pixel_per_mm": 8.816656112670898,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          1.177,
+          1.075,
+          0.26,
+          1.15,
+          0.699,
+          0.515,
+          1.364,
+          1.71,
+          0.773,
+          0.563,
+          0.957,
+          0.837
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": 0.7030129624536788,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case002__front.jpg",
+      "source_sha256": "f0ceb7d4ae5af0f3e640fc9ba007c294b5da124103f1fd666ba5c687ca5c25fd",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "default",
+      "status": "success",
+      "elapsed_seconds": 7.733948250002868,
+      "has_warnings": false,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 10,
+        "layout_name": "standard_6x2",
+        "layout_cost": 0.45189156042547474,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.10929397493600845,
+        "pixel_spacing_y_mm": 0.10899873077869415,
+        "avg_pixel_per_mm": 9.162027359008789,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.516,
+          1.177,
+          0.723,
+          0.822,
+          0.249,
+          0.945,
+          1.53,
+          0.71,
+          0.709,
+          1.358,
+          1.291,
+          1.157
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": 0.9844535689981652,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case003__front.jpg",
+      "source_sha256": "85e006707aab4a3e1870fb085696f0c97baa87cfdfb0ed35629eef91f2394f60",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "default",
+      "status": "success",
+      "elapsed_seconds": 7.580380583000078,
+      "has_warnings": false,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 10,
+        "layout_name": "standard_6x2",
+        "layout_cost": 0.1181125882896317,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.11045028269290924,
+        "pixel_spacing_y_mm": 0.11024343967437744,
+        "avg_pixel_per_mm": 9.06234073638916,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.637,
+          1.059,
+          0.624,
+          0.856,
+          0.373,
+          0.857,
+          1.398,
+          0.765,
+          0.941,
+          1.134,
+          1.476,
+          1.26
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": 0.8426358444970758,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case004__screen.jpg",
+      "source_sha256": "c96113d5e9d859e9597cf3df80fdb7f77774321749bb1473f3b0d28e5a020dc7",
+      "source_width": 1280,
+      "source_height": 960,
+      "mode": "default",
+      "status": "success",
+      "elapsed_seconds": 8.599575792002724,
+      "has_warnings": true,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 6,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.5884128052700905,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.11707533150911331,
+        "pixel_spacing_y_mm": 0.11912640929222107,
+        "avg_pixel_per_mm": 8.467976570129395,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.702,
+          0.434,
+          0.544,
+          0.732,
+          0.308,
+          0.601,
+          0.279,
+          0.89,
+          2.109,
+          0.196,
+          0.958,
+          1.938
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": -0.43676522782213134,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case005__front.jpg",
+      "source_sha256": "782a4cdeca8a0dc69d2ea8a167a66ea3dc696686d0aebe25ff8543d970a7d872",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "default",
+      "status": "success",
+      "elapsed_seconds": 8.38663295799779,
+      "has_warnings": true,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5"
+        ],
+        "detected_leads_count": 9,
+        "layout_name": "standard_6x2",
+        "layout_cost": 0.38129111794455645,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.10644257068634033,
+        "pixel_spacing_y_mm": 0.11024787276983261,
+        "avg_pixel_per_mm": 9.232603073120117,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.374,
+          0.892,
+          0.644,
+          0.607,
+          0.235,
+          0.801,
+          1.0,
+          1.096,
+          2.119,
+          1.054,
+          0.87,
+          1.011
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": 0.6103538533744463,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case006__front.jpg",
+      "source_sha256": "e470e7140c0da402eed49ae13fc476617abf2a55ae3addb66d13acdf188c083a",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "default",
+      "status": "success",
+      "elapsed_seconds": 7.857960124994861,
+      "has_warnings": true,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 11,
+        "layout_name": "3x4+1R",
+        "layout_cost": 1.8680949470719654,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.11717171967029572,
+        "pixel_spacing_y_mm": 0.11716461926698685,
+        "avg_pixel_per_mm": 8.534741401672363,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.276,
+          0.639,
+          1.064,
+          0.493,
+          1.076,
+          0.577,
+          0.736,
+          1.406,
+          1.394,
+          0.655,
+          1.277,
+          1.458
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": -0.941098094173959,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case007__front.jpg",
+      "source_sha256": "129689264b8910a24dc659be6212ac52d774b34b819caae1f3a85bf539bb5198",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "default",
+      "status": "success",
+      "elapsed_seconds": 8.272332082997309,
+      "has_warnings": true,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 10,
+        "layout_name": "standard_6x2",
+        "layout_cost": 0.1582832283461798,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.1099756732583046,
+        "pixel_spacing_y_mm": 0.11576845496892929,
+        "avg_pixel_per_mm": 8.865426063537598,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.376,
+          0.871,
+          0.69,
+          0.631,
+          0.35,
+          0.797,
+          0.485,
+          1.106,
+          2.133,
+          1.127,
+          1.041,
+          1.052
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": 0.5160718910947462,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case008__screen.jpg",
+      "source_sha256": "be856dd5ae05764502bd48d1936fb5355fb8fdca49e7475303f799210dc3042c",
+      "source_width": 720,
+      "source_height": 1280,
+      "mode": "default",
+      "status": "failed",
+      "elapsed_seconds": 11.994665833000909,
+      "has_warnings": true,
+      "diagnostics": {
+        "image_size": [
+          1440,
+          2560
+        ],
+        "raw_lines_count": 0,
+        "detected_leads": [
+          "III",
+          "aVR"
+        ],
+        "detected_leads_count": 2,
+        "layout_name": "Unknown layout",
+        "layout_cost": 1.0,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.13010287284851074,
+        "pixel_spacing_y_mm": 0.07513593137264252,
+        "avg_pixel_per_mm": 10.497718811035156,
+        "canonical_shape": [
+          0,
+          0
+        ],
+        "per_lead_energy": [],
+        "nonzero_leads_count": 0,
+        "einthoven_score": -1.0,
+        "processing_mode": "default"
+      },
+      "error": "RuntimeError: Open-ECG-Digitizer could not extract canonical leads. The image may be too noisy or not a standard ECG layout."
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case009__screen.jpg",
+      "source_sha256": "3c06eab989ecbdc3eb3f7965b0c5b9000442688459357d8b5792633e96472fe4",
+      "source_width": 720,
+      "source_height": 1280,
+      "mode": "default",
+      "status": "failed",
+      "elapsed_seconds": 8.983813667000504,
+      "has_warnings": true,
+      "diagnostics": {
+        "image_size": [
+          1440,
+          2560
+        ],
+        "raw_lines_count": 0,
+        "detected_leads": [
+          "II",
+          "III"
+        ],
+        "detected_leads_count": 2,
+        "layout_name": "Unknown layout",
+        "layout_cost": 1.0,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.07220759987831116,
+        "pixel_spacing_y_mm": 0.07209914177656174,
+        "avg_pixel_per_mm": 13.859375,
+        "canonical_shape": [
+          0,
+          0
+        ],
+        "per_lead_energy": [],
+        "nonzero_leads_count": 0,
+        "einthoven_score": -1.0,
+        "processing_mode": "default"
+      },
+      "error": "RuntimeError: Open-ECG-Digitizer could not extract canonical leads. The image may be too noisy or not a standard ECG layout."
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case010__screen.jpg",
+      "source_sha256": "bd0bbb29bc289e2c77bd3efe7a1aa21add8333544423c6ee9a5f4ee4465d134e",
+      "source_width": 1280,
+      "source_height": 720,
+      "mode": "default",
+      "status": "success",
+      "elapsed_seconds": 10.472045458998764,
+      "has_warnings": true,
+      "diagnostics": {
+        "image_size": [
+          1440,
+          2560
+        ],
+        "raw_lines_count": 10,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V3"
+        ],
+        "detected_leads_count": 7,
+        "layout_name": "3x4+1R",
+        "layout_cost": 5.327031742317167,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.12811386585235596,
+        "pixel_spacing_y_mm": 0.12579558789730072,
+        "avg_pixel_per_mm": 7.877480506896973,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.169,
+          1.005,
+          0.468,
+          0.177,
+          1.089,
+          0.449,
+          0.309,
+          1.294,
+          2.324,
+          0.371,
+          1.199,
+          0.759
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": -0.44871663190350863,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case001__front.jpg",
+      "source_sha256": "f86c70ca6de6bdfa9c104db68a303ef10c3e4d6fc54a8cd60ff6d5cc7fa43c88",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "retry",
+      "status": "success",
+      "elapsed_seconds": 8.211948916999972,
+      "has_warnings": false,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 11,
+        "layout_name": "standard_6x2",
+        "layout_cost": 0.7534963714060542,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.11174933612346649,
+        "pixel_spacing_y_mm": 0.11514484882354736,
+        "avg_pixel_per_mm": 8.816656112670898,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          1.177,
+          1.075,
+          0.26,
+          1.151,
+          0.699,
+          0.515,
+          1.364,
+          1.71,
+          0.773,
+          0.563,
+          0.957,
+          0.837
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": 0.7030129620618053,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case002__front.jpg",
+      "source_sha256": "f0ceb7d4ae5af0f3e640fc9ba007c294b5da124103f1fd666ba5c687ca5c25fd",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "retry",
+      "status": "success",
+      "elapsed_seconds": 7.828038333005679,
+      "has_warnings": false,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 10,
+        "layout_name": "standard_6x2",
+        "layout_cost": 0.4719732258153754,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.10929397493600845,
+        "pixel_spacing_y_mm": 0.10899364948272705,
+        "avg_pixel_per_mm": 9.162240982055664,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.516,
+          1.179,
+          0.723,
+          0.822,
+          0.249,
+          0.945,
+          1.529,
+          0.71,
+          0.708,
+          1.358,
+          1.292,
+          1.157
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": 0.9846154557709051,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case003__front.jpg",
+      "source_sha256": "85e006707aab4a3e1870fb085696f0c97baa87cfdfb0ed35629eef91f2394f60",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "retry",
+      "status": "failed",
+      "elapsed_seconds": 47.88903837500402,
+      "has_warnings": true,
+      "diagnostics": {},
+      "error": "Worker exit code -9: Worker produced no report"
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case004__screen.jpg",
+      "source_sha256": "c96113d5e9d859e9597cf3df80fdb7f77774321749bb1473f3b0d28e5a020dc7",
+      "source_width": 1280,
+      "source_height": 960,
+      "mode": "retry",
+      "status": "failed",
+      "elapsed_seconds": 85.91175249999651,
+      "has_warnings": true,
+      "diagnostics": {},
+      "error": "Worker exit code -9: Worker produced no report"
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case005__front.jpg",
+      "source_sha256": "782a4cdeca8a0dc69d2ea8a167a66ea3dc696686d0aebe25ff8543d970a7d872",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "retry",
+      "status": "failed",
+      "elapsed_seconds": 118.84945508400415,
+      "has_warnings": true,
+      "diagnostics": {},
+      "error": "Worker exit code -9: Worker produced no report"
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case006__front.jpg",
+      "source_sha256": "e470e7140c0da402eed49ae13fc476617abf2a55ae3addb66d13acdf188c083a",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "retry",
+      "status": "failed",
+      "elapsed_seconds": 118.67380604200298,
+      "has_warnings": true,
+      "diagnostics": {},
+      "error": "Worker exit code -9: Worker produced no report"
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case007__front.jpg",
+      "source_sha256": "129689264b8910a24dc659be6212ac52d774b34b819caae1f3a85bf539bb5198",
+      "source_width": 2880,
+      "source_height": 3840,
+      "mode": "retry",
+      "status": "success",
+      "elapsed_seconds": 10.388326083004358,
+      "has_warnings": true,
+      "diagnostics": {
+        "image_size": [
+          1800,
+          2400
+        ],
+        "raw_lines_count": 7,
+        "detected_leads": [
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "detected_leads_count": 10,
+        "layout_name": "standard_6x2",
+        "layout_cost": 0.1582832283461798,
+        "layout_flipped": false,
+        "pixel_spacing_x_mm": 0.1099756732583046,
+        "pixel_spacing_y_mm": 0.11576845496892929,
+        "avg_pixel_per_mm": 8.865426063537598,
+        "canonical_shape": [
+          12,
+          10000
+        ],
+        "per_lead_energy": [
+          0.387,
+          0.897,
+          0.711,
+          0.649,
+          0.36,
+          0.821,
+          0.499,
+          1.139,
+          2.106,
+          1.078,
+          0.866,
+          1.192
+        ],
+        "nonzero_leads_count": 12,
+        "einthoven_score": 0.5160718908034827,
+        "processing_mode": "default"
+      },
+      "error": null
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case008__screen.jpg",
+      "source_sha256": "be856dd5ae05764502bd48d1936fb5355fb8fdca49e7475303f799210dc3042c",
+      "source_width": 720,
+      "source_height": 1280,
+      "mode": "retry",
+      "status": "failed",
+      "elapsed_seconds": 74.22480308300146,
+      "has_warnings": true,
+      "diagnostics": {},
+      "error": "Worker exit code -9: Worker produced no report"
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case009__screen.jpg",
+      "source_sha256": "3c06eab989ecbdc3eb3f7965b0c5b9000442688459357d8b5792633e96472fe4",
+      "source_width": 720,
+      "source_height": 1280,
+      "mode": "retry",
+      "status": "failed",
+      "elapsed_seconds": 54.52509145899967,
+      "has_warnings": true,
+      "diagnostics": {},
+      "error": "Worker exit code -9: Worker produced no report"
+    },
+    {
+      "pipeline_version": 1,
+      "source_image": "data/real-phone/photos/case010__screen.jpg",
+      "source_sha256": "bd0bbb29bc289e2c77bd3efe7a1aa21add8333544423c6ee9a5f4ee4465d134e",
+      "source_width": 1280,
+      "source_height": 720,
+      "mode": "retry",
+      "status": "timeout",
+      "elapsed_seconds": 181.6160400000008,
+      "has_warnings": true,
+      "diagnostics": {},
+      "error": "Timed out after 180 seconds"
+    }
+  ]
+}
