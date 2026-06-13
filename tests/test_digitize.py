@@ -1,6 +1,8 @@
 # Tests for ECG digitization pipeline (image -> signal conversion)
 # Unit tests run without model weights; integration tests require them
 
+from __future__ import annotations
+
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -14,15 +16,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.pipeline.digitize import (
+from src.pipeline.digitize import (  # noqa: E402
     NUM_LEADS,
     TARGET_LENGTH,
     UV_TO_MV,
+    ECGDigitiser,
+    _crop_likely_landscape_page,
+    _expand_canonical_segments,
     _pad_or_truncate_leads,
     _pad_or_truncate_time,
     _resample_signal,
     _z_score_normalize,
 )
+from src.utils.signal_clean import einthoven_consistency  # noqa: E402
 
 WEIGHTS_DIR = PROJECT_ROOT / "external" / "open-ecg-digitizer" / "weights"
 WEIGHTS_EXIST = (
@@ -115,6 +121,58 @@ class TestResampleSignal:
         assert np.all(diffs >= 0)
 
 
+class TestExpandCanonicalSegments:
+    """Verify paper-layout segments are expanded without per-lead phase shifts."""
+
+    def test_preserves_einthoven_relation_for_synchronized_limb_leads(self) -> None:
+        canonical = np.full((12, 100), np.nan)
+        base = np.sin(np.linspace(0, 2 * np.pi, 25, endpoint=False))
+        canonical[0, :25] = base
+        canonical[2, :25] = 0.5 * base
+        canonical[1, :25] = canonical[0, :25] + canonical[2, :25]
+
+        expanded = _expand_canonical_segments(canonical)
+
+        np.testing.assert_allclose(expanded[1], expanded[0] + expanded[2])
+        assert einthoven_consistency(expanded) > 0.99
+
+    def test_tiles_each_exact_layout_column_without_phase_shift(self) -> None:
+        canonical = np.full((12, 100), np.nan)
+        segment = np.arange(25, dtype=np.float64)
+        canonical[0, :25] = segment
+        canonical[3, 25:50] = segment + 100
+        canonical[6, 50:75] = segment + 200
+        canonical[9, 75:100] = segment + 300
+
+        expanded = _expand_canonical_segments(canonical)
+
+        np.testing.assert_array_equal(expanded[0], np.tile(segment, 4))
+        np.testing.assert_array_equal(expanded[3], np.tile(segment + 100, 4))
+        np.testing.assert_array_equal(expanded[6], np.tile(segment + 200, 4))
+        np.testing.assert_array_equal(expanded[9], np.tile(segment + 300, 4))
+
+    def test_aligns_full_width_rhythm_lead_to_its_layout_column(self) -> None:
+        canonical = np.full((12, 100), np.nan)
+        rhythm = np.linspace(-1, 1, 100)
+        canonical[1] = rhythm
+        canonical[1, 50] = np.nan
+        canonical[0, :25] = np.arange(25)
+
+        expanded = _expand_canonical_segments(canonical)
+
+        expected_segment = rhythm[:25]
+        np.testing.assert_allclose(expanded[1], np.tile(expected_segment, 4))
+
+    def test_preserves_full_width_leads_when_no_partial_layout_exists(self) -> None:
+        canonical = np.tile(np.linspace(-1, 1, 100), (12, 1))
+        canonical[1, 50] = np.nan
+
+        expanded = _expand_canonical_segments(canonical)
+
+        rhythm = np.linspace(-1, 1, 100)
+        np.testing.assert_allclose(expanded[1], rhythm)
+
+
 class TestPadOrTruncateTime:
     """Verify time-axis padding and truncation."""
 
@@ -169,7 +227,7 @@ class TestCpuFullResolution:
 
     def test_image_upscaled_to_min_dimension(self) -> None:
         """Small images are upscaled so shortest side reaches MIN_IMAGE_DIMENSION."""
-        from src.pipeline.digitize import ECGDigitiser, MIN_IMAGE_DIMENSION
+        from src.pipeline.digitize import MIN_IMAGE_DIMENSION, ECGDigitiser
 
         digitiser = object.__new__(ECGDigitiser)
         digitiser.device = torch.device("cpu")
@@ -181,6 +239,32 @@ class TestCpuFullResolution:
 
             _, _, new_h, new_w = result.shape
             assert min(new_h, new_w) == MIN_IMAGE_DIMENSION
+
+    def test_crops_textured_landscape_page_from_portrait_screen_photo(self) -> None:
+        """A monitor photo should be cropped to the bright ECG page before rotation."""
+        image = torch.zeros(3, 1200, 700, dtype=torch.uint8)
+        image[:, :250, :] = 230  # bright but blank wall above the monitor
+        image[:, 400:850, 50:650] = 225
+        image[:, 400:850:12, 50:650] = 130
+        image[:, 400:850, 50:650:12] = 130
+        image[:, 500:510, 50:650] = 20
+        image[:, 650:660, 50:650] = 20
+
+        cropped = _crop_likely_landscape_page(image)
+
+        assert cropped.shape[2] > cropped.shape[1]
+        assert cropped.shape[1] < image.shape[1]
+        assert cropped.shape[2] < image.shape[2]
+
+    def test_does_not_crop_full_frame_portrait_paper(self) -> None:
+        """A paper filling the frame should keep its full bounds, then rotate normally."""
+        image = torch.full((3, 1200, 700), 225, dtype=torch.uint8)
+        image[:, ::12, :] = 150
+        image[:, :, ::12] = 150
+
+        cropped = _crop_likely_landscape_page(image)
+
+        assert cropped.shape == image.shape
 
 
 class TestPostprocessEndToEnd:
@@ -209,9 +293,46 @@ class TestPostprocessEndToEnd:
         # A random signal should not normalize to all zeros
         assert np.any(result != 0.0)
 
+    def test_postprocess_outputs_preserve_calibrated_millivolts(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        import src.pipeline.digitize as digitize_module
+        from src.pipeline.digitize import ECGDigitiser
+
+        monkeypatch.setattr(digitize_module, "highpass_filter", lambda signal, _: signal)
+        monkeypatch.setattr(digitize_module, "wavelet_denoise", lambda signal, _: signal)
+        canonical = torch.tensor(
+            np.tile(np.linspace(-1000.0, 1000.0, 5000), (12, 1)),
+            dtype=torch.float32,
+        )
+
+        outputs = ECGDigitiser._postprocess_outputs(canonical)
+
+        np.testing.assert_allclose(
+            outputs.calibrated_millivolts[0, [0, -1]],
+            np.array([-1.0, 1.0]),
+            atol=1e-6,
+        )
+        assert outputs.calibrated_millivolts.dtype == np.float32
+        assert outputs.model_input.dtype == np.float32
+        assert np.std(outputs.model_input) == pytest.approx(1.0, abs=1e-6)
+
 
 class TestQualityGuards:
     """Verify silent digitization failures are rejected."""
+
+    def test_negative_einthoven_score_is_a_quality_warning(self) -> None:
+        from src.pipeline.digitize import DigitizeInfo
+
+        healthy = {
+            "layout_cost": 0.1,
+            "detected_leads_count": 12,
+            "avg_pixel_per_mm": 8.0,
+            "raw_lines_count": 4,
+            "nonzero_leads_count": 12,
+        }
+        assert DigitizeInfo(**healthy, einthoven_score=-0.2).has_warnings is True
+        assert DigitizeInfo(**healthy).has_warnings is False
 
     def test_extract_canonical_raises_for_all_nan(self) -> None:
         from src.pipeline.digitize import ECGDigitiser
@@ -295,6 +416,7 @@ class TestRetryLogic:
 
         digitiser = object.__new__(ECGDigitiser)
         digitiser.enable_dewarping_retry = False
+        digitiser.enable_orientation_retry = False
         digitiser._run_inference = MagicMock(return_value={"signal": {}})
         digitiser._score_raw_result = MagicMock(return_value=1.0)
         digitiser._should_retry_with_dewarping = MagicMock(return_value=True)
@@ -303,6 +425,43 @@ class TestRetryLogic:
 
         assert result["processing_mode"] == "default"
         assert digitiser._run_inference.call_count == 1
+
+    def test_run_best_inference_selects_better_rotated_orientation(self) -> None:
+        from src.pipeline.digitize import ECGDigitiser
+
+        digitiser = object.__new__(ECGDigitiser)
+        digitiser.enable_orientation_retry = True
+        digitiser.enable_dewarping_retry = False
+        poor = {"signal": {"layout_matching_cost": 4.0}}
+        good = {"signal": {"layout_matching_cost": 0.2}}
+        digitiser._run_inference = MagicMock(side_effect=[poor, good])
+        digitiser._score_raw_result = MagicMock(side_effect=[1.0, 10.0])
+        digitiser._should_retry_with_orientation = MagicMock(return_value=True)
+
+        image = torch.arange(24).reshape(1, 3, 2, 4)
+        result = digitiser._run_best_inference(image)
+
+        assert result["processing_mode"] == "rotated_180_retry"
+        rotated = digitiser._run_inference.call_args_list[1].args[0]
+        torch.testing.assert_close(rotated, torch.rot90(image, k=2, dims=(2, 3)))
+
+    def test_run_best_inference_keeps_default_when_rotated_orientation_is_worse(
+        self,
+    ) -> None:
+        from src.pipeline.digitize import ECGDigitiser
+
+        digitiser = object.__new__(ECGDigitiser)
+        digitiser.enable_orientation_retry = True
+        digitiser.enable_dewarping_retry = False
+        default = {"signal": {"layout_matching_cost": 0.5}}
+        rotated = {"signal": {"layout_matching_cost": 1.0}}
+        digitiser._run_inference = MagicMock(side_effect=[default, rotated])
+        digitiser._score_raw_result = MagicMock(side_effect=[10.0, 1.0])
+        digitiser._should_retry_with_orientation = MagicMock(return_value=True)
+
+        result = digitiser._run_best_inference(torch.zeros(1, 3, 2, 4))
+
+        assert result["processing_mode"] == "default"
 
 
 # ---------------------------------------------------------------------------
@@ -315,12 +474,11 @@ class TestIntegrationDigitize:
     """Full integration test with real Open-ECG-Digitizer model."""
 
     @pytest.fixture(scope="class")
-    def digitiser(self) -> "ECGDigitiser":
-        from src.pipeline.digitize import ECGDigitiser
+    def digitiser(self) -> ECGDigitiser:
         return ECGDigitiser()
 
     def test_digitize_returns_correct_shape(
-        self, digitiser: "ECGDigitiser", tmp_path: Path
+        self, digitiser: ECGDigitiser, tmp_path: Path
     ) -> None:
         """Test with a synthetic solid-color image (not a real ECG)."""
         # Create a simple test image — won't produce meaningful signal

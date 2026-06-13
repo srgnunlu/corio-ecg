@@ -3,7 +3,11 @@
 import numpy as np
 import pytest
 
-from src.utils.metrics import compute_pearson_per_lead, compute_snr
+from src.utils.metrics import (
+    compute_multilabel_classification_metrics,
+    compute_pearson_per_lead,
+    compute_snr,
+)
 
 # Fixed seed for reproducible random tests
 RNG = np.random.default_rng(42)
@@ -75,3 +79,112 @@ class TestComputePearsonPerLead:
             f"Expected 0.0 for constant lead, got {correlations[0]}"
         )
         assert not np.isnan(correlations[0]), "Should not be NaN"
+
+    def test_pearson_near_constant_lead_returns_zero(self) -> None:
+        """Numerically near-constant leads should not emit scipy warnings."""
+        near_constant = CLEAN_SIGNAL.copy()
+        near_constant[0] = 1.0 + np.linspace(0.0, 1e-14, near_constant.shape[1])
+
+        correlations = compute_pearson_per_lead(near_constant, CLEAN_SIGNAL)
+
+        assert correlations[0] == 0.0
+
+    def test_pearson_ignores_non_finite_pairs(self) -> None:
+        """A few invalid samples should not poison the full lead correlation."""
+        signal_with_nan = CLEAN_SIGNAL.copy()
+        signal_with_nan[0, :10] = np.nan
+
+        correlations = compute_pearson_per_lead(signal_with_nan, CLEAN_SIGNAL)
+
+        assert correlations[0] == pytest.approx(1.0)
+
+
+class TestMultilabelClassificationMetrics:
+    """Tests for ground-truth multi-label classification metrics."""
+
+    def test_perfect_predictions_score_one(self) -> None:
+        y_true = np.array(
+            [
+                [0, 0],
+                [0, 1],
+                [1, 0],
+                [1, 1],
+            ],
+            dtype=np.int8,
+        )
+        y_prob = np.array(
+            [
+                [0.1, 0.2],
+                [0.2, 0.9],
+                [0.8, 0.1],
+                [0.9, 0.8],
+            ],
+            dtype=np.float32,
+        )
+
+        result = compute_multilabel_classification_metrics(
+            y_true,
+            y_prob,
+            class_names=["A", "B"],
+            threshold=0.5,
+        )
+
+        assert result["evaluated_classes"] == 2
+        assert result["macro_auroc"] == pytest.approx(1.0)
+        assert result["macro_average_precision"] == pytest.approx(1.0)
+        assert result["micro_f1"] == pytest.approx(1.0)
+        assert result["macro_f1"] == pytest.approx(1.0)
+
+    def test_skips_classes_without_positive_and_negative_examples(self) -> None:
+        y_true = np.array(
+            [
+                [0, 0],
+                [1, 0],
+                [0, 0],
+                [1, 0],
+            ],
+            dtype=np.int8,
+        )
+        y_prob = np.array(
+            [
+                [0.1, 0.2],
+                [0.9, 0.3],
+                [0.2, 0.1],
+                [0.8, 0.4],
+            ],
+            dtype=np.float32,
+        )
+
+        result = compute_multilabel_classification_metrics(
+            y_true,
+            y_prob,
+            class_names=["supported", "no positives"],
+            threshold=0.5,
+        )
+
+        assert result["evaluated_classes"] == 1
+        assert result["skipped_classes"] == 1
+        assert list(result["per_class"]) == ["supported"]
+
+    def test_skips_classes_below_minimum_positive_support(self) -> None:
+        y_true = np.array(
+            [
+                [1, 1],
+                [0, 1],
+                [0, 0],
+                [0, 0],
+            ],
+            dtype=np.int8,
+        )
+        y_prob = y_true.astype(np.float32)
+
+        result = compute_multilabel_classification_metrics(
+            y_true,
+            y_prob,
+            class_names=["one positive", "two positives"],
+            threshold=0.5,
+            minimum_positive_examples=2,
+        )
+
+        assert result["evaluated_classes"] == 1
+        assert list(result["per_class"]) == ["two positives"]

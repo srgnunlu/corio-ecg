@@ -49,7 +49,9 @@ MODEL_CONFIG: dict = {
     "stride": 2,
     "groups_width": 16,
     "n_classes": 150,
-    "use_bn": True,
+    # Official ECGFounder PTB-XL evaluation constructs BatchNorm parameters
+    # from the checkpoint but disables BatchNorm execution during inference.
+    "use_bn": False,
     "use_do": False,
 }
 
@@ -130,12 +132,16 @@ class ECGDiagnoser:
         self,
         signal: np.ndarray,
         threshold: float | None = None,
+        *,
+        apply_rate_adjustments: bool = True,
     ) -> list[DiagnosisResult]:
         """Run multi-label diagnosis on a 12-lead ECG signal.
 
         Args:
             signal: Z-score normalized array with shape (12, 5000).
             threshold: Sigmoid probability cutoff. Uses instance default if None.
+            apply_rate_adjustments: Apply heart-rate consistency heuristics. Keep
+                enabled for the UI; disable for raw model benchmarking.
 
         Returns:
             Diagnosis results above threshold, sorted by probability descending.
@@ -155,7 +161,10 @@ class ECGDiagnoser:
         with torch.no_grad():
             logits = self.model(tensor)
             probabilities = torch.sigmoid(logits).squeeze(0).cpu().numpy()
-        probabilities = self._apply_rate_consistency_adjustments(probabilities, signal)
+        if apply_rate_adjustments:
+            probabilities = self._apply_rate_consistency_adjustments(probabilities, signal)
+        else:
+            self.last_estimated_hr_bpm = None
 
         # Collect results above threshold
         results: list[DiagnosisResult] = []
@@ -174,7 +183,12 @@ class ECGDiagnoser:
         results.sort(key=lambda r: r.probability, reverse=True)
         return results
 
-    def diagnose_all(self, signal: np.ndarray) -> list[DiagnosisResult]:
+    def diagnose_all(
+        self,
+        signal: np.ndarray,
+        *,
+        apply_rate_adjustments: bool = True,
+    ) -> list[DiagnosisResult]:
         """Return all 150 diagnoses sorted by probability (no threshold filtering).
 
         Args:
@@ -183,7 +197,11 @@ class ECGDiagnoser:
         Returns:
             All 150 diagnosis results sorted by probability descending.
         """
-        return self.diagnose(signal, threshold=0.0)
+        return self.diagnose(
+            signal,
+            threshold=0.0,
+            apply_rate_adjustments=apply_rate_adjustments,
+        )
 
     def _apply_rate_consistency_adjustments(
         self,

@@ -7,12 +7,65 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 EXTERNAL_DIR = PROJECT_ROOT / "external"
+OPEN_ECG_DIGITIZER_PATCH = PROJECT_ROOT / "vendor" / "patches" / "open-ecg-digitizer.patch"
+OPEN_ECG_DIGITIZER_REVISION = "963387ff5abdfa3db91c15ac52d6cf1214345a6a"
+ECG_IMAGE_KIT_REVISION = "27b90f56896c9fc78b05a83ca14844ea2637aa0b"
 
 
-def run(cmd: list[str], cwd: Path | None = None) -> None:
-    """Run a shell command, raising on failure."""
+def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> int:
+    """Run a shell command and return its exit code."""
     print(f"  > {' '.join(cmd)}")
-    subprocess.run(cmd, cwd=cwd, check=True)
+    return subprocess.run(cmd, cwd=cwd, check=check).returncode
+
+
+def apply_open_ecg_digitizer_patch(repo_dir: Path, patch_path: Path) -> None:
+    """Apply the Corio vendor patch once, failing on incompatible upstream code."""
+    if not patch_path.exists():
+        raise FileNotFoundError(f"Vendor patch not found: {patch_path}")
+
+    reverse_check = run(
+        ["git", "apply", "--reverse", "--check", str(patch_path)],
+        cwd=repo_dir,
+        check=False,
+    )
+    if reverse_check == 0:
+        print("[OK] Corio Open-ECG-Digitizer patch already applied")
+        return
+
+    forward_check = run(
+        ["git", "apply", "--check", str(patch_path)],
+        cwd=repo_dir,
+        check=False,
+    )
+    if forward_check != 0:
+        raise RuntimeError(
+            "Open-ECG-Digitizer vendor patch is incompatible with the checked-out revision"
+        )
+
+    run(["git", "apply", str(patch_path)], cwd=repo_dir)
+    print("[PATCH] Applied Corio Open-ECG-Digitizer compatibility patch")
+
+
+def ensure_git_revision(repo_dir: Path, revision: str) -> None:
+    """Pin an external repository without overwriting local modifications."""
+    current_revision = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"],
+        cwd=repo_dir,
+        text=True,
+    ).strip()
+    if current_revision == revision:
+        return
+
+    dirty_files = subprocess.check_output(
+        ["git", "status", "--porcelain"],
+        cwd=repo_dir,
+        text=True,
+    ).strip()
+    if dirty_files:
+        raise RuntimeError(
+            f"Cannot pin {repo_dir.name} to {revision}: repository has local changes"
+        )
+    run(["git", "checkout", revision], cwd=repo_dir)
 
 
 def setup_open_ecg_digitizer() -> None:
@@ -27,6 +80,9 @@ def setup_open_ecg_digitizer() -> None:
         run(
             ["git", "clone", "https://github.com/Ahus-AIM/Open-ECG-Digitizer.git", str(repo_dir)],
         )
+
+    ensure_git_revision(repo_dir, OPEN_ECG_DIGITIZER_REVISION)
+    apply_open_ecg_digitizer_patch(repo_dir, OPEN_ECG_DIGITIZER_PATCH)
 
     # Verify model weights were downloaded via LFS
     weights_dir = repo_dir / "weights"
@@ -48,8 +104,14 @@ def setup_ecg_image_kit() -> None:
         print("[CLONE] ECG-Image-Kit...")
         EXTERNAL_DIR.mkdir(parents=True, exist_ok=True)
         run(
-            ["git", "clone", "https://github.com/alphanumericslab/ecg-image-kit.git", str(repo_dir)],
+            [
+                "git",
+                "clone",
+                "https://github.com/alphanumericslab/ecg-image-kit.git",
+                str(repo_dir),
+            ],
         )
+    ensure_git_revision(repo_dir, ECG_IMAGE_KIT_REVISION)
 
 
 def install_dependencies() -> None:

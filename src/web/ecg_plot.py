@@ -43,9 +43,9 @@ COLOR_BG: str = "#FDF6F0"
 def _extract_lead_segment(signal: np.ndarray, lead_idx: int, col_idx: int) -> np.ndarray:
     """Extract the 5-second segment of a lead from its column position.
 
-    After _align_leads_to_origin() in the digitize pipeline, all leads
-    have data starting at sample 0 (tiled to fill 5000 samples). Simple
-    column-based slicing is sufficient: col 0 → [0:2500], col 1 → [2500:5000].
+    After canonical segment expansion in the digitize pipeline, all leads
+    contain tiled data across 5000 samples. Simple column-based slicing is
+    sufficient: col 0 → [0:2500], col 1 → [2500:5000].
     """
     start = col_idx * SAMPLES_PER_COLUMN
     end = start + SAMPLES_PER_COLUMN
@@ -150,7 +150,7 @@ def plot_ecg_paper(
         fontsize=7, color="#666666", ha="right",
     )
 
-    plt.tight_layout(rect=[0, 0.02, 1, 0.97])
+    plt.tight_layout(rect=(0, 0.02, 1, 0.97))
     return fig
 
 

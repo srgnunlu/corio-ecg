@@ -4,10 +4,10 @@
 
 from __future__ import annotations
 
+import gc
 import logging
 import os
 import sys
-import gc
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -17,8 +17,11 @@ import torch
 import torch.nn.functional as F_torch
 from scipy.interpolate import interp1d
 
-from src.pipeline.lead_assignment import override_lead_assignment
-from src.utils.signal_clean import einthoven_consistency, highpass_filter, wavelet_denoise
+from src.utils.signal_clean import (
+    einthoven_consistency,
+    highpass_filter,
+    wavelet_denoise,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -80,8 +83,11 @@ class DigitizeInfo:
             or self.avg_pixel_per_mm < 1.0
             or self.avg_pixel_per_mm > 30.0
             or self.raw_lines_count < MIN_REQUIRED_RAW_LINES
-            or (self.nonzero_leads_count > 0 and self.nonzero_leads_count < MIN_REQUIRED_NONZERO_LEADS)
-            or (self.einthoven_score >= 0 and self.einthoven_score < 0.7)
+            or (
+                self.nonzero_leads_count > 0
+                and self.nonzero_leads_count < MIN_REQUIRED_NONZERO_LEADS
+            )
+            or (self.einthoven_score != -1.0 and self.einthoven_score < 0.7)
         )
 
     def summary(self) -> str:
@@ -102,6 +108,15 @@ class DigitizeInfo:
             f"Einthoven consistency: {self.einthoven_score:.2f}",
         ]
         return "\n".join(lines)
+
+
+@dataclass(frozen=True)
+class DigitizedSignals:
+    """Diagnosis-ready and calibrated outputs from one digitization run."""
+
+    model_input: np.ndarray
+    calibrated_millivolts: np.ndarray
+
 
 def _mock_ray_tune_if_missing() -> None:
     """Inject a fake ray.tune module if ray is not installed.
@@ -163,6 +178,92 @@ def _select_digitiser_device(requested: torch.device | None) -> torch.device:
     return requested
 
 
+def _crop_likely_landscape_page(image: torch.Tensor) -> torch.Tensor:
+    """Crop a textured landscape ECG page embedded in a portrait photo.
+
+    Portrait monitor photos can contain an already-upright landscape ECG page.
+    Cropping that page before the general portrait rotation avoids turning the
+    ECG sideways. The thresholds are intentionally conservative so ordinary
+    paper photos that fill the frame are left unchanged.
+    """
+    import cv2
+
+    if image.ndim != 3 or image.shape[1] <= image.shape[2]:
+        return image
+
+    _, height, width = image.shape
+    image_np = image.permute(1, 2, 0).cpu().numpy()
+    gray = cv2.cvtColor(image_np, cv2.COLOR_RGB2GRAY)
+    blurred = cv2.GaussianBlur(gray, (15, 15), 0)
+    _, bright_mask = cv2.threshold(
+        blurred,
+        0,
+        255,
+        cv2.THRESH_BINARY + cv2.THRESH_OTSU,
+    )
+    kernel_size = max(5, round(min(height, width) / 35))
+    if kernel_size % 2 == 0:
+        kernel_size += 1
+    close_kernel = cv2.getStructuringElement(
+        cv2.MORPH_RECT,
+        (kernel_size, kernel_size),
+    )
+    bright_mask = cv2.morphologyEx(
+        bright_mask,
+        cv2.MORPH_CLOSE,
+        close_kernel,
+    )
+    contours, _ = cv2.findContours(
+        bright_mask,
+        cv2.RETR_EXTERNAL,
+        cv2.CHAIN_APPROX_SIMPLE,
+    )
+    edges = cv2.Canny(gray, 50, 150)
+
+    best_bounds: tuple[int, int, int, int] | None = None
+    best_score = 0.0
+    total_area = height * width
+    for contour in contours:
+        x, y, candidate_width, candidate_height = cv2.boundingRect(contour)
+        area_ratio = candidate_width * candidate_height / total_area
+        aspect_ratio = candidate_width / max(candidate_height, 1)
+        width_ratio = candidate_width / width
+        if not (
+            0.12 <= area_ratio <= 0.85
+            and 1.05 <= aspect_ratio <= 2.2
+            and width_ratio >= 0.55
+        ):
+            continue
+
+        edge_density = float(
+            np.mean(edges[y : y + candidate_height, x : x + candidate_width] > 0)
+        )
+        if edge_density < 0.06:
+            continue
+        score = area_ratio * edge_density
+        if score > best_score:
+            best_score = score
+            best_bounds = (x, y, candidate_width, candidate_height)
+
+    if best_bounds is None:
+        return image
+
+    x, y, candidate_width, candidate_height = best_bounds
+    margin = max(2, round(min(height, width) * 0.01))
+    left = max(0, x - margin)
+    top = max(0, y - margin)
+    right = min(width, x + candidate_width + margin)
+    bottom = min(height, y + candidate_height + margin)
+    logger.info(
+        "Cropped landscape ECG page from portrait photo: %dx%d -> %dx%d",
+        width,
+        height,
+        right - left,
+        bottom - top,
+    )
+    return image[:, top:bottom, left:right].contiguous()
+
+
 # Repo root of the cloned Open-ECG-Digitizer, needed for its internal imports
 _DIGITIZER_REPO_ROOT: Path = (
     Path(__file__).resolve().parents[2] / "external" / "open-ecg-digitizer"
@@ -190,6 +291,7 @@ class ECGDigitiser:
         config_path: str | Path | None = None,
         device: torch.device | None = None,
         enable_dewarping_retry: bool = True,
+        enable_orientation_retry: bool = True,
     ) -> None:
         """Initialize the digitiser by loading Open-ECG-Digitizer's InferenceWrapper.
 
@@ -202,12 +304,14 @@ class ECGDigitiser:
         """
         self.device = _select_digitiser_device(device)
         self.enable_dewarping_retry = enable_dewarping_retry
+        self.enable_orientation_retry = enable_orientation_retry
         self.config_path = Path(config_path) if config_path else _DIGITIZER_CONFIG_PATH
         self._wrapper = self._load_wrapper()
         logger.info(
-            "ECGDigitiser ready — device=%s, dewarping_retry=%s",
+            "ECGDigitiser ready — device=%s, dewarping_retry=%s, orientation_retry=%s",
             self.device,
             self.enable_dewarping_retry,
+            self.enable_orientation_retry,
         )
 
     def _load_wrapper(self) -> torch.nn.Module:
@@ -314,6 +418,17 @@ class ECGDigitiser:
             FileNotFoundError: If image_path does not exist.
             RuntimeError: If digitization fails (e.g. no signal detected).
         """
+        return self.digitize_with_calibrated(
+            image_path,
+            layout_hint=layout_hint,
+        ).model_input
+
+    def digitize_with_calibrated(
+        self,
+        image_path: str | Path,
+        layout_hint: str | None = None,
+    ) -> DigitizedSignals:
+        """Digitize an image and preserve the pre-normalization mV signal."""
         image_path = Path(image_path)
         if not image_path.exists():
             raise FileNotFoundError(f"Image not found: {image_path}")
@@ -331,7 +446,8 @@ class ECGDigitiser:
         canonical = self._extract_canonical(raw_result)
         self.last_info.canonical_shape = tuple(canonical.shape)
 
-        signal = self._postprocess(canonical)
+        outputs = self._postprocess_outputs(canonical)
+        signal = outputs.model_input
         self.last_info.nonzero_leads_count = self._count_nonzero_leads(signal)
 
         # Per-lead energy (RMS) after z-score normalization
@@ -353,7 +469,7 @@ class ECGDigitiser:
 
         self._validate_digitized_signal(signal, layout_hint=layout_hint)
 
-        return signal
+        return outputs
 
     def _populate_diagnostics(self, raw_result: dict) -> None:
         """Extract diagnostic info from the raw inference result."""
@@ -387,17 +503,19 @@ class ECGDigitiser:
     def _load_image(self, image_path: Path) -> torch.Tensor:
         """Load image as (1, 3, H, W) tensor, clamped to safe dimensions.
 
-        Applies three pre-processing steps in order:
-        1. Auto-rotate portrait images (ECGs are always landscape)
-        2. Downscale oversized phone photos to MAX_IMAGE_DIMENSION
-        3. Upscale small images to MIN_IMAGE_DIMENSION (capped at 2x)
+        Applies four pre-processing steps in order:
+        1. Crop an already-upright landscape ECG page from portrait screen photos
+        2. Auto-rotate remaining portrait images (ECGs are always landscape)
+        3. Downscale oversized phone photos to MAX_IMAGE_DIMENSION
+        4. Upscale small images to MIN_IMAGE_DIMENSION (capped at 2x)
         """
         from torchvision.io import decode_image
 
         image = decode_image(str(image_path), mode="RGB")
+        image = _crop_likely_landscape_page(image)
         h, w = image.shape[1], image.shape[2]
 
-        # Step 1: Auto-rotate portrait → landscape
+        # Step 2: Auto-rotate portrait → landscape
         # ECG printouts are always wider than tall. A portrait photo means
         # the phone was held vertically — rotate 90° counter-clockwise.
         if h > w:
@@ -408,7 +526,7 @@ class ECGDigitiser:
                 w, h,
             )
 
-        # Step 2: Downscale oversized phone photos to prevent memory explosion
+        # Step 3: Downscale oversized phone photos to prevent memory explosion
         if max(h, w) > MAX_IMAGE_DIMENSION:
             scale = MAX_IMAGE_DIMENSION / max(h, w)
             new_h, new_w = int(h * scale), int(w * scale)
@@ -425,7 +543,7 @@ class ECGDigitiser:
             )
             h, w = new_h, new_w
 
-        # Step 3: Upscale small images (capped at 2x to avoid excessive blur)
+        # Step 4: Upscale small images (capped at 2x to avoid excessive blur)
         if min(h, w) < MIN_IMAGE_DIMENSION:
             scale = MIN_IMAGE_DIMENSION / min(h, w)
             scale = min(scale, self._MAX_UPSCALE_FACTOR)
@@ -478,20 +596,54 @@ class ECGDigitiser:
         image_tensor: torch.Tensor,
         layout_hint: str | None = None,
     ) -> dict:
-        """Retry difficult cases with dewarping and keep the best result."""
+        """Retry difficult cases with alternate orientation/dewarping."""
         best_result = self._run_inference(image_tensor, layout_hint=layout_hint)
         best_result["processing_mode"] = "default"
         best_score = self._score_raw_result(best_result)
+        best_image_tensor = image_tensor
+
+        if (
+            self.enable_orientation_retry
+            and self._should_retry_with_orientation(best_result)
+        ):
+            rotated_image_tensor = torch.rot90(image_tensor, k=2, dims=(2, 3))
+            rotated_result = self._run_inference(
+                rotated_image_tensor,
+                layout_hint=layout_hint,
+            )
+            rotated_result["processing_mode"] = "rotated_180_retry"
+            rotated_score = self._score_raw_result(rotated_result)
+            if rotated_score > best_score:
+                logger.info(
+                    "Selected rotated orientation result (score %.2f > %.2f)",
+                    rotated_score,
+                    best_score,
+                )
+                del best_result
+                best_result = rotated_result
+                best_score = rotated_score
+                best_image_tensor = rotated_image_tensor
+            else:
+                logger.info(
+                    "Kept default orientation result (score %.2f >= %.2f)",
+                    best_score,
+                    rotated_score,
+                )
+                del rotated_result, rotated_image_tensor
 
         if self.enable_dewarping_retry and self._should_retry_with_dewarping(best_result):
             # Free memory from first pass before allocating second pass
             gc.collect()
             retry_result = self._run_inference(
-                image_tensor,
+                best_image_tensor,
                 layout_hint=layout_hint,
                 apply_dewarping=True,
             )
-            retry_result["processing_mode"] = "dewarped_retry"
+            retry_result["processing_mode"] = (
+                "rotated_180_dewarped_retry"
+                if best_image_tensor is not image_tensor
+                else "dewarped_retry"
+            )
             retry_score = self._score_raw_result(retry_result)
             if retry_score > best_score:
                 logger.info(
@@ -509,6 +661,16 @@ class ECGDigitiser:
             del retry_result
 
         return best_result
+
+    @staticmethod
+    def _should_retry_with_orientation(result: dict) -> bool:
+        """Try the opposite landscape orientation for weak first-pass results."""
+        signal_dict = result.get("signal", {})
+        layout_cost = float(signal_dict.get("layout_matching_cost", float("inf")))
+        raw_lines = signal_dict.get("raw_lines")
+        raw_lines_count = 0 if raw_lines is None else int(raw_lines.shape[0])
+        detected_count = int(signal_dict.get("n_detected", 0))
+        return layout_cost > 1.2 or raw_lines_count < 3 or detected_count < 8
 
     @staticmethod
     def _trim_debug_payload(result: dict) -> None:
@@ -638,19 +800,26 @@ class ECGDigitiser:
     def _postprocess(canonical: torch.Tensor) -> np.ndarray:
         """Convert raw canonical_lines to ECGFounder-ready format.
 
-        Steps: NaN->0, uV->mV, resample to 500Hz/5000pts, pad/truncate,
-        align+tile leads, highpass 0.5Hz, wavelet denoise, z-score.
+        Steps: expand synchronized paper-layout segments, uV->mV, resample
+        to 500Hz/5000pts, highpass 0.5Hz, wavelet denoise, z-score.
         """
+        return ECGDigitiser._postprocess_outputs(canonical).model_input
+
+    @staticmethod
+    def _postprocess_outputs(canonical: torch.Tensor) -> DigitizedSignals:
+        """Return calibrated mV signal plus the normalized model input."""
         signal = canonical.cpu().numpy().astype(np.float64)
 
-        # Handle NaN values (overlapping/undetected leads produce NaN)
-        signal = np.nan_to_num(signal, nan=0.0)
+        # Ensure exactly 12 leads before expanding the paper layout.
+        signal = _pad_or_truncate_leads(signal, NUM_LEADS)
+
+        # Canonical NaNs encode where each printed lead segment begins and
+        # ends. Expand those exact shared column windows before replacing
+        # missing values so simultaneous leads retain their relative phase.
+        signal = _expand_canonical_segments(signal)
 
         # Convert microvolts to millivolts
         signal = signal / UV_TO_MV
-
-        # Ensure exactly 12 leads
-        signal = _pad_or_truncate_leads(signal, NUM_LEADS)
 
         # Resample to 500 Hz / 5000 samples
         n_points = signal.shape[1]
@@ -659,13 +828,6 @@ class ECGDigitiser:
 
         # Pad or truncate time axis to exactly 5000 samples
         signal = _pad_or_truncate_time(signal, TARGET_LENGTH)
-
-        # Shift each lead's active data to sample 0 and tile to fill.
-        # Paper ECG layouts place leads at different time offsets (e.g.
-        # Lead I at [0:1250], V1 at [2500:3750] in 3x4+1R). Aligning
-        # before bandpass lets the filter smooth tile boundaries, and
-        # z-score then operates on fully-populated data for correct scaling.
-        signal = _align_leads_to_origin(signal)
 
         # Remove baseline wander (< 0.5 Hz) from paper curvature and
         # lighting gradients. High-pass only — no upper cutoff, so QRS
@@ -679,10 +841,12 @@ class ECGDigitiser:
         # diagnostic waveform content untouched.
         signal = wavelet_denoise(signal, TARGET_SAMPLE_RATE)
 
-        # Global z-score normalization (same as wfdb_helpers)
-        signal = _z_score_normalize(signal)
-
-        return signal.astype(np.float32)
+        calibrated_millivolts = signal.astype(np.float32)
+        model_input = _z_score_normalize(signal).astype(np.float32)
+        return DigitizedSignals(
+            model_input=model_input,
+            calibrated_millivolts=calibrated_millivolts,
+        )
 
 
 def _sharpen_image(image: torch.Tensor, strength: float = 0.3) -> torch.Tensor:
@@ -744,49 +908,90 @@ def _pad_or_truncate_time(signal: np.ndarray, target_length: int) -> np.ndarray:
     return padded
 
 
-def _align_leads_to_origin(signal: np.ndarray) -> np.ndarray:
-    """Shift each lead's active data to sample 0 and tile to fill.
+def _expand_canonical_segments(signal: np.ndarray) -> np.ndarray:
+    """Expand canonical paper-layout segments while preserving synchronization.
 
-    Paper ECG layouts (3x4, 6x2) place each lead at a different time
-    offset in the canonical array. ECGFounder needs all leads aligned
-    to the same time window for cross-lead correlation.
-
-    After shifting, the active segment is REPEATED (tiled) to fill the
-    full signal length. This prevents ECGFounder from interpreting the
-    zero-padded tail as sinus arrest, and it's physiologically valid
-    since ECG morphology repeats with each heartbeat.
+    Open-ECG-Digitizer uses NaNs outside each lead's printed time window.
+    Leads in the same paper column share exact time boundaries, which must be
+    preserved for cross-lead relationships such as Einthoven's law. Partial
+    windows are interpolated within their snapped layout column and tiled to
+    the full duration. Full-width rhythm strips are cropped to the standard
+    lead's synchronized column before tiling when a multi-column layout exists.
     """
     total_len = signal.shape[1]
-    aligned = np.zeros_like(signal)
-    for i in range(signal.shape[0]):
-        lead = signal[i]
-        abs_lead = np.abs(lead)
-        peak_val = np.max(abs_lead)
-        if peak_val < 1e-8:
+    expanded = np.zeros_like(signal)
+    if total_len == 0:
+        return expanded
+
+    finite_spans: list[int] = []
+    finite_indices_by_lead: list[np.ndarray] = []
+    for lead in signal:
+        finite_indices = np.flatnonzero(np.isfinite(lead))
+        finite_indices_by_lead.append(finite_indices)
+        if finite_indices.size == 0:
+            continue
+        span = int(finite_indices[-1] - finite_indices[0] + 1)
+        if max(2, int(total_len * 0.1)) <= span < total_len * 0.8:
+            finite_spans.append(span)
+
+    if finite_spans:
+        typical_span = float(np.median(finite_spans))
+        n_columns = int(np.clip(round(total_len / typical_span), 1, 6))
+    else:
+        n_columns = 1
+    column_edges = np.linspace(0, total_len, n_columns + 1, dtype=int)
+
+    for lead_idx, finite_indices in enumerate(finite_indices_by_lead):
+        if finite_indices.size == 0:
             continue
 
-        # Find active region using adaptive threshold
-        threshold = peak_val * 0.01
-        active_indices = np.where(abs_lead > threshold)[0]
-        if len(active_indices) == 0:
-            aligned[i] = lead
-            continue
-
-        start = active_indices[0]
-        end = active_indices[-1] + 1
-        segment = lead[start:end]
-        seg_len = len(segment)
-
-        if seg_len >= total_len:
-            # Active data fills entire signal — no shift needed
-            aligned[i] = segment[:total_len]
+        lead = signal[lead_idx]
+        span = int(finite_indices[-1] - finite_indices[0] + 1)
+        if span >= total_len * 0.8:
+            if n_columns == 1:
+                expanded[lead_idx] = _interpolate_finite_values(lead)
+                continue
+            leads_per_column = int(np.ceil(signal.shape[0] / n_columns))
+            column_idx = min(n_columns - 1, lead_idx // leads_per_column)
+        elif n_columns > 1:
+            center = float(finite_indices[0] + finite_indices[-1]) / 2.0
+            column_idx = min(n_columns - 1, int(center * n_columns / total_len))
         else:
-            # Tile the segment to fill the full signal length
-            repeats = (total_len // seg_len) + 1
-            tiled = np.tile(segment, repeats)[:total_len]
-            aligned[i] = tiled
+            start = int(finite_indices[0])
+            end = int(finite_indices[-1] + 1)
+            segment = lead[start:end]
+            segment = _interpolate_finite_values(segment)
+            repeats = (total_len + len(segment) - 1) // len(segment)
+            expanded[lead_idx] = np.tile(segment, repeats)[:total_len]
+            continue
 
-    return aligned
+        start = int(column_edges[column_idx])
+        end = int(column_edges[column_idx + 1])
+        segment = lead[start:end]
+        if not np.isfinite(segment).any():
+            segment = lead[finite_indices[0] : finite_indices[-1] + 1]
+        segment = _interpolate_finite_values(segment)
+        repeats = (total_len + len(segment) - 1) // len(segment)
+        expanded[lead_idx] = np.tile(segment, repeats)[:total_len]
+
+    return expanded
+
+
+def _interpolate_finite_values(values: np.ndarray) -> np.ndarray:
+    """Linearly fill NaNs, extending edge values over missing boundaries."""
+    finite = np.isfinite(values)
+    if not finite.any():
+        return np.zeros_like(values)
+    if finite.all():
+        return values.copy()
+
+    positions = np.arange(len(values))
+    interpolated: np.ndarray = np.interp(
+        positions,
+        positions[finite],
+        values[finite],
+    )
+    return interpolated
 
 
 def _bandpass_filter(

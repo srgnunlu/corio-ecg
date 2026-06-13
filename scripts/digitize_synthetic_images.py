@@ -4,14 +4,22 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import time
+from dataclasses import asdict
 from pathlib import Path
 
 import numpy as np
+import torch
 from tqdm import tqdm
 
-from src.pipeline.digitize import ECGDigitiser
+from src.pipeline.digitize import (
+    MIN_REQUIRED_NONZERO_LEADS,
+    NUM_LEADS,
+    TARGET_LENGTH,
+    ECGDigitiser,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +27,40 @@ DEFAULT_IMAGE_DIR = Path("data/processed/images")
 DEFAULT_SIGNAL_DIR = Path("data/processed/signals")
 VALID_LEVELS = ["clean", "moderate", "hard"]
 DEFAULT_LAYOUT_HINT = "3x4+1R"
+DIGITIZATION_PIPELINE_VERSION = 4
+
+
+def _json_default(value: object) -> object:
+    """Convert vendor/PyTorch diagnostic values into JSON-compatible values."""
+    if isinstance(value, torch.Tensor):
+        return value.item() if value.numel() == 1 else value.detach().cpu().tolist()
+    if isinstance(value, np.generic):
+        return value.item()
+    raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")
+
+
+def _metadata_path(signal_path: Path) -> Path:
+    """Return the audit metadata path paired with a saved signal."""
+    return signal_path.with_suffix(".json")
+
+
+def _is_current_saved_signal(signal_path: Path) -> bool:
+    """Return whether an existing signal is usable and from this pipeline version."""
+    metadata_path = _metadata_path(signal_path)
+    if not signal_path.exists() or not metadata_path.exists():
+        return False
+    try:
+        metadata = json.loads(metadata_path.read_text())
+        signal = np.load(signal_path, mmap_mode="r")
+    except (OSError, ValueError, json.JSONDecodeError):
+        return False
+
+    if metadata.get("pipeline_version") != DIGITIZATION_PIPELINE_VERSION:
+        return False
+    if signal.shape != (NUM_LEADS, TARGET_LENGTH) or not np.isfinite(signal).all():
+        return False
+    active_leads = int(np.sum(np.max(np.abs(signal), axis=1) > 5e-2))
+    return active_leads >= MIN_REQUIRED_NONZERO_LEADS
 
 
 def collect_image_paths(
@@ -46,7 +88,15 @@ def collect_image_paths(
             f"Run generate_synthetic_images.py first."
         )
 
-    paths = sorted(level_dir.glob("*.png"))
+    paths = sorted(
+        level_dir.glob("*.png"),
+        key=lambda path: (
+            0,
+            int(path.stem),
+        )
+        if path.stem.isdigit()
+        else (1, path.stem),
+    )
     if not paths:
         raise FileNotFoundError(f"No PNG images found in {level_dir}")
 
@@ -62,6 +112,8 @@ def digitize_batch(
     output_dir: Path,
     level: str,
     layout_hint: str | None = DEFAULT_LAYOUT_HINT,
+    overwrite: bool = False,
+    max_new: int | None = None,
 ) -> dict[str, int]:
     """Digitize a batch of ECG images and save as .npy files.
 
@@ -82,6 +134,7 @@ def digitize_batch(
         "total": len(image_paths),
         "digitized": 0,
         "skipped": 0,
+        "invalidated": 0,
         "failed": 0,
     }
 
@@ -95,14 +148,31 @@ def digitize_batch(
         ecg_id = image_path.stem
         output_path = level_output / f"{ecg_id}.npy"
 
-        # Skip already-digitized files for resume capability
-        if output_path.exists():
+        # Resume only from audited outputs produced by the current pipeline.
+        if not overwrite and _is_current_saved_signal(output_path):
             summary["skipped"] += 1
             continue
+        if max_new is not None and summary["digitized"] + summary["failed"] >= max_new:
+            break
+        if output_path.exists():
+            summary["invalidated"] += 1
+            output_path.unlink()
+        _metadata_path(output_path).unlink(missing_ok=True)
 
         try:
             signal = digitiser.digitize(image_path, layout_hint=layout_hint)
             np.save(output_path, signal)
+            metadata = {
+                "pipeline_version": DIGITIZATION_PIPELINE_VERSION,
+                "source_image": str(image_path),
+                "layout_hint": layout_hint,
+                "dewarping_retry_enabled": digitiser.enable_dewarping_retry,
+                "orientation_retry_enabled": digitiser.enable_orientation_retry,
+                "diagnostics": asdict(digitiser.last_info),
+            }
+            _metadata_path(output_path).write_text(
+                json.dumps(metadata, indent=2, default=_json_default)
+            )
             summary["digitized"] += 1
         except Exception as error:
             summary["failed"] += 1
@@ -126,6 +196,7 @@ def print_summary(summary: dict[str, int], elapsed: float) -> None:
     print(f"Total images:     {summary['total']}")
     print(f"Digitized (new):  {summary['digitized']}")
     print(f"Skipped (exist):  {summary['skipped']}")
+    print(f"Invalidated old:  {summary['invalidated']}")
     print(f"Failed:           {summary['failed']}")
     print(f"Time elapsed:     {minutes:.1f} min ({elapsed:.0f} sec)")
 
@@ -175,17 +246,45 @@ def main() -> None:
             f"(default: {DEFAULT_LAYOUT_HINT}). Use 'auto' to disable."
         ),
     )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Re-digitize all selected images even when audited outputs exist",
+    )
+    parser.add_argument(
+        "--max-new",
+        type=int,
+        default=None,
+        help="Process at most this many non-reusable images before exiting",
+    )
+    parser.add_argument(
+        "--ecg-id",
+        type=str,
+        default=None,
+        help="Process only one image stem/ecg_id",
+    )
 
     args = parser.parse_args()
 
     # Collect images before loading the model (fail fast if no images)
     image_paths = collect_image_paths(args.image_dir, args.level, args.max_samples)
+    if args.ecg_id is not None:
+        image_paths = [path for path in image_paths if path.stem == args.ecg_id]
+        if not image_paths:
+            raise FileNotFoundError(
+                f"No image with ecg_id={args.ecg_id} found for level {args.level}"
+            )
     print(f"Found {len(image_paths)} images for level '{args.level}'")
     print(f"Output: {(args.output_dir / args.level).resolve()}\n")
 
     # Load model once, reuse for all images
     print("Loading ECGDigitiser model...")
-    digitiser = ECGDigitiser()
+    # Synthetic benchmark images have controlled flat geometry. Dewarping retry
+    # adds no value here and can hang on a few otherwise usable records.
+    digitiser = ECGDigitiser(
+        enable_dewarping_retry=False,
+        enable_orientation_retry=False,
+    )
 
     start_time = time.time()
 
@@ -195,6 +294,8 @@ def main() -> None:
         output_dir=args.output_dir,
         level=args.level,
         layout_hint=None if args.layout_hint.lower() == "auto" else args.layout_hint,
+        overwrite=args.overwrite,
+        max_new=args.max_new,
     )
 
     elapsed = time.time() - start_time

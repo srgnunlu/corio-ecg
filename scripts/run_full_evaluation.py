@@ -19,11 +19,16 @@ DEFAULT_MODEL_PATH = Path("models/ecgfounder/base/12_lead_ECGFounder.pth")
 DEFAULT_RESULTS_PATH = Path("results/metrics/roundtrip_comparison.json")
 DEFAULT_PLOTS_DIR = Path("results/figures")
 DEFAULT_THRESHOLD = 0.5
+DEFAULT_DIGITIZER_TIMEOUT_SECONDS = 90
 
 DIFFICULTY_LEVELS = ["clean", "moderate", "hard"]
 
 
-def _run_script(cmd: list[str], description: str) -> None:
+def _run_script(
+    cmd: list[str],
+    description: str,
+    timeout_seconds: int | None = None,
+) -> None:
     """Run a Python script as a subprocess, streaming output to stdout.
 
     Args:
@@ -34,9 +39,17 @@ def _run_script(cmd: list[str], description: str) -> None:
         RuntimeError: If the subprocess exits with non-zero code.
     """
     import subprocess
-    import sys
 
-    result = subprocess.run(cmd, cwd=str(Path(__file__).resolve().parents[1]))
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=str(Path(__file__).resolve().parents[1]),
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise RuntimeError(
+            f"{description} timed out after {timeout_seconds} seconds"
+        ) from error
     if result.returncode != 0:
         raise RuntimeError(f"{description} failed with exit code {result.returncode}")
 
@@ -56,7 +69,10 @@ def step_generate(data_dir: Path, image_dir: Path, max_samples: int | None) -> N
 
 
 def step_digitize(
-    image_dir: Path, signal_dir: Path, max_samples: int | None
+    image_dir: Path,
+    signal_dir: Path,
+    max_samples: int | None,
+    timeout_seconds: int = DEFAULT_DIGITIZER_TIMEOUT_SECONDS,
 ) -> None:
     """Step 2: Digitize synthetic images back to numpy signals."""
     import sys
@@ -71,13 +87,41 @@ def step_digitize(
         if not level_dir.exists():
             print(f"  Skipping {level}: directory not found")
             continue
-        cmd = [sys.executable, "scripts/digitize_synthetic_images.py", "--level", level]
-        if max_samples is not None:
-            cmd += ["--max-samples", str(max_samples)]
-        try:
-            _run_script(cmd, f"Digitization [{level}]")
-        except RuntimeError as error:
-            print(f"  Warning: {error} — continuing with next level")
+        from digitize_synthetic_images import (
+            _is_current_saved_signal,
+            collect_image_paths,
+        )
+
+        image_paths = collect_image_paths(image_dir, level, max_samples)
+        pending = [
+            path
+            for path in image_paths
+            if not _is_current_saved_signal(signal_dir / level / f"{path.stem}.npy")
+        ]
+        print(f"  Pending {level}: {len(pending)}")
+        failures: list[str] = []
+        for image_path in pending:
+            cmd = [
+                sys.executable,
+                "scripts/digitize_synthetic_images.py",
+                "--level",
+                level,
+                "--ecg-id",
+                image_path.stem,
+            ]
+            if max_samples is not None:
+                cmd += ["--max-samples", str(max_samples)]
+            try:
+                _run_script(
+                    cmd,
+                    f"Digitization [{level}] ecg_id={image_path.stem}",
+                    timeout_seconds=timeout_seconds,
+                )
+            except RuntimeError as error:
+                failures.append(image_path.stem)
+                print(f"  Warning: {error} — continuing with next record")
+        if failures:
+            print(f"  Failed/timed out {level} records: {', '.join(failures)}")
 
 
 def step_evaluate(
@@ -126,7 +170,7 @@ def print_final_summary(results_path: Path, total_elapsed: float) -> None:
     print("=" * 60)
     print(f"Total time: {total_elapsed / 60:.1f} min ({total_elapsed:.0f} sec)")
     print(f"Results:    {results_path}")
-    print(f"Plots:      results/figures/")
+    print("Plots:      results/figures/")
 
     # Show a quick summary if results exist
     if results_path.exists():
@@ -171,6 +215,12 @@ def main() -> None:
         "--threshold", type=float, default=DEFAULT_THRESHOLD,
         help=f"Probability threshold for agreement rate (default: {DEFAULT_THRESHOLD})",
     )
+    parser.add_argument(
+        "--digitizer-timeout",
+        type=int,
+        default=DEFAULT_DIGITIZER_TIMEOUT_SECONDS,
+        help="Maximum seconds allowed for each isolated image digitization",
+    )
     args = parser.parse_args()
 
     total_start = time.time()
@@ -183,7 +233,12 @@ def main() -> None:
 
     # Step 2: Digitize images to signals
     if not args.skip_digitization:
-        step_digitize(DEFAULT_IMAGE_DIR, DEFAULT_SIGNAL_DIR, args.max_samples)
+        step_digitize(
+            DEFAULT_IMAGE_DIR,
+            DEFAULT_SIGNAL_DIR,
+            args.max_samples,
+            timeout_seconds=args.digitizer_timeout,
+        )
     else:
         print("[SKIP] Digitization (--skip-digitization)")
 
