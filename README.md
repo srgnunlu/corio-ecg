@@ -1,6 +1,6 @@
 # Corio ECG
 
-AI-powered paper ECG photograph interpretation pipeline. Converts paper ECG photos into structured diagnostic reports using state-of-the-art foundation models.
+Research prototype for AI-assisted paper ECG photograph interpretation.
 
 ## Pipeline
 
@@ -8,15 +8,15 @@ AI-powered paper ECG photograph interpretation pipeline. Converts paper ECG phot
 Paper ECG Photo (PNG/JPG)
     → ECG-Digitiser (image to 12-lead digital signal)
     → ECGFounder (signal to 150+ diagnoses)
-    → LLM Report Engine (diagnoses to structured report)
+    → Planned: structured report engine
 ```
 
 ## Key Features
 
 - **Paper ECG input:** Works with photographs or scans of standard 12-lead paper ECGs
 - **150+ diagnoses:** Rhythm disorders, conduction abnormalities, ischemic changes, hypertrophy, and more
-- **VT/SVT specialization:** Enhanced differentiation using Brugada and Vereckei morphology criteria
-- **Structured reports:** Automated generation of clinical ECG reports
+- **Quality diagnostics:** Layout, lead activity, Einthoven consistency, and timing checks
+- **Research evaluation:** Synthetic round-trip consistency and PTB-XL ground-truth metrics
 
 ## Models Used
 
@@ -49,10 +49,16 @@ chmod +x scripts/setup_environment.sh
 source .venv/bin/activate
 
 # Download models
-./scripts/download_models.sh
+python scripts/download_models.py
 
 # Download PTB-XL dataset (for evaluation)
-./scripts/download_ptbxl.sh
+python scripts/download_ptbxl.py
+
+# Download ECGFounder's official PTB-XL target vectors
+python scripts/download_ecgfounder_eval_labels.py
+
+# Clone and patch pinned digitizer/image-generation dependencies
+python scripts/setup_phase2.py
 ```
 
 ### Environment Variables
@@ -69,15 +75,43 @@ cp .env.example .env
 # Activate environment
 source .venv/bin/activate
 
-# Interpret a single ECG image
-python -m src.pipeline.run --image path/to/ecg.png
+# Interpret a WFDB signal
+python -m src.pipeline.run --signal path/to/record_without_extension
 
-# Run evaluation on PTB-XL benchmark
-python -m src.training.evaluate --dataset ptbxl
+# Run PTB-XL ground-truth evaluation
+python -m src.training.evaluate --max-samples 500 --threshold 0.5
 
 # Launch test web UI
-python src/web/app.py
+python -m src.web.app
+
+# Evaluate real phone photos in isolated default and dewarping-retry modes
+python scripts/evaluate_real_photos.py --modes default retry --timeout 180
+
+# Use known per-case layouts from data/real-phone/metadata.csv
+python scripts/evaluate_real_photos.py --modes default --use-metadata-layouts
+
+# Download the balanced 70-image PMcardio reference subset without fetching the full archive
+python scripts/download_pmcardio_reference_subset.py --balanced-count 10
+
+# Compare digitized waveform shape with the matched reference signals
+python scripts/evaluate_pmcardio_reference.py --timeout 180
+
+# Compare ECGFounder outputs on matched reference and digitized signals
+python scripts/evaluate_pmcardio_diagnosis_drift.py
 ```
+
+Real-photo inputs belong in `data/real-phone/photos` and remain gitignored.
+The evaluator writes anonymous per-photo audit records plus aggregate JSON/CSV
+reports to `results/real-phone`. Without a matched PDF, scan, or digital
+waveform, these reports measure operational digitization quality only, not
+signal fidelity or diagnostic accuracy.
+
+Matched waveform-shape fidelity is measured separately with the GPL-3.0-or-later
+[PMcardio ECG Image Database](https://zenodo.org/records/13617673). The current
+balanced 70-image subset covers ten matched ECGs across bent, crumpled,
+phone-photographed, scanned, and screen-displayed categories. Corio downloads
+only the selected ZIP members and writes the benchmark report to
+`results/pmcardio-reference`.
 
 ### Persistent Gradio Service (macOS)
 
@@ -124,12 +158,51 @@ corio-ecg/
 └── results/            # Metrics, figures, reports
 ```
 
+## Current Status
+
+- Working: image digitization, ECGFounder inference, quality diagnostics, synthetic
+  round-trip evaluation, and Gradio test UI.
+- Verified baseline: local ECGFounder logits match the official implementation;
+  full PTB-XL test-fold official macro AUROC is 0.8679.
+- Verified round-trip smoke benchmark: 50 records across clean, moderate, and
+  hard synthetic photos, with audited pipeline-version metadata.
+- Verified balanced matched-reference benchmark: all 70 selected PMcardio images
+  digitized; median per-image waveform-shape correlation is 0.823. Calibrated
+  output has median RMSE 0.108 mV, median SNR 3.83 dB, and median gain ratio
+  0.904.
+- Verified matched-reference diagnosis drift: segment-aware mean aggregation
+  improves mean ECGFounder cosine consistency from 0.894 to 0.924 and threshold
+  agreement from 96.68% to 97.73% versus the tiled representation.
+- Verified real-photo operational batch with known paper layouts: all 10 images
+  digitized after orientation retry and conservative portrait-screen page crop;
+  screen captures still trigger quality warnings.
+- In progress: stronger bent/crumpled-paper reconstruction and larger
+  class-supported diagnostic evaluation.
+- Planned: artifact-aware fine-tuning, VT/SVT specialization, and structured reports.
+- This project is for research use only and is not clinically validated.
+
+## Evaluation Notes
+
+Round-trip agreement compares ECGFounder outputs on clean and digitized versions of
+the same signal. It measures pipeline consistency, not diagnostic accuracy.
+
+Primary ground-truth evaluation uses ECGFounder's official 150-output PTB-XL target
+vectors. A separate semantic-subset metric maps only PTB-XL SCP codes with direct
+equivalents in the ECGFounder vocabulary.
+
+Real phone photo collection requirements are documented in
+`docs/real-phone-photo-protocol.md`.
+
+Matched-reference methodology and limitations are documented in
+`docs/evaluation-methodology.md`.
+
 ## Datasets
 
 | Dataset | Records | Purpose |
 |---------|---------|---------|
 | [PTB-XL](https://physionet.org/content/ptb-xl/) | 21,799 | Primary benchmark, 71 labels |
 | [MIMIC-IV-ECG](https://physionet.org/content/mimic-iv-ecg/) | 800,000+ | Additional training data |
+| [PMcardio ECG Image Database](https://zenodo.org/records/13617673) | 6,000+ images | Matched image-to-signal fidelity |
 
 ## Hardware Requirements
 

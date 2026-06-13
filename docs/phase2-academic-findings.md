@@ -1,126 +1,78 @@
-# Phase 2 — Academic Findings & Interpretation
+# Phase 2 Round-Trip Findings
 
-## Study Design
-- **Objective:** Evaluate diagnostic fidelity of paper ECG digitization pipeline
-- **Pipeline:** WFDB signal → Synthetic paper ECG image → Open-ECG-Digitizer (U-Net) → ECGFounder (Net1D CNN, 150+ diagnoses)
-- **Dataset:** PTB-XL v1.0.1, test fold (fold 10), n=500
-- **Hardware:** NVIDIA RTX 4090 (CUDA), Vast.ai cloud GPU
-- **Image generation:** ECG-Image-Kit, 3 noise levels (clean/moderate/hard)
+## Validity Notice
 
-## Key Results
+The historical n=500 Phase 2 results are invalid for scientific interpretation.
+They were produced before the local Net1D implementation was proven equivalent
+to ECGFounder's official implementation. The old model used BatchNorm during
+inference and differed in first-block activation and residual channel padding.
 
-### Round-Trip Diagnostic Agreement (n=500, threshold=0.5)
+On 2026-06-13, the local model was corrected and produced exactly equal logits
+to the official implementation on the same checkpoint and input
+(`max_abs_diff = 0.0`). Only results produced after that correction should be
+used.
 
-| Noise Level | Cosine Similarity | Agreement Rate | Mean Pearson | Absolute Prob Diff |
-|-------------|-------------------|----------------|--------------|-------------------|
-| Clean       | 0.909             | 85.1%          | 0.132        | 0.119             |
-| Moderate    | 0.909             | 85.1%          | 0.131        | 0.119             |
-| Hard        | 0.905             | 85.0%          | 0.098        | 0.127             |
+## Corrected Diagnostic Baseline
 
-- Zero failures across all 1500 processing runs (500 × 3 scenarios)
+Full PTB-XL test fold, raw model probabilities, threshold 0.5:
 
-### Threshold Sensitivity Analysis
+| Metric | Result |
+|---|---:|
+| Test records processed | 2,203 / 2,203 |
+| Records matched to official targets | 2,198 |
+| Eligible official classes (minimum 5 positives) | 31 / 150 |
+| Official macro AUROC | 0.8679 |
+| Official macro average precision | 0.4454 |
+| Official micro F1 | 0.5885 |
+| Official macro F1 | 0.3673 |
 
-| Threshold | Clean  | Moderate | Hard   |
-|-----------|--------|----------|--------|
-| 0.1       | —      | —        | —      |
-| 0.3       | —      | —        | —      |
-| 0.5       | 85.7%  | 85.7%   | 85.6%  |
-| 0.7       | 89.7%  | 89.7%   | 90.7%  |
-| 0.9       | 96.7%  | 96.8%   | 97.3%  |
+This establishes that the diagnostic model integration is functioning. It does
+not establish clinical validity.
 
-### High-Confidence Diagnosis Retention
-- Baseline probability ≥ 0.7, evaluated at threshold 0.5
-- Total high-confidence diagnoses: 4,827
-- Flipped (lost after digitization): 680
-- **Retention rate: 85.9%**
+## Audited Round-Trip Smoke Benchmark
 
-## Clinical Interpretation
+The available corrected round-trip set contains only 50 records. All 150
+digitized outputs were regenerated with synchronized canonical segment
+expansion and paired pipeline-version metadata. With a minimum support of five
+positives, only three classes are eligible, so diagnostic deltas are
+directional rather than statistically robust.
 
-### Strengths (Paper'da vurgulanacak noktalar)
+| Scenario | Cosine similarity | Agreement | Mean Pearson | Official micro F1 delta |
+|---|---:|---:|---:|---:|
+| Clean | 0.5453 | 94.80% | 0.2175 | -0.2032 |
+| Moderate | 0.5394 | 94.67% | 0.2061 | -0.1922 |
+| Hard | 0.5492 | 94.56% | 0.1850 | -0.1922 |
 
-1. **Noise robustness:** Clean vs Hard arasında yalnızca ~0.4% fark var. Bu,
-   digitizer'ın kağıt kalitesinden neredeyse bağımsız çalıştığını gösteriyor.
-   Klinik ortamda farklı kalitede kağıt EKG'lerle karşılaşılacağı düşünülürse
-   bu çok önemli bir bulgu.
+High overall agreement is dominated by the many negative classes and must not
+be interpreted as preserved diagnostic accuracy. The F1 drop and low signal
+correlation make digitization fidelity the current primary technical risk.
 
-2. **High-confidence preservation:** Threshold 0.9'da %97+ agreement.
-   Model yüksek güvenle pozitif dediğinde, digitizasyon bunu bozmuyor.
-   ST elevasyonu, atriyal fibrilasyon gibi belirgin patolojiler güvenle tespit edilebilir.
+Physical consistency now degrades as expected with image difficulty:
 
-3. **Cosine similarity ~0.91:** 150+ boyutlu tanı vektörlerinde %91 benzerlik,
-   modelin genel tanısal profilinin korunduğunu gösteriyor.
+| Scenario | Mean Einthoven consistency | Outputs with 12 active leads |
+|---|---:|---:|
+| Clean | 0.9893 | 50 / 50 |
+| Moderate | 0.9473 | 49 / 50 |
+| Hard | 0.8744 | 48 / 50 |
 
-4. **Zero failure rate:** 1500 işlemde sıfır hata — pipeline production-ready
-   düzeyde stabil.
+The similar diagnostic drift across all three scenarios suggests that the
+dominant remaining error is paper-layout reconstruction, not image noise alone.
+A standard 3x4 sheet contains sequential 2.5-second lead segments, while
+ECGFounder expects a simultaneous 10-second 12-lead tensor.
 
-### Limitations (Paper'da dürüstçe belirtilmesi gerekenler)
+## Current Interpretation
 
-1. **Low Pearson correlation (0.098-0.132):** Olasılık kalibrasyonu kayboluyor.
-   Digitizasyondan sonra model çıktısındaki kesin olasılık değerleri güvenilir değil.
-   Sadece binary (var/yok) kararlar anlamlı.
-   - **Açıklama:** 150 sınıfın büyük çoğunluğu her ECG'de ~0 olasılıklı. Digitizasyon
-     bu sıfırlara küçük gürültü ekliyor → Pearson çöküyor ama cosine sim korunuyor.
-     Bu, metriğin yapısından kaynaklanan bir artefakt olabilir.
+- ECGFounder inference now matches the upstream implementation.
+- The official PTB-XL target vectors are now the primary diagnostic benchmark.
+- The semantic SCP-code mapping remains useful as a separately named subset
+  metric.
+- The next scientifically meaningful milestones are a segment-aware
+  reconstruction strategy, a larger corrected round-trip benchmark, and
+  real-phone-photo validation.
+- No clinical-performance or production-readiness claim is supported.
 
-2. **%14.1 high-confidence flip rate:** Her 7 yüksek güvenli tanıdan biri
-   digitizasyondan sonra kayboluyor. Klinik kullanımda bu kabul edilebilir olmayabilir.
-   - **Bağlam:** PTB-XL multi-label bir dataset, birçok kayıtta 3-5 eş zamanlı tanı var.
-     Flip olan tanılar genellikle sınırda (0.5-0.7 arası) olan ikincil bulgular.
+## Source Artifacts
 
-3. **Synthetic images vs real photos:** ECG-Image-Kit sentetik görüntüler üretiyor.
-   Gerçek telefon fotoğrafları perspektif bozulması, gölge, el titremesi gibi
-   ek artefaktlar içerecek. Gerçek dünya performansı muhtemelen daha düşük olacak.
-
-4. **Single dataset (PTB-XL):** Sonuçlar tek bir dataset üzerinde.
-   Generalizability için MIMIC-IV-ECG gibi ek veri setlerinde de test gerekli.
-
-## Statistical Notes (Makale istatistik bölümü için)
-
-- **Sample size:** n=500 (PTB-XL test fold 10'dan rastgele örnekleme değil, tüm fold)
-- **Classification:** Multi-label, 150 sınıf, sigmoid aktivasyon
-- **Metrics:**
-  - Cosine similarity: probability vektörleri arası açısal benzerlik
-  - Agreement rate: (baseline ≥ t) == (roundtrip ≥ t) oranı
-  - Pearson: linear korelasyon (tüm 150 sınıf üzerinden, per-record ortalaması)
-  - Mean absolute probability difference: |baseline_prob - roundtrip_prob| ortalaması
-
-## Potential Paper Angles
-
-1. **Feasibility study:** "Paper ECG digitization preserves diagnostic classification
-   with >85% agreement" — kısa, odaklı bir yayın
-
-2. **Threshold optimization:** "Higher confidence thresholds mitigate digitization
-   artifacts in AI-based ECG interpretation" — metodolojik katkı
-
-3. **Noise robustness:** "U-Net based ECG digitization is robust to paper quality
-   degradation" — digitizer'ın gücünü vurgulayan açı
-
-## Suggested Figures for Paper
-
-1. **Agreement vs Threshold curve** — X: threshold (0.1-0.9), Y: agreement %
-   → Grafikte 3 çizgi (clean/moderate/hard), neredeyse üst üste biner
-2. **Confusion matrix heatmap** — top-20 en sık tanı için flip oranları
-3. **Example ECG traces** — Baseline vs digitized sinyal karşılaştırması (clean + hard)
-4. **Probability scatter plot** — Baseline prob vs roundtrip prob (per-diagnosis)
-
-## Key Numbers to Remember
-
-| Metric | Value | Context |
-|--------|-------|---------|
-| Overall agreement (t=0.5) | ~85% | Kabul edilebilir, iyileştirilebilir |
-| High-threshold agreement (t=0.9) | ~97% | Güçlü bulgu |
-| Noise impact | <0.4% | Neredeyse yok — paper'ın en güçlü bulgusu |
-| High-conf retention | 85.9% | İyileştirilmeli |
-| Zero failure rate | 1500/1500 | Pipeline stabilitesi |
-| Cosine similarity | 0.91 | Tanısal profil korunuyor |
-| Model | ECGFounder (76.3M params) | NEJM AI 2024 referans |
-| Digitizer | Open-ECG-Digitizer (U-Net) | Ahus-AIM, BSD license |
-| Dataset | PTB-XL v1.0.1 (n=500) | PhysioNet / Kaggle |
-
----
-
-*Bu döküman Phase 2 sonuçlarının akademik yorumlarını içerir. Makale yazım
-aşamasında bu notları referans olarak kullanın.*
-
-*Son güncelleme: 2026-03-08*
+- `results/metrics/ptbxl_baseline_summary.json`
+- `results/metrics/roundtrip_comparison.json`
+- `docs/evaluation-methodology.md`
