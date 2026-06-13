@@ -4,9 +4,10 @@
 
 - Date: 2026-06-13
 - Branch: `feature/test-ui-gradio`
-- Branch status at handoff: substantial uncommitted project changes from the
-  current evaluation and digitization work. Inspect `git status` before making
-  new edits; do not revert unrelated changes.
+- Branch status at handoff: Phase 2 source, aggregate benchmark, and
+  documentation packages were committed and pushed through `4381f23`.
+  Inspect `git status` before making new edits; per-image operational records
+  and unrelated user files intentionally remain untracked.
 - Do not revert unrelated user files:
   - `docs/superpowers/`
   - `memory_test.py`
@@ -149,14 +150,17 @@ simultaneous 10-second 12-lead tensor.
 
 ## Next Session Plan
 
-1. Improve monitor-photo quality after cropping:
-   - reject or strongly warn on low Einthoven consistency;
-   - investigate layout selection for screen images;
-   - avoid treating extraction success as acceptable quality.
-2. Increase the corrected synthetic benchmark beyond 50 records with both
-   tiled and segment-ensemble evaluation.
-3. Add class-support and uncertainty reporting before making diagnostic claims.
-4. Keep all claims research-only; no clinical-validity claim is supported.
+1. Build an interpretable quality gate with `accept`, `warn`, and `reject`
+   outcomes using PMcardio matched-reference fidelity as the target.
+2. Report false accepts and false rejects by physical capture category.
+3. Run controlled reconstruction experiments for bent and crumpled paper
+   against the frozen Phase 2 baseline.
+4. Collect a Level B real-photo set with matched PDF, scan, or digital signal.
+5. Prepare a reproducible remote job before renting GPU capacity or starting
+   artifact-aware fine-tuning.
+
+The detailed execution order is maintained in
+`docs/plans/2026-06-13-next-priorities.md`.
 
 ## Useful Commands
 
