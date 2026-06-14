@@ -112,6 +112,9 @@ def test_evaluate_quality_gate_reports_false_accepts_and_false_rejects() -> None
     assert report["false_reject_rate"] == pytest.approx(0.5)
     assert report["reject_recall"] == pytest.approx(0.0)
     assert report["categories"]["photos_test"]["total"] == 3
+    assert report["confusion_matrix"]["reject"]["accept"] == 1
+    assert report["non_reject_coverage"] == pytest.approx(2 / 3)
+    assert report["missed_reject_records"][0]["prediction"] == "accept"
 
 
 def test_default_quality_gate_config_preserves_current_thresholds() -> None:

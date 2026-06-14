@@ -119,7 +119,7 @@ supported scan and phone-photo inputs.
 
 ## Workstream 3: Improve Quality-Gate Evaluation
 
-### Task 3.1: Add Statistical Reporting
+### Task 3.1: Add Statistical Reporting [Completed 2026-06-14]
 
 **Files**
 

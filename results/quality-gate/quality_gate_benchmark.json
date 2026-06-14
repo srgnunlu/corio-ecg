@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-06-14T06:38:27.317707+00:00",
+  "generated_at_utc": "2026-06-14T06:46:27.463195+00:00",
   "gate_version": "quality-gate-v1",
   "quality_gate_config": {
     "version": "quality-gate-v1",
@@ -25,6 +25,11 @@
     }
   },
   "evaluation_stage": "development",
+  "evaluation_purpose": "development-baseline",
+  "selected_split": null,
+  "split_manifest_id": null,
+  "split_evidence_status": null,
+  "sample_size_warning": null,
   "source_sha256": "2442725bb74149bd2641ec306fb72488fcfe42199860472c99215d99e368c713",
   "development_status": "Thresholds were developed on this same 70-image PMcardio subset. Results are exploratory and require external matched-reference validation.",
   "source_manifest": {
@@ -644,6 +649,7 @@
   "limitations": "The gate predicts reconstruction fidelity risk, not clinical diagnostic accuracy. Zero false accepts on this development subset does not establish safety on unseen ECG photos.",
   "aggregate": {
     "total": 70,
+    "independent_groups": 10,
     "target_counts": {
       "accept": 35,
       "warn": 13,
@@ -654,15 +660,91 @@
       "warn": 32,
       "accept": 11
     },
+    "confusion_matrix": {
+      "accept": {
+        "accept": 9,
+        "warn": 22,
+        "reject": 4
+      },
+      "warn": {
+        "accept": 2,
+        "warn": 6,
+        "reject": 5
+      },
+      "reject": {
+        "accept": 0,
+        "warn": 4,
+        "reject": 18
+      }
+    },
     "false_accepts": 0,
     "false_accept_rate": 0.0,
     "missed_rejects": 4,
     "reject_recall": 0.8181818181818182,
     "false_rejects": 9,
     "false_reject_rate": 0.1875,
+    "non_reject_coverage": 0.6142857142857143,
+    "confidence_intervals": {
+      "false_accept_rate": {
+        "low": 0.0,
+        "high": 0.0,
+        "resamples": 2000,
+        "resamples_used": 2000,
+        "resampling_unit": "ecg_id"
+      },
+      "reject_recall": {
+        "low": 0.6399090909090909,
+        "high": 1.0,
+        "resamples": 2000,
+        "resamples_used": 2000,
+        "resampling_unit": "ecg_id"
+      },
+      "false_reject_rate": {
+        "low": 0.06666666666666667,
+        "high": 0.3018867924528302,
+        "resamples": 2000,
+        "resamples_used": 2000,
+        "resampling_unit": "ecg_id"
+      },
+      "non_reject_coverage": {
+        "low": 0.5428571428571428,
+        "high": 0.7142857142857143,
+        "resamples": 2000,
+        "resamples_used": 2000,
+        "resampling_unit": "ecg_id"
+      }
+    },
+    "missed_reject_records": [
+      {
+        "ecg_id": "LPAE_09754_hr",
+        "image_id": 43,
+        "category": "photos_crumbles",
+        "prediction": "warn"
+      },
+      {
+        "ecg_id": "LPAE_14680_hr",
+        "image_id": 92,
+        "category": "photos_screens",
+        "prediction": "warn"
+      },
+      {
+        "ecg_id": "LPAE_17226_hr",
+        "image_id": 14,
+        "category": "photos_iphone",
+        "prediction": "warn"
+      },
+      {
+        "ecg_id": "LPAE_17226_hr",
+        "image_id": 14,
+        "category": "photos_scans",
+        "prediction": "warn"
+      }
+    ],
+    "statistical_warning": "Only 10 ECG groups and 70 records are available; confidence intervals and rates are unstable and must not be treated as external performance evidence.",
     "categories": {
       "photos_bents": {
         "total": 10,
+        "independent_groups": 10,
         "target_counts": {
           "accept": 1,
           "reject": 8,
@@ -672,15 +754,66 @@
           "reject": 9,
           "warn": 1
         },
+        "confusion_matrix": {
+          "accept": {
+            "accept": 0,
+            "warn": 0,
+            "reject": 1
+          },
+          "warn": {
+            "accept": 0,
+            "warn": 1,
+            "reject": 0
+          },
+          "reject": {
+            "accept": 0,
+            "warn": 0,
+            "reject": 8
+          }
+        },
         "false_accepts": 0,
         "false_accept_rate": 0.0,
         "missed_rejects": 0,
         "reject_recall": 1.0,
         "false_rejects": 1,
-        "false_reject_rate": 0.5
+        "false_reject_rate": 0.5,
+        "non_reject_coverage": 0.1,
+        "confidence_intervals": {
+          "false_accept_rate": {
+            "low": 0.0,
+            "high": 0.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "reject_recall": {
+            "low": 1.0,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "false_reject_rate": {
+            "low": 0.0,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 1807,
+            "resampling_unit": "ecg_id"
+          },
+          "non_reject_coverage": {
+            "low": 0.0,
+            "high": 0.3,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          }
+        },
+        "missed_reject_records": [],
+        "statistical_warning": "Only 10 ECG groups and 10 records are available; confidence intervals and rates are unstable and must not be treated as external performance evidence."
       },
       "photos_crumbles": {
         "total": 10,
+        "independent_groups": 10,
         "target_counts": {
           "warn": 2,
           "reject": 8
@@ -689,15 +822,73 @@
           "reject": 9,
           "warn": 1
         },
+        "confusion_matrix": {
+          "accept": {
+            "accept": 0,
+            "warn": 0,
+            "reject": 0
+          },
+          "warn": {
+            "accept": 0,
+            "warn": 0,
+            "reject": 2
+          },
+          "reject": {
+            "accept": 0,
+            "warn": 1,
+            "reject": 7
+          }
+        },
         "false_accepts": 0,
         "false_accept_rate": 0.0,
         "missed_rejects": 1,
         "reject_recall": 0.875,
         "false_rejects": 2,
-        "false_reject_rate": 1.0
+        "false_reject_rate": 1.0,
+        "non_reject_coverage": 0.1,
+        "confidence_intervals": {
+          "false_accept_rate": {
+            "low": 0.0,
+            "high": 0.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "reject_recall": {
+            "low": 0.5992857142857143,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "false_reject_rate": {
+            "low": 1.0,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 1790,
+            "resampling_unit": "ecg_id"
+          },
+          "non_reject_coverage": {
+            "low": 0.0,
+            "high": 0.3,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          }
+        },
+        "missed_reject_records": [
+          {
+            "ecg_id": "LPAE_09754_hr",
+            "image_id": 43,
+            "category": "photos_crumbles",
+            "prediction": "warn"
+          }
+        ],
+        "statistical_warning": "Only 10 ECG groups and 10 records are available; confidence intervals and rates are unstable and must not be treated as external performance evidence."
       },
       "photos_doogee": {
         "total": 10,
+        "independent_groups": 10,
         "target_counts": {
           "accept": 8,
           "warn": 2
@@ -707,15 +898,54 @@
           "reject": 1,
           "accept": 4
         },
+        "confusion_matrix": {
+          "accept": {
+            "accept": 3,
+            "warn": 4,
+            "reject": 1
+          },
+          "warn": {
+            "accept": 1,
+            "warn": 1,
+            "reject": 0
+          },
+          "reject": {
+            "accept": 0,
+            "warn": 0,
+            "reject": 0
+          }
+        },
         "false_accepts": 0,
         "false_accept_rate": 0.0,
         "missed_rejects": 0,
         "reject_recall": 0.0,
         "false_rejects": 1,
-        "false_reject_rate": 0.1
+        "false_reject_rate": 0.1,
+        "non_reject_coverage": 0.9,
+        "confidence_intervals": {
+          "false_accept_rate": null,
+          "reject_recall": null,
+          "false_reject_rate": {
+            "low": 0.0,
+            "high": 0.3,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "non_reject_coverage": {
+            "low": 0.7,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          }
+        },
+        "missed_reject_records": [],
+        "statistical_warning": "Only 10 ECG groups and 10 records are available; confidence intervals and rates are unstable and must not be treated as external performance evidence."
       },
       "photos_iphone": {
         "total": 10,
+        "independent_groups": 10,
         "target_counts": {
           "accept": 7,
           "reject": 2,
@@ -725,15 +955,73 @@
           "reject": 2,
           "warn": 8
         },
+        "confusion_matrix": {
+          "accept": {
+            "accept": 0,
+            "warn": 6,
+            "reject": 1
+          },
+          "warn": {
+            "accept": 0,
+            "warn": 1,
+            "reject": 0
+          },
+          "reject": {
+            "accept": 0,
+            "warn": 1,
+            "reject": 1
+          }
+        },
         "false_accepts": 0,
         "false_accept_rate": 0.0,
         "missed_rejects": 1,
         "reject_recall": 0.5,
         "false_rejects": 1,
-        "false_reject_rate": 0.125
+        "false_reject_rate": 0.125,
+        "non_reject_coverage": 0.8,
+        "confidence_intervals": {
+          "false_accept_rate": {
+            "low": 0.0,
+            "high": 0.0,
+            "resamples": 2000,
+            "resamples_used": 1795,
+            "resampling_unit": "ecg_id"
+          },
+          "reject_recall": {
+            "low": 0.0,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 1795,
+            "resampling_unit": "ecg_id"
+          },
+          "false_reject_rate": {
+            "low": 0.0,
+            "high": 0.4,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "non_reject_coverage": {
+            "low": 0.5,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          }
+        },
+        "missed_reject_records": [
+          {
+            "ecg_id": "LPAE_17226_hr",
+            "image_id": 14,
+            "category": "photos_iphone",
+            "prediction": "warn"
+          }
+        ],
+        "statistical_warning": "Only 10 ECG groups and 10 records are available; confidence intervals and rates are unstable and must not be treated as external performance evidence."
       },
       "photos_samsung": {
         "total": 10,
+        "independent_groups": 10,
         "target_counts": {
           "accept": 9,
           "warn": 1
@@ -743,15 +1031,54 @@
           "accept": 4,
           "reject": 1
         },
+        "confusion_matrix": {
+          "accept": {
+            "accept": 3,
+            "warn": 5,
+            "reject": 1
+          },
+          "warn": {
+            "accept": 1,
+            "warn": 0,
+            "reject": 0
+          },
+          "reject": {
+            "accept": 0,
+            "warn": 0,
+            "reject": 0
+          }
+        },
         "false_accepts": 0,
         "false_accept_rate": 0.0,
         "missed_rejects": 0,
         "reject_recall": 0.0,
         "false_rejects": 1,
-        "false_reject_rate": 0.1
+        "false_reject_rate": 0.1,
+        "non_reject_coverage": 0.9,
+        "confidence_intervals": {
+          "false_accept_rate": null,
+          "reject_recall": null,
+          "false_reject_rate": {
+            "low": 0.0,
+            "high": 0.3,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "non_reject_coverage": {
+            "low": 0.7,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          }
+        },
+        "missed_reject_records": [],
+        "statistical_warning": "Only 10 ECG groups and 10 records are available; confidence intervals and rates are unstable and must not be treated as external performance evidence."
       },
       "photos_scans": {
         "total": 10,
+        "independent_groups": 10,
         "target_counts": {
           "accept": 8,
           "reject": 2
@@ -761,15 +1088,73 @@
           "accept": 3,
           "reject": 1
         },
+        "confusion_matrix": {
+          "accept": {
+            "accept": 3,
+            "warn": 5,
+            "reject": 0
+          },
+          "warn": {
+            "accept": 0,
+            "warn": 0,
+            "reject": 0
+          },
+          "reject": {
+            "accept": 0,
+            "warn": 1,
+            "reject": 1
+          }
+        },
         "false_accepts": 0,
         "false_accept_rate": 0.0,
         "missed_rejects": 1,
         "reject_recall": 0.5,
         "false_rejects": 0,
-        "false_reject_rate": 0.0
+        "false_reject_rate": 0.0,
+        "non_reject_coverage": 0.9,
+        "confidence_intervals": {
+          "false_accept_rate": {
+            "low": 0.0,
+            "high": 0.0,
+            "resamples": 2000,
+            "resamples_used": 1787,
+            "resampling_unit": "ecg_id"
+          },
+          "reject_recall": {
+            "low": 0.0,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 1787,
+            "resampling_unit": "ecg_id"
+          },
+          "false_reject_rate": {
+            "low": 0.0,
+            "high": 0.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "non_reject_coverage": {
+            "low": 0.7,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          }
+        },
+        "missed_reject_records": [
+          {
+            "ecg_id": "LPAE_17226_hr",
+            "image_id": 14,
+            "category": "photos_scans",
+            "prediction": "warn"
+          }
+        ],
+        "statistical_warning": "Only 10 ECG groups and 10 records are available; confidence intervals and rates are unstable and must not be treated as external performance evidence."
       },
       "photos_screens": {
         "total": 10,
+        "independent_groups": 10,
         "target_counts": {
           "accept": 2,
           "warn": 6,
@@ -779,12 +1164,69 @@
           "warn": 6,
           "reject": 4
         },
+        "confusion_matrix": {
+          "accept": {
+            "accept": 0,
+            "warn": 2,
+            "reject": 0
+          },
+          "warn": {
+            "accept": 0,
+            "warn": 3,
+            "reject": 3
+          },
+          "reject": {
+            "accept": 0,
+            "warn": 1,
+            "reject": 1
+          }
+        },
         "false_accepts": 0,
         "false_accept_rate": 0.0,
         "missed_rejects": 1,
         "reject_recall": 0.5,
         "false_rejects": 3,
-        "false_reject_rate": 0.375
+        "false_reject_rate": 0.375,
+        "non_reject_coverage": 0.6,
+        "confidence_intervals": {
+          "false_accept_rate": {
+            "low": 0.0,
+            "high": 0.0,
+            "resamples": 2000,
+            "resamples_used": 1781,
+            "resampling_unit": "ecg_id"
+          },
+          "reject_recall": {
+            "low": 0.0,
+            "high": 1.0,
+            "resamples": 2000,
+            "resamples_used": 1781,
+            "resampling_unit": "ecg_id"
+          },
+          "false_reject_rate": {
+            "low": 0.1,
+            "high": 0.75,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          },
+          "non_reject_coverage": {
+            "low": 0.3,
+            "high": 0.9,
+            "resamples": 2000,
+            "resamples_used": 2000,
+            "resampling_unit": "ecg_id"
+          }
+        },
+        "missed_reject_records": [
+          {
+            "ecg_id": "LPAE_14680_hr",
+            "image_id": 92,
+            "category": "photos_screens",
+            "prediction": "warn"
+          }
+        ],
+        "statistical_warning": "Only 10 ECG groups and 10 records are available; confidence intervals and rates are unstable and must not be treated as external performance evidence."
       }
     }
   },

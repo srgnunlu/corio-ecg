@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from collections import Counter
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any
 
+from src.evaluation.quality_gate_metrics import evaluate_quality_gate_rows
 from src.training.quality_gate_config import QualityGateConfig, load_quality_gate_config
 
 DEFAULT_QUALITY_GATE_CONFIG = load_quality_gate_config()
@@ -141,45 +141,16 @@ def _evaluate_subset(
     config: QualityGateConfig,
 ) -> dict[str, Any]:
     rows = [
-        (
-            classify_fidelity_target(record, config),
-            classify_quality(record, config).outcome,
-        )
+        {
+            "target": classify_fidelity_target(record, config).value,
+            "prediction": classify_quality(record, config).outcome.value,
+            "category": record.get("category"),
+            "ecg_id": record.get("ecg_id"),
+            "image_id": record.get("image_id"),
+        }
         for record in records
     ]
-    target_counts = Counter(target.value for target, _ in rows)
-    prediction_counts = Counter(prediction.value for _, prediction in rows)
-    false_accepts = sum(
-        target is QualityGateOutcome.REJECT and prediction is QualityGateOutcome.ACCEPT
-        for target, prediction in rows
-    )
-    missed_rejects = sum(
-        target is QualityGateOutcome.REJECT and prediction is not QualityGateOutcome.REJECT
-        for target, prediction in rows
-    )
-    false_rejects = sum(
-        target is not QualityGateOutcome.REJECT and prediction is QualityGateOutcome.REJECT
-        for target, prediction in rows
-    )
-    rejected_targets = target_counts[QualityGateOutcome.REJECT.value]
-    non_rejected_targets = len(rows) - rejected_targets
-    return {
-        "total": len(rows),
-        "target_counts": dict(target_counts),
-        "prediction_counts": dict(prediction_counts),
-        "false_accepts": false_accepts,
-        "false_accept_rate": false_accepts / rejected_targets if rejected_targets else 0.0,
-        "missed_rejects": missed_rejects,
-        "reject_recall": (
-            (rejected_targets - missed_rejects) / rejected_targets
-            if rejected_targets
-            else 0.0
-        ),
-        "false_rejects": false_rejects,
-        "false_reject_rate": (
-            false_rejects / non_rejected_targets if non_rejected_targets else 0.0
-        ),
-    }
+    return evaluate_quality_gate_rows(rows)
 
 
 def evaluate_quality_gate(

@@ -76,7 +76,15 @@ experiments, and Level B matched real-photo validation.
 - Threshold-tuning runs may access only the tune split. Locked internal
   evaluation requires a future pre-registered test split; locked external
   evaluation must not use the internal split manifest.
-- The next task is Task 3.1: add quality-gate confusion matrices, coverage,
-  confidence intervals, and reviewable missed-reject identifiers.
+- Task 3.1 is complete. Quality-gate reports include a full confusion matrix,
+  non-reject coverage, reviewable missed-reject identifiers, and deterministic
+  bootstrap confidence intervals resampled by `ecg_id`.
+- The development baseline contains 70 images but only 10 independent ECG
+  groups. Reports automatically warn that its rates and intervals are unstable
+  and are not external performance evidence.
+- The four missed rejects are warnings rather than accepts: crumpled image 43,
+  screen image 92, and iPhone/scan variants of image 14.
+- The next task is Task 3.2: define and test the expanded inference-time quality
+  feature contract before creating the runtime quality decision API.
 - Do not wire quality-gate rejection into diagnosis or Gradio before an
   independent matched holdout review.

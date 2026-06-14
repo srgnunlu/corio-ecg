@@ -24,6 +24,34 @@ on the same records, so this artifact is not holdout or external evidence.
 | False rejects | 9 |
 | Missed rejects | 4 |
 | Reject recall | 81.8% |
+| Non-reject coverage | 61.4% |
+| Independent ECG groups | 10 |
+
+ECG-group bootstrap 95% intervals:
+
+- Reject recall: `64.0%-100.0%`
+- False-reject rate: `6.7%-30.2%`
+- Non-reject coverage: `54.3%-71.4%`
+
+The zero observed false-accept rate must not be interpreted as a demonstrated
+zero-risk rate because this development set contains only 10 independent ECGs.
+
+## Confusion Matrix
+
+| Fidelity target | Gate accept | Gate warn | Gate reject |
+|---|---:|---:|---:|
+| Accept | 9 | 22 | 4 |
+| Warn | 2 | 6 | 5 |
+| Reject | 0 | 4 | 18 |
+
+## Missed Rejects
+
+| ECG ID | Image ID | Category | Gate outcome |
+|---|---:|---|---|
+| `LPAE_09754_hr` | 43 | Crumpled | Warn |
+| `LPAE_14680_hr` | 92 | Screen | Warn |
+| `LPAE_17226_hr` | 14 | iPhone | Warn |
+| `LPAE_17226_hr` | 14 | Scan | Warn |
 
 ## Category Results
 
