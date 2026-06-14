@@ -78,6 +78,7 @@ def build_report(
                 "ecg_id": record.get("ecg_id"),
                 "target": classify_fidelity_target(record, resolved_config).value,
                 "prediction": decision.outcome.value,
+                "reason_codes": list(decision.reason_codes),
                 "reasons": list(decision.reasons),
             }
         )

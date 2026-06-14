@@ -2,31 +2,14 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import StrEnum
 from typing import Any
 
 from src.evaluation.quality_gate_metrics import evaluate_quality_gate_rows
-from src.quality.features import QualityFeatureError, extract_quality_features
+from src.quality.gate import classify_quality as classify_runtime_quality
+from src.quality.models import QualityGateDecision, QualityGateOutcome
 from src.training.quality_gate_config import QualityGateConfig, load_quality_gate_config
 
 DEFAULT_QUALITY_GATE_CONFIG = load_quality_gate_config()
-
-
-class QualityGateOutcome(StrEnum):
-    """Possible actions after digitization quality assessment."""
-
-    ACCEPT = "accept"
-    WARN = "warn"
-    REJECT = "reject"
-
-
-@dataclass(frozen=True)
-class QualityGateDecision:
-    """Quality-gate outcome and human-readable reasons."""
-
-    outcome: QualityGateOutcome
-    reasons: tuple[str, ...]
 
 
 def classify_fidelity_target(
@@ -70,65 +53,9 @@ def classify_quality(
     record: dict[str, Any],
     config: QualityGateConfig | None = None,
 ) -> QualityGateDecision:
-    """Classify digitization using operational features available at inference."""
+    """Call the runtime gate with thresholds from the benchmark configuration."""
     resolved_config = config or DEFAULT_QUALITY_GATE_CONFIG
-    thresholds = resolved_config.inference
-    if record.get("status") != "success":
-        return QualityGateDecision(
-            QualityGateOutcome.REJECT,
-            ("digitization did not complete successfully",),
-        )
-
-    try:
-        features = extract_quality_features(record.get("diagnostics") or {})
-    except QualityFeatureError as exc:
-        return QualityGateDecision(
-            QualityGateOutcome.REJECT,
-            (f"invalid quality diagnostics: {exc}",),
-        )
-
-    layout_cost = features.layout_cost
-    detected_leads = features.detected_leads_count
-    active_leads = features.nonzero_leads_count
-    einthoven_score = features.einthoven_score
-    pixel_per_mm = features.avg_pixel_per_mm
-
-    critical_reasons: list[str] = []
-    if active_leads < thresholds.reject_active_leads_below:
-        critical_reasons.append(f"only {active_leads}/12 active leads")
-    if detected_leads < thresholds.reject_detected_leads_below:
-        critical_reasons.append(f"only {detected_leads} lead labels detected")
-    if critical_reasons:
-        return QualityGateDecision(QualityGateOutcome.REJECT, tuple(critical_reasons))
-
-    severe_reasons: list[str] = []
-    if einthoven_score < thresholds.severe_einthoven_below:
-        severe_reasons.append(f"low Einthoven consistency ({einthoven_score:.2f})")
-    if layout_cost > thresholds.layout_cost_above:
-        severe_reasons.append(f"uncertain layout match ({layout_cost:.2f})")
-    if detected_leads < thresholds.severe_detected_leads_below:
-        severe_reasons.append(f"only {detected_leads} lead labels detected")
-    if pixel_per_mm < thresholds.pixel_per_mm_below:
-        severe_reasons.append(f"low grid calibration density ({pixel_per_mm:.2f} px/mm)")
-    if active_leads < thresholds.expected_active_leads:
-        severe_reasons.append(f"only {active_leads}/12 active leads")
-    if len(severe_reasons) >= thresholds.severe_flags_to_reject:
-        return QualityGateDecision(QualityGateOutcome.REJECT, tuple(severe_reasons))
-
-    warn_reasons: list[str] = []
-    if detected_leads < thresholds.warn_detected_leads_below:
-        warn_reasons.append(f"only {detected_leads} lead labels detected")
-    if einthoven_score < thresholds.warn_einthoven_below:
-        warn_reasons.append(f"reduced Einthoven consistency ({einthoven_score:.2f})")
-    if layout_cost > thresholds.layout_cost_above:
-        warn_reasons.append(f"uncertain layout match ({layout_cost:.2f})")
-    if pixel_per_mm < thresholds.pixel_per_mm_below:
-        warn_reasons.append(f"low grid calibration density ({pixel_per_mm:.2f} px/mm)")
-    if active_leads < thresholds.expected_active_leads:
-        warn_reasons.append(f"only {active_leads}/12 active leads")
-    if warn_reasons:
-        return QualityGateDecision(QualityGateOutcome.WARN, tuple(warn_reasons))
-    return QualityGateDecision(QualityGateOutcome.ACCEPT, ())
+    return classify_runtime_quality(record, resolved_config.inference)
 
 
 def _evaluate_subset(

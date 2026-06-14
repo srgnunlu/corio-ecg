@@ -8,6 +8,8 @@ from typing import Any
 
 import yaml  # type: ignore[import-untyped]
 
+from src.quality.thresholds import InferenceThresholds
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_QUALITY_GATE_CONFIG_PATH = PROJECT_ROOT / "configs" / "quality_gate_v1.yaml"
 
@@ -31,38 +33,6 @@ class FidelityThresholds:
             raise ValueError("reject RMSE threshold must be above warn RMSE")
         if self.reject_snr_db_below >= self.warn_snr_db_below:
             raise ValueError("reject SNR threshold must be below warn SNR")
-
-
-@dataclass(frozen=True)
-class InferenceThresholds:
-    """Thresholds for quality features available during ordinary inference."""
-
-    reject_active_leads_below: int
-    reject_detected_leads_below: int
-    severe_einthoven_below: float
-    warn_einthoven_below: float
-    layout_cost_above: float
-    severe_detected_leads_below: int
-    warn_detected_leads_below: int
-    pixel_per_mm_below: float
-    expected_active_leads: int
-    severe_flags_to_reject: int
-
-    def validate(self) -> None:
-        """Validate ordering and ranges for inference-time thresholds."""
-        if self.reject_active_leads_below > self.expected_active_leads:
-            raise ValueError("reject active-lead threshold exceeds expected active leads")
-        if not (
-            self.reject_detected_leads_below
-            <= self.severe_detected_leads_below
-            <= self.warn_detected_leads_below
-            <= self.expected_active_leads
-        ):
-            raise ValueError("detected-lead thresholds are not ordered")
-        if self.severe_einthoven_below >= self.warn_einthoven_below:
-            raise ValueError("severe Einthoven threshold must be below warn threshold")
-        if self.severe_flags_to_reject < 1:
-            raise ValueError("severe_flags_to_reject must be positive")
 
 
 @dataclass(frozen=True)

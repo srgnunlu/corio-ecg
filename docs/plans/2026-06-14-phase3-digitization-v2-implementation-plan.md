@@ -150,7 +150,7 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
 
 ## Workstream 4: Introduce a Production Quality Decision API
 
-### Task 4.1: Move Runtime Decisions Out of Training Code
+### Task 4.1: Move Runtime Decisions Out of Training Code [Completed 2026-06-14]
 
 **Files**
 

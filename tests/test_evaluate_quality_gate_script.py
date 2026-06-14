@@ -73,6 +73,7 @@ def test_build_report_records_evaluation_stage_and_source_hash() -> None:
     assert report["evaluation_stage"] == "holdout"
     assert report["source_sha256"] == "source-digest"
     assert report["quality_feature_contract"]["version"] == "quality-feature-contract-v1"
+    assert "reason_codes" in report["records"][0]
 
 
 def test_build_report_records_split_evaluation_context() -> None:

@@ -90,7 +90,15 @@ experiments, and Level B matched real-photo validation.
 - Blur, glare, shadow, occlusion, calibration-pulse confidence, reconstruction
   disagreement, and diagnosis disagreement are explicitly unavailable and are
   not consumed by the current gate.
-- The next task is Task 4.1: move runtime quality decisions and stable reason
-  codes out of training code while keeping matched-reference targets isolated.
+- Task 4.1 is complete. Runtime decisions live in `src/quality/gate.py`, typed
+  decision models and stable audit reason codes live in `src/quality/models.py`,
+  and runtime threshold loading is isolated in `src/quality/thresholds.py`.
+- Runtime quality modules do not import training or matched-reference fidelity
+  target code. Benchmark reports include both stable reason codes and readable
+  reason messages.
+- Task 4.2, enforcing abstention in Gradio before diagnosis, remains gated on an
+  independent matched holdout review and must not be wired yet.
+- The next executable task is Task 5.1: create a digitization regression harness
+  that compares candidate experiments against the frozen Phase 2 baseline.
 - Do not wire quality-gate rejection into diagnosis or Gradio before an
   independent matched holdout review.

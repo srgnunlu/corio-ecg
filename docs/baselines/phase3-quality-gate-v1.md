@@ -19,6 +19,10 @@ versioned feature contract. Planned blur, glare, occlusion, calibration-pulse,
 reconstruction-disagreement, and diagnosis-disagreement features are not yet
 available and are not used by the gate.
 
+Runtime decisions expose stable reason codes such as
+`low_einthoven_consistency`, `uncertain_layout`, and `low_grid_density`.
+Human-readable messages may evolve, but audit and UI logic must use reason codes.
+
 ## Frozen Aggregate
 
 | Metric | Value |
