@@ -3,6 +3,7 @@
 **Frozen:** 2026-06-14
 **Evaluation stage:** Development only
 **Gate config:** `configs/quality_gate_v1.yaml`
+**Feature contract:** `configs/quality_feature_contract_v1.yaml`
 **Config SHA-256:** `5009b2a1bbae1702e2d6800d777c1daed60f8de62fb14ec26b9fbd6b48ea5fe5`
 **Source report:** `results/pmcardio-reference/pmcardio_reference_fidelity.json`
 **Source SHA-256:** `2442725bb74149bd2641ec306fb72488fcfe42199860472c99215d99e368c713`
@@ -12,6 +13,11 @@
 This baseline freezes the first interpretable quality gate on the balanced
 70-image PMcardio matched-reference set. Thresholds were developed and evaluated
 on the same records, so this artifact is not holdout or external evidence.
+
+The active gate consumes only six inference-time features documented in the
+versioned feature contract. Planned blur, glare, occlusion, calibration-pulse,
+reconstruction-disagreement, and diagnosis-disagreement features are not yet
+available and are not used by the gate.
 
 ## Frozen Aggregate
 

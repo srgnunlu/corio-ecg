@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-06-14T06:46:27.463195+00:00",
+  "generated_at_utc": "2026-06-14T06:48:59.977696+00:00",
   "gate_version": "quality-gate-v1",
   "quality_gate_config": {
     "version": "quality-gate-v1",
@@ -23,6 +23,27 @@
       "expected_active_leads": 12,
       "severe_flags_to_reject": 2
     }
+  },
+  "quality_feature_contract": {
+    "version": "quality-feature-contract-v1",
+    "active_features": [
+      "avg_pixel_per_mm",
+      "detected_leads_count",
+      "einthoven_score",
+      "layout_cost",
+      "nonzero_leads_count",
+      "raw_lines_count"
+    ],
+    "planned_unavailable_features": [
+      "page_completeness",
+      "blur_score",
+      "glare_score",
+      "shadow_score",
+      "occlusion_score",
+      "calibration_pulse_confidence",
+      "reconstruction_disagreement",
+      "diagnosis_disagreement"
+    ]
   },
   "evaluation_stage": "development",
   "evaluation_purpose": "development-baseline",
@@ -641,7 +662,7 @@
     "accept": "all reject and warn thresholds passed"
   },
   "gate_definition": {
-    "reject": "failure, missing diagnostics, active leads < 10, detected labels < 4, or at least two severe independent risk flags",
+    "reject": "failure, feature-contract violation, active leads < 10, detected labels < 4, or at least two severe independent risk flags",
     "severe_risk_flags": "Einthoven < 0.60, layout cost > 0.60, detected labels < 6, pixel density < 8.8 px/mm, or active leads < 12",
     "warn": "detected labels < 8, Einthoven < 0.90, layout cost > 0.60, pixel density < 8.8 px/mm, or active leads < 12",
     "accept": "all reject and warn thresholds passed"

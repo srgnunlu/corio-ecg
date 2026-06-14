@@ -84,7 +84,13 @@ experiments, and Level B matched real-photo validation.
   and are not external performance evidence.
 - The four missed rejects are warnings rather than accepts: crumpled image 43,
   screen image 92, and iPhone/scan variants of image 14.
-- The next task is Task 3.2: define and test the expanded inference-time quality
-  feature contract before creating the runtime quality decision API.
+- Task 3.2 is complete. `configs/quality_feature_contract_v1.yaml` documents the
+  six active inference-time features with type, range, unit, and reject-on-missing
+  policy. The gate now consumes typed validated features.
+- Blur, glare, shadow, occlusion, calibration-pulse confidence, reconstruction
+  disagreement, and diagnosis disagreement are explicitly unavailable and are
+  not consumed by the current gate.
+- The next task is Task 4.1: move runtime quality decisions and stable reason
+  codes out of training code while keeping matched-reference targets isolated.
 - Do not wire quality-gate rejection into diagnosis or Gradio before an
   independent matched holdout review.

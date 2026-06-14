@@ -7,6 +7,7 @@ from enum import StrEnum
 from typing import Any
 
 from src.evaluation.quality_gate_metrics import evaluate_quality_gate_rows
+from src.quality.features import QualityFeatureError, extract_quality_features
 from src.training.quality_gate_config import QualityGateConfig, load_quality_gate_config
 
 DEFAULT_QUALITY_GATE_CONFIG = load_quality_gate_config()
@@ -78,25 +79,19 @@ def classify_quality(
             ("digitization did not complete successfully",),
         )
 
-    diagnostics = record.get("diagnostics") or {}
-    required = (
-        "layout_cost",
-        "detected_leads_count",
-        "nonzero_leads_count",
-        "einthoven_score",
-        "avg_pixel_per_mm",
-    )
-    if any(key not in diagnostics for key in required):
+    try:
+        features = extract_quality_features(record.get("diagnostics") or {})
+    except QualityFeatureError as exc:
         return QualityGateDecision(
             QualityGateOutcome.REJECT,
-            ("required quality diagnostics are missing",),
+            (f"invalid quality diagnostics: {exc}",),
         )
 
-    layout_cost = float(diagnostics["layout_cost"])
-    detected_leads = int(diagnostics["detected_leads_count"])
-    active_leads = int(diagnostics["nonzero_leads_count"])
-    einthoven_score = float(diagnostics["einthoven_score"])
-    pixel_per_mm = float(diagnostics["avg_pixel_per_mm"])
+    layout_cost = features.layout_cost
+    detected_leads = features.detected_leads_count
+    active_leads = features.nonzero_leads_count
+    einthoven_score = features.einthoven_score
+    pixel_per_mm = features.avg_pixel_per_mm
 
     critical_reasons: list[str] = []
     if active_leads < thresholds.reject_active_leads_below:

@@ -32,6 +32,7 @@ def _source_report() -> dict[str, object]:
                     "nonzero_leads_count": 12,
                     "einthoven_score": 0.95,
                     "avg_pixel_per_mm": 9.0,
+                    "raw_lines_count": 4,
                 },
                 "fidelity": {
                     "median_correlation": 0.9,
@@ -71,6 +72,7 @@ def test_build_report_records_evaluation_stage_and_source_hash() -> None:
 
     assert report["evaluation_stage"] == "holdout"
     assert report["source_sha256"] == "source-digest"
+    assert report["quality_feature_contract"]["version"] == "quality-feature-contract-v1"
 
 
 def test_build_report_records_split_evaluation_context() -> None:

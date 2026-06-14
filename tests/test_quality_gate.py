@@ -24,6 +24,7 @@ def _record(
     active_leads: int = 12,
     einthoven_score: float = 0.95,
     pixel_per_mm: float = 9.0,
+    raw_lines: int = 4,
     status: str = "success",
 ) -> dict[str, object]:
     return {
@@ -35,6 +36,7 @@ def _record(
             "nonzero_leads_count": active_leads,
             "einthoven_score": einthoven_score,
             "avg_pixel_per_mm": pixel_per_mm,
+            "raw_lines_count": raw_lines,
         },
         "fidelity": {
             "median_correlation": correlation,
@@ -175,3 +177,13 @@ def test_build_report_contains_resolved_quality_gate_config() -> None:
     assert report["gate_version"] == config.version
     assert report["quality_gate_config"]["fidelity"]["reject_correlation_below"] == 0.60
     assert report["quality_gate_config"]["inference"]["reject_active_leads_below"] == 10
+
+
+def test_classify_quality_rejects_feature_contract_violation() -> None:
+    record = _record()
+    record["diagnostics"]["einthoven_score"] = 1.5
+
+    decision = classify_quality(record)
+
+    assert decision.outcome is QualityGateOutcome.REJECT
+    assert "outside" in decision.reasons[0]

@@ -138,7 +138,7 @@ supported scan and phone-photo inputs.
 - Metrics handle empty and small categories without division errors.
 - Reports make unsupported statistical conclusions explicit.
 
-### Task 3.2: Expand Inference-Time Feature Contract
+### Task 3.2: Expand Inference-Time Feature Contract [Completed 2026-06-14]
 
 Candidate features include capture defects, layout and lead-label confidence, calibration,
 active-lead consistency, reconstruction disagreement, and diagnostic disagreement.

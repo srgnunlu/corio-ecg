@@ -22,6 +22,7 @@ from src.evaluation.split_selection import (  # noqa: E402
     select_records_for_split,
     validate_evaluation_request,
 )
+from src.quality.features import DEFAULT_QUALITY_FEATURE_CONTRACT  # noqa: E402
 from src.training.quality_gate import (  # noqa: E402
     QualityGateConfig,
     classify_fidelity_target,
@@ -84,6 +85,13 @@ def build_report(
         "generated_at_utc": datetime.now(UTC).isoformat(),
         "gate_version": resolved_config.version,
         "quality_gate_config": resolved_config.to_dict(),
+        "quality_feature_contract": {
+            "version": DEFAULT_QUALITY_FEATURE_CONTRACT.version,
+            "active_features": sorted(DEFAULT_QUALITY_FEATURE_CONTRACT.features),
+            "planned_unavailable_features": list(
+                DEFAULT_QUALITY_FEATURE_CONTRACT.planned_unavailable_features
+            ),
+        },
         "evaluation_stage": evaluation_stage.value,
         "evaluation_purpose": evaluation_purpose.value,
         "selected_split": selected_split,
@@ -103,8 +111,8 @@ def build_report(
         },
         "gate_definition": {
             "reject": (
-                "failure, missing diagnostics, active leads < 10, detected labels < 4, "
-                "or at least two severe independent risk flags"
+                "failure, feature-contract violation, active leads < 10, detected "
+                "labels < 4, or at least two severe independent risk flags"
             ),
             "severe_risk_flags": (
                 "Einthoven < 0.60, layout cost > 0.60, detected labels < 6, "

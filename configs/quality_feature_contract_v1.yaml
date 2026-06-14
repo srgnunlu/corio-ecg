@@ -1,0 +1,56 @@
+# Features currently emitted by the digitizer and safe to use during inference.
+version: quality-feature-contract-v1
+
+features:
+  layout_cost:
+    value_type: float
+    minimum: 0.0
+    maximum: 100.0
+    unit: layout_matching_cost
+    missing_policy: reject
+    description: Cost of matching extracted traces to a supported ECG paper layout.
+  detected_leads_count:
+    value_type: integer
+    minimum: 0
+    maximum: 12
+    unit: leads
+    missing_policy: reject
+    description: Number of lead labels detected in the ECG image.
+  nonzero_leads_count:
+    value_type: integer
+    minimum: 0
+    maximum: 12
+    unit: leads
+    missing_policy: reject
+    description: Number of reconstructed leads containing usable signal energy.
+  einthoven_score:
+    value_type: float
+    minimum: -1.0
+    maximum: 1.0
+    unit: pearson_correlation
+    missing_policy: reject
+    description: Correlation between lead II and the reconstructed sum of leads I and III.
+  avg_pixel_per_mm:
+    value_type: float
+    minimum: 0.0
+    maximum: 100.0
+    unit: pixels_per_mm
+    missing_policy: reject
+    description: Average image grid density derived from digitizer calibration.
+  raw_lines_count:
+    value_type: integer
+    minimum: 0
+    maximum: 12
+    unit: trace_rows
+    missing_policy: reject
+    description: Number of raw trace rows extracted before canonical lead reconstruction.
+
+planned_unavailable_features:
+  - page_completeness
+  - blur_score
+  - glare_score
+  - shadow_score
+  - occlusion_score
+  - calibration_pulse_confidence
+  - reconstruction_disagreement
+  - diagnosis_disagreement
