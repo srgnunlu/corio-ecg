@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from scripts.evaluate_quality_gate import (
+    EvaluationPurpose,
     EvaluationStage,
     build_report,
     calculate_file_sha256,
@@ -70,6 +71,23 @@ def test_build_report_records_evaluation_stage_and_source_hash() -> None:
 
     assert report["evaluation_stage"] == "holdout"
     assert report["source_sha256"] == "source-digest"
+
+
+def test_build_report_records_split_evaluation_context() -> None:
+    report = build_report(
+        _source_report(),
+        evaluation_stage=EvaluationStage.HOLDOUT,
+        evaluation_purpose=EvaluationPurpose.LOCKED_EVALUATION,
+        selected_split="test",
+        split_manifest_id="manifest-id",
+        split_evidence_status="pre-registered",
+    )
+
+    assert report["evaluation_purpose"] == "locked-evaluation"
+    assert report["selected_split"] == "test"
+    assert report["split_manifest_id"] == "manifest-id"
+    assert report["split_evidence_status"] == "pre-registered"
+    assert report["sample_size_warning"] is not None
 
 
 def test_write_report_refuses_to_overwrite_existing_artifact(tmp_path: Path) -> None:

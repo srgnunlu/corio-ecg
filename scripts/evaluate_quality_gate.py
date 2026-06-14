@@ -8,7 +8,6 @@ import hashlib
 import json
 import sys
 from datetime import UTC, datetime
-from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +15,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.evaluation.split_selection import (  # noqa: E402
+    EvaluationPurpose,
+    EvaluationStage,
+    holdout_sample_size_warning,
+    select_records_for_split,
+    validate_evaluation_request,
+)
 from src.training.quality_gate import (  # noqa: E402
     QualityGateConfig,
     classify_fidelity_target,
@@ -27,14 +33,6 @@ from src.training.quality_gate_config import DEFAULT_QUALITY_GATE_CONFIG_PATH  #
 
 DEFAULT_INPUT = Path("results/pmcardio-reference/pmcardio_reference_fidelity.json")
 DEFAULT_OUTPUT_DIR = Path("results/quality-gate")
-
-
-class EvaluationStage(StrEnum):
-    """Allowed benchmark evaluation stages."""
-
-    DEVELOPMENT = "development"
-    HOLDOUT = "holdout"
-    EXTERNAL = "external"
 
 
 def calculate_file_sha256(path: Path) -> str:
@@ -60,7 +58,11 @@ def build_report(
     source_report: dict[str, Any],
     config: QualityGateConfig | None = None,
     evaluation_stage: EvaluationStage = EvaluationStage.DEVELOPMENT,
+    evaluation_purpose: EvaluationPurpose = EvaluationPurpose.DEVELOPMENT_BASELINE,
     source_sha256: str | None = None,
+    selected_split: str | None = None,
+    split_manifest_id: str | None = None,
+    split_evidence_status: str | None = None,
 ) -> dict[str, Any]:
     """Build a quality-gate benchmark report from matched-reference records."""
     resolved_config = config or load_quality_gate_config()
@@ -83,6 +85,11 @@ def build_report(
         "gate_version": resolved_config.version,
         "quality_gate_config": resolved_config.to_dict(),
         "evaluation_stage": evaluation_stage.value,
+        "evaluation_purpose": evaluation_purpose.value,
+        "selected_split": selected_split,
+        "split_manifest_id": split_manifest_id,
+        "split_evidence_status": split_evidence_status,
+        "sample_size_warning": holdout_sample_size_warning(records, evaluation_stage),
         "source_sha256": source_sha256,
         "development_status": (
             "Thresholds were developed on this same 70-image PMcardio subset. "
@@ -159,18 +166,51 @@ def main() -> None:
         choices=[stage.value for stage in EvaluationStage],
         default=EvaluationStage.DEVELOPMENT.value,
     )
+    parser.add_argument(
+        "--purpose",
+        choices=[purpose.value for purpose in EvaluationPurpose],
+        default=EvaluationPurpose.DEVELOPMENT_BASELINE.value,
+    )
+    parser.add_argument("--split-manifest", type=Path)
+    parser.add_argument("--split", choices=["train", "tune", "test"])
     parser.add_argument("--expected-input-sha256")
     parser.add_argument("--allow-overwrite", action="store_true")
     args = parser.parse_args()
 
     source_sha256 = validate_source_hash(args.input, args.expected_input_sha256)
     source_report = json.loads(args.input.read_text())
+    stage = EvaluationStage(args.evaluation_stage)
+    purpose = EvaluationPurpose(args.purpose)
+    has_manifest = args.split_manifest is not None
+    split_manifest = (
+        json.loads(args.split_manifest.read_text()) if args.split_manifest else None
+    )
+    validate_evaluation_request(
+        purpose,
+        stage,
+        args.split,
+        has_manifest,
+        split_manifest.get("evidence_status") if split_manifest else None,
+    )
+    if split_manifest is not None:
+        assert args.split is not None
+        source_report["records"] = select_records_for_split(
+            source_report["records"],
+            split_manifest,
+            args.split,
+        )
     config = load_quality_gate_config(args.config)
     report = build_report(
         source_report,
         config=config,
-        evaluation_stage=EvaluationStage(args.evaluation_stage),
+        evaluation_stage=stage,
+        evaluation_purpose=purpose,
         source_sha256=source_sha256,
+        selected_split=args.split,
+        split_manifest_id=split_manifest.get("manifest_id") if split_manifest else None,
+        split_evidence_status=(
+            split_manifest.get("evidence_status") if split_manifest else None
+        ),
     )
     json_path, csv_path = write_report(
         report,

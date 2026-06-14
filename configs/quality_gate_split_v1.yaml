@@ -1,0 +1,9 @@
+# Development split for grouped quality-gate threshold work.
+version: quality-gate-split-v1
+seed: 20260614
+evidence_status: retroactive-development-only
+train_fraction: 0.60
+tune_fraction: 0.20
+test_fraction: 0.20
+group_key: ecg_id
+category_key: category

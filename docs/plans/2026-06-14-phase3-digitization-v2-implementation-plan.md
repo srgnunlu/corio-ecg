@@ -78,7 +78,7 @@ supported scan and phone-photo inputs.
 
 ## Workstream 2: Build Leakage-Safe Benchmark Splits
 
-### Task 2.1: Add Grouped Split Manifests
+### Task 2.1: Add Grouped Split Manifests [Completed 2026-06-14]
 
 **Files**
 
@@ -99,7 +99,7 @@ supported scan and phone-photo inputs.
 - Re-running with the same seed produces identical manifests.
 - Leakage validation rejects malformed manifests.
 
-### Task 2.2: Separate Tuning from Evaluation
+### Task 2.2: Separate Tuning from Evaluation [Completed 2026-06-14]
 
 **Files**
 

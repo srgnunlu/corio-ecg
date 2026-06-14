@@ -67,7 +67,16 @@ experiments, and Level B matched real-photo validation.
   `docs/baselines/phase3-quality-gate-v1.md`; generated reports include source
   SHA-256 and evaluation-stage metadata, validate an expected source hash, and
   refuse accidental overwrite.
-- The next task is Task 2.1: create deterministic leakage-safe train, tune, and
-  test manifests grouped by `ecg_id`.
+- Tasks 2.1 and 2.2 are complete. The deterministic manifest at
+  `results/quality-gate/quality_gate_split_v1.json` keeps all seven variants of
+  each ECG together and assigns 10 ECG groups as train/tune/test = `6/2/2`.
+- The split is explicitly `retroactive-development-only` because thresholds
+  were developed before it existed. The evaluator refuses to present its test
+  partition as locked holdout evidence.
+- Threshold-tuning runs may access only the tune split. Locked internal
+  evaluation requires a future pre-registered test split; locked external
+  evaluation must not use the internal split manifest.
+- The next task is Task 3.1: add quality-gate confusion matrices, coverage,
+  confidence intervals, and reviewable missed-reject identifiers.
 - Do not wire quality-gate rejection into diagnosis or Gradio before an
   independent matched holdout review.

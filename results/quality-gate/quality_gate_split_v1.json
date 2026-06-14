@@ -1,0 +1,504 @@
+{
+  "source_path": "results/pmcardio-reference/pmcardio_reference_fidelity.json",
+  "source_sha256": "2442725bb74149bd2641ec306fb72488fcfe42199860472c99215d99e368c713",
+  "split_version": "quality-gate-split-v1",
+  "seed": 20260614,
+  "evidence_status": "retroactive-development-only",
+  "group_key": "ecg_id",
+  "category_key": "category",
+  "fractions": {
+    "train": 0.6,
+    "tune": 0.2,
+    "test": 0.2
+  },
+  "splits": {
+    "train": {
+      "ecg_ids": [
+        "LPAE_09275_hr",
+        "LPAE_09754_hr",
+        "LPAE_17226_hr",
+        "LPAE_19269_hr",
+        "LPAE_19394_hr",
+        "LPAE_20999_hr"
+      ]
+    },
+    "tune": {
+      "ecg_ids": [
+        "LPAE_00232_hr",
+        "LPAE_14680_hr"
+      ]
+    },
+    "test": {
+      "ecg_ids": [
+        "LPAE_04827_hr",
+        "LPAE_09545_hr"
+      ]
+    }
+  },
+  "summary": {
+    "groups_total": 10,
+    "records_total": 70,
+    "group_counts": {
+      "train": 6,
+      "tune": 2,
+      "test": 2
+    },
+    "record_counts": {
+      "train": 42,
+      "tune": 14,
+      "test": 14
+    },
+    "category_counts": {
+      "train": {
+        "photos_bents": 6,
+        "photos_crumbles": 6,
+        "photos_doogee": 6,
+        "photos_iphone": 6,
+        "photos_samsung": 6,
+        "photos_scans": 6,
+        "photos_screens": 6
+      },
+      "tune": {
+        "photos_bents": 2,
+        "photos_crumbles": 2,
+        "photos_doogee": 2,
+        "photos_iphone": 2,
+        "photos_samsung": 2,
+        "photos_scans": 2,
+        "photos_screens": 2
+      },
+      "test": {
+        "photos_bents": 2,
+        "photos_crumbles": 2,
+        "photos_doogee": 2,
+        "photos_iphone": 2,
+        "photos_samsung": 2,
+        "photos_scans": 2,
+        "photos_screens": 2
+      }
+    }
+  },
+  "records": [
+    {
+      "ecg_id": "LPAE_00232_hr",
+      "image_id": 81,
+      "category": "photos_bents",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_00232_hr",
+      "image_id": 81,
+      "category": "photos_crumbles",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_00232_hr",
+      "image_id": 81,
+      "category": "photos_doogee",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_00232_hr",
+      "image_id": 81,
+      "category": "photos_iphone",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_00232_hr",
+      "image_id": 81,
+      "category": "photos_samsung",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_00232_hr",
+      "image_id": 81,
+      "category": "photos_scans",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_00232_hr",
+      "image_id": 81,
+      "category": "photos_screens",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_04827_hr",
+      "image_id": 10,
+      "category": "photos_bents",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04827_hr",
+      "image_id": 10,
+      "category": "photos_crumbles",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04827_hr",
+      "image_id": 10,
+      "category": "photos_doogee",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04827_hr",
+      "image_id": 10,
+      "category": "photos_iphone",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04827_hr",
+      "image_id": 10,
+      "category": "photos_samsung",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04827_hr",
+      "image_id": 10,
+      "category": "photos_scans",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04827_hr",
+      "image_id": 10,
+      "category": "photos_screens",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09275_hr",
+      "image_id": 40,
+      "category": "photos_bents",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09275_hr",
+      "image_id": 40,
+      "category": "photos_crumbles",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09275_hr",
+      "image_id": 40,
+      "category": "photos_doogee",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09275_hr",
+      "image_id": 40,
+      "category": "photos_iphone",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09275_hr",
+      "image_id": 40,
+      "category": "photos_samsung",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09275_hr",
+      "image_id": 40,
+      "category": "photos_scans",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09275_hr",
+      "image_id": 40,
+      "category": "photos_screens",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09545_hr",
+      "image_id": 42,
+      "category": "photos_bents",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09545_hr",
+      "image_id": 42,
+      "category": "photos_crumbles",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09545_hr",
+      "image_id": 42,
+      "category": "photos_doogee",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09545_hr",
+      "image_id": 42,
+      "category": "photos_iphone",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09545_hr",
+      "image_id": 42,
+      "category": "photos_samsung",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09545_hr",
+      "image_id": 42,
+      "category": "photos_scans",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09545_hr",
+      "image_id": 42,
+      "category": "photos_screens",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09754_hr",
+      "image_id": 43,
+      "category": "photos_bents",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09754_hr",
+      "image_id": 43,
+      "category": "photos_crumbles",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09754_hr",
+      "image_id": 43,
+      "category": "photos_doogee",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09754_hr",
+      "image_id": 43,
+      "category": "photos_iphone",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09754_hr",
+      "image_id": 43,
+      "category": "photos_samsung",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09754_hr",
+      "image_id": 43,
+      "category": "photos_scans",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_09754_hr",
+      "image_id": 43,
+      "category": "photos_screens",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_14680_hr",
+      "image_id": 92,
+      "category": "photos_bents",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14680_hr",
+      "image_id": 92,
+      "category": "photos_crumbles",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14680_hr",
+      "image_id": 92,
+      "category": "photos_doogee",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14680_hr",
+      "image_id": 92,
+      "category": "photos_iphone",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14680_hr",
+      "image_id": 92,
+      "category": "photos_samsung",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14680_hr",
+      "image_id": 92,
+      "category": "photos_scans",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14680_hr",
+      "image_id": 92,
+      "category": "photos_screens",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_17226_hr",
+      "image_id": 14,
+      "category": "photos_bents",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_17226_hr",
+      "image_id": 14,
+      "category": "photos_crumbles",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_17226_hr",
+      "image_id": 14,
+      "category": "photos_doogee",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_17226_hr",
+      "image_id": 14,
+      "category": "photos_iphone",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_17226_hr",
+      "image_id": 14,
+      "category": "photos_samsung",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_17226_hr",
+      "image_id": 14,
+      "category": "photos_scans",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_17226_hr",
+      "image_id": 14,
+      "category": "photos_screens",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19269_hr",
+      "image_id": 82,
+      "category": "photos_bents",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19269_hr",
+      "image_id": 82,
+      "category": "photos_crumbles",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19269_hr",
+      "image_id": 82,
+      "category": "photos_doogee",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19269_hr",
+      "image_id": 82,
+      "category": "photos_iphone",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19269_hr",
+      "image_id": 82,
+      "category": "photos_samsung",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19269_hr",
+      "image_id": 82,
+      "category": "photos_scans",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19269_hr",
+      "image_id": 82,
+      "category": "photos_screens",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19394_hr",
+      "image_id": 80,
+      "category": "photos_bents",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19394_hr",
+      "image_id": 80,
+      "category": "photos_crumbles",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19394_hr",
+      "image_id": 80,
+      "category": "photos_doogee",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19394_hr",
+      "image_id": 80,
+      "category": "photos_iphone",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19394_hr",
+      "image_id": 80,
+      "category": "photos_samsung",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19394_hr",
+      "image_id": 80,
+      "category": "photos_scans",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_19394_hr",
+      "image_id": 80,
+      "category": "photos_screens",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_20999_hr",
+      "image_id": 4,
+      "category": "photos_bents",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_20999_hr",
+      "image_id": 4,
+      "category": "photos_crumbles",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_20999_hr",
+      "image_id": 4,
+      "category": "photos_doogee",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_20999_hr",
+      "image_id": 4,
+      "category": "photos_iphone",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_20999_hr",
+      "image_id": 4,
+      "category": "photos_samsung",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_20999_hr",
+      "image_id": 4,
+      "category": "photos_scans",
+      "split": "train"
+    },
+    {
+      "ecg_id": "LPAE_20999_hr",
+      "image_id": 4,
+      "category": "photos_screens",
+      "split": "train"
+    }
+  ],
+  "manifest_id": "26f1660dd8276595fd57677252c403e4ce51be8313fb63f5d8c9b9bd454bebb4"
+}
