@@ -1,0 +1,22 @@
+# Versioned thresholds for the development-only digitization quality gate.
+version: quality-gate-v1
+
+fidelity:
+  reject_correlation_below: 0.60
+  warn_correlation_below: 0.80
+  reject_rmse_mv_above: 0.20
+  warn_rmse_mv_above: 0.15
+  reject_snr_db_below: 0.0
+  warn_snr_db_below: 3.0
+
+inference:
+  reject_active_leads_below: 10
+  reject_detected_leads_below: 4
+  severe_einthoven_below: 0.60
+  warn_einthoven_below: 0.90
+  layout_cost_above: 0.60
+  severe_detected_leads_below: 6
+  warn_detected_leads_below: 8
+  pixel_per_mm_below: 8.8
+  expected_active_leads: 12
+  severe_flags_to_reject: 2

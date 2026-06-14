@@ -1,0 +1,1525 @@
+{
+  "generated_at_utc": "2026-06-14T06:38:27.317707+00:00",
+  "gate_version": "quality-gate-v1",
+  "quality_gate_config": {
+    "version": "quality-gate-v1",
+    "fidelity": {
+      "reject_correlation_below": 0.6,
+      "warn_correlation_below": 0.8,
+      "reject_rmse_mv_above": 0.2,
+      "warn_rmse_mv_above": 0.15,
+      "reject_snr_db_below": 0.0,
+      "warn_snr_db_below": 3.0
+    },
+    "inference": {
+      "reject_active_leads_below": 10,
+      "reject_detected_leads_below": 4,
+      "severe_einthoven_below": 0.6,
+      "warn_einthoven_below": 0.9,
+      "layout_cost_above": 0.6,
+      "severe_detected_leads_below": 6,
+      "warn_detected_leads_below": 8,
+      "pixel_per_mm_below": 8.8,
+      "expected_active_leads": 12,
+      "severe_flags_to_reject": 2
+    }
+  },
+  "evaluation_stage": "development",
+  "source_sha256": "2442725bb74149bd2641ec306fb72488fcfe42199860472c99215d99e368c713",
+  "development_status": "Thresholds were developed on this same 70-image PMcardio subset. Results are exploratory and require external matched-reference validation.",
+  "source_manifest": {
+    "manifest_version": 1,
+    "manifest_id": "22b4fbf08c7358bd68ecfe5f978609b9c446996a116de87af1fa5c6ab376e65d",
+    "selection_seed": 20260613,
+    "selection": {
+      "image_ids": [
+        4,
+        10,
+        14,
+        40,
+        42,
+        43,
+        80,
+        81,
+        82,
+        92
+      ],
+      "categories": [
+        "photos_bents",
+        "photos_crumbles",
+        "photos_doogee",
+        "photos_iphone",
+        "photos_samsung",
+        "photos_scans",
+        "photos_screens"
+      ],
+      "layout": [
+        "3x4+1R"
+      ],
+      "images": 70,
+      "images_per_category": {
+        "photos_bents": 10,
+        "photos_crumbles": 10,
+        "photos_doogee": 10,
+        "photos_iphone": 10,
+        "photos_samsung": 10,
+        "photos_scans": 10,
+        "photos_screens": 10
+      }
+    },
+    "records": [
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_bents/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_crumbles/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_doogee/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_iphone/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_samsung/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_scans/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 4,
+        "ECG ID": "LPAE_20999_hr",
+        "Image relative path": "photos_screens/img_4_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_bents/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_crumbles/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_doogee/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_iphone/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_samsung/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_scans/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 10,
+        "ECG ID": "LPAE_04827_hr",
+        "Image relative path": "photos_screens/img_10_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_bents/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_crumbles/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_doogee/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_iphone/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_samsung/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_scans/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 14,
+        "ECG ID": "LPAE_17226_hr",
+        "Image relative path": "photos_screens/img_14_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_bents/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_crumbles/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_doogee/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_iphone/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_samsung/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_scans/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 40,
+        "ECG ID": "LPAE_09275_hr",
+        "Image relative path": "photos_screens/img_40_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_bents/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_crumbles/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_doogee/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_iphone/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_samsung/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_scans/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 42,
+        "ECG ID": "LPAE_09545_hr",
+        "Image relative path": "photos_screens/img_42_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_bents/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_crumbles/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_doogee/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_iphone/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_samsung/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_scans/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 43,
+        "ECG ID": "LPAE_09754_hr",
+        "Image relative path": "photos_screens/img_43_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_bents/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_crumbles/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_doogee/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_iphone/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_samsung/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_scans/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 80,
+        "ECG ID": "LPAE_19394_hr",
+        "Image relative path": "photos_screens/img_80_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_bents/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_crumbles/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_doogee/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_iphone/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_samsung/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_scans/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 81,
+        "ECG ID": "LPAE_00232_hr",
+        "Image relative path": "photos_screens/img_81_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_bents/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_crumbles/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_doogee/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_iphone/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_samsung/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_scans/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 82,
+        "ECG ID": "LPAE_19269_hr",
+        "Image relative path": "photos_screens/img_82_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_bents/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_bents"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_crumbles/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_crumbles"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_doogee/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_doogee"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_iphone/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_iphone"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_samsung/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_samsung"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_scans/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_scans"
+      },
+      {
+        "Image ID": 92,
+        "ECG ID": "LPAE_14680_hr",
+        "Image relative path": "photos_screens/img_92_page_0.jpeg",
+        "Image page": 0,
+        "ECG format": "3x4+1R",
+        "category": "photos_screens"
+      }
+    ]
+  },
+  "target_definition": {
+    "reject": "correlation < 0.60, RMSE > 0.20 mV, SNR < 0 dB, or failure",
+    "warn": "correlation < 0.80, RMSE > 0.15 mV, or SNR < 3 dB",
+    "accept": "all reject and warn thresholds passed"
+  },
+  "gate_definition": {
+    "reject": "failure, missing diagnostics, active leads < 10, detected labels < 4, or at least two severe independent risk flags",
+    "severe_risk_flags": "Einthoven < 0.60, layout cost > 0.60, detected labels < 6, pixel density < 8.8 px/mm, or active leads < 12",
+    "warn": "detected labels < 8, Einthoven < 0.90, layout cost > 0.60, pixel density < 8.8 px/mm, or active leads < 12",
+    "accept": "all reject and warn thresholds passed"
+  },
+  "limitations": "The gate predicts reconstruction fidelity risk, not clinical diagnostic accuracy. Zero false accepts on this development subset does not establish safety on unseen ECG photos.",
+  "aggregate": {
+    "total": 70,
+    "target_counts": {
+      "accept": 35,
+      "warn": 13,
+      "reject": 22
+    },
+    "prediction_counts": {
+      "reject": 27,
+      "warn": 32,
+      "accept": 11
+    },
+    "false_accepts": 0,
+    "false_accept_rate": 0.0,
+    "missed_rejects": 4,
+    "reject_recall": 0.8181818181818182,
+    "false_rejects": 9,
+    "false_reject_rate": 0.1875,
+    "categories": {
+      "photos_bents": {
+        "total": 10,
+        "target_counts": {
+          "accept": 1,
+          "reject": 8,
+          "warn": 1
+        },
+        "prediction_counts": {
+          "reject": 9,
+          "warn": 1
+        },
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "missed_rejects": 0,
+        "reject_recall": 1.0,
+        "false_rejects": 1,
+        "false_reject_rate": 0.5
+      },
+      "photos_crumbles": {
+        "total": 10,
+        "target_counts": {
+          "warn": 2,
+          "reject": 8
+        },
+        "prediction_counts": {
+          "reject": 9,
+          "warn": 1
+        },
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "missed_rejects": 1,
+        "reject_recall": 0.875,
+        "false_rejects": 2,
+        "false_reject_rate": 1.0
+      },
+      "photos_doogee": {
+        "total": 10,
+        "target_counts": {
+          "accept": 8,
+          "warn": 2
+        },
+        "prediction_counts": {
+          "warn": 5,
+          "reject": 1,
+          "accept": 4
+        },
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "missed_rejects": 0,
+        "reject_recall": 0.0,
+        "false_rejects": 1,
+        "false_reject_rate": 0.1
+      },
+      "photos_iphone": {
+        "total": 10,
+        "target_counts": {
+          "accept": 7,
+          "reject": 2,
+          "warn": 1
+        },
+        "prediction_counts": {
+          "reject": 2,
+          "warn": 8
+        },
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "missed_rejects": 1,
+        "reject_recall": 0.5,
+        "false_rejects": 1,
+        "false_reject_rate": 0.125
+      },
+      "photos_samsung": {
+        "total": 10,
+        "target_counts": {
+          "accept": 9,
+          "warn": 1
+        },
+        "prediction_counts": {
+          "warn": 5,
+          "accept": 4,
+          "reject": 1
+        },
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "missed_rejects": 0,
+        "reject_recall": 0.0,
+        "false_rejects": 1,
+        "false_reject_rate": 0.1
+      },
+      "photos_scans": {
+        "total": 10,
+        "target_counts": {
+          "accept": 8,
+          "reject": 2
+        },
+        "prediction_counts": {
+          "warn": 6,
+          "accept": 3,
+          "reject": 1
+        },
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "missed_rejects": 1,
+        "reject_recall": 0.5,
+        "false_rejects": 0,
+        "false_reject_rate": 0.0
+      },
+      "photos_screens": {
+        "total": 10,
+        "target_counts": {
+          "accept": 2,
+          "warn": 6,
+          "reject": 2
+        },
+        "prediction_counts": {
+          "warn": 6,
+          "reject": 4
+        },
+        "false_accepts": 0,
+        "false_accept_rate": 0.0,
+        "missed_rejects": 1,
+        "reject_recall": 0.5,
+        "false_rejects": 3,
+        "false_reject_rate": 0.375
+      }
+    }
+  },
+  "records": [
+    {
+      "category": "photos_bents",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "target": "accept",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.02)",
+        "uncertain layout match (0.93)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "target": "warn",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (-0.18)",
+        "low grid calibration density (8.69 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.61)",
+        "low grid calibration density (8.80 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "target": "accept",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.04)",
+        "low grid calibration density (8.70 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.61)",
+        "uncertain layout match (0.96)"
+      ]
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "uncertain layout match (0.93)"
+      ]
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 6 lead labels detected",
+        "reduced Einthoven consistency (0.51)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (-0.13)",
+        "low grid calibration density (8.79 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "target": "warn",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.46)",
+        "low grid calibration density (8.59 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "target": "accept",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.03)",
+        "only 11/12 active leads"
+      ]
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.63)",
+        "low grid calibration density (8.77 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.72)"
+      ]
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "target": "warn",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.66)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (-0.26)",
+        "only 5 lead labels detected",
+        "low grid calibration density (7.25 px/mm)",
+        "only 11/12 active leads"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.50)",
+        "uncertain layout match (1.19)",
+        "low grid calibration density (8.78 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 11/12 active leads"
+      ]
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "target": "reject",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.66)"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "target": "warn",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "target": "reject",
+      "prediction": "warn",
+      "reasons": [
+        "uncertain layout match (1.18)"
+      ]
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "target": "warn",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.38)",
+        "uncertain layout match (1.20)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.46)",
+        "uncertain layout match (2.59)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "only 3 lead labels detected"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected",
+        "uncertain layout match (0.77)"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected",
+        "uncertain layout match (0.75)"
+      ]
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "uncertain layout match (0.66)",
+        "only 5 lead labels detected",
+        "low grid calibration density (8.74 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.12)",
+        "uncertain layout match (0.61)",
+        "low grid calibration density (8.27 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.26)",
+        "uncertain layout match (0.63)",
+        "low grid calibration density (8.13 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.81)"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.40)",
+        "uncertain layout match (1.08)"
+      ]
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "target": "warn",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.88)",
+        "uncertain layout match (0.77)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "target": "warn",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected",
+        "reduced Einthoven consistency (0.40)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "target": "reject",
+      "prediction": "warn",
+      "reasons": [
+        "only 6 lead labels detected",
+        "reduced Einthoven consistency (0.70)"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 6 lead labels detected",
+        "uncertain layout match (0.75)"
+      ]
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected",
+        "uncertain layout match (0.64)"
+      ]
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 6 lead labels detected",
+        "reduced Einthoven consistency (0.82)",
+        "uncertain layout match (1.84)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.10)",
+        "uncertain layout match (2.05)",
+        "low grid calibration density (7.85 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (-0.04)",
+        "uncertain layout match (2.52)",
+        "only 5 lead labels detected"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.73)"
+      ]
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected",
+        "reduced Einthoven consistency (0.89)"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "target": "accept",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.41)",
+        "uncertain layout match (1.00)"
+      ]
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 5 lead labels detected"
+      ]
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "target": "warn",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (-0.05)",
+        "uncertain layout match (0.66)",
+        "low grid calibration density (8.39 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.57)",
+        "uncertain layout match (8.31)",
+        "only 5 lead labels detected",
+        "low grid calibration density (7.88 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (-0.10)",
+        "uncertain layout match (2.14)",
+        "only 5 lead labels detected",
+        "low grid calibration density (8.11 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "target": "warn",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 6 lead labels detected",
+        "uncertain layout match (1.12)"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected"
+      ]
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "only 6 lead labels detected"
+      ]
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "target": "warn",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.59)",
+        "uncertain layout match (2.94)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.26)",
+        "low grid calibration density (8.59 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "only 1 lead labels detected"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "target": "warn",
+      "prediction": "warn",
+      "reasons": [
+        "low grid calibration density (8.70 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "only 9/12 active leads"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "target": "warn",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected",
+        "reduced Einthoven consistency (0.65)"
+      ]
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.59)",
+        "low grid calibration density (8.31 px/mm)"
+      ]
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "target": "reject",
+      "prediction": "reject",
+      "reasons": [
+        "low Einthoven consistency (0.35)",
+        "uncertain layout match (0.75)"
+      ]
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.74)"
+      ]
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "target": "warn",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.86)"
+      ]
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "target": "accept",
+      "prediction": "warn",
+      "reasons": [
+        "reduced Einthoven consistency (0.90)"
+      ]
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "target": "accept",
+      "prediction": "accept",
+      "reasons": []
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "target": "reject",
+      "prediction": "warn",
+      "reasons": [
+        "only 7 lead labels detected",
+        "uncertain layout match (1.71)"
+      ]
+    }
+  ]
+}

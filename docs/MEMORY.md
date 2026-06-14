@@ -43,7 +43,31 @@
 
 ## Current Direction
 
-Phase 3 starts with an interpretable quality gate and abstention policy,
-followed by targeted bent/crumpled reconstruction experiments and Level B
-matched real-photo collection. See
-`docs/plans/2026-06-13-next-priorities.md`.
+The canonical phase headings are in `docs/plans/master-roadmap.md`. The active
+implementation plan is
+`docs/plans/2026-06-14-phase3-digitization-v2-implementation-plan.md`.
+
+Phase 3 is Digitization v2, but it starts by hardening the quality gate because
+reconstruction changes cannot be evaluated safely without reliable rejection.
+After the gate baseline is frozen, work proceeds through leakage-safe splits,
+statistical reporting, a runtime abstention API, controlled bent/crumpled
+experiments, and Level B matched real-photo validation.
+
+## Active Phase 3 State
+
+- Task 1.1 is complete: quality-gate thresholds are versioned in
+  `configs/quality_gate_v1.yaml` and loaded through typed validated models.
+- Benchmark reports now include the resolved quality-gate config and version.
+- The versioned config preserves the existing 70-image aggregate exactly:
+  `0` false accepts, `9` false rejects, `4` missed rejects, reject recall
+  `81.8%`.
+- These results are development-only because threshold development and
+  evaluation used the same 70 PMcardio images.
+- Task 1.2 is complete: the development baseline is frozen in
+  `docs/baselines/phase3-quality-gate-v1.md`; generated reports include source
+  SHA-256 and evaluation-stage metadata, validate an expected source hash, and
+  refuse accidental overwrite.
+- The next task is Task 2.1: create deterministic leakage-safe train, tune, and
+  test manifests grouped by `ecg_id`.
+- Do not wire quality-gate rejection into diagnosis or Gradio before an
+  independent matched holdout review.
