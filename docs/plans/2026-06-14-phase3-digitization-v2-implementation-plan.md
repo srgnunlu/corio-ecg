@@ -332,4 +332,7 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
   and raised reject recall to `95.52%`, but false rejects rose to `56.58%`.
 - Task 6.2 is blocked until a revised gate adds a new reconstruction or
   image-to-signal disagreement feature and is frozen using tune-only evidence.
+- A reference-free paired-reconstruction metric is implemented. Conservative
+  shadow normalization was rejected as its perturbation after both remaining
+  in-scope false accepts stayed above `0.9994` median pair correlation.
 - Detailed result: `docs/experiments/phase3-pmcardio-holdout-tune-v1.md`.

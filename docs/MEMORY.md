@@ -174,6 +174,11 @@ experiments, and Level B matched real-photo validation.
 - The two remaining in-scope false accepts look healthy under the existing
   inference features. The next quality-gate work must add reconstruction or
   image-to-signal disagreement rather than only tightening current thresholds.
+- A reference-free reconstruction disagreement metric now compares paired
+  attempts using shifted morphology correlation and optional calibrated mV
+  disagreement. A two-record tune pilot rejected conservative shadow
+  normalization as the perturbation: both false accepts remained above
+  `0.9994` median pair correlation, demonstrating stable-but-wrong extraction.
 - Ten or twenty independent ECGs support pilots and pipeline validation, not
   reliable performance claims. Roughly 150 independent relevant cases with
   zero failures are needed to place a rule-of-three upper 95% bound near `2%`;
