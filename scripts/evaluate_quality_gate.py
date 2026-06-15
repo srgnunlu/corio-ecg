@@ -36,6 +36,27 @@ DEFAULT_INPUT = Path("results/pmcardio-reference/pmcardio_reference_fidelity.jso
 DEFAULT_OUTPUT_DIR = Path("results/quality-gate")
 
 
+def _development_status(
+    purpose: EvaluationPurpose,
+    stage: EvaluationStage,
+    selected_split: str | None,
+) -> str:
+    if purpose is EvaluationPurpose.THRESHOLD_TUNING:
+        return (
+            f"Results use the pre-registered {selected_split} split for development. "
+            "They are not locked holdout or external evidence."
+        )
+    if purpose is EvaluationPurpose.LOCKED_EVALUATION:
+        return (
+            f"Results are a locked {stage.value} evaluation and must not be used "
+            "for threshold or feature selection."
+        )
+    return (
+        "Thresholds were developed on this same 70-image PMcardio subset. "
+        "Results are exploratory and require external matched-reference validation."
+    )
+
+
 def calculate_file_sha256(path: Path) -> str:
     """Calculate a file SHA-256 digest without loading it fully into memory."""
     digest = hashlib.sha256()
@@ -100,9 +121,10 @@ def build_report(
         "split_evidence_status": split_evidence_status,
         "sample_size_warning": holdout_sample_size_warning(records, evaluation_stage),
         "source_sha256": source_sha256,
-        "development_status": (
-            "Thresholds were developed on this same 70-image PMcardio subset. "
-            "Results are exploratory and require external matched-reference validation."
+        "development_status": _development_status(
+            evaluation_purpose,
+            evaluation_stage,
+            selected_split,
         ),
         "source_manifest": source_report.get("selection_manifest"),
         "target_definition": {

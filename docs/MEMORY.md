@@ -161,5 +161,22 @@ experiments, and Level B matched real-photo validation.
 - The PMcardio holdout is stronger engineering evidence than the 10-ECG
   development baseline, but it is not external or clinical evidence because it
   comes from the same public dataset.
+- The 30-group PMcardio tune split has been evaluated; the separate 60-group
+  locked test remains unopened. Tune extraction succeeded on `180/210` images
+  with median correlation `0.5264`.
+- The frozen v1 gate failed tune review with `7` false accepts (`5.22%`) and
+  reject recall `67.91%`. It must not be used for production abstention or
+  locked test evaluation.
+- A tune-only layout-scope experiment limited support to `3x4+1R` and
+  `3x4+3R`. It reduced false accepts to `2` and raised reject recall to
+  `95.52%`, but false rejects reached `56.58%` and the false-accept upper 95%
+  bound remained above `2%`. Do not promote this policy.
+- The two remaining in-scope false accepts look healthy under the existing
+  inference features. The next quality-gate work must add reconstruction or
+  image-to-signal disagreement rather than only tightening current thresholds.
+- Ten or twenty independent ECGs support pilots and pipeline validation, not
+  reliable performance claims. Roughly 150 independent relevant cases with
+  zero failures are needed to place a rule-of-three upper 95% bound near `2%`;
+  clinical claims require larger external evidence.
 - Do not wire quality-gate rejection into diagnosis or Gradio before an
   independent matched holdout review.

@@ -52,6 +52,7 @@ results/figures/*.pdf
 results/reports/*.txt
 results/reports/*.json
 results/pmcardio-reference/operational/
+results/pmcardio-holdout/*/operational/
 results/real-phone*/records/
 results/digitization-experiments/*/operational/
 results/digitization-experiments/*/signals/

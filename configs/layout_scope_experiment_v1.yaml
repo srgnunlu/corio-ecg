@@ -1,0 +1,6 @@
+# Tune-only experiment for narrowing the currently supported paper layouts.
+version: layout-scope-experiment-v1
+supported_layouts:
+  - 3x4+1R
+  - 3x4+3R
+require_layout_hint: true

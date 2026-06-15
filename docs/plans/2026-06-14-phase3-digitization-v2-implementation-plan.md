@@ -320,3 +320,16 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
   assignments.
 - This is internal holdout evidence, not external evidence. Level B real-photo
   collection remains required for the independent external review.
+
+**Tune review status 2026-06-15**
+
+- Evaluated only the 30-group tune split; the 60-group test split remains
+  locked.
+- Extraction succeeded on `180/210` images with median waveform correlation
+  `0.5264`. The frozen v1 gate produced `7` false accepts (`5.22%`) and
+  `67.91%` reject recall.
+- A research-only `3x4+1R` / `3x4+3R` layout scope reduced false accepts to `2`
+  and raised reject recall to `95.52%`, but false rejects rose to `56.58%`.
+- Task 6.2 is blocked until a revised gate adds a new reconstruction or
+  image-to-signal disagreement feature and is frozen using tune-only evidence.
+- Detailed result: `docs/experiments/phase3-pmcardio-holdout-tune-v1.md`.

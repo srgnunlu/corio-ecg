@@ -1,0 +1,211 @@
+category,image_id,ecg_id,target,prediction,reason_codes,reasons
+photos_bents,67,LPAE_01805_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.08)', 'uncertain layout match (10.84)', 'only 4 lead labels detected', 'low grid calibration density (8.52 px/mm)']"
+photos_crumbles,67,LPAE_01805_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.38)', 'uncertain layout match (1.78)', 'only 5 lead labels detected', 'low grid calibration density (8.40 px/mm)']"
+photos_doogee,67,LPAE_01805_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.44)', 'uncertain layout match (2.28)', 'only 4 lead labels detected', 'low grid calibration density (8.31 px/mm)']"
+photos_iphone,67,LPAE_01805_hr,reject,reject,"['uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['uncertain layout match (2.54)', 'only 4 lead labels detected', 'low grid calibration density (8.45 px/mm)']"
+photos_samsung,67,LPAE_01805_hr,reject,warn,"['low_einthoven_consistency', 'insufficient_lead_labels', 'low_grid_density']","['reduced Einthoven consistency (0.81)', 'only 6 lead labels detected', 'low grid calibration density (8.71 px/mm)']"
+photos_scans,67,LPAE_01805_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (0.50)', 'uncertain layout match (1.15)']"
+photos_screens,67,LPAE_01805_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_bents,75,LPAE_02444_hr,reject,reject,"['low_einthoven_consistency', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.46)', 'only 4 lead labels detected', 'low grid calibration density (8.66 px/mm)']"
+photos_crumbles,75,LPAE_02444_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels']","['low Einthoven consistency (0.46)', 'uncertain layout match (2.26)', 'only 4 lead labels detected']"
+photos_doogee,75,LPAE_02444_hr,reject,warn,['insufficient_lead_labels'],['only 4 lead labels detected']
+photos_iphone,75,LPAE_02444_hr,reject,reject,"['uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['uncertain layout match (1.04)', 'only 4 lead labels detected', 'low grid calibration density (8.67 px/mm)']"
+photos_samsung,75,LPAE_02444_hr,reject,reject,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (0.68)', 'only 4 lead labels detected']"
+photos_scans,75,LPAE_02444_hr,reject,reject,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (0.74)', 'only 5 lead labels detected']"
+photos_screens,75,LPAE_02444_hr,reject,reject,['insufficient_lead_labels'],['only 3 lead labels detected']
+photos_bents,6,LPAE_02926_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_crumbles,6,LPAE_02926_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_doogee,6,LPAE_02926_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_iphone,6,LPAE_02926_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_samsung,6,LPAE_02926_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_scans,6,LPAE_02926_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_screens,6,LPAE_02926_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_bents,57,LPAE_06282_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_crumbles,57,LPAE_06282_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_doogee,57,LPAE_06282_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_iphone,57,LPAE_06282_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_samsung,57,LPAE_06282_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_scans,57,LPAE_06282_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_screens,57,LPAE_06282_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_bents,28,LPAE_07250_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.17)', 'low grid calibration density (8.49 px/mm)']"
+photos_crumbles,28,LPAE_07250_hr,reject,reject,['insufficient_lead_labels'],['only 2 lead labels detected']
+photos_doogee,28,LPAE_07250_hr,accept,warn,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels']","['reduced Einthoven consistency (0.86)', 'uncertain layout match (0.67)', 'only 7 lead labels detected']"
+photos_iphone,28,LPAE_07250_hr,accept,warn,"['low_einthoven_consistency', 'uncertain_layout']","['reduced Einthoven consistency (0.87)', 'uncertain layout match (1.35)']"
+photos_samsung,28,LPAE_07250_hr,accept,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (0.34)', 'uncertain layout match (0.71)']"
+photos_scans,28,LPAE_07250_hr,accept,warn,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (0.88)', 'only 6 lead labels detected']"
+photos_screens,28,LPAE_07250_hr,accept,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (0.56)', 'uncertain layout match (0.65)']"
+photos_bents,33,LPAE_07299_hr,reject,warn,"['low_einthoven_consistency', 'low_grid_density']","['reduced Einthoven consistency (0.79)', 'low grid calibration density (8.20 px/mm)']"
+photos_crumbles,33,LPAE_07299_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.27)']
+photos_doogee,33,LPAE_07299_hr,reject,warn,['low_grid_density'],['low grid calibration density (8.79 px/mm)']
+photos_iphone,33,LPAE_07299_hr,reject,warn,['low_grid_density'],['low grid calibration density (8.60 px/mm)']
+photos_samsung,33,LPAE_07299_hr,reject,accept,[],[]
+photos_scans,33,LPAE_07299_hr,reject,accept,[],[]
+photos_screens,33,LPAE_07299_hr,reject,accept,[],[]
+photos_bents,38,LPAE_08885_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (-0.43)', 'uncertain layout match (7.47)', 'low grid calibration density (8.67 px/mm)']"
+photos_crumbles,38,LPAE_08885_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (0.41)', 'uncertain layout match (14.36)', 'low grid calibration density (8.56 px/mm)']"
+photos_doogee,38,LPAE_08885_hr,accept,warn,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (2.83)', 'only 6 lead labels detected']"
+photos_iphone,38,LPAE_08885_hr,accept,reject,"['uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['uncertain layout match (0.74)', 'only 5 lead labels detected', 'low grid calibration density (8.43 px/mm)']"
+photos_samsung,38,LPAE_08885_hr,accept,warn,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (5.48)', 'only 6 lead labels detected']"
+photos_scans,38,LPAE_08885_hr,accept,reject,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (3.72)', 'only 5 lead labels detected']"
+photos_screens,38,LPAE_08885_hr,accept,reject,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (3.64)', 'only 5 lead labels detected']"
+photos_bents,55,LPAE_10518_hr,reject,reject,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (2.79)', 'only 5 lead labels detected']"
+photos_crumbles,55,LPAE_10518_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (0.59)', 'uncertain layout match (4.46)']"
+photos_doogee,55,LPAE_10518_hr,reject,warn,"['low_einthoven_consistency', 'insufficient_lead_labels']","['reduced Einthoven consistency (0.90)', 'only 7 lead labels detected']"
+photos_iphone,55,LPAE_10518_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.45)']
+photos_samsung,55,LPAE_10518_hr,accept,warn,"['low_einthoven_consistency', 'uncertain_layout']","['reduced Einthoven consistency (0.82)', 'uncertain layout match (1.23)']"
+photos_scans,55,LPAE_10518_hr,accept,accept,[],[]
+photos_screens,55,LPAE_10518_hr,reject,reject,['insufficient_lead_labels'],['only 3 lead labels detected']
+photos_bents,36,LPAE_10555_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.02)']
+photos_crumbles,36,LPAE_10555_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.13)', 'low grid calibration density (8.76 px/mm)']"
+photos_doogee,36,LPAE_10555_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.70)']
+photos_iphone,36,LPAE_10555_hr,accept,reject,"['uncertain_layout', 'insufficient_active_leads']","['uncertain layout match (0.72)', 'only 10/12 active leads']"
+photos_samsung,36,LPAE_10555_hr,warn,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.47)']
+photos_scans,36,LPAE_10555_hr,accept,accept,[],[]
+photos_screens,36,LPAE_10555_hr,warn,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.30)', 'low grid calibration density (8.64 px/mm)']"
+photos_bents,56,LPAE_10564_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.72)']
+photos_crumbles,56,LPAE_10564_hr,reject,reject,"['low_einthoven_consistency', 'insufficient_lead_labels']","['low Einthoven consistency (0.15)', 'only 5 lead labels detected']"
+photos_doogee,56,LPAE_10564_hr,warn,accept,[],[]
+photos_iphone,56,LPAE_10564_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.51)']
+photos_samsung,56,LPAE_10564_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.74)']
+photos_scans,56,LPAE_10564_hr,accept,accept,[],[]
+photos_screens,56,LPAE_10564_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_active_leads']","['low Einthoven consistency (0.28)', 'uncertain layout match (1.55)', 'only 11/12 active leads']"
+photos_bents,53,LPAE_10598_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.36)']
+photos_crumbles,53,LPAE_10598_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (0.03)', 'uncertain layout match (1.31)', 'low grid calibration density (8.45 px/mm)']"
+photos_doogee,53,LPAE_10598_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.28)', 'low grid calibration density (8.40 px/mm)']"
+photos_iphone,53,LPAE_10598_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.52)']
+photos_samsung,53,LPAE_10598_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (-0.19)']
+photos_scans,53,LPAE_10598_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.23)']
+photos_screens,53,LPAE_10598_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (-0.32)', 'low grid calibration density (8.64 px/mm)']"
+photos_bents,71,LPAE_12190_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (0.15)', 'uncertain layout match (1.49)', 'low grid calibration density (7.41 px/mm)']"
+photos_crumbles,71,LPAE_12190_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (0.51)', 'uncertain layout match (1.35)', 'low grid calibration density (8.67 px/mm)']"
+photos_doogee,71,LPAE_12190_hr,warn,accept,[],[]
+photos_iphone,71,LPAE_12190_hr,accept,warn,"['low_einthoven_consistency', 'uncertain_layout']","['reduced Einthoven consistency (0.84)', 'uncertain layout match (0.63)']"
+photos_samsung,71,LPAE_12190_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.36)']
+photos_scans,71,LPAE_12190_hr,accept,accept,[],[]
+photos_screens,71,LPAE_12190_hr,warn,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.32)', 'uncertain layout match (3.03)', 'only 4 lead labels detected', 'low grid calibration density (8.31 px/mm)']"
+photos_bents,74,LPAE_12629_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.13)', 'low grid calibration density (7.64 px/mm)']"
+photos_crumbles,74,LPAE_12629_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.20)', 'low grid calibration density (8.34 px/mm)']"
+photos_doogee,74,LPAE_12629_hr,reject,accept,[],[]
+photos_iphone,74,LPAE_12629_hr,warn,accept,[],[]
+photos_samsung,74,LPAE_12629_hr,warn,accept,[],[]
+photos_scans,74,LPAE_12629_hr,accept,accept,[],[]
+photos_screens,74,LPAE_12629_hr,reject,warn,"['low_einthoven_consistency', 'uncertain_layout']","['reduced Einthoven consistency (0.88)', 'uncertain layout match (0.78)']"
+photos_bents,18,LPAE_12879_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_crumbles,18,LPAE_12879_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_doogee,18,LPAE_12879_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_iphone,18,LPAE_12879_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_samsung,18,LPAE_12879_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_scans,18,LPAE_12879_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_screens,18,LPAE_12879_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_bents,88,LPAE_14304_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_crumbles,88,LPAE_14304_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_doogee,88,LPAE_14304_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_iphone,88,LPAE_14304_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_samsung,88,LPAE_14304_hr,reject,reject,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (6.42)', 'only 5 lead labels detected']"
+photos_scans,88,LPAE_14304_hr,reject,reject,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (6.40)', 'only 5 lead labels detected']"
+photos_screens,88,LPAE_14304_hr,reject,reject,"['uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['uncertain layout match (2.20)', 'only 5 lead labels detected', 'low grid calibration density (8.78 px/mm)']"
+photos_bents,93,LPAE_15368_hr,reject,warn,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels']","['reduced Einthoven consistency (0.64)', 'uncertain layout match (0.77)', 'only 7 lead labels detected']"
+photos_crumbles,93,LPAE_15368_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (-0.11)', 'uncertain layout match (3.13)', 'low grid calibration density (8.57 px/mm)']"
+photos_doogee,93,LPAE_15368_hr,warn,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.05)']
+photos_iphone,93,LPAE_15368_hr,accept,warn,"['low_einthoven_consistency', 'uncertain_layout']","['reduced Einthoven consistency (0.64)', 'uncertain layout match (0.63)']"
+photos_samsung,93,LPAE_15368_hr,warn,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.12)']
+photos_scans,93,LPAE_15368_hr,accept,warn,['uncertain_layout'],['uncertain layout match (0.69)']
+photos_screens,93,LPAE_15368_hr,warn,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (-0.02)', 'uncertain layout match (0.68)']"
+photos_bents,91,LPAE_15477_hr,accept,reject,"['low_einthoven_consistency', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.03)', 'only 5 lead labels detected', 'low grid calibration density (8.26 px/mm)']"
+photos_crumbles,91,LPAE_15477_hr,accept,reject,"['low_einthoven_consistency', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.23)', 'only 4 lead labels detected', 'low grid calibration density (7.52 px/mm)']"
+photos_doogee,91,LPAE_15477_hr,accept,warn,"['low_einthoven_consistency', 'low_grid_density']","['reduced Einthoven consistency (0.86)', 'low grid calibration density (8.64 px/mm)']"
+photos_iphone,91,LPAE_15477_hr,accept,reject,"['uncertain_layout', 'low_grid_density']","['uncertain layout match (0.94)', 'low grid calibration density (8.50 px/mm)']"
+photos_samsung,91,LPAE_15477_hr,accept,warn,"['low_einthoven_consistency', 'low_grid_density']","['reduced Einthoven consistency (0.87)', 'low grid calibration density (8.53 px/mm)']"
+photos_scans,91,LPAE_15477_hr,reject,warn,['uncertain_layout'],['uncertain layout match (1.27)']
+photos_screens,91,LPAE_15477_hr,warn,reject,"['uncertain_layout', 'low_grid_density']","['uncertain layout match (3.34)', 'low grid calibration density (8.40 px/mm)']"
+photos_bents,95,LPAE_15529_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (0.27)', 'uncertain layout match (3.19)', 'low grid calibration density (8.23 px/mm)']"
+photos_crumbles,95,LPAE_15529_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.19)']
+photos_doogee,95,LPAE_15529_hr,reject,warn,"['low_einthoven_consistency', 'insufficient_lead_labels']","['reduced Einthoven consistency (0.74)', 'only 7 lead labels detected']"
+photos_iphone,95,LPAE_15529_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.73)']
+photos_samsung,95,LPAE_15529_hr,reject,warn,['insufficient_lead_labels'],['only 7 lead labels detected']
+photos_scans,95,LPAE_15529_hr,accept,accept,[],[]
+photos_screens,95,LPAE_15529_hr,reject,reject,['insufficient_lead_labels'],['only 3 lead labels detected']
+photos_bents,96,LPAE_15607_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.27)', 'uncertain layout match (2.16)', 'only 5 lead labels detected', 'low grid calibration density (7.56 px/mm)']"
+photos_crumbles,96,LPAE_15607_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (-0.10)', 'uncertain layout match (1.61)', 'only 4 lead labels detected', 'low grid calibration density (7.09 px/mm)']"
+photos_doogee,96,LPAE_15607_hr,reject,reject,['insufficient_lead_labels'],['only 3 lead labels detected']
+photos_iphone,96,LPAE_15607_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_samsung,96,LPAE_15607_hr,reject,reject,['insufficient_lead_labels'],['only 3 lead labels detected']
+photos_scans,96,LPAE_15607_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_screens,96,LPAE_15607_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_bents,76,LPAE_17345_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.34)', 'uncertain layout match (5.80)', 'only 4 lead labels detected', 'low grid calibration density (7.14 px/mm)']"
+photos_crumbles,76,LPAE_17345_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.47)', 'uncertain layout match (8.44)', 'only 5 lead labels detected', 'low grid calibration density (8.34 px/mm)']"
+photos_doogee,76,LPAE_17345_hr,warn,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (-0.69)', 'uncertain layout match (3.11)']"
+photos_iphone,76,LPAE_17345_hr,warn,reject,"['uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['uncertain layout match (3.61)', 'only 5 lead labels detected', 'low grid calibration density (8.71 px/mm)']"
+photos_samsung,76,LPAE_17345_hr,warn,reject,"['uncertain_layout', 'low_grid_density', 'insufficient_active_leads']","['uncertain layout match (4.52)', 'low grid calibration density (8.75 px/mm)', 'only 11/12 active leads']"
+photos_scans,76,LPAE_17345_hr,warn,reject,"['uncertain_layout', 'insufficient_lead_labels', 'insufficient_active_leads']","['uncertain layout match (3.58)', 'only 5 lead labels detected', 'only 11/12 active leads']"
+photos_screens,76,LPAE_17345_hr,warn,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels']","['low Einthoven consistency (0.43)', 'uncertain layout match (15.97)', 'only 5 lead labels detected']"
+photos_bents,59,LPAE_18073_hr,reject,reject,"['uncertain_layout', 'low_grid_density', 'insufficient_active_leads']","['uncertain layout match (4.43)', 'low grid calibration density (8.56 px/mm)', 'only 11/12 active leads']"
+photos_crumbles,59,LPAE_18073_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.42)', 'uncertain layout match (22.98)', 'only 5 lead labels detected', 'low grid calibration density (8.39 px/mm)']"
+photos_doogee,59,LPAE_18073_hr,reject,reject,"['uncertain_layout', 'low_grid_density']","['uncertain layout match (1.43)', 'low grid calibration density (8.31 px/mm)']"
+photos_iphone,59,LPAE_18073_hr,reject,warn,['insufficient_lead_labels'],['only 6 lead labels detected']
+photos_samsung,59,LPAE_18073_hr,reject,warn,"['insufficient_lead_labels', 'low_grid_density']","['only 7 lead labels detected', 'low grid calibration density (8.53 px/mm)']"
+photos_scans,59,LPAE_18073_hr,reject,warn,['insufficient_lead_labels'],['only 6 lead labels detected']
+photos_screens,59,LPAE_18073_hr,reject,reject,['digitization_failed'],['digitization failed']
+photos_bents,64,LPAE_18227_hr,reject,warn,"['low_einthoven_consistency', 'insufficient_lead_labels']","['reduced Einthoven consistency (0.44)', 'only 6 lead labels detected']"
+photos_crumbles,64,LPAE_18227_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (-0.15)', 'uncertain layout match (1.43)']"
+photos_doogee,64,LPAE_18227_hr,reject,warn,"['low_einthoven_consistency', 'low_grid_density']","['reduced Einthoven consistency (0.66)', 'low grid calibration density (8.63 px/mm)']"
+photos_iphone,64,LPAE_18227_hr,reject,warn,['low_grid_density'],['low grid calibration density (8.33 px/mm)']
+photos_samsung,64,LPAE_18227_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.87)']
+photos_scans,64,LPAE_18227_hr,reject,accept,[],[]
+photos_screens,64,LPAE_18227_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.37)', 'low grid calibration density (8.76 px/mm)']"
+photos_bents,65,LPAE_18552_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (-0.18)', 'uncertain layout match (0.96)']"
+photos_crumbles,65,LPAE_18552_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (0.33)', 'uncertain layout match (5.03)', 'low grid calibration density (7.67 px/mm)']"
+photos_doogee,65,LPAE_18552_hr,accept,warn,['low_grid_density'],['low grid calibration density (8.62 px/mm)']
+photos_iphone,65,LPAE_18552_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.75)']
+photos_samsung,65,LPAE_18552_hr,accept,warn,"['low_einthoven_consistency', 'low_grid_density']","['reduced Einthoven consistency (0.80)', 'low grid calibration density (8.70 px/mm)']"
+photos_scans,65,LPAE_18552_hr,accept,accept,[],[]
+photos_screens,65,LPAE_18552_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.81)']
+photos_bents,16,LPAE_19550_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.56)', 'low grid calibration density (8.73 px/mm)']"
+photos_crumbles,16,LPAE_19550_hr,accept,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_active_leads']","['low Einthoven consistency (-0.66)', 'uncertain layout match (0.72)', 'only 11/12 active leads']"
+photos_doogee,16,LPAE_19550_hr,accept,accept,[],[]
+photos_iphone,16,LPAE_19550_hr,accept,accept,[],[]
+photos_samsung,16,LPAE_19550_hr,accept,accept,[],[]
+photos_scans,16,LPAE_19550_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (-0.31)', 'uncertain layout match (1.20)']"
+photos_screens,16,LPAE_19550_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.62)']
+photos_bents,83,LPAE_20117_hr,reject,reject,"['uncertain_layout', 'low_grid_density']","['uncertain layout match (5.80)', 'low grid calibration density (8.71 px/mm)']"
+photos_crumbles,83,LPAE_20117_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.14)']
+photos_doogee,83,LPAE_20117_hr,warn,warn,['uncertain_layout'],['uncertain layout match (1.27)']
+photos_iphone,83,LPAE_20117_hr,accept,warn,['uncertain_layout'],['uncertain layout match (2.21)']
+photos_samsung,83,LPAE_20117_hr,accept,warn,['uncertain_layout'],['uncertain layout match (1.40)']
+photos_scans,83,LPAE_20117_hr,accept,warn,['uncertain_layout'],['uncertain layout match (0.83)']
+photos_screens,83,LPAE_20117_hr,reject,warn,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels']","['reduced Einthoven consistency (0.88)', 'uncertain layout match (2.38)', 'only 7 lead labels detected']"
+photos_bents,100,LPAE_20139_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (0.37)', 'uncertain layout match (5.33)']"
+photos_crumbles,100,LPAE_20139_hr,warn,reject,"['uncertain_layout', 'low_grid_density']","['uncertain layout match (1.58)', 'low grid calibration density (8.65 px/mm)']"
+photos_doogee,100,LPAE_20139_hr,accept,warn,['uncertain_layout'],['uncertain layout match (3.39)']
+photos_iphone,100,LPAE_20139_hr,accept,warn,['uncertain_layout'],['uncertain layout match (5.69)']
+photos_samsung,100,LPAE_20139_hr,accept,warn,['uncertain_layout'],['uncertain layout match (3.18)']
+photos_scans,100,LPAE_20139_hr,accept,warn,['uncertain_layout'],['uncertain layout match (1.64)']
+photos_screens,100,LPAE_20139_hr,accept,reject,"['uncertain_layout', 'insufficient_lead_labels']","['uncertain layout match (4.37)', 'only 5 lead labels detected']"
+photos_bents,21,LPAE_20515_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.38)', 'low grid calibration density (8.16 px/mm)']"
+photos_crumbles,21,LPAE_20515_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.17)', 'low grid calibration density (8.64 px/mm)']"
+photos_doogee,21,LPAE_20515_hr,reject,warn,"['low_einthoven_consistency', 'low_grid_density']","['reduced Einthoven consistency (0.81)', 'low grid calibration density (8.68 px/mm)']"
+photos_iphone,21,LPAE_20515_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.87)']
+photos_samsung,21,LPAE_20515_hr,reject,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.74)']
+photos_scans,21,LPAE_20515_hr,reject,accept,[],[]
+photos_screens,21,LPAE_20515_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (-0.14)', 'low grid calibration density (8.79 px/mm)']"
+photos_bents,20,LPAE_20947_hr,reject,reject,"['uncertain_layout', 'low_grid_density']","['uncertain layout match (0.89)', 'low grid calibration density (7.94 px/mm)']"
+photos_crumbles,20,LPAE_20947_hr,warn,reject,"['low_einthoven_consistency', 'uncertain_layout', 'insufficient_lead_labels', 'low_grid_density']","['low Einthoven consistency (0.43)', 'uncertain layout match (1.04)', 'only 5 lead labels detected', 'low grid calibration density (8.02 px/mm)']"
+photos_doogee,20,LPAE_20947_hr,reject,warn,['low_grid_density'],['low grid calibration density (8.13 px/mm)']
+photos_iphone,20,LPAE_20947_hr,reject,warn,['low_grid_density'],['low grid calibration density (8.42 px/mm)']
+photos_samsung,20,LPAE_20947_hr,reject,reject,"['uncertain_layout', 'low_grid_density']","['uncertain layout match (0.73)', 'low grid calibration density (8.19 px/mm)']"
+photos_scans,20,LPAE_20947_hr,reject,warn,"['insufficient_lead_labels', 'low_grid_density']","['only 7 lead labels detected', 'low grid calibration density (8.65 px/mm)']"
+photos_screens,20,LPAE_20947_hr,reject,warn,['low_grid_density'],['low grid calibration density (8.08 px/mm)']
+photos_bents,26,LPAE_20971_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout', 'low_grid_density']","['low Einthoven consistency (0.01)', 'uncertain layout match (0.93)', 'low grid calibration density (7.69 px/mm)']"
+photos_crumbles,26,LPAE_20971_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (-0.16)', 'low grid calibration density (8.68 px/mm)']"
+photos_doogee,26,LPAE_20971_hr,accept,accept,[],[]
+photos_iphone,26,LPAE_20971_hr,reject,accept,[],[]
+photos_samsung,26,LPAE_20971_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (0.19)', 'uncertain layout match (1.08)']"
+photos_scans,26,LPAE_20971_hr,accept,accept,[],[]
+photos_screens,26,LPAE_20971_hr,accept,warn,"['low_einthoven_consistency', 'low_grid_density']","['reduced Einthoven consistency (0.82)', 'low grid calibration density (8.58 px/mm)']"
+photos_bents,37,LPAE_21468_hr,reject,reject,"['low_einthoven_consistency', 'uncertain_layout']","['low Einthoven consistency (-0.23)', 'uncertain layout match (0.90)']"
+photos_crumbles,37,LPAE_21468_hr,reject,reject,"['low_einthoven_consistency', 'low_grid_density']","['low Einthoven consistency (0.30)', 'low grid calibration density (8.79 px/mm)']"
+photos_doogee,37,LPAE_21468_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.63)']
+photos_iphone,37,LPAE_21468_hr,accept,warn,['low_einthoven_consistency'],['reduced Einthoven consistency (0.44)']
+photos_samsung,37,LPAE_21468_hr,accept,reject,"['low_einthoven_consistency', 'insufficient_active_leads']","['low Einthoven consistency (0.35)', 'only 11/12 active leads']"
+photos_scans,37,LPAE_21468_hr,accept,warn,"['low_einthoven_consistency', 'uncertain_layout']","['reduced Einthoven consistency (0.62)', 'uncertain layout match (0.65)']"
+photos_screens,37,LPAE_21468_hr,accept,warn,"['low_einthoven_consistency', 'uncertain_layout']","['reduced Einthoven consistency (0.83)', 'uncertain layout match (0.92)']"

@@ -91,6 +91,19 @@ def test_build_report_records_split_evaluation_context() -> None:
     assert report["split_manifest_id"] == "manifest-id"
     assert report["split_evidence_status"] == "pre-registered"
     assert report["sample_size_warning"] is not None
+    assert "locked holdout evaluation" in report["development_status"]
+
+
+def test_build_report_labels_tune_split_as_development() -> None:
+    report = build_report(
+        _source_report(),
+        evaluation_stage=EvaluationStage.DEVELOPMENT,
+        evaluation_purpose=EvaluationPurpose.THRESHOLD_TUNING,
+        selected_split="tune",
+    )
+
+    assert "pre-registered tune split" in report["development_status"]
+    assert "not locked holdout" in report["development_status"]
 
 
 def test_write_report_refuses_to_overwrite_existing_artifact(tmp_path: Path) -> None:
