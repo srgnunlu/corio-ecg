@@ -144,6 +144,10 @@ experiments, and Level B matched real-photo validation.
   `configs/matched_photo_manifest_v1.yaml`; validation is run with
   `scripts/validate_matched_photo_dataset.py` and writes only aggregate,
   path-free evidence.
+- `scripts/build_matched_photo_manifest.py` builds the local manifest from a
+  strict `collection.csv`, computes SHA-256 values, preserves explicitly
+  pre-registered splits, and refuses to write unless the complete dataset
+  passes the locked validator.
 - The validator enforces at least 20 anonymous matched ECG records, at least
   two capture sources, photo/reference SHA-256 verification, explicit PHI
   review, safe relative paths, and case-grouped pre-registered tune/test splits.

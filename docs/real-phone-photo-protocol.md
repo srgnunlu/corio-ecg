@@ -91,7 +91,18 @@ All variants of one case must remain in one split and point to the same matched
 reference. Validate the complete local dataset with:
 
 ```bash
+.venv/bin/python scripts/build_matched_photo_manifest.py
 .venv/bin/python scripts/validate_matched_photo_dataset.py
+```
+
+The builder reads `data/level-b-matched/collection.csv`, computes file hashes,
+preserves the explicitly pre-registered `tune` or `test` split, and writes the
+manifest only after the complete dataset passes validation. The CSV must contain
+exactly these columns:
+
+```csv
+case_id,photo_id,variant,layout,device_model,printer_model,photo_path,reference_type,reference_path,split,phi_reviewed
+case001,case001__front,front,3x4+1R,phone-a,printer-a,photos/case001__front.jpg,flatbed_scan,references/case001.png,tune,true
 ```
 
 The aggregate validation report contains no source paths or per-case records.

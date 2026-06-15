@@ -294,6 +294,9 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
 
 - Added the locked `matched-photo-manifest-v1` contract and aggregate-only
   validation CLI.
+- Added a strict CSV-to-manifest builder that computes local file hashes,
+  preserves explicitly pre-registered splits, rejects unexpected inventory
+  columns, and writes only after full validation passes.
 - Validation rejects non-anonymous IDs, declared or direct PHI fields, unsafe
   paths, missing or mismatched file hashes, inconsistent matched references,
   insufficient capture-source diversity, and ECG-group split leakage.
