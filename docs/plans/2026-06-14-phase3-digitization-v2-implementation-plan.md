@@ -191,7 +191,7 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
 
 ## Workstream 5: Controlled Digitization v2 Experiments
 
-### Task 5.1: Create a Regression Harness
+### Task 5.1: Create a Regression Harness [Completed 2026-06-15]
 
 **Files**
 
@@ -205,15 +205,24 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
 - Report correlation, RMSE, SNR, gain, runtime, failure rate, and quality-gate outcome.
 - Fail experiment promotion when supported categories regress beyond locked tolerances.
 
-### Task 5.2: Run Targeted Reconstruction Experiments
+**Completed**
+
+- Added paired record and category comparison with source-image identity validation.
+- Locked v1 supported-category tolerances in
+  `configs/digitization_regression_v1.yaml`.
+- Added an audit-safe CLI that exits nonzero when promotion checks fail.
+- Kept bent/crumpled as target categories and screen captures as reported but
+  unclassified; promotion is currently determined by scans and supported phone photos.
+
+### Task 5.2: Run Targeted Reconstruction Experiments [Completed 2026-06-15]
 
 **Experiment order**
 
-1. Conservative page-boundary and perspective correction.
-2. Fold- and shadow-aware normalization.
-3. Layout-specific trace extraction.
-4. Calibrated dewarping with strict memory and timeout limits.
-5. Segment-aware reconstruction without fake 10-second tiling.
+1. Conservative page-boundary and perspective correction. [Completed and rejected 2026-06-15]
+2. Fold- and shadow-aware normalization. [Completed and rejected 2026-06-15]
+3. Layout-specific trace extraction. [Completed and rejected after pilot 2026-06-15]
+4. Calibrated dewarping with strict memory and timeout limits. [Rejected after pilot 2026-06-15]
+5. Segment-aware reconstruction without fake 10-second tiling. [Research candidate passed 2026-06-15]
 
 **Acceptance**
 
@@ -221,9 +230,52 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
 - Bent and crumpled results improve without supported-category regression.
 - Memory, timeout, and failure behavior are reported.
 
+**Experiment 1 result**
+
+- `conservative-perspective-v1` selected only 3/70 images, all crumpled, and
+  preserved supported-category regression tolerances.
+- The candidate was rejected because two of three corrected records regressed
+  substantially; aggregate crumpled RMSE and SNR worsened.
+- Detailed result: `docs/experiments/phase3-conservative-perspective-v1.md`.
+
+**Experiment 2 result**
+
+- `conservative-shadow-v1` substantially improved bent and crumpled correlation
+  while preserving supported-category fidelity tolerances.
+- The candidate was rejected because Doogee median wall runtime increased
+  `33.2%`, above the locked `25%` category tolerance.
+- Detailed result: `docs/experiments/phase3-conservative-shadow-v1.md`.
+
+**Experiment 3 result**
+
+- `layout-segments-v1` constrained `3x4+1R` pages to short `3x4` segments so
+  the rhythm strip could not overwrite Lead II.
+- The 14-image pilot showed no target-category aggregate benefit and worsened
+  one crumpled Lead II correlation by `-0.169`; the full benchmark was not run.
+- Detailed result: `docs/experiments/phase3-layout-segments-v1.md`.
+
+**Experiment 4 result**
+
+- Existing vendor dewarping retry was evaluated in isolated workers with a
+  strict `60 second` timeout.
+- The second pilot record, crumpled image 4, timed out; the pilot was stopped
+  immediately and no full benchmark was run.
+- Detailed result: `docs/experiments/phase3-dewarping-retry-v1.md`.
+
+**Experiment 5 result**
+
+- `segment-aware-experiment-v1` applied a locked research-only contract to the
+  existing 70-image matched diagnosis-drift artifact without rerunning the model.
+- Segment ensemble improved mean cosine by `+0.0336` on bent and `+0.0145` on
+  crumpled images, with no failed checks in supported categories.
+- The research candidate passed, but production remains `experimental-only`
+  because this is diagnosis-consistency evidence, not clinical accuracy or
+  digitization-fidelity evidence.
+- Detailed result: `docs/experiments/phase3-segment-aware-v1.md`.
+
 ## Workstream 6: Level B Matched Real-Photo Validation
 
-### Task 6.1: Add Dataset Manifest and Validation
+### Task 6.1: Add Dataset Manifest and Validation [Validator completed; collection pending]
 
 **Files**
 
@@ -237,6 +289,17 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
 - At least 20 distinct anonymous ECG records with matched references.
 - Capture metadata and ECG-grouped splits validate successfully.
 - No source images or patient-identifiable data enter git.
+
+**Implementation status 2026-06-15**
+
+- Added the locked `matched-photo-manifest-v1` contract and aggregate-only
+  validation CLI.
+- Validation rejects non-anonymous IDs, declared or direct PHI fields, unsafe
+  paths, missing or mismatched file hashes, inconsistent matched references,
+  insufficient capture-source diversity, and ECG-group split leakage.
+- The existing 10-photo real-phone batch remains Level A and has no matched
+  references. Task 6.1 acceptance remains pending until at least 20 Level B
+  records are collected and the local manifest passes validation.
 
 ### Task 6.2: Run Independent Phase 3 Gate Review
 

@@ -98,7 +98,57 @@ experiments, and Level B matched real-photo validation.
   reason messages.
 - Task 4.2, enforcing abstention in Gradio before diagnosis, remains gated on an
   independent matched holdout review and must not be wired yet.
-- The next executable task is Task 5.1: create a digitization regression harness
-  that compares candidate experiments against the frozen Phase 2 baseline.
+- Task 5.1 is complete. `src/evaluation/digitization_regression.py` compares
+  paired candidate artifacts against the frozen Phase 2 baseline and refuses
+  mismatched record sets or source-image hashes.
+- `configs/digitization_regression_v1.yaml` locks supported-category promotion
+  tolerances for scans and Doogee/iPhone/Samsung phone photos. Bent and crumpled
+  are target categories; screens are reported but do not determine promotion.
+- Regression reports include correlation, RMSE, SNR, gain error, runtime,
+  failure rate, and quality-gate outcome changes. Missing required supported
+  categories or unavailable required metrics fail promotion.
+- Run candidate review with
+  `python scripts/evaluate_digitization_experiment.py --candidate <report.json>
+  --experiment-name <name> --output-dir <dir>`. A failed promotion writes its
+  audit artifacts and exits nonzero.
+- Task 5.2 experiment 1 is complete and rejected. `conservative-perspective-v1`
+  selected only three crumpled images and did not regress supported-category
+  tolerances, but two corrected records regressed substantially. Crumpled
+  median correlation changed only `+0.0011`; RMSE and SNR worsened.
+- Do not enable `enable_perspective_correction` in the default pipeline or UI.
+  The experimental mode remains available only for controlled evaluation.
+- Task 5.2 experiment 2 is complete and rejected by the locked promotion gate.
+  `conservative-shadow-v1` improved bent correlation by `+0.1749` and crumpled
+  correlation by `+0.0960`, but Doogee median wall runtime increased `33.2%`
+  against a locked `25%` tolerance.
+- Do not enable `enable_shadow_normalization` in the default pipeline or UI.
+  It remains experimental because target fidelity improved substantially.
+- Task 5.2 experiment 3 is complete and rejected after a 14-image pilot.
+  `layout-segments-v1` constrained `3x4+1R` pages to `3x4` so the rhythm strip
+  could not overwrite Lead II, but produced no target aggregate benefit and
+  worsened one crumpled Lead II correlation by `-0.169`.
+- Do not use the dormant `src/pipeline/lead_assignment.py` raw-line override:
+  `raw_lines` are pixel Y-coordinates while canonical lines are microvolts.
+- Task 5.2 experiment 4 is rejected after an early pilot stop. The existing
+  vendor dewarping retry hit the strict `60 second` timeout on crumpled image 4,
+  the second pilot record. No full benchmark was run.
+- Task 5.2 experiment 5 is complete. The versioned research-only contract at
+  `configs/segment_aware_experiment_v1.yaml` passed on the existing 70-image
+  diagnosis-drift artifact: bent mean cosine improved `+0.0336`, crumpled
+  improved `+0.0145`, and supported categories had no failed checks.
+- Segment-aware mean aggregation remains `experimental-only`. The result is
+  diagnosis-consistency evidence, not clinical accuracy or digitization
+  fidelity, and it must not replace the production diagnosis path.
+- Task 5.2's controlled experiment series is complete.
+- Task 6.1's validator implementation is complete. The locked contract is
+  `configs/matched_photo_manifest_v1.yaml`; validation is run with
+  `scripts/validate_matched_photo_dataset.py` and writes only aggregate,
+  path-free evidence.
+- The validator enforces at least 20 anonymous matched ECG records, at least
+  two capture sources, photo/reference SHA-256 verification, explicit PHI
+  review, safe relative paths, and case-grouped pre-registered tune/test splits.
+- Task 6.1 acceptance remains pending because the current 10-photo real-phone
+  batch is Level A and contains no matched references. The next executable work
+  is Level B data collection followed by local manifest validation.
 - Do not wire quality-gate rejection into diagnosis or Gradio before an
   independent matched holdout review.
