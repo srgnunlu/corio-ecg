@@ -73,6 +73,29 @@ case001,angle,3x4+1R,unknown,true,approximately 25 degrees
 case001,lowlight,3x4+1R,unknown,true,no flash
 ```
 
+## Level B Manifest
+
+Store the local Level B dataset under `data/level-b-matched/`. The directory is
+gitignored. Its `manifest.json` must follow the locked contract in
+`configs/matched_photo_manifest_v1.yaml`.
+
+Each photo record must include:
+
+- anonymous `case_id` and unique `photo_id`;
+- capture variant, layout, phone/device model, and printer model;
+- safe relative photo and matched-reference paths with SHA-256 hashes;
+- reference type, pre-registered `tune` or `test` split, and
+  `phi_reviewed: true`.
+
+All variants of one case must remain in one split and point to the same matched
+reference. Validate the complete local dataset with:
+
+```bash
+.venv/bin/python scripts/validate_matched_photo_dataset.py
+```
+
+The aggregate validation report contains no source paths or per-case records.
+
 ## Initial Acceptance Criteria
 
 - At least 90% of photos digitize without an exception.

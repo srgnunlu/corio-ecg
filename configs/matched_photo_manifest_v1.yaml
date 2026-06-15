@@ -1,0 +1,21 @@
+# Locked contract for independent Level B matched real-photo datasets.
+version: matched-photo-manifest-v1
+evidence_status: pre-registered-external
+minimum_ecg_records: 20
+minimum_capture_sources: 2
+anonymous_case_id_pattern: "^case[0-9]{3,}$"
+allowed_variants:
+  - front
+  - angle
+  - lowlight
+  - difficult
+allowed_reference_types:
+  - digital_waveform
+  - exported_image
+  - flatbed_scan
+allowed_splits:
+  - tune
+  - test
+required_splits:
+  - tune
+  - test
