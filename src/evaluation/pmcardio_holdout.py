@@ -164,9 +164,24 @@ def build_pmcardio_holdout_manifest(
         "manifest_version": config.version,
         "evidence_status": config.evidence_status,
         "seed": config.seed,
+        "group_key": "ecg_id",
+        "category_key": "category",
         "metadata_sha256": metadata_sha256,
         "excluded_development_manifest_id": development_manifest.get("manifest_id"),
         "config": config.to_dict(),
+        "splits": {
+            "train": {"ecg_ids": []},
+            "tune": {
+                "ecg_ids": sorted(
+                    ecg_id for ecg_id, split in assignments.items() if split == "tune"
+                )
+            },
+            "test": {
+                "ecg_ids": sorted(
+                    ecg_id for ecg_id, split in assignments.items() if split == "test"
+                )
+            },
+        },
         "summary": {
             "ecg_groups": len(assignments),
             "images": len(output_records),

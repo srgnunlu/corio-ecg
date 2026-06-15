@@ -8,6 +8,7 @@ import pandas as pd
 import pytest
 
 from scripts.create_pmcardio_holdout import write_manifest
+from src.evaluation.grouped_split import validate_grouped_split_manifest
 from src.evaluation.pmcardio_holdout import (
     PMCardioHoldoutConfig,
     build_pmcardio_holdout_manifest,
@@ -54,6 +55,7 @@ def test_holdout_excludes_development_and_keeps_variants_grouped() -> None:
     assert manifest["summary"]["ecg_groups"] == 32
     assert manifest["summary"]["images"] == 64
     assert manifest["summary"]["split_ecg_counts"] == {"test": 30, "tune": 2}
+    validate_grouped_split_manifest(manifest)
     assert all(record["ecg_id"] != "ecg-0" for record in manifest["records"])
     assignments: dict[str, set[str]] = {}
     for record in manifest["records"]:
