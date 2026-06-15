@@ -154,5 +154,12 @@ experiments, and Level B matched real-photo validation.
 - Task 6.1 acceptance remains pending because the current 10-photo real-phone
   batch is Level A and contains no matched references. The next executable work
   is Level B data collection followed by local manifest validation.
+- A separate pre-registered internal PMcardio holdout is locked in
+  `results/pmcardio-holdout/pmcardio_holdout_v1.json`. It excludes the 10
+  development ECGs and assigns all remaining 90 complete physical ECGs as
+  `30` tune and `60` locked test groups across 630 images and six layouts.
+- The PMcardio holdout is stronger engineering evidence than the 10-ECG
+  development baseline, but it is not external or clinical evidence because it
+  comes from the same public dataset.
 - Do not wire quality-gate rejection into diagnosis or Gradio before an
   independent matched holdout review.

@@ -1,0 +1,5092 @@
+{
+  "manifest_version": "pmcardio-holdout-v1",
+  "evidence_status": "pre-registered",
+  "seed": 20260615,
+  "metadata_sha256": "6d89d1990692767eef15560737e2c0ebce517a22b4da7068a2bcd68ae231daea",
+  "excluded_development_manifest_id": "22b4fbf08c7358bd68ecfe5f978609b9c446996a116de87af1fa5c6ab376e65d",
+  "config": {
+    "version": "pmcardio-holdout-v1",
+    "evidence_status": "pre-registered",
+    "seed": 20260615,
+    "tune_ecg_count": 30,
+    "test_ecg_count": 60,
+    "categories": [
+      "photos_bents",
+      "photos_crumbles",
+      "photos_doogee",
+      "photos_iphone",
+      "photos_samsung",
+      "photos_scans",
+      "photos_screens"
+    ]
+  },
+  "summary": {
+    "ecg_groups": 90,
+    "images": 630,
+    "split_ecg_counts": {
+      "test": 60,
+      "tune": 30
+    },
+    "split_layout_counts": {
+      "tune": {
+        "12x1": 3,
+        "3x4": 5,
+        "3x4+1R": 7,
+        "3x4+3R": 3,
+        "6x2": 11,
+        "6x2+1R": 1
+      },
+      "test": {
+        "12x1": 6,
+        "3x4": 12,
+        "3x4+1R": 12,
+        "3x4+3R": 4,
+        "6x2": 22,
+        "6x2+1R": 4
+      }
+    }
+  },
+  "records": [
+    {
+      "ecg_id": "LPAE_01805_hr",
+      "image_id": 67,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_67_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_01805_hr",
+      "image_id": 67,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_67_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_01805_hr",
+      "image_id": 67,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_67_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_01805_hr",
+      "image_id": 67,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_67_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_01805_hr",
+      "image_id": 67,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_67_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_01805_hr",
+      "image_id": 67,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_67_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_01805_hr",
+      "image_id": 67,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_67_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02444_hr",
+      "image_id": 75,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_75_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02444_hr",
+      "image_id": 75,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_75_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02444_hr",
+      "image_id": 75,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_75_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02444_hr",
+      "image_id": 75,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_75_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02444_hr",
+      "image_id": 75,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_75_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02444_hr",
+      "image_id": 75,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_75_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02444_hr",
+      "image_id": 75,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_75_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02926_hr",
+      "image_id": 6,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_6_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02926_hr",
+      "image_id": 6,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_6_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02926_hr",
+      "image_id": 6,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_6_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02926_hr",
+      "image_id": 6,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_6_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02926_hr",
+      "image_id": 6,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_6_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02926_hr",
+      "image_id": 6,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_6_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_02926_hr",
+      "image_id": 6,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_6_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_04733_hr",
+      "image_id": 62,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_62_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04733_hr",
+      "image_id": 62,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_62_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04733_hr",
+      "image_id": 62,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_62_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04733_hr",
+      "image_id": 62,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_62_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04733_hr",
+      "image_id": 62,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_62_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04733_hr",
+      "image_id": 62,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_62_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04733_hr",
+      "image_id": 62,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_62_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04794_hr",
+      "image_id": 70,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_70_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04794_hr",
+      "image_id": 70,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_70_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04794_hr",
+      "image_id": 70,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_70_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04794_hr",
+      "image_id": 70,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_70_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04794_hr",
+      "image_id": 70,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_70_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04794_hr",
+      "image_id": 70,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_70_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04794_hr",
+      "image_id": 70,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_70_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04957_hr",
+      "image_id": 23,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_23_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04957_hr",
+      "image_id": 23,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_23_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04957_hr",
+      "image_id": 23,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_23_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04957_hr",
+      "image_id": 23,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_23_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04957_hr",
+      "image_id": 23,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_23_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04957_hr",
+      "image_id": 23,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_23_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_04957_hr",
+      "image_id": 23,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_23_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05359_hr",
+      "image_id": 51,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_51_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05359_hr",
+      "image_id": 51,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_51_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05359_hr",
+      "image_id": 51,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_51_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05359_hr",
+      "image_id": 51,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_51_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05359_hr",
+      "image_id": 51,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_51_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05359_hr",
+      "image_id": 51,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_51_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05359_hr",
+      "image_id": 51,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_51_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05432_hr",
+      "image_id": 8,
+      "category": "photos_bents",
+      "layout": "3x4+3R",
+      "relative_path": "photos_bents/img_8_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05432_hr",
+      "image_id": 8,
+      "category": "photos_crumbles",
+      "layout": "3x4+3R",
+      "relative_path": "photos_crumbles/img_8_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05432_hr",
+      "image_id": 8,
+      "category": "photos_doogee",
+      "layout": "3x4+3R",
+      "relative_path": "photos_doogee/img_8_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05432_hr",
+      "image_id": 8,
+      "category": "photos_iphone",
+      "layout": "3x4+3R",
+      "relative_path": "photos_iphone/img_8_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05432_hr",
+      "image_id": 8,
+      "category": "photos_samsung",
+      "layout": "3x4+3R",
+      "relative_path": "photos_samsung/img_8_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05432_hr",
+      "image_id": 8,
+      "category": "photos_scans",
+      "layout": "3x4+3R",
+      "relative_path": "photos_scans/img_8_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05432_hr",
+      "image_id": 8,
+      "category": "photos_screens",
+      "layout": "3x4+3R",
+      "relative_path": "photos_screens/img_8_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05441_hr",
+      "image_id": 25,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_25_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05441_hr",
+      "image_id": 25,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_25_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05441_hr",
+      "image_id": 25,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_25_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05441_hr",
+      "image_id": 25,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_25_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05441_hr",
+      "image_id": 25,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_25_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05441_hr",
+      "image_id": 25,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_25_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05441_hr",
+      "image_id": 25,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_25_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05742_hr",
+      "image_id": 15,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_15_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05742_hr",
+      "image_id": 15,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_15_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05742_hr",
+      "image_id": 15,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_15_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05742_hr",
+      "image_id": 15,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_15_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05742_hr",
+      "image_id": 15,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_15_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05742_hr",
+      "image_id": 15,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_15_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05742_hr",
+      "image_id": 15,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_15_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05944_hr",
+      "image_id": 61,
+      "category": "photos_bents",
+      "layout": "6x2+1R",
+      "relative_path": "photos_bents/img_61_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05944_hr",
+      "image_id": 61,
+      "category": "photos_crumbles",
+      "layout": "6x2+1R",
+      "relative_path": "photos_crumbles/img_61_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05944_hr",
+      "image_id": 61,
+      "category": "photos_doogee",
+      "layout": "6x2+1R",
+      "relative_path": "photos_doogee/img_61_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05944_hr",
+      "image_id": 61,
+      "category": "photos_iphone",
+      "layout": "6x2+1R",
+      "relative_path": "photos_iphone/img_61_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05944_hr",
+      "image_id": 61,
+      "category": "photos_samsung",
+      "layout": "6x2+1R",
+      "relative_path": "photos_samsung/img_61_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05944_hr",
+      "image_id": 61,
+      "category": "photos_scans",
+      "layout": "6x2+1R",
+      "relative_path": "photos_scans/img_61_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_05944_hr",
+      "image_id": 61,
+      "category": "photos_screens",
+      "layout": "6x2+1R",
+      "relative_path": "photos_screens/img_61_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06229_hr",
+      "image_id": 11,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_11_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06229_hr",
+      "image_id": 11,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_11_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06229_hr",
+      "image_id": 11,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_11_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06229_hr",
+      "image_id": 11,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_11_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06229_hr",
+      "image_id": 11,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_11_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06229_hr",
+      "image_id": 11,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_11_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06229_hr",
+      "image_id": 11,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_11_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06282_hr",
+      "image_id": 57,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_57_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_06282_hr",
+      "image_id": 57,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_57_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_06282_hr",
+      "image_id": 57,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_57_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_06282_hr",
+      "image_id": 57,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_57_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_06282_hr",
+      "image_id": 57,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_57_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_06282_hr",
+      "image_id": 57,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_57_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_06282_hr",
+      "image_id": 57,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_57_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_06303_hr",
+      "image_id": 77,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_77_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06303_hr",
+      "image_id": 77,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_77_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06303_hr",
+      "image_id": 77,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_77_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06303_hr",
+      "image_id": 77,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_77_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06303_hr",
+      "image_id": 77,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_77_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06303_hr",
+      "image_id": 77,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_77_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06303_hr",
+      "image_id": 77,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_77_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06846_hr",
+      "image_id": 22,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_22_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06846_hr",
+      "image_id": 22,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_22_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06846_hr",
+      "image_id": 22,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_22_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06846_hr",
+      "image_id": 22,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_22_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06846_hr",
+      "image_id": 22,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_22_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06846_hr",
+      "image_id": 22,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_22_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06846_hr",
+      "image_id": 22,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_22_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06918_hr",
+      "image_id": 17,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_17_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06918_hr",
+      "image_id": 17,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_17_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06918_hr",
+      "image_id": 17,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_17_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06918_hr",
+      "image_id": 17,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_17_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06918_hr",
+      "image_id": 17,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_17_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06918_hr",
+      "image_id": 17,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_17_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06918_hr",
+      "image_id": 17,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_17_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06938_hr",
+      "image_id": 30,
+      "category": "photos_bents",
+      "layout": "6x2+1R",
+      "relative_path": "photos_bents/img_30_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06938_hr",
+      "image_id": 30,
+      "category": "photos_crumbles",
+      "layout": "6x2+1R",
+      "relative_path": "photos_crumbles/img_30_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06938_hr",
+      "image_id": 30,
+      "category": "photos_doogee",
+      "layout": "6x2+1R",
+      "relative_path": "photos_doogee/img_30_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06938_hr",
+      "image_id": 30,
+      "category": "photos_iphone",
+      "layout": "6x2+1R",
+      "relative_path": "photos_iphone/img_30_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06938_hr",
+      "image_id": 30,
+      "category": "photos_samsung",
+      "layout": "6x2+1R",
+      "relative_path": "photos_samsung/img_30_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06938_hr",
+      "image_id": 30,
+      "category": "photos_scans",
+      "layout": "6x2+1R",
+      "relative_path": "photos_scans/img_30_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_06938_hr",
+      "image_id": 30,
+      "category": "photos_screens",
+      "layout": "6x2+1R",
+      "relative_path": "photos_screens/img_30_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07250_hr",
+      "image_id": 28,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_28_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07250_hr",
+      "image_id": 28,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_28_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07250_hr",
+      "image_id": 28,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_28_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07250_hr",
+      "image_id": 28,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_28_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07250_hr",
+      "image_id": 28,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_28_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07250_hr",
+      "image_id": 28,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_28_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07250_hr",
+      "image_id": 28,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_28_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07285_hr",
+      "image_id": 32,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_32_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07285_hr",
+      "image_id": 32,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_32_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07285_hr",
+      "image_id": 32,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_32_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07285_hr",
+      "image_id": 32,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_32_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07285_hr",
+      "image_id": 32,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_32_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07285_hr",
+      "image_id": 32,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_32_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07285_hr",
+      "image_id": 32,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_32_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07299_hr",
+      "image_id": 33,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_33_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07299_hr",
+      "image_id": 33,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_33_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07299_hr",
+      "image_id": 33,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_33_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07299_hr",
+      "image_id": 33,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_33_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07299_hr",
+      "image_id": 33,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_33_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07299_hr",
+      "image_id": 33,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_33_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07299_hr",
+      "image_id": 33,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_33_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_07596_hr",
+      "image_id": 35,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_35_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07596_hr",
+      "image_id": 35,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_35_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07596_hr",
+      "image_id": 35,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_35_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07596_hr",
+      "image_id": 35,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_35_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07596_hr",
+      "image_id": 35,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_35_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07596_hr",
+      "image_id": 35,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_35_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_07596_hr",
+      "image_id": 35,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_35_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08007_hr",
+      "image_id": 48,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_48_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08007_hr",
+      "image_id": 48,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_48_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08007_hr",
+      "image_id": 48,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_48_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08007_hr",
+      "image_id": 48,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_48_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08007_hr",
+      "image_id": 48,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_48_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08007_hr",
+      "image_id": 48,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_48_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08007_hr",
+      "image_id": 48,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_48_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08885_hr",
+      "image_id": 38,
+      "category": "photos_bents",
+      "layout": "3x4+3R",
+      "relative_path": "photos_bents/img_38_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_08885_hr",
+      "image_id": 38,
+      "category": "photos_crumbles",
+      "layout": "3x4+3R",
+      "relative_path": "photos_crumbles/img_38_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_08885_hr",
+      "image_id": 38,
+      "category": "photos_doogee",
+      "layout": "3x4+3R",
+      "relative_path": "photos_doogee/img_38_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_08885_hr",
+      "image_id": 38,
+      "category": "photos_iphone",
+      "layout": "3x4+3R",
+      "relative_path": "photos_iphone/img_38_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_08885_hr",
+      "image_id": 38,
+      "category": "photos_samsung",
+      "layout": "3x4+3R",
+      "relative_path": "photos_samsung/img_38_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_08885_hr",
+      "image_id": 38,
+      "category": "photos_scans",
+      "layout": "3x4+3R",
+      "relative_path": "photos_scans/img_38_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_08885_hr",
+      "image_id": 38,
+      "category": "photos_screens",
+      "layout": "3x4+3R",
+      "relative_path": "photos_screens/img_38_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_08962_hr",
+      "image_id": 49,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_49_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08962_hr",
+      "image_id": 49,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_49_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08962_hr",
+      "image_id": 49,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_49_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08962_hr",
+      "image_id": 49,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_49_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08962_hr",
+      "image_id": 49,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_49_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08962_hr",
+      "image_id": 49,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_49_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_08962_hr",
+      "image_id": 49,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_49_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09331_hr",
+      "image_id": 39,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_39_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09331_hr",
+      "image_id": 39,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_39_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09331_hr",
+      "image_id": 39,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_39_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09331_hr",
+      "image_id": 39,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_39_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09331_hr",
+      "image_id": 39,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_39_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09331_hr",
+      "image_id": 39,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_39_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_09331_hr",
+      "image_id": 39,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_39_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10266_hr",
+      "image_id": 47,
+      "category": "photos_bents",
+      "layout": "3x4+3R",
+      "relative_path": "photos_bents/img_47_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10266_hr",
+      "image_id": 47,
+      "category": "photos_crumbles",
+      "layout": "3x4+3R",
+      "relative_path": "photos_crumbles/img_47_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10266_hr",
+      "image_id": 47,
+      "category": "photos_doogee",
+      "layout": "3x4+3R",
+      "relative_path": "photos_doogee/img_47_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10266_hr",
+      "image_id": 47,
+      "category": "photos_iphone",
+      "layout": "3x4+3R",
+      "relative_path": "photos_iphone/img_47_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10266_hr",
+      "image_id": 47,
+      "category": "photos_samsung",
+      "layout": "3x4+3R",
+      "relative_path": "photos_samsung/img_47_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10266_hr",
+      "image_id": 47,
+      "category": "photos_scans",
+      "layout": "3x4+3R",
+      "relative_path": "photos_scans/img_47_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10266_hr",
+      "image_id": 47,
+      "category": "photos_screens",
+      "layout": "3x4+3R",
+      "relative_path": "photos_screens/img_47_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10300_hr",
+      "image_id": 13,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_13_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10300_hr",
+      "image_id": 13,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_13_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10300_hr",
+      "image_id": 13,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_13_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10300_hr",
+      "image_id": 13,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_13_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10300_hr",
+      "image_id": 13,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_13_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10300_hr",
+      "image_id": 13,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_13_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10300_hr",
+      "image_id": 13,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_13_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10306_hr",
+      "image_id": 46,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_46_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10306_hr",
+      "image_id": 46,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_46_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10306_hr",
+      "image_id": 46,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_46_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10306_hr",
+      "image_id": 46,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_46_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10306_hr",
+      "image_id": 46,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_46_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10306_hr",
+      "image_id": 46,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_46_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10306_hr",
+      "image_id": 46,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_46_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10505_hr",
+      "image_id": 12,
+      "category": "photos_bents",
+      "layout": "3x4+3R",
+      "relative_path": "photos_bents/img_12_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10505_hr",
+      "image_id": 12,
+      "category": "photos_crumbles",
+      "layout": "3x4+3R",
+      "relative_path": "photos_crumbles/img_12_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10505_hr",
+      "image_id": 12,
+      "category": "photos_doogee",
+      "layout": "3x4+3R",
+      "relative_path": "photos_doogee/img_12_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10505_hr",
+      "image_id": 12,
+      "category": "photos_iphone",
+      "layout": "3x4+3R",
+      "relative_path": "photos_iphone/img_12_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10505_hr",
+      "image_id": 12,
+      "category": "photos_samsung",
+      "layout": "3x4+3R",
+      "relative_path": "photos_samsung/img_12_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10505_hr",
+      "image_id": 12,
+      "category": "photos_scans",
+      "layout": "3x4+3R",
+      "relative_path": "photos_scans/img_12_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10505_hr",
+      "image_id": 12,
+      "category": "photos_screens",
+      "layout": "3x4+3R",
+      "relative_path": "photos_screens/img_12_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10518_hr",
+      "image_id": 55,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_55_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10518_hr",
+      "image_id": 55,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_55_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10518_hr",
+      "image_id": 55,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_55_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10518_hr",
+      "image_id": 55,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_55_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10518_hr",
+      "image_id": 55,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_55_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10518_hr",
+      "image_id": 55,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_55_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10518_hr",
+      "image_id": 55,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_55_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10554_hr",
+      "image_id": 52,
+      "category": "photos_bents",
+      "layout": "6x2+1R",
+      "relative_path": "photos_bents/img_52_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10554_hr",
+      "image_id": 52,
+      "category": "photos_crumbles",
+      "layout": "6x2+1R",
+      "relative_path": "photos_crumbles/img_52_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10554_hr",
+      "image_id": 52,
+      "category": "photos_doogee",
+      "layout": "6x2+1R",
+      "relative_path": "photos_doogee/img_52_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10554_hr",
+      "image_id": 52,
+      "category": "photos_iphone",
+      "layout": "6x2+1R",
+      "relative_path": "photos_iphone/img_52_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10554_hr",
+      "image_id": 52,
+      "category": "photos_samsung",
+      "layout": "6x2+1R",
+      "relative_path": "photos_samsung/img_52_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10554_hr",
+      "image_id": 52,
+      "category": "photos_scans",
+      "layout": "6x2+1R",
+      "relative_path": "photos_scans/img_52_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10554_hr",
+      "image_id": 52,
+      "category": "photos_screens",
+      "layout": "6x2+1R",
+      "relative_path": "photos_screens/img_52_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10555_hr",
+      "image_id": 36,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_36_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10555_hr",
+      "image_id": 36,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_36_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10555_hr",
+      "image_id": 36,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_36_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10555_hr",
+      "image_id": 36,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_36_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10555_hr",
+      "image_id": 36,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_36_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10555_hr",
+      "image_id": 36,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_36_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10555_hr",
+      "image_id": 36,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_36_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10564_hr",
+      "image_id": 56,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_56_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10564_hr",
+      "image_id": 56,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_56_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10564_hr",
+      "image_id": 56,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_56_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10564_hr",
+      "image_id": 56,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_56_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10564_hr",
+      "image_id": 56,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_56_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10564_hr",
+      "image_id": 56,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_56_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10564_hr",
+      "image_id": 56,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_56_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10598_hr",
+      "image_id": 53,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_53_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10598_hr",
+      "image_id": 53,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_53_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10598_hr",
+      "image_id": 53,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_53_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10598_hr",
+      "image_id": 53,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_53_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10598_hr",
+      "image_id": 53,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_53_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10598_hr",
+      "image_id": 53,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_53_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10598_hr",
+      "image_id": 53,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_53_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_10943_hr",
+      "image_id": 58,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_58_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10943_hr",
+      "image_id": 58,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_58_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10943_hr",
+      "image_id": 58,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_58_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10943_hr",
+      "image_id": 58,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_58_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10943_hr",
+      "image_id": 58,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_58_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10943_hr",
+      "image_id": 58,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_58_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10943_hr",
+      "image_id": 58,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_58_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10986_hr",
+      "image_id": 63,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_63_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10986_hr",
+      "image_id": 63,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_63_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10986_hr",
+      "image_id": 63,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_63_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10986_hr",
+      "image_id": 63,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_63_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10986_hr",
+      "image_id": 63,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_63_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10986_hr",
+      "image_id": 63,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_63_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_10986_hr",
+      "image_id": 63,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_63_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11209_hr",
+      "image_id": 2,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_2_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11209_hr",
+      "image_id": 2,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_2_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11209_hr",
+      "image_id": 2,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_2_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11209_hr",
+      "image_id": 2,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_2_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11209_hr",
+      "image_id": 2,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_2_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11209_hr",
+      "image_id": 2,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_2_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11209_hr",
+      "image_id": 2,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_2_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11397_hr",
+      "image_id": 60,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_60_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11397_hr",
+      "image_id": 60,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_60_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11397_hr",
+      "image_id": 60,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_60_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11397_hr",
+      "image_id": 60,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_60_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11397_hr",
+      "image_id": 60,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_60_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11397_hr",
+      "image_id": 60,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_60_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11397_hr",
+      "image_id": 60,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_60_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11498_hr",
+      "image_id": 66,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_66_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11498_hr",
+      "image_id": 66,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_66_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11498_hr",
+      "image_id": 66,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_66_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11498_hr",
+      "image_id": 66,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_66_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11498_hr",
+      "image_id": 66,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_66_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11498_hr",
+      "image_id": 66,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_66_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11498_hr",
+      "image_id": 66,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_66_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11666_hr",
+      "image_id": 1,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_1_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11666_hr",
+      "image_id": 1,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_1_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11666_hr",
+      "image_id": 1,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_1_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11666_hr",
+      "image_id": 1,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_1_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11666_hr",
+      "image_id": 1,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_1_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11666_hr",
+      "image_id": 1,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_1_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_11666_hr",
+      "image_id": 1,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_1_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12186_hr",
+      "image_id": 69,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_69_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12186_hr",
+      "image_id": 69,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_69_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12186_hr",
+      "image_id": 69,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_69_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12186_hr",
+      "image_id": 69,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_69_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12186_hr",
+      "image_id": 69,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_69_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12186_hr",
+      "image_id": 69,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_69_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12186_hr",
+      "image_id": 69,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_69_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12190_hr",
+      "image_id": 71,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_71_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12190_hr",
+      "image_id": 71,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_71_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12190_hr",
+      "image_id": 71,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_71_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12190_hr",
+      "image_id": 71,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_71_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12190_hr",
+      "image_id": 71,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_71_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12190_hr",
+      "image_id": 71,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_71_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12190_hr",
+      "image_id": 71,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_71_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12432_hr",
+      "image_id": 72,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_72_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12432_hr",
+      "image_id": 72,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_72_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12432_hr",
+      "image_id": 72,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_72_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12432_hr",
+      "image_id": 72,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_72_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12432_hr",
+      "image_id": 72,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_72_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12432_hr",
+      "image_id": 72,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_72_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12432_hr",
+      "image_id": 72,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_72_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_12629_hr",
+      "image_id": 74,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_74_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12629_hr",
+      "image_id": 74,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_74_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12629_hr",
+      "image_id": 74,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_74_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12629_hr",
+      "image_id": 74,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_74_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12629_hr",
+      "image_id": 74,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_74_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12629_hr",
+      "image_id": 74,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_74_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12629_hr",
+      "image_id": 74,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_74_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12879_hr",
+      "image_id": 18,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_18_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12879_hr",
+      "image_id": 18,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_18_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12879_hr",
+      "image_id": 18,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_18_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12879_hr",
+      "image_id": 18,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_18_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12879_hr",
+      "image_id": 18,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_18_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12879_hr",
+      "image_id": 18,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_18_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_12879_hr",
+      "image_id": 18,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_18_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_13851_hr",
+      "image_id": 78,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_78_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13851_hr",
+      "image_id": 78,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_78_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13851_hr",
+      "image_id": 78,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_78_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13851_hr",
+      "image_id": 78,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_78_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13851_hr",
+      "image_id": 78,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_78_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13851_hr",
+      "image_id": 78,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_78_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13851_hr",
+      "image_id": 78,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_78_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13962_hr",
+      "image_id": 79,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_79_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13962_hr",
+      "image_id": 79,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_79_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13962_hr",
+      "image_id": 79,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_79_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13962_hr",
+      "image_id": 79,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_79_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13962_hr",
+      "image_id": 79,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_79_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13962_hr",
+      "image_id": 79,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_79_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_13962_hr",
+      "image_id": 79,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_79_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14009_hr",
+      "image_id": 3,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_3_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14009_hr",
+      "image_id": 3,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_3_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14009_hr",
+      "image_id": 3,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_3_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14009_hr",
+      "image_id": 3,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_3_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14009_hr",
+      "image_id": 3,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_3_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14009_hr",
+      "image_id": 3,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_3_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14009_hr",
+      "image_id": 3,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_3_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14304_hr",
+      "image_id": 88,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_88_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14304_hr",
+      "image_id": 88,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_88_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14304_hr",
+      "image_id": 88,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_88_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14304_hr",
+      "image_id": 88,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_88_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14304_hr",
+      "image_id": 88,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_88_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14304_hr",
+      "image_id": 88,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_88_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14304_hr",
+      "image_id": 88,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_88_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_14641_hr",
+      "image_id": 90,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_90_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14641_hr",
+      "image_id": 90,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_90_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14641_hr",
+      "image_id": 90,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_90_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14641_hr",
+      "image_id": 90,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_90_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14641_hr",
+      "image_id": 90,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_90_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14641_hr",
+      "image_id": 90,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_90_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14641_hr",
+      "image_id": 90,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_90_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14819_hr",
+      "image_id": 24,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_24_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14819_hr",
+      "image_id": 24,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_24_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14819_hr",
+      "image_id": 24,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_24_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14819_hr",
+      "image_id": 24,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_24_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14819_hr",
+      "image_id": 24,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_24_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14819_hr",
+      "image_id": 24,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_24_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_14819_hr",
+      "image_id": 24,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_24_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_15368_hr",
+      "image_id": 93,
+      "category": "photos_bents",
+      "layout": "6x2+1R",
+      "relative_path": "photos_bents/img_93_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15368_hr",
+      "image_id": 93,
+      "category": "photos_crumbles",
+      "layout": "6x2+1R",
+      "relative_path": "photos_crumbles/img_93_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15368_hr",
+      "image_id": 93,
+      "category": "photos_doogee",
+      "layout": "6x2+1R",
+      "relative_path": "photos_doogee/img_93_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15368_hr",
+      "image_id": 93,
+      "category": "photos_iphone",
+      "layout": "6x2+1R",
+      "relative_path": "photos_iphone/img_93_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15368_hr",
+      "image_id": 93,
+      "category": "photos_samsung",
+      "layout": "6x2+1R",
+      "relative_path": "photos_samsung/img_93_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15368_hr",
+      "image_id": 93,
+      "category": "photos_scans",
+      "layout": "6x2+1R",
+      "relative_path": "photos_scans/img_93_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15368_hr",
+      "image_id": 93,
+      "category": "photos_screens",
+      "layout": "6x2+1R",
+      "relative_path": "photos_screens/img_93_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15477_hr",
+      "image_id": 91,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_91_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15477_hr",
+      "image_id": 91,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_91_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15477_hr",
+      "image_id": 91,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_91_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15477_hr",
+      "image_id": 91,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_91_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15477_hr",
+      "image_id": 91,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_91_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15477_hr",
+      "image_id": 91,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_91_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15477_hr",
+      "image_id": 91,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_91_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15529_hr",
+      "image_id": 95,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_95_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15529_hr",
+      "image_id": 95,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_95_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15529_hr",
+      "image_id": 95,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_95_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15529_hr",
+      "image_id": 95,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_95_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15529_hr",
+      "image_id": 95,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_95_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15529_hr",
+      "image_id": 95,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_95_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15529_hr",
+      "image_id": 95,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_95_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15607_hr",
+      "image_id": 96,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_96_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15607_hr",
+      "image_id": 96,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_96_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15607_hr",
+      "image_id": 96,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_96_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15607_hr",
+      "image_id": 96,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_96_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15607_hr",
+      "image_id": 96,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_96_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15607_hr",
+      "image_id": 96,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_96_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_15607_hr",
+      "image_id": 96,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_96_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_16212_hr",
+      "image_id": 98,
+      "category": "photos_bents",
+      "layout": "3x4+3R",
+      "relative_path": "photos_bents/img_98_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16212_hr",
+      "image_id": 98,
+      "category": "photos_crumbles",
+      "layout": "3x4+3R",
+      "relative_path": "photos_crumbles/img_98_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16212_hr",
+      "image_id": 98,
+      "category": "photos_doogee",
+      "layout": "3x4+3R",
+      "relative_path": "photos_doogee/img_98_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16212_hr",
+      "image_id": 98,
+      "category": "photos_iphone",
+      "layout": "3x4+3R",
+      "relative_path": "photos_iphone/img_98_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16212_hr",
+      "image_id": 98,
+      "category": "photos_samsung",
+      "layout": "3x4+3R",
+      "relative_path": "photos_samsung/img_98_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16212_hr",
+      "image_id": 98,
+      "category": "photos_scans",
+      "layout": "3x4+3R",
+      "relative_path": "photos_scans/img_98_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16212_hr",
+      "image_id": 98,
+      "category": "photos_screens",
+      "layout": "3x4+3R",
+      "relative_path": "photos_screens/img_98_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16895_hr",
+      "image_id": 50,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_50_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16895_hr",
+      "image_id": 50,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_50_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16895_hr",
+      "image_id": 50,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_50_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16895_hr",
+      "image_id": 50,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_50_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16895_hr",
+      "image_id": 50,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_50_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16895_hr",
+      "image_id": 50,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_50_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_16895_hr",
+      "image_id": 50,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_50_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17118_hr",
+      "image_id": 45,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_45_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17118_hr",
+      "image_id": 45,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_45_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17118_hr",
+      "image_id": 45,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_45_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17118_hr",
+      "image_id": 45,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_45_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17118_hr",
+      "image_id": 45,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_45_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17118_hr",
+      "image_id": 45,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_45_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17118_hr",
+      "image_id": 45,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_45_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17269_hr",
+      "image_id": 54,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_54_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17269_hr",
+      "image_id": 54,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_54_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17269_hr",
+      "image_id": 54,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_54_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17269_hr",
+      "image_id": 54,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_54_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17269_hr",
+      "image_id": 54,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_54_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17269_hr",
+      "image_id": 54,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_54_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17269_hr",
+      "image_id": 54,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_54_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17345_hr",
+      "image_id": 76,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_76_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_17345_hr",
+      "image_id": 76,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_76_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_17345_hr",
+      "image_id": 76,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_76_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_17345_hr",
+      "image_id": 76,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_76_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_17345_hr",
+      "image_id": 76,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_76_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_17345_hr",
+      "image_id": 76,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_76_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_17345_hr",
+      "image_id": 76,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_76_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_17637_hr",
+      "image_id": 44,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_44_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17637_hr",
+      "image_id": 44,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_44_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17637_hr",
+      "image_id": 44,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_44_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17637_hr",
+      "image_id": 44,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_44_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17637_hr",
+      "image_id": 44,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_44_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17637_hr",
+      "image_id": 44,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_44_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_17637_hr",
+      "image_id": 44,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_44_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_18073_hr",
+      "image_id": 59,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_59_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18073_hr",
+      "image_id": 59,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_59_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18073_hr",
+      "image_id": 59,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_59_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18073_hr",
+      "image_id": 59,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_59_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18073_hr",
+      "image_id": 59,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_59_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18073_hr",
+      "image_id": 59,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_59_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18073_hr",
+      "image_id": 59,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_59_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18227_hr",
+      "image_id": 64,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_64_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18227_hr",
+      "image_id": 64,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_64_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18227_hr",
+      "image_id": 64,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_64_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18227_hr",
+      "image_id": 64,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_64_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18227_hr",
+      "image_id": 64,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_64_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18227_hr",
+      "image_id": 64,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_64_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18227_hr",
+      "image_id": 64,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_64_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18552_hr",
+      "image_id": 65,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_65_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18552_hr",
+      "image_id": 65,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_65_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18552_hr",
+      "image_id": 65,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_65_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18552_hr",
+      "image_id": 65,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_65_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18552_hr",
+      "image_id": 65,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_65_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18552_hr",
+      "image_id": 65,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_65_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18552_hr",
+      "image_id": 65,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_65_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_18945_hr",
+      "image_id": 68,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_68_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_18945_hr",
+      "image_id": 68,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_68_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_18945_hr",
+      "image_id": 68,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_68_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_18945_hr",
+      "image_id": 68,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_68_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_18945_hr",
+      "image_id": 68,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_68_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_18945_hr",
+      "image_id": 68,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_68_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_18945_hr",
+      "image_id": 68,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_68_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19036_hr",
+      "image_id": 73,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_73_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19036_hr",
+      "image_id": 73,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_73_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19036_hr",
+      "image_id": 73,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_73_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19036_hr",
+      "image_id": 73,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_73_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19036_hr",
+      "image_id": 73,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_73_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19036_hr",
+      "image_id": 73,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_73_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19036_hr",
+      "image_id": 73,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_73_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19138_hr",
+      "image_id": 94,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_94_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19138_hr",
+      "image_id": 94,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_94_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19138_hr",
+      "image_id": 94,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_94_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19138_hr",
+      "image_id": 94,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_94_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19138_hr",
+      "image_id": 94,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_94_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19138_hr",
+      "image_id": 94,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_94_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19138_hr",
+      "image_id": 94,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_94_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19164_hr",
+      "image_id": 84,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_84_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19164_hr",
+      "image_id": 84,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_84_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19164_hr",
+      "image_id": 84,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_84_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19164_hr",
+      "image_id": 84,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_84_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19164_hr",
+      "image_id": 84,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_84_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19164_hr",
+      "image_id": 84,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_84_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19164_hr",
+      "image_id": 84,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_84_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19202_hr",
+      "image_id": 97,
+      "category": "photos_bents",
+      "layout": "12x1",
+      "relative_path": "photos_bents/img_97_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19202_hr",
+      "image_id": 97,
+      "category": "photos_crumbles",
+      "layout": "12x1",
+      "relative_path": "photos_crumbles/img_97_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19202_hr",
+      "image_id": 97,
+      "category": "photos_doogee",
+      "layout": "12x1",
+      "relative_path": "photos_doogee/img_97_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19202_hr",
+      "image_id": 97,
+      "category": "photos_iphone",
+      "layout": "12x1",
+      "relative_path": "photos_iphone/img_97_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19202_hr",
+      "image_id": 97,
+      "category": "photos_samsung",
+      "layout": "12x1",
+      "relative_path": "photos_samsung/img_97_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19202_hr",
+      "image_id": 97,
+      "category": "photos_scans",
+      "layout": "12x1",
+      "relative_path": "photos_scans/img_97_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19202_hr",
+      "image_id": 97,
+      "category": "photos_screens",
+      "layout": "12x1",
+      "relative_path": "photos_screens/img_97_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19288_hr",
+      "image_id": 87,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_87_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19288_hr",
+      "image_id": 87,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_87_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19288_hr",
+      "image_id": 87,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_87_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19288_hr",
+      "image_id": 87,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_87_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19288_hr",
+      "image_id": 87,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_87_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19288_hr",
+      "image_id": 87,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_87_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19288_hr",
+      "image_id": 87,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_87_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19309_hr",
+      "image_id": 89,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_89_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19309_hr",
+      "image_id": 89,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_89_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19309_hr",
+      "image_id": 89,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_89_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19309_hr",
+      "image_id": 89,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_89_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19309_hr",
+      "image_id": 89,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_89_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19309_hr",
+      "image_id": 89,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_89_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19309_hr",
+      "image_id": 89,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_89_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19326_hr",
+      "image_id": 99,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_99_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19326_hr",
+      "image_id": 99,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_99_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19326_hr",
+      "image_id": 99,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_99_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19326_hr",
+      "image_id": 99,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_99_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19326_hr",
+      "image_id": 99,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_99_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19326_hr",
+      "image_id": 99,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_99_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19326_hr",
+      "image_id": 99,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_99_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19550_hr",
+      "image_id": 16,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_16_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_19550_hr",
+      "image_id": 16,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_16_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_19550_hr",
+      "image_id": 16,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_16_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_19550_hr",
+      "image_id": 16,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_16_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_19550_hr",
+      "image_id": 16,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_16_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_19550_hr",
+      "image_id": 16,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_16_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_19550_hr",
+      "image_id": 16,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_16_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_19686_hr",
+      "image_id": 85,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_85_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19686_hr",
+      "image_id": 85,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_85_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19686_hr",
+      "image_id": 85,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_85_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19686_hr",
+      "image_id": 85,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_85_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19686_hr",
+      "image_id": 85,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_85_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19686_hr",
+      "image_id": 85,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_85_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19686_hr",
+      "image_id": 85,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_85_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19968_hr",
+      "image_id": 86,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_86_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19968_hr",
+      "image_id": 86,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_86_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19968_hr",
+      "image_id": 86,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_86_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19968_hr",
+      "image_id": 86,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_86_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19968_hr",
+      "image_id": 86,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_86_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19968_hr",
+      "image_id": 86,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_86_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_19968_hr",
+      "image_id": 86,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_86_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20117_hr",
+      "image_id": 83,
+      "category": "photos_bents",
+      "layout": "3x4+3R",
+      "relative_path": "photos_bents/img_83_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20117_hr",
+      "image_id": 83,
+      "category": "photos_crumbles",
+      "layout": "3x4+3R",
+      "relative_path": "photos_crumbles/img_83_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20117_hr",
+      "image_id": 83,
+      "category": "photos_doogee",
+      "layout": "3x4+3R",
+      "relative_path": "photos_doogee/img_83_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20117_hr",
+      "image_id": 83,
+      "category": "photos_iphone",
+      "layout": "3x4+3R",
+      "relative_path": "photos_iphone/img_83_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20117_hr",
+      "image_id": 83,
+      "category": "photos_samsung",
+      "layout": "3x4+3R",
+      "relative_path": "photos_samsung/img_83_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20117_hr",
+      "image_id": 83,
+      "category": "photos_scans",
+      "layout": "3x4+3R",
+      "relative_path": "photos_scans/img_83_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20117_hr",
+      "image_id": 83,
+      "category": "photos_screens",
+      "layout": "3x4+3R",
+      "relative_path": "photos_screens/img_83_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20139_hr",
+      "image_id": 100,
+      "category": "photos_bents",
+      "layout": "3x4+3R",
+      "relative_path": "photos_bents/img_100_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20139_hr",
+      "image_id": 100,
+      "category": "photos_crumbles",
+      "layout": "3x4+3R",
+      "relative_path": "photos_crumbles/img_100_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20139_hr",
+      "image_id": 100,
+      "category": "photos_doogee",
+      "layout": "3x4+3R",
+      "relative_path": "photos_doogee/img_100_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20139_hr",
+      "image_id": 100,
+      "category": "photos_iphone",
+      "layout": "3x4+3R",
+      "relative_path": "photos_iphone/img_100_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20139_hr",
+      "image_id": 100,
+      "category": "photos_samsung",
+      "layout": "3x4+3R",
+      "relative_path": "photos_samsung/img_100_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20139_hr",
+      "image_id": 100,
+      "category": "photos_scans",
+      "layout": "3x4+3R",
+      "relative_path": "photos_scans/img_100_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20139_hr",
+      "image_id": 100,
+      "category": "photos_screens",
+      "layout": "3x4+3R",
+      "relative_path": "photos_screens/img_100_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20159_hr",
+      "image_id": 9,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_9_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20159_hr",
+      "image_id": 9,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_9_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20159_hr",
+      "image_id": 9,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_9_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20159_hr",
+      "image_id": 9,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_9_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20159_hr",
+      "image_id": 9,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_9_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20159_hr",
+      "image_id": 9,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_9_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20159_hr",
+      "image_id": 9,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_9_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20243_hr",
+      "image_id": 41,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_41_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20243_hr",
+      "image_id": 41,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_41_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20243_hr",
+      "image_id": 41,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_41_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20243_hr",
+      "image_id": 41,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_41_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20243_hr",
+      "image_id": 41,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_41_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20243_hr",
+      "image_id": 41,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_41_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20243_hr",
+      "image_id": 41,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_41_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20367_hr",
+      "image_id": 31,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_31_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20367_hr",
+      "image_id": 31,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_31_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20367_hr",
+      "image_id": 31,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_31_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20367_hr",
+      "image_id": 31,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_31_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20367_hr",
+      "image_id": 31,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_31_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20367_hr",
+      "image_id": 31,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_31_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20367_hr",
+      "image_id": 31,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_31_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20515_hr",
+      "image_id": 21,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_21_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20515_hr",
+      "image_id": 21,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_21_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20515_hr",
+      "image_id": 21,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_21_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20515_hr",
+      "image_id": 21,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_21_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20515_hr",
+      "image_id": 21,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_21_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20515_hr",
+      "image_id": 21,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_21_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20515_hr",
+      "image_id": 21,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_21_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20680_hr",
+      "image_id": 27,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_27_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20680_hr",
+      "image_id": 27,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_27_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20680_hr",
+      "image_id": 27,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_27_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20680_hr",
+      "image_id": 27,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_27_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20680_hr",
+      "image_id": 27,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_27_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20680_hr",
+      "image_id": 27,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_27_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20680_hr",
+      "image_id": 27,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_27_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20748_hr",
+      "image_id": 29,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_29_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20748_hr",
+      "image_id": 29,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_29_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20748_hr",
+      "image_id": 29,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_29_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20748_hr",
+      "image_id": 29,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_29_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20748_hr",
+      "image_id": 29,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_29_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20748_hr",
+      "image_id": 29,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_29_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20748_hr",
+      "image_id": 29,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_29_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20790_hr",
+      "image_id": 19,
+      "category": "photos_bents",
+      "layout": "6x2+1R",
+      "relative_path": "photos_bents/img_19_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20790_hr",
+      "image_id": 19,
+      "category": "photos_crumbles",
+      "layout": "6x2+1R",
+      "relative_path": "photos_crumbles/img_19_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20790_hr",
+      "image_id": 19,
+      "category": "photos_doogee",
+      "layout": "6x2+1R",
+      "relative_path": "photos_doogee/img_19_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20790_hr",
+      "image_id": 19,
+      "category": "photos_iphone",
+      "layout": "6x2+1R",
+      "relative_path": "photos_iphone/img_19_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20790_hr",
+      "image_id": 19,
+      "category": "photos_samsung",
+      "layout": "6x2+1R",
+      "relative_path": "photos_samsung/img_19_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20790_hr",
+      "image_id": 19,
+      "category": "photos_scans",
+      "layout": "6x2+1R",
+      "relative_path": "photos_scans/img_19_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20790_hr",
+      "image_id": 19,
+      "category": "photos_screens",
+      "layout": "6x2+1R",
+      "relative_path": "photos_screens/img_19_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_20947_hr",
+      "image_id": 20,
+      "category": "photos_bents",
+      "layout": "3x4",
+      "relative_path": "photos_bents/img_20_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20947_hr",
+      "image_id": 20,
+      "category": "photos_crumbles",
+      "layout": "3x4",
+      "relative_path": "photos_crumbles/img_20_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20947_hr",
+      "image_id": 20,
+      "category": "photos_doogee",
+      "layout": "3x4",
+      "relative_path": "photos_doogee/img_20_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20947_hr",
+      "image_id": 20,
+      "category": "photos_iphone",
+      "layout": "3x4",
+      "relative_path": "photos_iphone/img_20_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20947_hr",
+      "image_id": 20,
+      "category": "photos_samsung",
+      "layout": "3x4",
+      "relative_path": "photos_samsung/img_20_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20947_hr",
+      "image_id": 20,
+      "category": "photos_scans",
+      "layout": "3x4",
+      "relative_path": "photos_scans/img_20_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20947_hr",
+      "image_id": 20,
+      "category": "photos_screens",
+      "layout": "3x4",
+      "relative_path": "photos_screens/img_20_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20971_hr",
+      "image_id": 26,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_26_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20971_hr",
+      "image_id": 26,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_26_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20971_hr",
+      "image_id": 26,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_26_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20971_hr",
+      "image_id": 26,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_26_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20971_hr",
+      "image_id": 26,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_26_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20971_hr",
+      "image_id": 26,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_26_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_20971_hr",
+      "image_id": 26,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_26_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_21468_hr",
+      "image_id": 37,
+      "category": "photos_bents",
+      "layout": "3x4+1R",
+      "relative_path": "photos_bents/img_37_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_21468_hr",
+      "image_id": 37,
+      "category": "photos_crumbles",
+      "layout": "3x4+1R",
+      "relative_path": "photos_crumbles/img_37_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_21468_hr",
+      "image_id": 37,
+      "category": "photos_doogee",
+      "layout": "3x4+1R",
+      "relative_path": "photos_doogee/img_37_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_21468_hr",
+      "image_id": 37,
+      "category": "photos_iphone",
+      "layout": "3x4+1R",
+      "relative_path": "photos_iphone/img_37_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_21468_hr",
+      "image_id": 37,
+      "category": "photos_samsung",
+      "layout": "3x4+1R",
+      "relative_path": "photos_samsung/img_37_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_21468_hr",
+      "image_id": 37,
+      "category": "photos_scans",
+      "layout": "3x4+1R",
+      "relative_path": "photos_scans/img_37_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_21468_hr",
+      "image_id": 37,
+      "category": "photos_screens",
+      "layout": "3x4+1R",
+      "relative_path": "photos_screens/img_37_page_0.jpeg",
+      "split": "tune"
+    },
+    {
+      "ecg_id": "LPAE_21515_hr",
+      "image_id": 5,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_5_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21515_hr",
+      "image_id": 5,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_5_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21515_hr",
+      "image_id": 5,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_5_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21515_hr",
+      "image_id": 5,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_5_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21515_hr",
+      "image_id": 5,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_5_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21515_hr",
+      "image_id": 5,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_5_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21515_hr",
+      "image_id": 5,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_5_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21541_hr",
+      "image_id": 7,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_7_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21541_hr",
+      "image_id": 7,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_7_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21541_hr",
+      "image_id": 7,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_7_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21541_hr",
+      "image_id": 7,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_7_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21541_hr",
+      "image_id": 7,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_7_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21541_hr",
+      "image_id": 7,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_7_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21541_hr",
+      "image_id": 7,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_7_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21629_hr",
+      "image_id": 34,
+      "category": "photos_bents",
+      "layout": "6x2",
+      "relative_path": "photos_bents/img_34_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21629_hr",
+      "image_id": 34,
+      "category": "photos_crumbles",
+      "layout": "6x2",
+      "relative_path": "photos_crumbles/img_34_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21629_hr",
+      "image_id": 34,
+      "category": "photos_doogee",
+      "layout": "6x2",
+      "relative_path": "photos_doogee/img_34_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21629_hr",
+      "image_id": 34,
+      "category": "photos_iphone",
+      "layout": "6x2",
+      "relative_path": "photos_iphone/img_34_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21629_hr",
+      "image_id": 34,
+      "category": "photos_samsung",
+      "layout": "6x2",
+      "relative_path": "photos_samsung/img_34_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21629_hr",
+      "image_id": 34,
+      "category": "photos_scans",
+      "layout": "6x2",
+      "relative_path": "photos_scans/img_34_page_0.jpeg",
+      "split": "test"
+    },
+    {
+      "ecg_id": "LPAE_21629_hr",
+      "image_id": 34,
+      "category": "photos_screens",
+      "layout": "6x2",
+      "relative_path": "photos_screens/img_34_page_0.jpeg",
+      "split": "test"
+    }
+  ],
+  "manifest_id": "6da682d70ea8de5ff8dd5249089813ad23e22385a4fa6e8ac5ebd5a2b05e993e"
+}

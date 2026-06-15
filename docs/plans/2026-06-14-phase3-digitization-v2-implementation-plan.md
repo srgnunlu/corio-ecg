@@ -312,3 +312,11 @@ active-lead consistency, reconstruction disagreement, and diagnostic disagreemen
 - Digitization v2 is compared with the frozen Phase 2 baseline.
 - Results determine whether Phase 3 continues, narrows supported inputs, or returns to
   reconstruction development.
+
+**Pre-registration status 2026-06-15**
+
+- Locked an internal PMcardio holdout before evaluation: 90 previously unused
+  ECG groups, 630 physical images, and layout-balanced `30` tune / `60` test
+  assignments.
+- This is internal holdout evidence, not external evidence. Level B real-photo
+  collection remains required for the independent external review.

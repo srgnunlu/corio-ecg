@@ -1,0 +1,14 @@
+# Pre-registered internal PMcardio holdout; not external clinical evidence.
+version: pmcardio-holdout-v1
+evidence_status: pre-registered
+seed: 20260615
+tune_ecg_count: 30
+test_ecg_count: 60
+categories:
+  - photos_bents
+  - photos_crumbles
+  - photos_doogee
+  - photos_iphone
+  - photos_samsung
+  - photos_scans
+  - photos_screens
