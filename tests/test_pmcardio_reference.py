@@ -14,6 +14,7 @@ from scripts.download_pmcardio_reference_subset import (
 from scripts.evaluate_pmcardio_reference import (
     _experiment_signal_paths,
     aggregate_fidelity_records,
+    select_evaluation_metadata,
     write_report,
 )
 from src.training.reference_fidelity import (
@@ -283,6 +284,26 @@ def test_write_report_embeds_selection_manifest(tmp_path) -> None:
 
     assert report["selection_manifest"] == manifest
     assert b"\r\n" not in csv_path.read_bytes()
+
+
+def test_holdout_metadata_requires_explicit_split() -> None:
+    metadata = pd.DataFrame(
+        [
+            {"ECG ID": "ecg-1", "split": "tune"},
+            {"ECG ID": "ecg-2", "split": "test"},
+        ]
+    )
+
+    with pytest.raises(ValueError, match="requires --split"):
+        select_evaluation_metadata(metadata, None)
+
+    selected = select_evaluation_metadata(metadata, "test")
+    assert selected["ECG ID"].tolist() == ["ecg-2"]
+
+
+def test_development_metadata_rejects_split_selection() -> None:
+    with pytest.raises(ValueError, match="has no split column"):
+        select_evaluation_metadata(pd.DataFrame([{"ECG ID": "ecg-1"}]), "test")
 
 
 def test_experiment_signal_paths_keep_candidate_outputs_out_of_baseline_data(

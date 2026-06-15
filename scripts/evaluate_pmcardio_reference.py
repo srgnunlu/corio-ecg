@@ -147,6 +147,7 @@ def _flatten_record(record: dict[str, Any]) -> dict[str, Any]:
         "image_path": record.get("image_path"),
         "ecg_id": record.get("ecg_id"),
         "layout": record.get("layout"),
+        "split": record.get("split"),
         "status": record.get("status"),
         "elapsed_seconds": record.get("elapsed_seconds"),
         "error": record.get("error"),
@@ -168,6 +169,7 @@ def write_report(
     output_dir: Path,
     *,
     selection_manifest: dict[str, Any] | None = None,
+    selected_split: str | None = None,
 ) -> tuple[Path, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     json_path = output_dir / "pmcardio_reference_fidelity.json"
@@ -190,6 +192,7 @@ def write_report(
             ),
         },
         "selection_manifest": selection_manifest,
+        "selected_split": selected_split,
         "aggregate": aggregate_fidelity_records(records),
         "records": records,
     }
@@ -209,6 +212,23 @@ def write_report(
     return json_path, csv_path
 
 
+def select_evaluation_metadata(
+    metadata: pd.DataFrame,
+    selected_split: str | None,
+) -> pd.DataFrame:
+    """Require explicit split selection for pre-registered holdout metadata."""
+    if "split" not in metadata.columns:
+        if selected_split is not None:
+            raise ValueError("selected split requested but metadata has no split column")
+        return metadata
+    if selected_split not in {"tune", "test"}:
+        raise ValueError("pre-registered holdout evaluation requires --split tune or test")
+    selected = metadata[metadata["split"] == selected_split].copy()
+    if selected.empty:
+        raise ValueError(f"selected split contains no records: {selected_split}")
+    return selected.reset_index(drop=True)
+
+
 def evaluate_subset(
     data_dir: Path,
     output_dir: Path,
@@ -217,8 +237,10 @@ def evaluate_subset(
     overwrite: bool,
     max_images: int | None,
     mode: str = "default",
+    selected_split: str | None = None,
 ) -> list[dict[str, Any]]:
     metadata = pd.read_csv(data_dir / "subset_metadata.csv")
+    metadata = select_evaluation_metadata(metadata, selected_split)
     if max_images is not None:
         metadata = metadata.head(max_images)
     references = np.load(data_dir / "leads.npz")
@@ -278,6 +300,7 @@ def evaluate_subset(
             "image_path": relative_path,
             "ecg_id": str(row["ECG ID"]),
             "layout": layout,
+            "split": row.get("split"),
             "reference_key": str(row["reference_key"]),
             "fidelity": None,
         }
@@ -310,6 +333,7 @@ def main() -> None:
     parser.add_argument("--max-images", type=int, default=None)
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--mode", choices=VALID_MODES, default="default")
+    parser.add_argument("--split", choices=("tune", "test"))
     args = parser.parse_args()
 
     records = evaluate_subset(
@@ -319,6 +343,7 @@ def main() -> None:
         overwrite=args.overwrite,
         max_images=args.max_images,
         mode=args.mode,
+        selected_split=args.split,
     )
     manifest_path = args.data_dir / "selection_manifest.json"
     selection_manifest = (
@@ -328,6 +353,7 @@ def main() -> None:
         records,
         args.output_dir,
         selection_manifest=selection_manifest,
+        selected_split=args.split,
     )
     aggregate = aggregate_fidelity_records(records)
     print(f"\nReport: {json_path}")
