@@ -1,0 +1,21 @@
+# Locked tolerances for controlled Phase 3 digitization experiments.
+version: digitization-regression-v1
+
+supported_categories:
+  - photos_doogee
+  - photos_iphone
+  - photos_samsung
+  - photos_scans
+
+target_categories:
+  - photos_bents
+  - photos_crumbles
+
+tolerances:
+  median_correlation_drop: 0.02
+  median_rmse_mv_increase: 0.02
+  median_snr_db_drop: 1.0
+  median_gain_error_increase: 0.05
+  failure_rate_increase: 0.0
+  median_runtime_increase_fraction: 0.25
+  quality_gate_reject_rate_increase: 0.0

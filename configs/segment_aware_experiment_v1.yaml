@@ -1,0 +1,20 @@
+# Research-only decision contract for segment-aware diagnosis consistency.
+version: segment-aware-experiment-v1
+baseline_method: tiled
+candidate_method: segment_ensemble
+
+supported_categories:
+  - photos_doogee
+  - photos_iphone
+  - photos_samsung
+  - photos_scans
+
+target_categories:
+  - photos_bents
+  - photos_crumbles
+
+tolerances:
+  mean_cosine_similarity_drop: 0.0
+  mean_abs_probability_difference_increase: 0.0
+  mean_agreement_rate_drop: 0.0
+  target_mean_cosine_similarity_gain: 0.01

@@ -31,9 +31,26 @@ from src.training.reference_fidelity import (  # noqa: E402
 DEFAULT_DATA_DIR = Path("data/reference/pmcardio")
 DEFAULT_OUTPUT_DIR = Path("results/pmcardio-reference")
 DEFAULT_TIMEOUT_SECONDS = 180
+VALID_MODES = ("default", "retry", "perspective", "shadow", "layout_segments")
 MAX_SHIFT_SAMPLES = 50  # 100 ms at 500 Hz
 BOOTSTRAP_SEED = 20260613
 BOOTSTRAP_RESAMPLES = 2000
+
+
+def _experiment_signal_paths(
+    output_dir: Path,
+    *,
+    category: str,
+    image_stem: str,
+    mode: str,
+) -> tuple[Path, Path]:
+    """Return isolated signal paths for a non-default experiment."""
+    if mode == "default":
+        raise ValueError("default mode uses the frozen baseline signal paths")
+    return (
+        output_dir / "signals" / category / f"{image_stem}.npy",
+        output_dir / "signals-calibrated" / category / f"{image_stem}.npy",
+    )
 
 
 def _bootstrap_ci95(
@@ -181,7 +198,11 @@ def write_report(
     rows = [_flatten_record(record) for record in records]
     fieldnames = list(rows[0].keys()) if rows else []
     with csv_path.open("w", newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer = csv.DictWriter(
+            csv_file,
+            fieldnames=fieldnames,
+            lineterminator="\n",
+        )
         if rows:
             writer.writeheader()
             writer.writerows(rows)
@@ -195,6 +216,7 @@ def evaluate_subset(
     timeout_seconds: int,
     overwrite: bool,
     max_images: int | None,
+    mode: str = "default",
 ) -> list[dict[str, Any]]:
     metadata = pd.read_csv(data_dir / "subset_metadata.csv")
     if max_images is not None:
@@ -208,11 +230,20 @@ def evaluate_subset(
         layout = str(row["ECG format"])
         image_path = data_dir / "images" / relative_path
         record_id = f"{category}__{image_path.stem}"
-        signal_path = data_dir / "digitized" / category / f"{image_path.stem}.npy"
-        calibrated_path = (
-            data_dir / "digitized-calibrated" / category / f"{image_path.stem}.npy"
-        )
-        operational_path = output_dir / "operational" / f"{record_id}.json"
+        if mode == "default":
+            signal_path = data_dir / "digitized" / category / f"{image_path.stem}.npy"
+            calibrated_path = (
+                data_dir / "digitized-calibrated" / category / f"{image_path.stem}.npy"
+            )
+            operational_path = output_dir / "operational" / f"{record_id}.json"
+        else:
+            signal_path, calibrated_path = _experiment_signal_paths(
+                output_dir,
+                category=category,
+                image_stem=image_path.stem,
+                mode=mode,
+            )
+            operational_path = output_dir / "operational" / mode / f"{record_id}.json"
         source_sha256 = sha256_file(image_path)
 
         print(f"{index + 1}/{len(metadata)} {relative_path}", flush=True)
@@ -222,7 +253,7 @@ def evaluate_subset(
             and calibrated_path.exists()
             and is_reusable_record(
                 operational_path,
-                mode="default",
+                mode=mode,
                 source_sha256=source_sha256,
                 layout_hint=layout,
             )
@@ -232,7 +263,7 @@ def evaluate_subset(
         else:
             operational = run_isolated_attempt(
                 image_path,
-                mode="default",
+                mode=mode,
                 layout_hint=layout,
                 signal_path=signal_path,
                 record_path=operational_path,
@@ -278,6 +309,7 @@ def main() -> None:
     parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT_SECONDS)
     parser.add_argument("--max-images", type=int, default=None)
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--mode", choices=VALID_MODES, default="default")
     args = parser.parse_args()
 
     records = evaluate_subset(
@@ -286,6 +318,7 @@ def main() -> None:
         timeout_seconds=args.timeout,
         overwrite=args.overwrite,
         max_images=args.max_images,
+        mode=args.mode,
     )
     manifest_path = args.data_dir / "selection_manifest.json"
     selection_manifest = (

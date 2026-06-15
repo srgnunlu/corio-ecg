@@ -11,7 +11,11 @@ from scripts.download_pmcardio_reference_subset import (
     select_balanced_image_ids,
     select_reference_rows,
 )
-from scripts.evaluate_pmcardio_reference import aggregate_fidelity_records, write_report
+from scripts.evaluate_pmcardio_reference import (
+    _experiment_signal_paths,
+    aggregate_fidelity_records,
+    write_report,
+)
 from src.training.reference_fidelity import (
     evaluate_absolute_printed_segments,
     evaluate_printed_segments,
@@ -274,7 +278,24 @@ def test_aggregate_fidelity_records_groups_categories() -> None:
 def test_write_report_embeds_selection_manifest(tmp_path) -> None:
     manifest = {"manifest_version": 1, "manifest_id": "abc123"}
 
-    json_path, _ = write_report([], tmp_path, selection_manifest=manifest)
+    json_path, csv_path = write_report([], tmp_path, selection_manifest=manifest)
     report = json.loads(json_path.read_text())
 
     assert report["selection_manifest"] == manifest
+    assert b"\r\n" not in csv_path.read_bytes()
+
+
+def test_experiment_signal_paths_keep_candidate_outputs_out_of_baseline_data(
+    tmp_path,
+) -> None:
+    signal_path, calibrated_path = _experiment_signal_paths(
+        tmp_path,
+        category="photos_bents",
+        image_stem="img_4_page_0",
+        mode="perspective",
+    )
+
+    assert signal_path == tmp_path / "signals" / "photos_bents" / "img_4_page_0.npy"
+    assert calibrated_path == (
+        tmp_path / "signals-calibrated" / "photos_bents" / "img_4_page_0.npy"
+    )

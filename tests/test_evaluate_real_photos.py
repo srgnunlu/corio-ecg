@@ -6,6 +6,7 @@ import numpy as np
 
 from scripts.evaluate_real_photos import (
     REAL_PHOTO_EVALUATION_VERSION,
+    _inference_layout_hint,
     aggregate_records,
     collect_photo_paths,
     is_reusable_record,
@@ -28,6 +29,13 @@ def _success_record(
         "source_image": "data/real-phone/photos/case001__front.jpg",
         "source_sha256": "abc123",
         "mode": mode,
+        "preprocessing_version": (
+            "conservative-perspective-v1"
+            if mode == "perspective"
+            else "vendor-dewarping-retry-v1"
+            if mode == "retry"
+            else "default"
+        ),
         "capture_variant": "front",
         "layout_hint": None,
         "status": "success",
@@ -64,6 +72,14 @@ def test_load_layout_hints_ignores_unknown_layouts(tmp_path: Path) -> None:
     )
 
     assert load_layout_hints(metadata_path) == {"case001": "standard_6x2"}
+
+
+def test_layout_segments_mode_removes_only_rhythm_suffix() -> None:
+    assert _inference_layout_hint("layout_segments", "3x4+1R") == "3x4"
+    assert _inference_layout_hint("layout_segments", "6x2+1R") == "6x2"
+    assert _inference_layout_hint("layout_segments", "3x4") == "3x4"
+    assert _inference_layout_hint("default", "3x4+1R") == "3x4+1R"
+    assert _inference_layout_hint("layout_segments", None) is None
 
 
 def test_aggregate_records_reports_acceptance_metrics() -> None:
@@ -127,6 +143,22 @@ def test_failed_record_is_not_reusable(tmp_path: Path) -> None:
     ) is False
 
 
+def test_perspective_record_requires_current_preprocessing_version(
+    tmp_path: Path,
+) -> None:
+    record = _success_record(mode="perspective")
+    record["preprocessing_version"] = "old-perspective"
+    record_path = tmp_path / "record.json"
+    record_path.write_text(json.dumps(record))
+
+    assert is_reusable_record(
+        record_path,
+        mode="perspective",
+        source_sha256="abc123",
+        layout_hint=None,
+    ) is False
+
+
 def test_write_reports_creates_json_and_flat_csv(tmp_path: Path) -> None:
     record = _success_record()
 
@@ -148,7 +180,11 @@ def test_run_worker_can_save_model_and_calibrated_signals(
     monkeypatch,
 ) -> None:
     class FakeDigitiser:
-        def __init__(self, **_kwargs) -> None:
+        init_kwargs: dict[str, object] = {}
+
+        def __init__(self, **kwargs) -> None:
+            self.init_kwargs = kwargs
+            FakeDigitiser.init_kwargs = kwargs
             self.last_info = DigitizeInfo()
 
         def digitize_with_calibrated(self, *_args, **_kwargs) -> DigitizedSignals:
@@ -174,3 +210,98 @@ def test_run_worker_can_save_model_and_calibrated_signals(
     assert record["status"] == "success"
     assert np.load(signal_path).mean() == 1.0
     assert np.load(calibrated_path).mean() == 0.5
+    assert FakeDigitiser.init_kwargs["enable_perspective_correction"] is False
+
+
+def test_run_worker_enables_only_conservative_correction_for_perspective_mode(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    class FakeDigitiser:
+        init_kwargs: dict[str, object] = {}
+
+        def __init__(self, **kwargs) -> None:
+            FakeDigitiser.init_kwargs = kwargs
+            self.last_info = DigitizeInfo()
+
+        def digitize(self, *_args, **_kwargs) -> np.ndarray:
+            return np.ones((12, 5000), dtype=np.float32)
+
+    image_path = tmp_path / "ecg.png"
+    image_path.write_bytes(b"not-an-image")
+    monkeypatch.setattr("scripts.evaluate_real_photos.ECGDigitiser", FakeDigitiser)
+
+    run_worker(
+        image_path,
+        mode="perspective",
+        layout_hint="3x4+1R",
+        signal_path=tmp_path / "signal.npy",
+    )
+
+    assert FakeDigitiser.init_kwargs == {
+        "enable_dewarping_retry": False,
+        "enable_perspective_correction": True,
+        "enable_shadow_normalization": False,
+    }
+
+
+def test_run_worker_enables_only_shadow_normalization_for_shadow_mode(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    class FakeDigitiser:
+        init_kwargs: dict[str, object] = {}
+
+        def __init__(self, **kwargs) -> None:
+            FakeDigitiser.init_kwargs = kwargs
+            self.last_info = DigitizeInfo()
+
+        def digitize(self, *_args, **_kwargs) -> np.ndarray:
+            return np.ones((12, 5000), dtype=np.float32)
+
+    image_path = tmp_path / "ecg.png"
+    image_path.write_bytes(b"not-an-image")
+    monkeypatch.setattr("scripts.evaluate_real_photos.ECGDigitiser", FakeDigitiser)
+
+    run_worker(
+        image_path,
+        mode="shadow",
+        layout_hint="3x4+1R",
+        signal_path=tmp_path / "signal.npy",
+    )
+
+    assert FakeDigitiser.init_kwargs == {
+        "enable_dewarping_retry": False,
+        "enable_perspective_correction": False,
+        "enable_shadow_normalization": True,
+    }
+
+
+def test_run_worker_uses_short_segment_layout_for_layout_segments_mode(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    class FakeDigitiser:
+        received_layout_hint: str | None = None
+
+        def __init__(self, **_kwargs) -> None:
+            self.last_info = DigitizeInfo()
+
+        def digitize(self, *_args, layout_hint=None, **_kwargs) -> np.ndarray:
+            FakeDigitiser.received_layout_hint = layout_hint
+            return np.ones((12, 5000), dtype=np.float32)
+
+    image_path = tmp_path / "ecg.png"
+    image_path.write_bytes(b"not-an-image")
+    monkeypatch.setattr("scripts.evaluate_real_photos.ECGDigitiser", FakeDigitiser)
+
+    record = run_worker(
+        image_path,
+        mode="layout_segments",
+        layout_hint="3x4+1R",
+        signal_path=tmp_path / "signal.npy",
+    )
+
+    assert FakeDigitiser.received_layout_hint == "3x4"
+    assert record["layout_hint"] == "3x4+1R"
+    assert record["inference_layout_hint"] == "3x4"

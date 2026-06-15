@@ -25,6 +25,8 @@ import torch
 from PIL import Image
 
 from src.pipeline.digitize import ECGDigitiser
+from src.pipeline.perspective_correction import PERSPECTIVE_CORRECTION_VERSION
+from src.pipeline.shadow_normalization import SHADOW_NORMALIZATION_VERSION
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_IMAGE_DIR = Path("data/real-phone/photos")
@@ -32,9 +34,11 @@ DEFAULT_METADATA_PATH = Path("data/real-phone/metadata.csv")
 DEFAULT_SIGNAL_DIR = Path("data/real-phone/signals")
 DEFAULT_OUTPUT_DIR = Path("results/real-phone")
 DEFAULT_TIMEOUT_SECONDS = 180
-VALID_MODES = ("default", "retry")
+VALID_MODES = ("default", "retry", "perspective", "shadow", "layout_segments")
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 REAL_PHOTO_EVALUATION_VERSION = 2
+LAYOUT_SEGMENTS_VERSION = "layout-segments-v1"
+DEWARPING_RETRY_VERSION = "vendor-dewarping-retry-v1"
 
 
 def _json_default(value: object) -> object:
@@ -104,9 +108,13 @@ def is_reusable_record(
         record = json.loads(record_path.read_text())
     except (OSError, json.JSONDecodeError):
         return False
-    return (
+    return bool(
         record.get("pipeline_version") == REAL_PHOTO_EVALUATION_VERSION
         and record.get("mode") == mode
+        and (
+            mode not in {"retry", "perspective", "shadow", "layout_segments"}
+            or record.get("preprocessing_version") == _preprocessing_version(mode)
+        )
         and record.get("source_sha256") == source_sha256
         and record.get("layout_hint") == layout_hint
         and record.get("status") == "success"
@@ -117,6 +125,25 @@ def _capture_variant(image_path: Path) -> str:
     """Return the anonymous capture variant encoded after ``__`` in a filename."""
     parts = image_path.stem.split("__", maxsplit=1)
     return parts[1] if len(parts) == 2 else "unknown"
+
+
+def _preprocessing_version(mode: str) -> str:
+    if mode == "perspective":
+        return PERSPECTIVE_CORRECTION_VERSION
+    if mode == "shadow":
+        return SHADOW_NORMALIZATION_VERSION
+    if mode == "layout_segments":
+        return LAYOUT_SEGMENTS_VERSION
+    if mode == "retry":
+        return DEWARPING_RETRY_VERSION
+    return "default"
+
+
+def _inference_layout_hint(mode: str, layout_hint: str | None) -> str | None:
+    """Return the vendor layout constraint used for one experiment mode."""
+    if mode != "layout_segments" or layout_hint is None:
+        return layout_hint
+    return layout_hint.removesuffix("+1R")
 
 
 def _case_id(image_path: Path) -> str:
@@ -149,8 +176,10 @@ def _base_record(
         "source_width": source_width,
         "source_height": source_height,
         "mode": mode,
+        "preprocessing_version": _preprocessing_version(mode),
         "capture_variant": _capture_variant(image_path),
         "layout_hint": layout_hint,
+        "inference_layout_hint": _inference_layout_hint(mode, layout_hint),
         "status": "failed",
         "elapsed_seconds": 0.0,
         "has_warnings": True,
@@ -173,13 +202,20 @@ def run_worker(
     start = time.monotonic()
     digitiser: ECGDigitiser | None = None
     try:
-        digitiser = ECGDigitiser(enable_dewarping_retry=mode == "retry")
+        digitiser = ECGDigitiser(
+            enable_dewarping_retry=mode == "retry",
+            enable_perspective_correction=mode == "perspective",
+            enable_shadow_normalization=mode == "shadow",
+        )
         if calibrated_signal_path is None:
-            signal = digitiser.digitize(image_path, layout_hint=layout_hint)
+            signal = digitiser.digitize(
+                image_path,
+                layout_hint=_inference_layout_hint(mode, layout_hint),
+            )
         else:
             outputs = digitiser.digitize_with_calibrated(
                 image_path,
-                layout_hint=layout_hint,
+                layout_hint=_inference_layout_hint(mode, layout_hint),
             )
             signal = outputs.model_input
             calibrated_signal_path.parent.mkdir(parents=True, exist_ok=True)

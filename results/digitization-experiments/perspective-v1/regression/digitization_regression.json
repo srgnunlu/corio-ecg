@@ -1,0 +1,1611 @@
+{
+  "generated_at_utc": "2026-06-15T03:26:23.171242+00:00",
+  "experiment_name": "conservative-perspective-v1",
+  "baseline_sha256": "2442725bb74149bd2641ec306fb72488fcfe42199860472c99215d99e368c713",
+  "candidate_sha256": "1fb41281071e5e1c32bcf6f2d7daf410e7c0b32ca23bffa14d0ca171faa31fa8",
+  "config": {
+    "version": "digitization-regression-v1",
+    "supported_categories": [
+      "photos_doogee",
+      "photos_iphone",
+      "photos_samsung",
+      "photos_scans"
+    ],
+    "target_categories": [
+      "photos_bents",
+      "photos_crumbles"
+    ],
+    "tolerances": {
+      "median_correlation_drop": 0.02,
+      "median_rmse_mv_increase": 0.02,
+      "median_snr_db_drop": 1.0,
+      "median_gain_error_increase": 0.05,
+      "failure_rate_increase": 0.0,
+      "median_runtime_increase_fraction": 0.25,
+      "quality_gate_reject_rate_increase": 0.0
+    }
+  },
+  "quality_gate_version": "quality-gate-v1",
+  "promotion": {
+    "passed": true,
+    "failed_checks": []
+  },
+  "overall": {
+    "role": "unclassified",
+    "baseline": {
+      "total": 70,
+      "successful": 70,
+      "failure_rate": 0.0,
+      "median_correlation": 0.8234293071503853,
+      "median_rmse_mv": 0.10756067812561831,
+      "median_snr_db": 3.8281517257999713,
+      "median_gain_error": 0.09615957384361984,
+      "median_runtime_seconds": 9.756702104000397,
+      "quality_gate": {
+        "outcome_counts": {
+          "reject": 27,
+          "warn": 32,
+          "accept": 11
+        },
+        "reject_rate": 0.38571428571428573
+      }
+    },
+    "candidate": {
+      "total": 70,
+      "successful": 70,
+      "failure_rate": 0.0,
+      "median_correlation": 0.8283744408681981,
+      "median_rmse_mv": 0.10843755173193606,
+      "median_snr_db": 3.8355060015153732,
+      "median_gain_error": 0.09700529331988511,
+      "median_runtime_seconds": 8.884283187500841,
+      "quality_gate": {
+        "outcome_counts": {
+          "reject": 26,
+          "warn": 32,
+          "accept": 12
+        },
+        "reject_rate": 0.37142857142857144
+      }
+    },
+    "deltas": {
+      "median_correlation": 0.0049451337178128,
+      "median_rmse_mv": 0.0008768736063177462,
+      "median_snr_db": 0.007354275715401926,
+      "median_gain_error": 0.000845719476265272,
+      "failure_rate": 0.0,
+      "median_runtime_seconds": -0.872418916499555,
+      "quality_gate_reject_rate": -0.01428571428571429,
+      "median_runtime_increase_fraction": -0.08941739813310996
+    }
+  },
+  "categories": {
+    "photos_bents": {
+      "role": "target",
+      "baseline": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.2800832246851755,
+        "median_rmse_mv": 0.18221104762754814,
+        "median_snr_db": -0.26695108101237774,
+        "median_gain_error": 0.10877173580250643,
+        "median_runtime_seconds": 12.451260937999905,
+        "quality_gate": {
+          "outcome_counts": {
+            "reject": 9,
+            "warn": 1
+          },
+          "reject_rate": 0.9
+        }
+      },
+      "candidate": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.27941470246072575,
+        "median_rmse_mv": 0.1825801237469573,
+        "median_snr_db": -0.35526776860957854,
+        "median_gain_error": 0.10877173580250643,
+        "median_runtime_seconds": 11.428012103504443,
+        "quality_gate": {
+          "outcome_counts": {
+            "reject": 9,
+            "warn": 1
+          },
+          "reject_rate": 0.9
+        }
+      },
+      "deltas": {
+        "median_correlation": -0.0006685222244497413,
+        "median_rmse_mv": 0.00036907611940917295,
+        "median_snr_db": -0.0883166875972008,
+        "median_gain_error": 0.0,
+        "failure_rate": 0.0,
+        "median_runtime_seconds": -1.0232488344954618,
+        "quality_gate_reject_rate": 0.0,
+        "median_runtime_increase_fraction": -0.08218033816740734
+      }
+    },
+    "photos_crumbles": {
+      "role": "target",
+      "baseline": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.4233232699068702,
+        "median_rmse_mv": 0.18700291822576576,
+        "median_snr_db": -0.0917334554029888,
+        "median_gain_error": 0.09791879725387131,
+        "median_runtime_seconds": 10.460854062999715,
+        "quality_gate": {
+          "outcome_counts": {
+            "reject": 9,
+            "warn": 1
+          },
+          "reject_rate": 0.9
+        }
+      },
+      "candidate": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.42442402036776306,
+        "median_rmse_mv": 0.1888591595564487,
+        "median_snr_db": -0.11530475556939686,
+        "median_gain_error": 0.11009891017719026,
+        "median_runtime_seconds": 10.888452250001137,
+        "quality_gate": {
+          "outcome_counts": {
+            "reject": 8,
+            "warn": 2
+          },
+          "reject_rate": 0.8
+        }
+      },
+      "deltas": {
+        "median_correlation": 0.001100750460892863,
+        "median_rmse_mv": 0.001856241330682934,
+        "median_snr_db": -0.023571300166408057,
+        "median_gain_error": 0.012180112923318942,
+        "failure_rate": 0.0,
+        "median_runtime_seconds": 0.42759818700142205,
+        "quality_gate_reject_rate": -0.09999999999999998,
+        "median_runtime_increase_fraction": 0.04087603023866348
+      }
+    },
+    "photos_doogee": {
+      "role": "supported",
+      "baseline": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.9383769922069201,
+        "median_rmse_mv": 0.08229211926093385,
+        "median_snr_db": 7.740406563904836,
+        "median_gain_error": 0.10224155614301561,
+        "median_runtime_seconds": 6.283933228999558,
+        "quality_gate": {
+          "outcome_counts": {
+            "accept": 4,
+            "reject": 1,
+            "warn": 5
+          },
+          "reject_rate": 0.1
+        }
+      },
+      "candidate": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.9380413237475093,
+        "median_rmse_mv": 0.08234917553013002,
+        "median_snr_db": 7.705920482094172,
+        "median_gain_error": 0.09506744108544657,
+        "median_runtime_seconds": 6.499607208999805,
+        "quality_gate": {
+          "outcome_counts": {
+            "accept": 5,
+            "reject": 1,
+            "warn": 4
+          },
+          "reject_rate": 0.1
+        }
+      },
+      "deltas": {
+        "median_correlation": -0.00033566845941079837,
+        "median_rmse_mv": 5.705626919616513e-05,
+        "median_snr_db": -0.03448608181066426,
+        "median_gain_error": -0.0071741150575690416,
+        "failure_rate": 0.0,
+        "median_runtime_seconds": 0.21567398000024696,
+        "quality_gate_reject_rate": 0.0,
+        "median_runtime_increase_fraction": 0.034321494538633666
+      }
+    },
+    "photos_iphone": {
+      "role": "supported",
+      "baseline": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.8804895935791639,
+        "median_rmse_mv": 0.09333422719119622,
+        "median_snr_db": 5.523225660007716,
+        "median_gain_error": 0.09668378103958641,
+        "median_runtime_seconds": 9.978715249999368,
+        "quality_gate": {
+          "outcome_counts": {
+            "warn": 8,
+            "reject": 2
+          },
+          "reject_rate": 0.2
+        }
+      },
+      "candidate": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.8804895935791639,
+        "median_rmse_mv": 0.09333422719119622,
+        "median_snr_db": 5.523225660007716,
+        "median_gain_error": 0.09668378033281261,
+        "median_runtime_seconds": 7.239164750499185,
+        "quality_gate": {
+          "outcome_counts": {
+            "warn": 8,
+            "reject": 2
+          },
+          "reject_rate": 0.2
+        }
+      },
+      "deltas": {
+        "median_correlation": 0.0,
+        "median_rmse_mv": 0.0,
+        "median_snr_db": 0.0,
+        "median_gain_error": -7.067738061472539e-10,
+        "failure_rate": 0.0,
+        "median_runtime_seconds": -2.739550499500183,
+        "quality_gate_reject_rate": 0.0,
+        "median_runtime_increase_fraction": -0.27453940019987605
+      }
+    },
+    "photos_samsung": {
+      "role": "supported",
+      "baseline": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.9132415598037007,
+        "median_rmse_mv": 0.07216720123267599,
+        "median_snr_db": 6.511901343179877,
+        "median_gain_error": 0.09071549075511215,
+        "median_runtime_seconds": 8.651964166499965,
+        "quality_gate": {
+          "outcome_counts": {
+            "warn": 5,
+            "accept": 4,
+            "reject": 1
+          },
+          "reject_rate": 0.1
+        }
+      },
+      "candidate": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.9108076102059668,
+        "median_rmse_mv": 0.07324917056299318,
+        "median_snr_db": 6.485937741897623,
+        "median_gain_error": 0.09107772602122344,
+        "median_runtime_seconds": 6.302170354007103,
+        "quality_gate": {
+          "outcome_counts": {
+            "warn": 5,
+            "accept": 4,
+            "reject": 1
+          },
+          "reject_rate": 0.1
+        }
+      },
+      "deltas": {
+        "median_correlation": -0.0024339495977339087,
+        "median_rmse_mv": 0.0010819693303171923,
+        "median_snr_db": -0.025963601282254167,
+        "median_gain_error": 0.0003622352661112882,
+        "failure_rate": 0.0,
+        "median_runtime_seconds": -2.3497938124928623,
+        "quality_gate_reject_rate": 0.0,
+        "median_runtime_increase_fraction": -0.2715907934051742
+      }
+    },
+    "photos_scans": {
+      "role": "supported",
+      "baseline": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.974626441351155,
+        "median_rmse_mv": 0.07164112639533643,
+        "median_snr_db": 8.88410531617576,
+        "median_gain_error": 0.07534226447082665,
+        "median_runtime_seconds": 9.62619747950066,
+        "quality_gate": {
+          "outcome_counts": {
+            "warn": 6,
+            "accept": 3,
+            "reject": 1
+          },
+          "reject_rate": 0.1
+        }
+      },
+      "candidate": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.9743033437050037,
+        "median_rmse_mv": 0.07176913713504361,
+        "median_snr_db": 8.868939226296101,
+        "median_gain_error": 0.07534226447082665,
+        "median_runtime_seconds": 9.063039854503586,
+        "quality_gate": {
+          "outcome_counts": {
+            "warn": 6,
+            "accept": 3,
+            "reject": 1
+          },
+          "reject_rate": 0.1
+        }
+      },
+      "deltas": {
+        "median_correlation": -0.00032309764615123804,
+        "median_rmse_mv": 0.00012801073970718224,
+        "median_snr_db": -0.015166089879658173,
+        "median_gain_error": 0.0,
+        "failure_rate": 0.0,
+        "median_runtime_seconds": -0.5631576249970749,
+        "quality_gate_reject_rate": 0.0,
+        "median_runtime_increase_fraction": -0.058502604605436326
+      }
+    },
+    "photos_screens": {
+      "role": "unclassified",
+      "baseline": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.7753764722220469,
+        "median_rmse_mv": 0.11628287542288929,
+        "median_snr_db": 3.185349627018911,
+        "median_gain_error": 0.12788419962667497,
+        "median_runtime_seconds": 13.882529458001045,
+        "quality_gate": {
+          "outcome_counts": {
+            "reject": 4,
+            "warn": 6
+          },
+          "reject_rate": 0.4
+        }
+      },
+      "candidate": {
+        "total": 10,
+        "successful": 10,
+        "failure_rate": 0.0,
+        "median_correlation": 0.7710561855231819,
+        "median_rmse_mv": 0.11474906501379895,
+        "median_snr_db": 2.990280279590899,
+        "median_gain_error": 0.13588298731492088,
+        "median_runtime_seconds": 13.593193958506163,
+        "quality_gate": {
+          "outcome_counts": {
+            "reject": 4,
+            "warn": 6
+          },
+          "reject_rate": 0.4
+        }
+      },
+      "deltas": {
+        "median_correlation": -0.004320286698864972,
+        "median_rmse_mv": -0.0015338104090903415,
+        "median_snr_db": -0.19506934742801185,
+        "median_gain_error": 0.007998787688245912,
+        "failure_rate": 0.0,
+        "median_runtime_seconds": -0.28933549949488224,
+        "quality_gate_reject_rate": 0.0,
+        "median_runtime_increase_fraction": -0.020841698940399285
+      }
+    }
+  },
+  "records": [
+    {
+      "category": "photos_bents",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.1959014589938306,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.5199547195881309,
+      "median_rmse_mv_delta": -0.08691046500395377,
+      "median_snr_db_delta": 3.8113534563935936,
+      "median_gain_error_delta": 0.27042999693054126,
+      "elapsed_seconds_delta": 2.948342124998817,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.4135760839963041,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.09763529200245102,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.12013979299445054,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.0006461952923024761,
+      "median_rmse_mv_delta": 0.0002560214794143645,
+      "median_snr_db_delta": -0.030332179759318123,
+      "median_gain_error_delta": -0.0013012556709295353,
+      "elapsed_seconds_delta": 0.38310054200883314,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 81,
+      "ecg_id": "LPAE_00232_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -1.4778697499950795,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.001337044448899538,
+      "median_rmse_mv_delta": 0.0007381522388183182,
+      "median_snr_db_delta": -0.010103644071489976,
+      "median_gain_error_delta": -0.0032148745975626447,
+      "elapsed_seconds_delta": -0.15486324999619683,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.31397966599797655,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.0006713365318768982,
+      "median_rmse_mv_delta": 0.00011411333120203704,
+      "median_snr_db_delta": -0.06897220620409872,
+      "median_gain_error_delta": -0.0004870349746523006,
+      "elapsed_seconds_delta": 0.4032524169997487,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 4.3457997890072875e-05,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.0048678991954677064,
+      "median_rmse_mv_delta": 0.002163938303793661,
+      "median_snr_db_delta": -0.051927202564508335,
+      "median_gain_error_delta": -0.0012903717263161862,
+      "elapsed_seconds_delta": 0.3478437910107459,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 1.4543740829976741,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 10,
+      "ecg_id": "LPAE_04827_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.013490156136676035,
+      "median_rmse_mv_delta": -0.0015378578902064816,
+      "median_snr_db_delta": -0.020420162550732535,
+      "median_gain_error_delta": -0.002195180642477146,
+      "elapsed_seconds_delta": 0.984883290993821,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -3.0384802500011574,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 7.412555014241207e-10,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.6262572079995152,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.6472425010088045,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.8529358750001848,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.14314441599526617,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.247386415996516,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 40,
+      "ecg_id": "LPAE_09275_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 2.918176915989534,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.9463621660052013,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.027277749997665524,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.0012544510921662644,
+      "median_rmse_mv_delta": 0.00020972019179506252,
+      "median_snr_db_delta": -0.032244431870372736,
+      "median_gain_error_delta": 0.0025755479727291863,
+      "elapsed_seconds_delta": 0.5295914580001408,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.4415657499976078,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.3788790429935034,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.8537557919953542,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 42,
+      "ecg_id": "LPAE_09545_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.03034652649060121,
+      "median_rmse_mv_delta": -0.0015297629279741737,
+      "median_snr_db_delta": -0.543861307792473,
+      "median_gain_error_delta": 0.0013684432377147893,
+      "elapsed_seconds_delta": 0.8882281659971341,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 3.0079995161358397e-09,
+      "median_rmse_mv_delta": -1.7200296742458931e-10,
+      "median_snr_db_delta": 4.029195199706237e-08,
+      "median_gain_error_delta": -3.6843650352835766e-10,
+      "elapsed_seconds_delta": 0.22404491599809262,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.2832985523028928,
+      "median_rmse_mv_delta": -0.06480488959337107,
+      "median_snr_db_delta": 4.051805120917682,
+      "median_gain_error_delta": 0.0010240732187682955,
+      "elapsed_seconds_delta": 0.24079220800376788,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 4.783815785169843e-06,
+      "median_rmse_mv_delta": -7.928096928955242e-10,
+      "median_snr_db_delta": 1.0485394597026243e-07,
+      "median_gain_error_delta": 1.6985235440358792e-10,
+      "elapsed_seconds_delta": 0.3456254999982775,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.002640654559003419,
+      "median_rmse_mv_delta": -9.368120168495864e-11,
+      "median_snr_db_delta": 0.2312278604021074,
+      "median_gain_error_delta": 1.0023301078021518e-08,
+      "elapsed_seconds_delta": -1.5127500829967175,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -1.0753558044029887e-09,
+      "median_rmse_mv_delta": 3.568407166976151e-10,
+      "median_snr_db_delta": -7.69759687102578e-08,
+      "median_gain_error_delta": 6.327757318125293e-09,
+      "elapsed_seconds_delta": -0.02554416600469267,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 1.771705004927071e-10,
+      "median_rmse_mv_delta": 8.818192009929504e-10,
+      "median_snr_db_delta": -0.010196220157762781,
+      "median_gain_error_delta": -0.00019057854973147936,
+      "elapsed_seconds_delta": -0.028968583992536878,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 43,
+      "ecg_id": "LPAE_09754_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0007943343253129509,
+      "median_rmse_mv_delta": 1.1394032384259845e-09,
+      "median_snr_db_delta": 0.03477848571413755,
+      "median_gain_error_delta": 8.545065544041108e-09,
+      "elapsed_seconds_delta": 0.7381034999998519,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.05701621691341607,
+      "median_rmse_mv_delta": 0.015593422552638014,
+      "median_snr_db_delta": 0.6291838179583285,
+      "median_gain_error_delta": 0.14113344763218816,
+      "elapsed_seconds_delta": -22.361661000000822,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0022015009217856707,
+      "median_rmse_mv_delta": 0.00371248266136584,
+      "median_snr_db_delta": -0.0471426003328161,
+      "median_gain_error_delta": -0.021056412783818867,
+      "elapsed_seconds_delta": -10.451395833995775,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -9.104622333001316,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -15.873513541999273,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -16.16698762499982,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -5.745272709002165,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 92,
+      "ecg_id": "LPAE_14680_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.0005705194842745009,
+      "median_rmse_mv_delta": 0.0004189661188887528,
+      "median_snr_db_delta": 0.0005944384285119231,
+      "median_gain_error_delta": -3.4081905075922236e-09,
+      "elapsed_seconds_delta": -19.661660125007984,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.0016525089132388981,
+      "median_rmse_mv_delta": 0.018737864305033602,
+      "median_snr_db_delta": -1.095309109365068,
+      "median_gain_error_delta": -0.08608451590441124,
+      "elapsed_seconds_delta": 0.10269537400563422,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.1741613009022825,
+      "median_rmse_mv_delta": 0.09879156159196145,
+      "median_snr_db_delta": -0.014337956446404898,
+      "median_gain_error_delta": 0.3850048365909515,
+      "elapsed_seconds_delta": 52.88671425000575,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.009216460635496082,
+      "median_rmse_mv_delta": -0.011729882930231056,
+      "median_snr_db_delta": -0.5008432151230204,
+      "median_gain_error_delta": -0.024052340340009914,
+      "elapsed_seconds_delta": 0.5260388759907073,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 1.2750736577693544e-09,
+      "median_rmse_mv_delta": -0.0004649283789628367,
+      "median_snr_db_delta": 9.211953866383737e-09,
+      "median_gain_error_delta": -1.4135476122945079e-09,
+      "elapsed_seconds_delta": -0.13029549900420534,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.019881272433059483,
+      "median_rmse_mv_delta": -0.0008002667742817438,
+      "median_snr_db_delta": 0.29312680900912635,
+      "median_gain_error_delta": 0.004475023337246586,
+      "elapsed_seconds_delta": -4.247305125987623,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -6.207798665092135e-05,
+      "median_rmse_mv_delta": 0.0024666524944249035,
+      "median_snr_db_delta": -4.405980646993157e-08,
+      "median_gain_error_delta": -8.928416894704583e-09,
+      "elapsed_seconds_delta": -0.5583802089877281,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 14,
+      "ecg_id": "LPAE_17226_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0027574847454046036,
+      "median_rmse_mv_delta": -0.00019853572652547835,
+      "median_snr_db_delta": 0.1537226129364493,
+      "median_gain_error_delta": 0.015997575376491824,
+      "elapsed_seconds_delta": -1.5439065840018884,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.0003072553372560072,
+      "median_rmse_mv_delta": -0.0004522461896033225,
+      "median_snr_db_delta": -0.004061945158746555,
+      "median_gain_error_delta": 0.005792426392680072,
+      "elapsed_seconds_delta": -1.8874290839939931,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.012043744036599358,
+      "median_rmse_mv_delta": -0.001177491364028227,
+      "median_snr_db_delta": -0.1407021440508116,
+      "median_gain_error_delta": -0.006377530026732803,
+      "elapsed_seconds_delta": -4.383500957999786,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.5908712500095135,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -6.675776457988832,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.0023371451661158282,
+      "median_rmse_mv_delta": 0.0035964512200555576,
+      "median_snr_db_delta": -0.3444774397902104,
+      "median_gain_error_delta": 0.0007244705322225764,
+      "elapsed_seconds_delta": -3.8649954160009656,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -2.3189323760016123,
+      "quality_gate": {
+        "baseline": "accept",
+        "candidate": "accept"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 82,
+      "ecg_id": "LPAE_19269_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -1.8695135439728006e-09,
+      "median_rmse_mv_delta": 8.884097346673059e-10,
+      "median_snr_db_delta": -0.04749288232774962,
+      "median_gain_error_delta": -1.6158459015258586e-09,
+      "elapsed_seconds_delta": -4.931783166006426,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -2.0903496250048192,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.027951933102775106,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": -0.35844498181266715,
+      "median_gain_error_delta": -0.0007404259177686834,
+      "elapsed_seconds_delta": 0.19791399900168472,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -3.8694469850497626e-10,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 4.2582769310683943e-08,
+      "median_gain_error_delta": -0.014348230115138083,
+      "elapsed_seconds_delta": -0.8165678329896764,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.0310732910020306,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.13795583400860778,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.41551820800304995,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 80,
+      "ecg_id": "LPAE_19394_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0008369880822033382,
+      "median_rmse_mv_delta": -8.083418795434838e-10,
+      "median_snr_db_delta": -0.0089165496583834,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.4380152919966349,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_bents",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.3753995419956482,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_crumbles",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": -0.6207899202979821,
+      "median_rmse_mv_delta": 0.10059140398453292,
+      "median_snr_db_delta": -4.580402068442256,
+      "median_gain_error_delta": -0.0010865819502037244,
+      "elapsed_seconds_delta": 8.82211745800123,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 1.0108374180017563,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 1.3142739589984558,
+      "quality_gate": {
+        "baseline": "reject",
+        "candidate": "reject"
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.3286325420031062,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": 0.48687191699718824,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    },
+    {
+      "category": "photos_screens",
+      "image_id": 4,
+      "ecg_id": "LPAE_20999_hr",
+      "baseline_status": "success",
+      "candidate_status": "success",
+      "status_changed": false,
+      "median_correlation_delta": 0.0,
+      "median_rmse_mv_delta": 0.0,
+      "median_snr_db_delta": 0.0,
+      "median_gain_error_delta": 0.0,
+      "elapsed_seconds_delta": -0.07771241599220957,
+      "quality_gate": {
+        "baseline": "warn",
+        "candidate": "warn"
+      }
+    }
+  ]
+}

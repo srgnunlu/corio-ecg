@@ -17,6 +17,14 @@ import torch
 import torch.nn.functional as F_torch
 from scipy.interpolate import interp1d
 
+from src.pipeline.perspective_correction import (
+    PERSPECTIVE_CORRECTION_VERSION,
+    correct_perspective,
+)
+from src.pipeline.shadow_normalization import (
+    SHADOW_NORMALIZATION_VERSION,
+    normalize_broad_shadow,
+)
 from src.utils.signal_clean import (
     einthoven_consistency,
     highpass_filter,
@@ -73,6 +81,12 @@ class DigitizeInfo:
     nonzero_leads_count: int = 0
     einthoven_score: float = -1.0  # Pearson corr: II vs I+III (-1=not computed)
     processing_mode: str = "default"
+    page_correction_applied: bool = False
+    page_correction_confidence: float = 0.0
+    page_correction_version: str = "disabled"
+    shadow_normalization_applied: bool = False
+    shadow_score: float = 0.0
+    shadow_normalization_version: str = "disabled"
 
     @property
     def has_warnings(self) -> bool:
@@ -101,6 +115,8 @@ class DigitizeInfo:
             f"Raw signal lines: {self.raw_lines_count}",
             f"Non-zero leads: {self.nonzero_leads_count}/12",
             f"Processing mode: {self.processing_mode}",
+            f"Page correction: {'applied' if self.page_correction_applied else 'not applied'} "
+            f"(confidence: {self.page_correction_confidence:.2f})",
             f"Pixel spacing: x={self.pixel_spacing_x_mm:.3f} mm/px, "
             f"y={self.pixel_spacing_y_mm:.3f} mm/px "
             f"(avg={self.avg_pixel_per_mm:.1f} px/mm)",
@@ -292,6 +308,8 @@ class ECGDigitiser:
         device: torch.device | None = None,
         enable_dewarping_retry: bool = True,
         enable_orientation_retry: bool = True,
+        enable_perspective_correction: bool = False,
+        enable_shadow_normalization: bool = False,
     ) -> None:
         """Initialize the digitiser by loading Open-ECG-Digitizer's InferenceWrapper.
 
@@ -305,13 +323,18 @@ class ECGDigitiser:
         self.device = _select_digitiser_device(device)
         self.enable_dewarping_retry = enable_dewarping_retry
         self.enable_orientation_retry = enable_orientation_retry
+        self.enable_perspective_correction = enable_perspective_correction
+        self.enable_shadow_normalization = enable_shadow_normalization
         self.config_path = Path(config_path) if config_path else _DIGITIZER_CONFIG_PATH
         self._wrapper = self._load_wrapper()
         logger.info(
-            "ECGDigitiser ready — device=%s, dewarping_retry=%s, orientation_retry=%s",
+            "ECGDigitiser ready — device=%s, dewarping_retry=%s, "
+            "orientation_retry=%s, perspective_correction=%s, shadow_normalization=%s",
             self.device,
             self.enable_dewarping_retry,
             self.enable_orientation_retry,
+            self.enable_perspective_correction,
+            self.enable_shadow_normalization,
         )
 
     def _load_wrapper(self) -> torch.nn.Module:
@@ -503,11 +526,13 @@ class ECGDigitiser:
     def _load_image(self, image_path: Path) -> torch.Tensor:
         """Load image as (1, 3, H, W) tensor, clamped to safe dimensions.
 
-        Applies four pre-processing steps in order:
+        Applies six pre-processing steps in order:
         1. Crop an already-upright landscape ECG page from portrait screen photos
         2. Auto-rotate remaining portrait images (ECGs are always landscape)
-        3. Downscale oversized phone photos to MAX_IMAGE_DIMENSION
-        4. Upscale small images to MIN_IMAGE_DIMENSION (capped at 2x)
+        3. Optionally rectify a high-confidence quadrilateral page
+        4. Downscale oversized phone photos to MAX_IMAGE_DIMENSION
+        5. Optionally normalize a broad illumination shadow
+        6. Upscale small images to MIN_IMAGE_DIMENSION (capped at 2x)
         """
         from torchvision.io import decode_image
 
@@ -526,7 +551,21 @@ class ECGDigitiser:
                 w, h,
             )
 
-        # Step 3: Downscale oversized phone photos to prevent memory explosion
+        if getattr(self, "enable_perspective_correction", False):
+            self.last_info.page_correction_version = PERSPECTIVE_CORRECTION_VERSION
+            correction = correct_perspective(image)
+            image = correction.image
+            self.last_info.page_correction_applied = correction.applied
+            self.last_info.page_correction_confidence = correction.confidence
+            h, w = image.shape[1], image.shape[2]
+            if correction.applied:
+                logger.info(
+                    "Applied conservative perspective correction: %dx%d",
+                    w,
+                    h,
+                )
+
+        # Step 4: Downscale oversized phone photos to prevent memory explosion
         if max(h, w) > MAX_IMAGE_DIMENSION:
             scale = MAX_IMAGE_DIMENSION / max(h, w)
             new_h, new_w = int(h * scale), int(w * scale)
@@ -543,7 +582,14 @@ class ECGDigitiser:
             )
             h, w = new_h, new_w
 
-        # Step 4: Upscale small images (capped at 2x to avoid excessive blur)
+        if getattr(self, "enable_shadow_normalization", False):
+            self.last_info.shadow_normalization_version = SHADOW_NORMALIZATION_VERSION
+            normalization = normalize_broad_shadow(image)
+            image = normalization.image
+            self.last_info.shadow_normalization_applied = normalization.applied
+            self.last_info.shadow_score = normalization.shadow_score
+
+        # Step 6: Upscale small images (capped at 2x to avoid excessive blur)
         if min(h, w) < MIN_IMAGE_DIMENSION:
             scale = MIN_IMAGE_DIMENSION / min(h, w)
             scale = min(scale, self._MAX_UPSCALE_FACTOR)

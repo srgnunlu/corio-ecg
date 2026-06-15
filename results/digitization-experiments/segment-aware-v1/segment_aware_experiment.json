@@ -1,0 +1,362 @@
+{
+  "generated_at_utc": "2026-06-15T04:13:19.386844+00:00",
+  "source_sha256": "8c8a6d884a54001dcce0b50784e174356f0a44cbf27a77911d3e56bcee55e355",
+  "config": {
+    "version": "segment-aware-experiment-v1",
+    "baseline_method": "tiled",
+    "candidate_method": "segment_ensemble",
+    "supported_categories": [
+      "photos_doogee",
+      "photos_iphone",
+      "photos_samsung",
+      "photos_scans"
+    ],
+    "target_categories": [
+      "photos_bents",
+      "photos_crumbles"
+    ],
+    "tolerances": {
+      "mean_cosine_similarity_drop": 0.0,
+      "mean_abs_probability_difference_increase": 0.0,
+      "mean_agreement_rate_drop": 0.0,
+      "target_mean_cosine_similarity_gain": 0.01
+    }
+  },
+  "research_candidate": {
+    "passed": true,
+    "failed_checks": []
+  },
+  "production_status": "experimental-only",
+  "limitations": "This decision measures matched-reference diagnosis consistency, not clinical accuracy or digitization fidelity. Sparse segment inputs remain outside the diagnosis model's expected input distribution.",
+  "categories": {
+    "photos_bents": {
+      "role": "target",
+      "source_counts": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0
+      },
+      "baseline": {
+        "n": 10,
+        "mean_cosine_similarity": 0.8140941560268402,
+        "median_cosine_similarity": 0.8132363557815552,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.7688265359401704,
+          "high": 0.8594888782501221,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.0669478178024292,
+        "mean_agreement_rate": 0.9513333333333334,
+        "mean_agreement_rate_ci95": {
+          "low": 0.942,
+          "high": 0.96,
+          "resamples": 2000
+        }
+      },
+      "candidate": {
+        "n": 10,
+        "mean_cosine_similarity": 0.8476860165596009,
+        "median_cosine_similarity": 0.8495100140571594,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.8058127178251744,
+          "high": 0.8893221260607242,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.05832222402095795,
+        "mean_agreement_rate": 0.962,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9526666666666668,
+          "high": 0.9693333333333334,
+          "resamples": 2000
+        }
+      },
+      "deltas": {
+        "mean_cosine_similarity": 0.03359186053276064,
+        "mean_abs_probability_difference": -0.00862559378147125,
+        "mean_agreement_rate": 0.010666666666666602
+      }
+    },
+    "photos_crumbles": {
+      "role": "target",
+      "source_counts": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0
+      },
+      "baseline": {
+        "n": 10,
+        "mean_cosine_similarity": 0.8441473245620728,
+        "median_cosine_similarity": 0.8491958975791931,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.7997005119919777,
+          "high": 0.8831302644312382,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.06125608682632446,
+        "mean_agreement_rate": 0.96,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9493333333333333,
+          "high": 0.9686833333333333,
+          "resamples": 2000
+        }
+      },
+      "candidate": {
+        "n": 10,
+        "mean_cosine_similarity": 0.8586868584156037,
+        "median_cosine_similarity": 0.8703088462352753,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.8056952041387557,
+          "high": 0.9087313717603683,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.055135583877563475,
+        "mean_agreement_rate": 0.968,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9579999999999999,
+          "high": 0.9786666666666667,
+          "resamples": 2000
+        }
+      },
+      "deltas": {
+        "mean_cosine_similarity": 0.014539533853530906,
+        "mean_abs_probability_difference": -0.006120502948760986,
+        "mean_agreement_rate": 0.008000000000000007
+      }
+    },
+    "photos_doogee": {
+      "role": "supported",
+      "source_counts": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0
+      },
+      "baseline": {
+        "n": 10,
+        "mean_cosine_similarity": 0.9401152551174163,
+        "median_cosine_similarity": 0.9540530145168304,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.9167297104001045,
+          "high": 0.9622357879579067,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.03468577899038792,
+        "mean_agreement_rate": 0.9753333333333334,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9686666666666668,
+          "high": 0.9826666666666666,
+          "resamples": 2000
+        }
+      },
+      "candidate": {
+        "n": 10,
+        "mean_cosine_similarity": 0.9695219337940216,
+        "median_cosine_similarity": 0.9832627475261688,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.9435290287435055,
+          "high": 0.986706063747406,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.019894292671233417,
+        "mean_agreement_rate": 0.9860000000000001,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9773333333333334,
+          "high": 0.9933333333333334,
+          "resamples": 2000
+        }
+      },
+      "deltas": {
+        "mean_cosine_similarity": 0.02940667867660529,
+        "mean_abs_probability_difference": -0.014791486319154501,
+        "mean_agreement_rate": 0.010666666666666713
+      }
+    },
+    "photos_iphone": {
+      "role": "supported",
+      "source_counts": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0
+      },
+      "baseline": {
+        "n": 10,
+        "mean_cosine_similarity": 0.928605592250824,
+        "median_cosine_similarity": 0.9541405737400055,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.8915665580332279,
+          "high": 0.9585645350813865,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.03707939758896828,
+        "mean_agreement_rate": 0.9726666666666667,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9673333333333332,
+          "high": 0.9773333333333334,
+          "resamples": 2000
+        }
+      },
+      "candidate": {
+        "n": 10,
+        "mean_cosine_similarity": 0.9547305583953858,
+        "median_cosine_similarity": 0.9742881953716278,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.9295402431488037,
+          "high": 0.9765478852391243,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.027587215043604375,
+        "mean_agreement_rate": 0.9833333333333334,
+        "mean_agreement_rate_ci95": {
+          "low": 0.976,
+          "high": 0.9906666666666666,
+          "resamples": 2000
+        }
+      },
+      "deltas": {
+        "mean_cosine_similarity": 0.026124966144561834,
+        "mean_abs_probability_difference": -0.009492182545363902,
+        "mean_agreement_rate": 0.010666666666666713
+      }
+    },
+    "photos_samsung": {
+      "role": "supported",
+      "source_counts": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0
+      },
+      "baseline": {
+        "n": 10,
+        "mean_cosine_similarity": 0.9430276453495026,
+        "median_cosine_similarity": 0.9554869830608368,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.9239393073320389,
+          "high": 0.9598204152286053,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.03371044769883156,
+        "mean_agreement_rate": 0.9746666666666666,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9673333333333332,
+          "high": 0.9826666666666666,
+          "resamples": 2000
+        }
+      },
+      "candidate": {
+        "n": 10,
+        "mean_cosine_similarity": 0.9718407392501831,
+        "median_cosine_similarity": 0.9800398349761963,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.9548720024526118,
+          "high": 0.9844549545645714,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.021509763784706593,
+        "mean_agreement_rate": 0.9833333333333334,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9753333333333332,
+          "high": 0.99,
+          "resamples": 2000
+        }
+      },
+      "deltas": {
+        "mean_cosine_similarity": 0.028813093900680542,
+        "mean_abs_probability_difference": -0.012200683914124967,
+        "mean_agreement_rate": 0.008666666666666822
+      }
+    },
+    "photos_scans": {
+      "role": "supported",
+      "source_counts": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0
+      },
+      "baseline": {
+        "n": 10,
+        "mean_cosine_similarity": 0.9102641046047211,
+        "median_cosine_similarity": 0.9525842666625977,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.8478358094394207,
+          "high": 0.959690861403942,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.038325364142656325,
+        "mean_agreement_rate": 0.9713333333333333,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9593333333333331,
+          "high": 0.9813333333333333,
+          "resamples": 2000
+        }
+      },
+      "candidate": {
+        "n": 10,
+        "mean_cosine_similarity": 0.9432905316352844,
+        "median_cosine_similarity": 0.9832512736320496,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.8903846681118012,
+          "high": 0.9813392587006092,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.02795132203027606,
+        "mean_agreement_rate": 0.9866666666666667,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9766666666666668,
+          "high": 0.9953333333333333,
+          "resamples": 2000
+        }
+      },
+      "deltas": {
+        "mean_cosine_similarity": 0.033026427030563354,
+        "mean_abs_probability_difference": -0.010374042112380265,
+        "mean_agreement_rate": 0.015333333333333421
+      }
+    },
+    "photos_screens": {
+      "role": "unclassified",
+      "source_counts": {
+        "total": 10,
+        "successful": 10,
+        "failed": 0
+      },
+      "baseline": {
+        "n": 10,
+        "mean_cosine_similarity": 0.8771619319915771,
+        "median_cosine_similarity": 0.8773485720157623,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.8453189228475094,
+          "high": 0.9067353484034538,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.05482474267482758,
+        "mean_agreement_rate": 0.9620000000000001,
+        "mean_agreement_rate_ci95": {
+          "low": 0.9533333333333334,
+          "high": 0.9706833333333332,
+          "resamples": 2000
+        }
+      },
+      "candidate": {
+        "n": 10,
+        "mean_cosine_similarity": 0.920911830663681,
+        "median_cosine_similarity": 0.9358311295509338,
+        "mean_cosine_similarity_ci95": {
+          "low": 0.8909324797987938,
+          "high": 0.9485760305821895,
+          "resamples": 2000
+        },
+        "mean_abs_probability_difference": 0.03963287528604269,
+        "mean_agreement_rate": 0.9719999999999999,
+        "mean_agreement_rate_ci95": {
+          "low": 0.962,
+          "high": 0.9813333333333333,
+          "resamples": 2000
+        }
+      },
+      "deltas": {
+        "mean_cosine_similarity": 0.04374989867210388,
+        "mean_abs_probability_difference": -0.015191867388784891,
+        "mean_agreement_rate": 0.009999999999999787
+      }
+    }
+  }
+}

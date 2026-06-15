@@ -20,6 +20,7 @@ from src.pipeline.digitize import (  # noqa: E402
     NUM_LEADS,
     TARGET_LENGTH,
     UV_TO_MV,
+    DigitizeInfo,
     ECGDigitiser,
     _crop_likely_landscape_page,
     _expand_canonical_segments,
@@ -265,6 +266,54 @@ class TestCpuFullResolution:
         cropped = _crop_likely_landscape_page(image)
 
         assert cropped.shape == image.shape
+
+    def test_load_image_applies_enabled_perspective_correction(self) -> None:
+        """The controlled experiment flag applies correction before resizing."""
+        digitiser = object.__new__(ECGDigitiser)
+        digitiser.device = torch.device("cpu")
+        digitiser.enable_perspective_correction = True
+        digitiser.last_info = DigitizeInfo()
+        corrected = torch.zeros(3, 900, 1600, dtype=torch.uint8)
+
+        with (
+            patch("torchvision.io.decode_image") as mock_decode,
+            patch("src.pipeline.digitize.correct_perspective") as mock_correct,
+        ):
+            mock_decode.return_value = torch.zeros(3, 1000, 1700, dtype=torch.uint8)
+            mock_correct.return_value = MagicMock(
+                image=corrected,
+                applied=True,
+                confidence=0.91,
+            )
+            digitiser._load_image(Path("fake.png"))
+
+        assert digitiser.last_info.page_correction_applied is True
+        assert digitiser.last_info.page_correction_confidence == pytest.approx(0.91)
+        assert digitiser.last_info.page_correction_version == "conservative-perspective-v1"
+
+    def test_load_image_applies_enabled_shadow_normalization(self) -> None:
+        """The shadow experiment flag is independent from perspective correction."""
+        digitiser = object.__new__(ECGDigitiser)
+        digitiser.device = torch.device("cpu")
+        digitiser.enable_shadow_normalization = True
+        digitiser.last_info = DigitizeInfo()
+        normalized = torch.zeros(3, 900, 1600, dtype=torch.uint8)
+
+        with (
+            patch("torchvision.io.decode_image") as mock_decode,
+            patch("src.pipeline.digitize.normalize_broad_shadow") as mock_normalize,
+        ):
+            mock_decode.return_value = torch.zeros(3, 900, 1600, dtype=torch.uint8)
+            mock_normalize.return_value = MagicMock(
+                image=normalized,
+                applied=True,
+                shadow_score=0.32,
+            )
+            digitiser._load_image(Path("fake.png"))
+
+        assert digitiser.last_info.shadow_normalization_applied is True
+        assert digitiser.last_info.shadow_score == pytest.approx(0.32)
+        assert digitiser.last_info.shadow_normalization_version == "conservative-shadow-v1"
 
 
 class TestPostprocessEndToEnd:
