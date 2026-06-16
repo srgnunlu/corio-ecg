@@ -17,6 +17,7 @@ Paper ECG Photo (PNG/JPG)
 - **150+ diagnoses:** Rhythm disorders, conduction abnormalities, ischemic changes, hypertrophy, and more
 - **Clinical measurements:** Heart rate (from the full 10 s rhythm strip), PR / QRS / QT / QTc intervals, and rule-based rhythm classification
 - **Structured verdict:** Strict, explainable Normal / Abnormal / Indeterminate headline with the reasons spelled out
+- **AI natural-language summary:** Optional Claude (Opus 4.8) prose summary of the findings — Turkish or English, grounded strictly in the structured report (no new diagnoses); needs `ANTHROPIC_API_KEY`
 - **Professional web UI:** Modern medical-style Gradio app — drag &amp; drop / camera upload, progress indicator, color-coded result card, interval table, AI-diagnosis confidence bars, and a 12-lead signal plot
 - **PDF report:** One-click "Download PDF Report" — verdict, HR/rhythm, intervals, AI diagnoses, original photo, digitized tracing, and disclaimer
 - **Quality diagnostics:** Layout, lead activity, Einthoven consistency, and timing checks
@@ -29,7 +30,7 @@ Paper ECG Photo (PNG/JPG)
 | Digitization | ECG-Digitiser (nnU-Net) | ~475 MB | [GitHub](https://github.com/felixkrones/ECG-Digitiser) |
 | Diagnosis | ECGFounder (Net1D CNN) | ~370 MB | [GitHub](https://github.com/PKUDigitalHealth/ECGFounder) |
 | Measurement | scipy delineation (PR/QRS/QT/QTc) + Pan-Tompkins HR | — | in-repo (`src/measurement/`) |
-| Reporting | Deterministic structured report + reportlab PDF (LLM narrative planned) | — | in-repo (`src/report/`) |
+| Reporting | Deterministic structured report + reportlab PDF + Claude Opus 4.8 narrative | — | in-repo (`src/report/`) |
 
 ## Setup
 

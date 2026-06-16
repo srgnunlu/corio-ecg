@@ -30,6 +30,9 @@ dependencies = [
     # PDF report generation (Phase D.2)
     "reportlab>=4.0.0",
 
+    # LLM natural-language report narrative (Phase D.2)
+    "anthropic>=0.40.0",
+
     # Model downloads
     "huggingface_hub>=0.20.0",
 

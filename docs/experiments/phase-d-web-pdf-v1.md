@@ -70,11 +70,35 @@ mevcut scipy/torchvision deseniyle aynı, `type: ignore[import-untyped]`).
 - **Yalnızca render/üretim doğrulaması** — bu faz sayısal model doğruluğu
   ölçmez; D.1/D.2 sunum katmanıdır.
 
+## LLM doğal-dil özeti (D.2 nihai hedef — TAMAMLANDI 2026-06-17)
+
+Deterministik raporun yanına **Claude Opus 4.8** ile doğal-dil özet eklendi.
+
+- **Modül** `src/report/llm_narrative.py`: `generate_narrative(report, language)`.
+  Girdi = `report_to_dict(report)` JSON. Model `claude-opus-4-8`, thinking yok
+  (kısa/grounded özet → hız+maliyet için adaptive gereksiz), max_tokens 1024,
+  non-streaming.
+- **Halüsinasyon koruması (sıkı system prompt):** yalnızca verilen bulguları
+  özetler; listede olmayan tanı/ritim/ölçüm eklemez; null değeri "ölçülemedi"
+  der; tedavi/karar vermez; sonunda "bu AI özetidir, hekim doğrulamalı" cümlesi.
+  3 paragraf: karar+HR/ritim, intervaller, top tanılar.
+- **Best-effort:** `ANTHROPIC_API_KEY` yoksa veya API hata verirse `None` döner;
+  rapor yine deterministik çalışır. Key `.env`'den (`python-dotenv`).
+- **Dil:** TR/EN seçici (web'de dropdown). **Tetikleme:** her analizde otomatik
+  (key varsa). Web'de mor "🧠 AI Summary" kartı; PDF'e "AI Summary" bölümü.
+- **⚠️ Font bug yakalandı + çözüldü:** reportlab varsayılan Helvetica Türkçe
+  glyph (ş/ı/ğ/İ) içermiyordu → PDF'te kutu (□) çıkıyordu. matplotlib ile gelen
+  **DejaVuSans** TTF kaydedildi (`registerFont`+`registerFontFamily`), tüm
+  stiller bu fonta geçirildi. Kayıt başarısız olursa Helvetica'ya düşer.
+- **⚠️ GÜVENLİK:** API'ye sadece yapılandırılmış bulgular (HR, interval, tanı
+  etiketleri) gider — hasta kimliği/PHI gitmez. Gerçek hasta verisi devreye
+  girince dış-servis veri aktarımı sayılır; KVKK/onam ayrıca değerlendirilmeli.
+- **Maliyet:** rapor başına ~$0.013 (Opus 4.8, ~600 giriş + ~400 çıkış token).
+- **Bağımlılık:** `anthropic>=0.40.0`. **Test:** 6 yeni (`test_llm_narrative.py`,
+  fake client — gerçek API çağrısı yok) + PDF narrative testi. Suite **327 passed**.
+
 ## Bilinen sınırlamalar / sonraki adımlar
 
-- **LLM doğal-dil özeti henüz yok.** Roadmap D.2 nihai hedefi deterministik
-  ölçüm bloğu + LLM (Claude Opus 4.8) doğal-dil özet. Şu an rapor tamamen
-  deterministik; LLM narrative ayrı adım (API key `.env`, PHI loglanmaz).
 - **Abstention UX (D.1) bekliyor:** quality gate üretime bağlanınca "bu görüntüyü
   okuyamadım, şu açıdan yeniden çekin" mesajı. Gate Faz A'da bilinçli olarak
   üretime bağlanmadı → şimdilik debug paneli uyarıları mevcut.

@@ -66,6 +66,19 @@ def test_build_pdf_without_images(tmp_path: Path) -> None:
     assert _is_pdf(out)
 
 
+def test_build_pdf_with_narrative(tmp_path: Path) -> None:
+    out = tmp_path / "report_narrative.pdf"
+
+    # Include HTML-special characters to confirm escaping doesn't break reportlab.
+    narrative = (
+        "Sinüs ritmi, hız 72/dk.\n\nPR & QRS normal; QTc < 440 ms.\n\n"
+        "Bu yapay zeka özetidir, klinik karar değildir."
+    )
+    build_pdf_report(_make_report(), output_path=out, narrative=narrative)
+
+    assert _is_pdf(out)
+
+
 def test_build_pdf_indeterminate_no_diagnoses(tmp_path: Path) -> None:
     out = tmp_path / "report_indeterminate.pdf"
     report = _make_report(assessment="Indeterminate ECG")

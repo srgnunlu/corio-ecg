@@ -20,6 +20,7 @@ from src.measurement.intervals import IntervalMeasurements, interpret_intervals
 from src.measurement.rhythm_analysis import analyze_rhythm
 from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser
 from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
+from src.report.llm_narrative import generate_narrative, narrative_available
 from src.report.pdf_report import build_pdf_report
 from src.report.structured_report import ECGReport, build_report
 from src.utils.ecg_labels import CRITICAL_DIAGNOSIS_INDICES
@@ -42,6 +43,7 @@ class AnalysisContext:
     intervals: IntervalMeasurements | None
     original_image: Image.Image | None
     signal_image: Image.Image | None
+    narrative: str | None = None
 
 # Lazy-loaded global instances (loaded once on first request)
 _digitiser: ECGDigitiser | None = None
@@ -130,6 +132,7 @@ def analyze_ecg(
     image: Image.Image | None,
     threshold: float,
     layout_choice: str,
+    language: str = "tr",
     progress: gr.Progress | None = None,
 ) -> tuple[Image.Image | None, str, str, str, AnalysisContext, Image.Image | None]:
     """Full pipeline: image -> digitize -> diagnose -> display.
@@ -138,6 +141,7 @@ def analyze_ecg(
         Tuple of (ecg_visualization, critical_findings_html, all_diagnoses_html,
                   debug_info_html, analysis_context, original_image). The context
         feeds the PDF-download action; original_image mirrors to the Original tab.
+        ``language`` ("tr"/"en") selects the auto-generated AI summary language.
     """
     import time as _time
 
@@ -229,6 +233,13 @@ def analyze_ecg(
             logger.exception("Report assembly failed")
             report = None
 
+        # Step 2b: LLM natural-language summary (best-effort, auto on each run).
+        # Skipped silently when no API key is configured or the call fails.
+        narrative: str | None = None
+        if report is not None and narrative_available():
+            progress(0.75, desc="Writing AI summary…")
+            narrative = generate_narrative(report, language=language)
+
         # Step 3: Generate ECG paper visualization
         progress(0.85, desc="Rendering digitized signal…")
         plot_start = _time.time()
@@ -244,6 +255,7 @@ def analyze_ecg(
         # Step 5: Format results
         critical_html = (
             _format_report_headline(report)
+            + _format_narrative(narrative)
             + _format_intervals(intervals)
             + _format_critical(
                 results=results,
@@ -261,6 +273,7 @@ def analyze_ecg(
             intervals=intervals,
             original_image=image,
             signal_image=ecg_image,
+            narrative=narrative,
         )
         response = (ecg_image, critical_html, diagnoses_html, debug_html, context, image)
         del signal, all_results, results, debug_info, wrapper_times, fig
@@ -345,6 +358,28 @@ def _format_report_headline(report: ECGReport | None) -> str:
         "<div style='font-size:11px; color:#64748B; margin-top:8px;'>"
         "Decision support — final responsibility rests with the reviewing clinician."
         "</div></div>"
+    )
+
+
+def _format_narrative(narrative: str | None) -> str:
+    """Render the LLM natural-language summary as a card (paragraph-aware)."""
+    if not narrative:
+        return ""
+    import html as _html
+
+    paragraphs = [p.strip() for p in narrative.split("\n\n") if p.strip()]
+    body = "".join(
+        f"<p style='margin:0 0 8px 0; font-size:13.5px; color:#334155; "
+        f"line-height:1.55;'>{_html.escape(p)}</p>"
+        for p in paragraphs
+    )
+    return (
+        "<div style='padding:14px 16px; margin-bottom:12px; background:#F5F3FF; "
+        "border-radius:8px; border-left:4px solid #8B5CF6;'>"
+        "<div style='font-size:13px; font-weight:bold; color:#6D28D9; "
+        "margin-bottom:6px;'>&#129504; AI Summary</div>"
+        f"{body}"
+        "</div>"
     )
 
 
@@ -721,6 +756,7 @@ def generate_pdf(context: AnalysisContext | None) -> str | None:
             original_image=context.original_image,
             signal_image=context.signal_image,
             intervals=context.intervals,
+            narrative=context.narrative,
             generated_at=stamp,
         )
     except Exception:  # noqa: BLE001
@@ -810,6 +846,17 @@ def create_app() -> gr.Blocks:
                         label="Diagnosis Threshold",
                         info="For digitized photos, 0.65–0.75 gives cleaner results",
                     )
+                    _summary_hint = (
+                        "AI summary language (auto-generated each run)"
+                        if narrative_available()
+                        else "AI summary disabled — set ANTHROPIC_API_KEY in .env to enable"
+                    )
+                    language_dropdown = gr.Dropdown(
+                        choices=[("Türkçe", "tr"), ("English", "en")],
+                        value="tr",
+                        label="AI Summary Language",
+                        info=_summary_hint,
+                    )
                     analyze_btn = gr.Button(
                         "Analyze ECG",
                         variant="primary",
@@ -880,7 +927,7 @@ def create_app() -> gr.Blocks:
         # Wire up the analyze button
         analyze_btn.click(
             fn=analyze_ecg,
-            inputs=[image_input, threshold_slider, layout_dropdown],
+            inputs=[image_input, threshold_slider, layout_dropdown, language_dropdown],
             outputs=[
                 ecg_output,
                 critical_output,
