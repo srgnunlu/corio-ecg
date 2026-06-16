@@ -16,8 +16,10 @@ from PIL import Image
 import torch
 
 from src.measurement.intervals import IntervalMeasurements, interpret_intervals
+from src.measurement.rhythm_analysis import analyze_rhythm
 from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser
 from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
+from src.report.structured_report import ECGReport, build_report
 from src.utils.ecg_labels import CRITICAL_DIAGNOSIS_INDICES, ECG_FOUNDER_LABELS
 from src.web.ecg_plot import fig_to_pil, plot_ecg_paper
 
@@ -174,6 +176,25 @@ def analyze_ecg(
         estimated_hr = diagnoser.last_estimated_hr_bpm
         intervals = diagnoser.last_interval_measurements
 
+        # Rhythm classification + structured report (Phase C.3). Best-effort:
+        # rhythm/report assembly must never break the core diagnosis path.
+        try:
+            rhythm = analyze_rhythm(signal, rhythm_strip=rhythm_strip)
+        except Exception:  # noqa: BLE001
+            logger.exception("Rhythm analysis failed")
+            rhythm = None
+        try:
+            report = build_report(
+                all_results,
+                intervals,
+                rhythm,
+                threshold=threshold,
+                estimated_hr_bpm=estimated_hr,
+            )
+        except Exception:  # noqa: BLE001
+            logger.exception("Report assembly failed")
+            report = None
+
         # Step 3: Generate ECG paper visualization
         plot_start = _time.time()
         fig = plot_ecg_paper(signal)
@@ -186,11 +207,15 @@ def analyze_ecg(
         wrapper_times["Total (end-to-end)"] = _time.time() - total_start
 
         # Step 5: Format results
-        critical_html = _format_intervals(intervals) + _format_critical(
-            results=results,
-            all_results=all_results,
-            threshold=threshold,
-            estimated_hr=estimated_hr,
+        critical_html = (
+            _format_report_headline(report)
+            + _format_intervals(intervals)
+            + _format_critical(
+                results=results,
+                all_results=all_results,
+                threshold=threshold,
+                estimated_hr=estimated_hr,
+            )
         )
         diagnoses_html = _format_diagnoses(all_results, threshold)
         debug_html = _format_debug_info(debug_info, wrapper_times, estimated_hr)
@@ -229,6 +254,54 @@ def analyze_ecg(
         elif torch.backends.mps.is_available():
             torch.mps.empty_cache()
         gc.collect()
+
+
+def _format_report_headline(report: ECGReport | None) -> str:
+    """Render the report headline: overall verdict + rhythm line + HR.
+
+    This is the clinician-facing TLDR that sits above the detailed cards: is the
+    ECG normal or not, what is the rhythm, and at what rate.
+    """
+    if report is None:
+        return ""
+
+    palette = {
+        "Normal ECG": ("#166534", "#F0FDF4", "#22C55E"),
+        "Abnormal ECG": ("#991B1B", "#FEF2F2", "#EF4444"),
+        "Indeterminate ECG": ("#92400E", "#FFFBEB", "#F59E0B"),
+    }
+    fg, bg, accent = palette.get(report.overall_assessment, ("#1E3A8A", "#F8FAFC", "#3B82F6"))
+
+    hr_text = f"{report.heart_rate_bpm:.0f} bpm" if report.heart_rate_bpm is not None else "n/a"
+    rhythm_line = (
+        f"<b>Rhythm:</b> {report.rhythm_classification} &nbsp;·&nbsp; "
+        f"<b>HR:</b> {hr_text}"
+    )
+    if report.ectopy_present:
+        rhythm_line += (
+            f" &nbsp;·&nbsp; <span style='color:#B91C1C;'>"
+            f"{report.pvc_count} PVC-like beat(s)</span>"
+        )
+
+    reasons_html = ""
+    if report.abnormal_reasons:
+        items = "".join(f"<li>{r}</li>" for r in report.abnormal_reasons)
+        reasons_html = (
+            "<ul style='margin:8px 0 0 0; padding-left:20px; font-size:13px; "
+            f"color:{fg};'>{items}</ul>"
+        )
+
+    return (
+        f"<div style='padding:14px 16px; margin-bottom:12px; background:{bg}; "
+        f"border-radius:8px; border-left:4px solid {accent};'>"
+        f"<div style='font-size:18px; font-weight:bold; color:{fg};'>"
+        f"{report.overall_assessment}</div>"
+        f"<div style='font-size:14px; color:#334155; margin-top:4px;'>{rhythm_line}</div>"
+        f"{reasons_html}"
+        "<div style='font-size:11px; color:#64748B; margin-top:8px;'>"
+        "Decision support — final responsibility rests with the reviewing clinician."
+        "</div></div>"
+    )
 
 
 def _format_intervals(measurements: IntervalMeasurements | None) -> str:
