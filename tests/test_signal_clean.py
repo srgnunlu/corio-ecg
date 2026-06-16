@@ -13,6 +13,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from src.utils.signal_clean import (
     einthoven_consistency,
+    goldberger_consistency,
     highpass_filter,
     wavelet_denoise,
 )
@@ -162,3 +163,88 @@ class TestEinthovenConsistency:
 
         score = einthoven_consistency(normalized)
         assert score > 0.95, f"Post-z-score consistency too low: {score:.3f}"
+
+
+def _make_consistent_limb_leads(rng: np.random.RandomState) -> np.ndarray:
+    """Build a 12-lead signal whose limb leads satisfy every derivation rule."""
+    signal = np.zeros((12, N_SAMPLES))
+    signal[0] = rng.randn(N_SAMPLES)              # I
+    signal[2] = rng.randn(N_SAMPLES)              # III
+    signal[1] = signal[0] + signal[2]             # II  = I + III
+    signal[3] = -(signal[0] + signal[1]) / 2.0    # aVR = -(I + II) / 2
+    signal[4] = (signal[0] - signal[2]) / 2.0     # aVL = (I - III) / 2
+    signal[5] = (signal[1] + signal[2]) / 2.0     # aVF = (II + III) / 2
+    for i in range(6, 12):
+        signal[i] = rng.randn(N_SAMPLES)          # chest leads: independent
+    return signal
+
+
+class TestGoldbergerConsistency:
+    """Verify the full Einthoven/Goldberger limb-lead redundancy check."""
+
+    def test_perfect_consistency(self) -> None:
+        """Exact derivation identities give ~1.0 correlations and ~0 residuals."""
+        rng = np.random.RandomState(42)
+        signal = _make_consistent_limb_leads(rng)
+
+        result = goldberger_consistency(signal)
+
+        for rule, corr in result.correlations.items():
+            assert corr > 0.99, f"Rule {rule} correlation too low: {corr:.3f}"
+        assert result.mean_residual < 0.01
+        assert result.worst_residual < 0.01
+
+    def test_recovers_phase_shifted_lead(self) -> None:
+        """A circularly shifted aVR still matches under the best-lag search.
+
+        On a 3x4 paper ECG the augmented leads come from a different column
+        (time window) than I/II/III, so the measured trace is phase-shifted
+        from its derivation. The lag-tolerant metric must see through that.
+        """
+        rng = np.random.RandomState(7)
+        signal = _make_consistent_limb_leads(rng)
+        shift = 300  # 0.6 s at 500 Hz — within one slow RR interval
+        signal[3] = np.roll(signal[3], shift)
+
+        lag_tolerant = goldberger_consistency(signal, max_lag_seconds=1.3)
+        zero_lag = goldberger_consistency(signal, max_lag_seconds=0.0)
+
+        # Circularly rolling white noise loses ``shift`` samples of overlap in
+        # the linear cross-correlation, capping recovery below 1.0; the contrast
+        # with the zero-lag value is what proves phase tolerance works.
+        assert lag_tolerant.correlations["aVR"] > 0.9
+        assert zero_lag.correlations["aVR"] < 0.5
+        assert lag_tolerant.residuals["aVR"] < zero_lag.residuals["aVR"]
+
+    def test_detects_inconsistent_leads(self) -> None:
+        """Fully random limb leads give high residuals."""
+        rng = np.random.RandomState(1)
+        signal = rng.randn(12, N_SAMPLES)
+
+        result = goldberger_consistency(signal)
+
+        assert result.mean_residual > 0.5
+        assert result.worst_residual >= result.mean_residual
+
+    def test_flat_leads_return_max_residual(self) -> None:
+        """Flat leads yield 0 correlation and residual 1.0 without crashing."""
+        signal = np.zeros((12, N_SAMPLES))
+        result = goldberger_consistency(signal)
+        assert result.mean_residual == 1.0
+        assert all(corr == 0.0 for corr in result.correlations.values())
+
+    def test_requires_six_limb_leads(self) -> None:
+        """Fewer than six leads cannot define the augmented derivations."""
+        with pytest.raises(ValueError, match="needs >=6 leads"):
+            goldberger_consistency(np.zeros((3, N_SAMPLES)))
+
+    def test_worst_residual_is_max_of_rules(self) -> None:
+        """The worst residual must equal the maximum per-rule residual."""
+        rng = np.random.RandomState(99)
+        signal = _make_consistent_limb_leads(rng)
+        signal[4] = rng.randn(N_SAMPLES)  # corrupt only aVL
+
+        result = goldberger_consistency(signal)
+
+        assert result.worst_residual == max(result.residuals.values())
+        assert result.residuals["aVL"] == result.worst_residual

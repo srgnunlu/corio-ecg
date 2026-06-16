@@ -1,0 +1,558 @@
+{
+  "generated_at_utc": "2026-06-16T12:04:27.431280+00:00",
+  "fidelity_source": "results/pmcardio-holdout/tune/pmcardio_reference_fidelity.json",
+  "lag_variants": {
+    "lag_tolerant": 1.3,
+    "zero_lag": 0.0
+  },
+  "rules": [
+    "II = I+III",
+    "aVR = -(I+II)/2",
+    "aVL = (I-III)/2",
+    "aVF = (II+III)/2"
+  ],
+  "summary": {
+    "lag_tolerant": {
+      "mean_residual": {
+        "false_accept_values": [
+          0.4974242076277733,
+          0.1349291354417801
+        ],
+        "control_count": 10,
+        "control_min": 0.1461661010980606,
+        "control_max": 0.6626803055405617,
+        "control_median": 0.39368103817105293,
+        "separation_margin": -0.5277511700987816
+      },
+      "worst_residual": {
+        "false_accept_values": [
+          0.7973803728818893,
+          0.2008691430091858
+        ],
+        "control_count": 10,
+        "control_min": 0.21977370977401733,
+        "control_max": 0.826093927025795,
+        "control_median": 0.6235764771699905,
+        "separation_margin": -0.6252247840166092
+      }
+    },
+    "zero_lag": {
+      "mean_residual": {
+        "false_accept_values": [
+          0.7372330948710442,
+          0.7429159265011549
+        ],
+        "control_count": 10,
+        "control_min": 0.46161915361881256,
+        "control_max": 0.9855628237128258,
+        "control_median": 0.752329976297915,
+        "separation_margin": -0.24832972884178162
+      },
+      "worst_residual": {
+        "false_accept_values": [
+          1.0,
+          1.0
+        ],
+        "control_count": 10,
+        "control_min": 0.7143896520137787,
+        "control_max": 1.0,
+        "control_median": 1.0,
+        "separation_margin": 0.0
+      }
+    }
+  },
+  "records": [
+    {
+      "category": "photos_doogee",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "false_accept",
+      "true_median_correlation": 0.8937304901314367,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9926007986068726,
+            "aVR": 0.5810186266899109,
+            "aVL": 0.20261962711811066,
+            "aVF": 0.23406411707401276
+          },
+          "residuals": {
+            "II": 0.007399201393127441,
+            "aVR": 0.4189813733100891,
+            "aVL": 0.7973803728818893,
+            "aVF": 0.7659358829259872
+          },
+          "mean_residual": 0.4974242076277733,
+          "worst_residual": 0.7973803728818893
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9926007986068726,
+            "aVR": 0.058466821908950806,
+            "aVL": -0.10787036269903183,
+            "aVF": -0.20798078179359436
+          },
+          "residuals": {
+            "II": 0.007399201393127441,
+            "aVR": 0.9415331780910492,
+            "aVL": 1.0,
+            "aVF": 1.0
+          },
+          "mean_residual": 0.7372330948710442,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 26,
+      "layout": "3x4+1R",
+      "role": "false_accept",
+      "true_median_correlation": 0.5145751453168269,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9778480529785156,
+            "aVR": 0.7991308569908142,
+            "aVL": 0.8464935421943665,
+            "aVF": 0.8368110060691833
+          },
+          "residuals": {
+            "II": 0.022151947021484375,
+            "aVR": 0.2008691430091858,
+            "aVL": 0.15350645780563354,
+            "aVF": 0.16318899393081665
+          },
+          "mean_residual": 0.1349291354417801,
+          "worst_residual": 0.2008691430091858
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9568741917610168,
+            "aVR": 0.07146210223436356,
+            "aVL": -0.14191046357154846,
+            "aVF": -0.14405930042266846
+          },
+          "residuals": {
+            "II": 0.043125808238983154,
+            "aVR": 0.9285378977656364,
+            "aVL": 1.0,
+            "aVF": 1.0
+          },
+          "mean_residual": 0.7429159265011549,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 26,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9871335730214988,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.6670023202896118,
+            "aVR": 0.19136899709701538,
+            "aVL": 0.27396419644355774,
+            "aVF": 0.6614751815795898
+          },
+          "residuals": {
+            "II": 0.3329976797103882,
+            "aVR": 0.8086310029029846,
+            "aVL": 0.7260358035564423,
+            "aVF": 0.33852481842041016
+          },
+          "mean_residual": 0.5515473261475563,
+          "worst_residual": 0.8086310029029846
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.2594505250453949,
+            "aVR": 0.15101222693920135,
+            "aVL": 0.04142222926020622,
+            "aVF": -0.14403539896011353
+          },
+          "residuals": {
+            "II": 0.7405494749546051,
+            "aVR": 0.8489877730607986,
+            "aVL": 0.9585777707397938,
+            "aVF": 1.0
+          },
+          "mean_residual": 0.8870287546887994,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9809350302294423,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.983299970626831,
+            "aVR": 0.505578339099884,
+            "aVL": 0.5455291867256165,
+            "aVF": 0.41105028986930847
+          },
+          "residuals": {
+            "II": 0.016700029373168945,
+            "aVR": 0.49442166090011597,
+            "aVL": 0.45447081327438354,
+            "aVF": 0.5889497101306915
+          },
+          "mean_residual": 0.38863555341959,
+          "worst_residual": 0.5889497101306915
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9704537391662598,
+            "aVR": -0.1338847130537033,
+            "aVL": -0.20470762252807617,
+            "aVF": 0.022429779171943665
+          },
+          "residuals": {
+            "II": 0.029546260833740234,
+            "aVR": 1.0,
+            "aVL": 1.0,
+            "aVF": 0.9775702208280563
+          },
+          "mean_residual": 0.7517791204154491,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9803258209868684,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9883853793144226,
+            "aVR": 0.481981486082077,
+            "aVL": 0.5425724387168884,
+            "aVF": 0.39215460419654846
+          },
+          "residuals": {
+            "II": 0.011614620685577393,
+            "aVR": 0.518018513917923,
+            "aVL": 0.4574275612831116,
+            "aVF": 0.6078453958034515
+          },
+          "mean_residual": 0.39872652292251587,
+          "worst_residual": 0.6078453958034515
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9883853793144226,
+            "aVR": -0.14589755237102509,
+            "aVL": -0.20497620105743408,
+            "aVF": 0.0029332824051380157
+          },
+          "residuals": {
+            "II": 0.011614620685577393,
+            "aVR": 1.0,
+            "aVL": 1.0,
+            "aVF": 0.997066717594862
+          },
+          "mean_residual": 0.7521703345701098,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 100,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.979725713571791,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.2383970469236374,
+            "aVR": 0.17390607297420502,
+            "aVL": 0.6902139186859131,
+            "aVF": 0.2467617392539978
+          },
+          "residuals": {
+            "II": 0.7616029530763626,
+            "aVR": 0.826093927025795,
+            "aVL": 0.3097860813140869,
+            "aVF": 0.7532382607460022
+          },
+          "mean_residual": 0.6626803055405617,
+          "worst_residual": 0.826093927025795
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": -0.6343540549278259,
+            "aVR": 0.0577487051486969,
+            "aVL": -0.14858978986740112,
+            "aVF": -0.14143280684947968
+          },
+          "residuals": {
+            "II": 1.0,
+            "aVR": 0.9422512948513031,
+            "aVL": 1.0,
+            "aVF": 1.0
+          },
+          "mean_residual": 0.9855628237128258,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 28,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9756090349978344,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9643895626068115,
+            "aVR": 0.3402766287326813,
+            "aVL": 0.5154971480369568,
+            "aVF": 0.6268046498298645
+          },
+          "residuals": {
+            "II": 0.03561043739318848,
+            "aVR": 0.6597233712673187,
+            "aVL": 0.4845028519630432,
+            "aVF": 0.3731953501701355
+          },
+          "mean_residual": 0.3882580026984215,
+          "worst_residual": 0.6597233712673187
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9566249251365662,
+            "aVR": -0.03331423178315163,
+            "aVL": 0.09788882732391357,
+            "aVF": 0.01637640967965126
+          },
+          "residuals": {
+            "II": 0.04337507486343384,
+            "aVR": 1.0,
+            "aVL": 0.9021111726760864,
+            "aVF": 0.9836235903203487
+          },
+          "mean_residual": 0.7322774594649673,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 83,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.9751991649242392,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9978631138801575,
+            "aVR": 0.7013118267059326,
+            "aVL": 0.666020393371582,
+            "aVF": 0.638327419757843
+          },
+          "residuals": {
+            "II": 0.0021368861198425293,
+            "aVR": 0.2986881732940674,
+            "aVL": 0.33397960662841797,
+            "aVF": 0.361672580242157
+          },
+          "mean_residual": 0.24911931157112122,
+          "worst_residual": 0.361672580242157
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9978631138801575,
+            "aVR": 0.39421167969703674,
+            "aVL": 0.47583824396133423,
+            "aVF": 0.2856103479862213
+          },
+          "residuals": {
+            "II": 0.0021368861198425293,
+            "aVR": 0.6057883203029633,
+            "aVL": 0.5241617560386658,
+            "aVF": 0.7143896520137787
+          },
+          "mean_residual": 0.46161915361881256,
+          "worst_residual": 0.7143896520137787
+        }
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9736602400462777,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9414966106414795,
+            "aVR": 0.5270824432373047,
+            "aVL": 0.6219226121902466,
+            "aVF": 0.49906620383262634
+          },
+          "residuals": {
+            "II": 0.05850338935852051,
+            "aVR": 0.4729175567626953,
+            "aVL": 0.3780773878097534,
+            "aVF": 0.5009337961673737
+          },
+          "mean_residual": 0.3526080325245857,
+          "worst_residual": 0.5009337961673737
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9173792004585266,
+            "aVR": -0.13360576331615448,
+            "aVL": -0.21721558272838593,
+            "aVF": 0.014691673219203949
+          },
+          "residuals": {
+            "II": 0.08262079954147339,
+            "aVR": 1.0,
+            "aVL": 1.0,
+            "aVF": 0.985308326780796
+          },
+          "mean_residual": 0.7669822815805674,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9642596520111708,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9863882660865784,
+            "aVR": 0.5575185418128967,
+            "aVL": 0.33965232968330383,
+            "aVF": 0.43075311183929443
+          },
+          "residuals": {
+            "II": 0.01361173391342163,
+            "aVR": 0.44248145818710327,
+            "aVL": 0.6603476703166962,
+            "aVF": 0.5692468881607056
+          },
+          "mean_residual": 0.42142193764448166,
+          "worst_residual": 0.6603476703166962
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9849706292152405,
+            "aVR": 0.07002724707126617,
+            "aVL": -0.06660089641809464,
+            "aVF": -0.14428676664829254
+          },
+          "residuals": {
+            "II": 0.015029370784759521,
+            "aVR": 0.9299727529287338,
+            "aVL": 1.0,
+            "aVF": 1.0
+          },
+          "mean_residual": 0.7362505309283733,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 38,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.9629234248151953,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9667421579360962,
+            "aVR": 0.7802262902259827,
+            "aVL": 0.8046407699584961,
+            "aVF": 0.8637263774871826
+          },
+          "residuals": {
+            "II": 0.03325784206390381,
+            "aVR": 0.21977370977401733,
+            "aVL": 0.1953592300415039,
+            "aVF": 0.13627362251281738
+          },
+          "mean_residual": 0.1461661010980606,
+          "worst_residual": 0.21977370977401733
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9667421579360962,
+            "aVR": -0.0648001953959465,
+            "aVL": -0.2370043396949768,
+            "aVF": -0.006046762689948082
+          },
+          "residuals": {
+            "II": 0.03325784206390381,
+            "aVR": 1.0,
+            "aVL": 1.0,
+            "aVF": 1.0
+          },
+          "mean_residual": 0.758314460515976,
+          "worst_residual": 1.0
+        }
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9598267054059292,
+      "variants": {
+        "lag_tolerant": {
+          "correlations": {
+            "II": 0.9433688521385193,
+            "aVR": 0.5342040061950684,
+            "aVL": 0.36069244146347046,
+            "aVF": 0.44340765476226807
+          },
+          "residuals": {
+            "II": 0.05663114786148071,
+            "aVR": 0.46579599380493164,
+            "aVL": 0.6393075585365295,
+            "aVF": 0.5565923452377319
+          },
+          "mean_residual": 0.42958176136016846,
+          "worst_residual": 0.6393075585365295
+        },
+        "zero_lag": {
+          "correlations": {
+            "II": 0.9315697550773621,
+            "aVR": 0.05847177281975746,
+            "aVL": -0.11934927850961685,
+            "aVF": -0.16806426644325256
+          },
+          "residuals": {
+            "II": 0.06843024492263794,
+            "aVR": 0.9415282271802425,
+            "aVL": 1.0,
+            "aVF": 1.0
+          },
+          "mean_residual": 0.7524896180257201,
+          "worst_residual": 1.0
+        }
+      }
+    }
+  ]
+}

@@ -5,10 +5,11 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass
 
 import numpy as np
 import pywt
-from scipy.signal import butter, sosfiltfilt
+from scipy.signal import butter, correlate, sosfiltfilt
 
 logger = logging.getLogger(__name__)
 
@@ -138,3 +139,128 @@ def einthoven_consistency(signal: np.ndarray) -> float:
 
     corr = np.corrcoef(lead_ii, computed_ii)[0, 1]
     return float(corr) if np.isfinite(corr) else 0.0
+
+
+# Limb-lead derivation identities (Einthoven + Goldberger). Each maps a
+# measured limb lead to the combination of the three bipolar limb leads it
+# must equal in a simultaneous recording. Lead order: I=0, II=1, III=2,
+# aVR=3, aVL=4, aVF=5.
+#   II  = I + III          (Einthoven's law)
+#   aVR = -(I + II) / 2     (Goldberger)
+#   aVL = (I - III) / 2     (Goldberger)
+#   aVF = (II + III) / 2    (Goldberger)
+# Maximum lag (seconds) searched when matching a measured lead to its derived
+# counterpart. On a 3x4 paper ECG the limb leads come from different columns
+# (different 2.5 s time windows), so after column tiling the derived and
+# measured traces are phase-shifted by an arbitrary fraction of a cardiac
+# cycle. A lag search of just over one slow RR interval recovers that phase so
+# the metric measures morphology agreement, not column timing.
+_GOLDBERGER_MAX_LAG_SECONDS: float = 1.3
+
+
+@dataclass(frozen=True)
+class GoldbergerConsistency:
+    """Phase-tolerant agreement of measured limb leads with their derivations.
+
+    All correlations are best-lag Pearson values in ``[-1, 1]`` (higher is more
+    physiologically consistent). Residuals are ``1 - correlation`` clamped to
+    ``[0, 1]`` so that larger means a worse, internally inconsistent
+    reconstruction — the failure mode a stable-but-wrong digitization exhibits.
+    """
+
+    correlations: dict[str, float]
+    residuals: dict[str, float]
+    mean_residual: float
+    worst_residual: float
+
+
+def _best_lag_correlation(
+    measured: np.ndarray,
+    derived: np.ndarray,
+    max_lag: int,
+) -> float:
+    """Return the maximum normalized cross-correlation within ``+/- max_lag``.
+
+    Both inputs are mean-centered and scaled to unit standard deviation, so the
+    full FFT cross-correlation divided by the sample count equals the Pearson
+    correlation at each integer lag. The maximum over the lag window recovers
+    the best phase alignment between a measured lead and its derived twin.
+
+    Args:
+        measured: 1-D measured lead signal.
+        derived: 1-D derived lead signal (a limb-lead combination).
+        max_lag: Lag half-window in samples (``0`` reduces to zero-lag Pearson).
+
+    Returns:
+        Best-lag Pearson correlation, or ``0.0`` for degenerate flat inputs.
+    """
+    centered_measured = measured - np.mean(measured)
+    centered_derived = derived - np.mean(derived)
+    std_measured = float(np.std(centered_measured))
+    std_derived = float(np.std(centered_derived))
+    if std_measured < 1e-9 or std_derived < 1e-9:
+        return 0.0
+
+    normalized_measured = centered_measured / std_measured
+    normalized_derived = centered_derived / std_derived
+    n_samples = len(normalized_measured)
+
+    cross = correlate(normalized_measured, normalized_derived, mode="full", method="fft")
+    cross = cross / n_samples
+    lags = np.arange(-(n_samples - 1), n_samples)
+    window = np.abs(lags) <= max_lag
+    best = float(np.max(cross[window]))
+    # FFT rounding can nudge a perfect match a hair past 1.0; clamp for safety.
+    return float(np.clip(best, -1.0, 1.0))
+
+
+def goldberger_consistency(
+    signal: np.ndarray,
+    sample_rate: int = 500,
+    max_lag_seconds: float = _GOLDBERGER_MAX_LAG_SECONDS,
+) -> GoldbergerConsistency:
+    """Score the full limb-lead redundancy of a digitized 12-lead signal.
+
+    Extends the single Einthoven check (``II = I + III``) to all four
+    Einthoven/Goldberger derivation identities. A faithful reconstruction
+    satisfies every identity (residuals near zero); a stable-but-wrong
+    digitization — distorted morphology or a swapped lead — violates one or
+    more, regardless of how reproducible it is.
+
+    Pass ``max_lag_seconds=0.0`` for the strict zero-lag variant (only valid
+    when all six limb leads share one time window).
+
+    Args:
+        signal: Shape ``(>=6, N)`` — at least the six limb leads, any scaling.
+        sample_rate: Sampling rate in Hz, used to convert the lag window.
+        max_lag_seconds: Phase-search half-window in seconds.
+
+    Returns:
+        A :class:`GoldbergerConsistency` with per-rule correlations/residuals
+        and the mean and worst residual across the four rules.
+    """
+    if signal.shape[0] < 6:
+        raise ValueError(f"goldberger_consistency needs >=6 leads, got {signal.shape[0]}")
+
+    lead_i, lead_ii, lead_iii = signal[0], signal[1], signal[2]
+    lead_avr, lead_avl, lead_avf = signal[3], signal[4], signal[5]
+    rules: dict[str, tuple[np.ndarray, np.ndarray]] = {
+        "II": (lead_ii, lead_i + lead_iii),
+        "aVR": (lead_avr, -(lead_i + lead_ii) / 2.0),
+        "aVL": (lead_avl, (lead_i - lead_iii) / 2.0),
+        "aVF": (lead_avf, (lead_ii + lead_iii) / 2.0),
+    }
+
+    max_lag = max(0, int(round(max_lag_seconds * sample_rate)))
+    correlations = {
+        name: _best_lag_correlation(measured, derived, max_lag)
+        for name, (measured, derived) in rules.items()
+    }
+    residuals = {name: float(np.clip(1.0 - corr, 0.0, 1.0)) for name, corr in correlations.items()}
+    residual_values = list(residuals.values())
+    return GoldbergerConsistency(
+        correlations=correlations,
+        residuals=residuals,
+        mean_residual=float(np.mean(residual_values)),
+        worst_residual=float(np.max(residual_values)),
+    )
