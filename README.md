@@ -15,6 +15,10 @@ Paper ECG Photo (PNG/JPG)
 
 - **Paper ECG input:** Works with photographs or scans of standard 12-lead paper ECGs
 - **150+ diagnoses:** Rhythm disorders, conduction abnormalities, ischemic changes, hypertrophy, and more
+- **Clinical measurements:** Heart rate (from the full 10 s rhythm strip), PR / QRS / QT / QTc intervals, and rule-based rhythm classification
+- **Structured verdict:** Strict, explainable Normal / Abnormal / Indeterminate headline with the reasons spelled out
+- **Professional web UI:** Modern medical-style Gradio app — drag &amp; drop / camera upload, progress indicator, color-coded result card, interval table, AI-diagnosis confidence bars, and a 12-lead signal plot
+- **PDF report:** One-click "Download PDF Report" — verdict, HR/rhythm, intervals, AI diagnoses, original photo, digitized tracing, and disclaimer
 - **Quality diagnostics:** Layout, lead activity, Einthoven consistency, and timing checks
 - **Research evaluation:** Synthetic round-trip consistency and PTB-XL ground-truth metrics
 
@@ -24,7 +28,8 @@ Paper ECG Photo (PNG/JPG)
 |-----------|-------|------|--------|
 | Digitization | ECG-Digitiser (nnU-Net) | ~475 MB | [GitHub](https://github.com/felixkrones/ECG-Digitiser) |
 | Diagnosis | ECGFounder (Net1D CNN) | ~370 MB | [GitHub](https://github.com/PKUDigitalHealth/ECGFounder) |
-| Reporting | TBD (open-source LLM preferred) | TBD | TBD |
+| Measurement | scipy delineation (PR/QRS/QT/QTc) + Pan-Tompkins HR | — | in-repo (`src/measurement/`) |
+| Reporting | Deterministic structured report + reportlab PDF (LLM narrative planned) | — | in-repo (`src/report/`) |
 
 ## Setup
 
@@ -81,7 +86,8 @@ python -m src.pipeline.run --signal path/to/record_without_extension
 # Run PTB-XL ground-truth evaluation
 python -m src.training.evaluate --max-samples 500 --threshold 0.5
 
-# Launch test web UI
+# Launch the web UI (http://localhost:7860): upload a photo, get the verdict,
+# HR/intervals/rhythm, AI diagnoses, the digitized tracing, and a downloadable PDF.
 python -m src.web.app
 
 # Evaluate real phone photos in isolated default and dewarping-retry modes
@@ -145,11 +151,13 @@ Notes:
 ```
 corio-ecg/
 ├── src/
-│   ├── pipeline/       # Core pipeline (digitize → diagnose → report)
+│   ├── pipeline/       # Core pipeline (digitize → diagnose)
+│   ├── measurement/    # HR, PR/QRS/QT/QTc intervals, rhythm analysis
+│   ├── report/         # Structured report + PDF generation
 │   ├── training/       # Fine-tuning and evaluation scripts
 │   ├── vtsvt/          # VT/SVT specialization (Brugada/Vereckei)
 │   ├── utils/          # Helper functions
-│   └── web/            # Test web interface
+│   └── web/            # Web interface (Gradio)
 ├── configs/            # Training configs and report templates
 ├── notebooks/          # Jupyter notebooks for experimentation
 ├── scripts/            # Setup and download scripts

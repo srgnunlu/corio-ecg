@@ -27,6 +27,9 @@ dependencies = [
     # Visualization
     "matplotlib>=3.10.1",
 
+    # PDF report generation (Phase D.2)
+    "reportlab>=4.0.0",
+
     # Model downloads
     "huggingface_hub>=0.20.0",
 

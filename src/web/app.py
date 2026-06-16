@@ -8,24 +8,40 @@ import gc
 import logging
 import os
 import tempfile
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 
 import gradio as gr
-import numpy as np
-from PIL import Image
 import torch
+from PIL import Image
 
 from src.measurement.intervals import IntervalMeasurements, interpret_intervals
 from src.measurement.rhythm_analysis import analyze_rhythm
 from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser
 from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
+from src.report.pdf_report import build_pdf_report
 from src.report.structured_report import ECGReport, build_report
-from src.utils.ecg_labels import CRITICAL_DIAGNOSIS_INDICES, ECG_FOUNDER_LABELS
+from src.utils.ecg_labels import CRITICAL_DIAGNOSIS_INDICES
 from src.web.ecg_plot import fig_to_pil, plot_ecg_paper
 
 logger = logging.getLogger(__name__)
 
 MODEL_PATH: Path = Path("models/ecgfounder/base/12_lead_ECGFounder.pth")
+
+
+@dataclass
+class AnalysisContext:
+    """Everything needed to (re)generate a downloadable PDF for one analysis.
+
+    Held in a gr.State between the analyze and download-PDF actions so the PDF
+    is built from the exact result the user is looking at, not a re-run.
+    """
+
+    report: ECGReport | None
+    intervals: IntervalMeasurements | None
+    original_image: Image.Image | None
+    signal_image: Image.Image | None
 
 # Lazy-loaded global instances (loaded once on first request)
 _digitiser: ECGDigitiser | None = None
@@ -107,36 +123,53 @@ def _resolve_segment_layout(
     return None
 
 
+_EMPTY_CONTEXT = AnalysisContext(None, None, None, None)
+
+
 def analyze_ecg(
     image: Image.Image | None,
     threshold: float,
     layout_choice: str,
-) -> tuple[Image.Image | None, str, str, str]:
+    progress: gr.Progress | None = None,
+) -> tuple[Image.Image | None, str, str, str, AnalysisContext, Image.Image | None]:
     """Full pipeline: image -> digitize -> diagnose -> display.
 
     Returns:
-        Tuple of (ecg_visualization, critical_findings_html,
-                  all_diagnoses_html, debug_info_html).
+        Tuple of (ecg_visualization, critical_findings_html, all_diagnoses_html,
+                  debug_info_html, analysis_context, original_image). The context
+        feeds the PDF-download action; original_image mirrors to the Original tab.
     """
     import time as _time
 
+    if progress is None:
+        progress = gr.Progress()
+
     if image is None:
-        return None, _info_html("Upload an ECG image to begin analysis."), "", ""
+        return (
+            None,
+            _info_html("Upload an ECG image to begin analysis."),
+            "",
+            "",
+            _EMPTY_CONTEXT,
+            None,
+        )
 
     layout_hint = _LAYOUT_MAP.get(layout_choice)
     total_start = _time.time()
     timing_breakdown: dict[str, float] = {}
 
     # Save uploaded image to temp file (digitiser needs a file path)
+    progress(0.05, desc="Preparing image…")
     save_start = _time.time()
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
         image.save(tmp, format="PNG")
         tmp_path = Path(tmp.name)
     timing_breakdown["Save upload"] = _time.time() - save_start
-    response: tuple[Image.Image | None, str, str, str]
+    response: tuple[Image.Image | None, str, str, str, AnalysisContext, Image.Image | None]
 
     try:
         # Step 1: Digitize image to signal
+        progress(0.15, desc="Digitizing ECG (image → signal)…")
         digitiser_load_start = _time.time()
         digitiser_was_loaded = _digitiser is not None
         digitiser = _get_digitiser()
@@ -149,6 +182,7 @@ def analyze_ecg(
         debug_info = digitiser.last_info
 
         # Step 2: Diagnose signal
+        progress(0.55, desc="Running diagnosis model…")
         diagnoser_load_start = _time.time()
         diagnoser_was_loaded = _diagnoser is not None
         diagnoser = _get_diagnoser()
@@ -196,6 +230,7 @@ def analyze_ecg(
             report = None
 
         # Step 3: Generate ECG paper visualization
+        progress(0.85, desc="Rendering digitized signal…")
         plot_start = _time.time()
         fig = plot_ecg_paper(signal)
         ecg_image = fig_to_pil(fig)
@@ -220,7 +255,14 @@ def analyze_ecg(
         diagnoses_html = _format_diagnoses(all_results, threshold)
         debug_html = _format_debug_info(debug_info, wrapper_times, estimated_hr)
 
-        response = (ecg_image, critical_html, diagnoses_html, debug_html)
+        progress(1.0, desc="Done")
+        context = AnalysisContext(
+            report=report,
+            intervals=intervals,
+            original_image=image,
+            signal_image=ecg_image,
+        )
+        response = (ecg_image, critical_html, diagnoses_html, debug_html, context, image)
         del signal, all_results, results, debug_info, wrapper_times, fig
         return response
 
@@ -231,7 +273,7 @@ def analyze_ecg(
             f"<b>Analysis Failed</b><br>{exc}</div>"
         )
         logger.exception("ECG analysis failed")
-        response = (None, error_msg, "", "")
+        response = (None, error_msg, "", "", _EMPTY_CONTEXT, image)
         return response
     except Exception:
         logger.exception("Unexpected exception during ECG analysis")
@@ -245,6 +287,8 @@ def analyze_ecg(
             ),
             "",
             "",
+            _EMPTY_CONTEXT,
+            image,
         )
         return response
     finally:
@@ -449,8 +493,10 @@ def _format_rhythm_considerations(
     rows = "".join(
         "<tr>"
         f"<td style='padding:4px 8px;'>{result.label}</td>"
-        f"<td style='padding:4px 8px; text-align:right; font-family:monospace;'>{result.probability:.3f}</td>"
-        f"<td style='padding:4px 8px; text-align:right;'>{'above threshold' if result.probability >= threshold else 'below threshold'}</td>"
+        "<td style='padding:4px 8px; text-align:right; font-family:monospace;'>"
+        f"{result.probability:.3f}</td>"
+        "<td style='padding:4px 8px; text-align:right;'>"
+        f"{'above threshold' if result.probability >= threshold else 'below threshold'}</td>"
         "</tr>"
         for result in ranked
     )
@@ -653,64 +699,161 @@ def _info_html(message: str) -> str:
     )
 
 
-def create_app() -> gr.Blocks:
-    """Build and return the Gradio Blocks app."""
-    with gr.Blocks(
-        title="Corio ECG — AI ECG Interpreter",
-    ) as app:
-        gr.Markdown(
-            "# Corio ECG — AI ECG Interpreter\n"
-            "> *For Educational and Research Use Only*\n\n"
-            "Upload a paper ECG photograph to get AI-powered diagnosis."
+def generate_pdf(context: AnalysisContext | None) -> str | None:
+    """Build a downloadable PDF from the current analysis context.
+
+    Returns the path to a freshly written PDF, or None when there is nothing to
+    export yet (no analysis run, or the run failed before producing a report).
+    """
+    if context is None or context.report is None:
+        gr.Warning("Run an analysis first — there is no report to export yet.")
+        return None
+
+    out_dir = Path(tempfile.gettempdir()) / "corio-reports"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now()
+    out_path = out_dir / f"corio-ecg-report-{stamp.strftime('%Y%m%d-%H%M%S')}.pdf"
+
+    try:
+        build_pdf_report(
+            context.report,
+            output_path=out_path,
+            original_image=context.original_image,
+            signal_image=context.signal_image,
+            intervals=context.intervals,
+            generated_at=stamp,
         )
+    except Exception:  # noqa: BLE001
+        logger.exception("PDF report generation failed")
+        gr.Warning("Could not generate the PDF report. See logs for details.")
+        return None
+    return str(out_path)
+
+
+CUSTOM_CSS: str = """
+:root { --corio-primary: #1E3A8A; --corio-accent: #3B82F6; }
+.gradio-container { max-width: 1200px !important; margin: 0 auto !important; }
+#corio-header {
+    background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+    color: #fff; border-radius: 14px; padding: 22px 26px; margin-bottom: 14px;
+}
+#corio-header h1 {
+    color: #fff; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px;
+}
+#corio-header p { color: #DBEAFE; margin: 6px 0 0 0; font-size: 14px; }
+#corio-disclaimer {
+    background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px;
+    padding: 10px 14px; color: #92400E; font-size: 12.5px; margin-bottom: 14px;
+}
+.corio-card {
+    background: #fff; border: 1px solid #E2E8F0; border-radius: 14px;
+    padding: 16px 18px; box-shadow: 0 1px 3px rgba(15,23,42,0.05);
+}
+#corio-analyze-btn { font-size: 16px !important; font-weight: 600 !important; }
+.corio-section-title {
+    font-size: 15px !important; font-weight: 700 !important;
+    color: #1E3A8A !important; margin: 4px 0 !important;
+}
+@media (max-width: 768px) {
+    #corio-header h1 { font-size: 21px; }
+    .gradio-container { padding: 6px !important; }
+}
+"""
+
+_INTRO_HTML: str = (
+    "<div id='corio-header'>"
+    "<h1>CorioECG</h1>"
+    "<p>AI-Assisted Paper ECG Interpretation — photo → digitized signal → "
+    "diagnosis, rate, intervals &amp; rhythm.</p>"
+    "</div>"
+    "<div id='corio-disclaimer'>"
+    "&#9888; <b>Research &amp; educational use only.</b> This is an experimental "
+    "pipeline, not a medical device. It must not be used for clinical "
+    "decision-making — final responsibility rests with a qualified clinician."
+    "</div>"
+)
+
+
+def create_app() -> gr.Blocks:
+    """Build and return the Gradio Blocks app.
+
+    Theme and CSS are applied at launch() (Gradio 6 moved them off the Blocks
+    constructor); see main().
+    """
+    with gr.Blocks(title="CorioECG — AI ECG Interpreter") as app:
+        analysis_state = gr.State(_EMPTY_CONTEXT)
+
+        gr.HTML(_INTRO_HTML)
 
         with gr.Row():
-            with gr.Column(scale=1):
-                image_input = gr.Image(
-                    label="Upload ECG Image",
-                    type="pil",
-                    height=300,
-                )
-                layout_dropdown = gr.Dropdown(
-                    choices=LAYOUT_CHOICES,
-                    value="3x4+1R (standard)",
-                    label="ECG Layout",
-                    info="Most standard paper ECGs are 3x4+1R; switch if your printout differs",
-                )
-                threshold_slider = gr.Slider(
-                    minimum=0.1,
-                    maximum=0.9,
-                    value=0.7,
-                    step=0.05,
-                    label="Diagnosis Threshold",
-                    info="For digitized photos, 0.65-0.75 usually gives cleaner results",
-                )
-                analyze_btn = gr.Button(
-                    "Analyze ECG",
-                    variant="primary",
-                    size="lg",
-                )
+            # --- Left: input controls ---
+            with gr.Column(scale=2, min_width=320):
+                with gr.Group(elem_classes="corio-card"):
+                    gr.HTML("<div class='corio-section-title'>1 &middot; Upload ECG</div>")
+                    image_input = gr.Image(
+                        label="Drag &amp; drop, paste, or use your camera",
+                        type="pil",
+                        height=280,
+                        sources=["upload", "clipboard", "webcam"],
+                    )
+                    layout_dropdown = gr.Dropdown(
+                        choices=LAYOUT_CHOICES,
+                        value="3x4+1R (standard)",
+                        label="ECG Layout",
+                        info="Most paper ECGs are 3x4+1R; switch if your printout differs",
+                    )
+                    threshold_slider = gr.Slider(
+                        minimum=0.1,
+                        maximum=0.9,
+                        value=0.7,
+                        step=0.05,
+                        label="Diagnosis Threshold",
+                        info="For digitized photos, 0.65–0.75 gives cleaner results",
+                    )
+                    analyze_btn = gr.Button(
+                        "Analyze ECG",
+                        variant="primary",
+                        size="lg",
+                        elem_id="corio-analyze-btn",
+                    )
 
-            with gr.Column(scale=2):
-                with gr.Tabs():
-                    with gr.TabItem("Visualization"):
-                        ecg_output = gr.Image(
-                            label="Digitized ECG Signal",
-                            type="pil",
-                        )
-                    with gr.TabItem("Original"):
-                        original_output = gr.Image(
-                            label="Original Upload",
-                            type="pil",
-                        )
+            # --- Right: verdict + findings ---
+            with gr.Column(scale=3, min_width=360):
+                with gr.Group(elem_classes="corio-card"):
+                    gr.HTML("<div class='corio-section-title'>2 &middot; Result</div>")
+                    critical_output = gr.HTML(
+                        value=_info_html("Upload an ECG image and click Analyze."),
+                    )
+                    pdf_btn = gr.Button(
+                        "⬇ Download PDF Report",
+                        variant="secondary",
+                        size="sm",
+                    )
+                    pdf_file = gr.File(
+                        label="PDF Report",
+                        visible=True,
+                        interactive=False,
+                    )
 
-        gr.Markdown("### Findings")
-        critical_output = gr.HTML(
-            value=_info_html("Upload an ECG image and click Analyze."),
-        )
+        # --- ECG images ---
+        with gr.Group(elem_classes="corio-card"):
+            gr.HTML("<div class='corio-section-title'>3 &middot; ECG Signal</div>")
+            with gr.Tabs():
+                with gr.TabItem("Digitized Signal"):
+                    ecg_output = gr.Image(
+                        label="Digitized 12-lead ECG",
+                        type="pil",
+                    )
+                with gr.TabItem("Original Photo"):
+                    original_output = gr.Image(
+                        label="Original Upload",
+                        type="pil",
+                    )
 
-        gr.Markdown("### All Diagnoses (Top 20)")
-        diagnoses_output = gr.HTML()
+        # --- All diagnoses ---
+        with gr.Group(elem_classes="corio-card"):
+            gr.HTML("<div class='corio-section-title'>4 &middot; AI Diagnoses (Top 20)</div>")
+            diagnoses_output = gr.HTML()
 
         with gr.Accordion("Digitization Debug Info", open=False):
             debug_output = gr.HTML(
@@ -738,17 +881,31 @@ def create_app() -> gr.Blocks:
         analyze_btn.click(
             fn=analyze_ecg,
             inputs=[image_input, threshold_slider, layout_dropdown],
-            outputs=[ecg_output, critical_output, diagnoses_output, debug_output],
+            outputs=[
+                ecg_output,
+                critical_output,
+                diagnoses_output,
+                debug_output,
+                analysis_state,
+                original_output,
+            ],
         )
 
-        # Mirror uploaded image to Original tab
+        # Generate + surface the downloadable PDF
+        pdf_btn.click(
+            fn=generate_pdf,
+            inputs=[analysis_state],
+            outputs=[pdf_file],
+        )
+
+        # Mirror uploaded image to Original tab immediately on upload
         image_input.change(
             fn=lambda img: img,
             inputs=[image_input],
             outputs=[original_output],
         )
 
-    return app
+    return app  # type: ignore[no-any-return]
 
 
 def main() -> None:
@@ -768,7 +925,8 @@ def main() -> None:
         server_name="0.0.0.0",
         server_port=7860,
         share=args.share,
-        theme=gr.themes.Soft(),
+        theme=gr.themes.Soft(primary_hue="blue", neutral_hue="slate"),
+        css=CUSTOM_CSS,
     )
 
 
