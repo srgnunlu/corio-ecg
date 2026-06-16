@@ -15,7 +15,7 @@ import torch
 from src.models.net1d import Net1D
 from src.pipeline.lead_assignment import LAYOUT_3X4, LAYOUT_6X2
 from src.utils.ecg_labels import DEFAULT_THRESHOLD, ECG_FOUNDER_LABELS, NUM_CLASSES
-from src.utils.rhythm import estimate_heart_rate_bpm
+from src.utils.rhythm import estimate_heart_rate_bpm, estimate_rhythm_hr
 
 logger = logging.getLogger(__name__)
 
@@ -148,6 +148,7 @@ class ECGDiagnoser:
         threshold: float | None = None,
         *,
         apply_rate_adjustments: bool = True,
+        rhythm_strip: np.ndarray | None = None,
     ) -> list[DiagnosisResult]:
         """Run multi-label diagnosis on a 12-lead ECG signal.
 
@@ -156,6 +157,9 @@ class ECGDiagnoser:
             threshold: Sigmoid probability cutoff. Uses instance default if None.
             apply_rate_adjustments: Apply heart-rate consistency heuristics. Keep
                 enabled for the UI; disable for raw model benchmarking.
+            rhythm_strip: Optional full-duration rhythm strip (uncropped) used
+                for heart-rate estimation. When provided, HR comes from the true
+                10 s RR sequence instead of the tiled diagnosis signal.
 
         Returns:
             Diagnosis results above threshold, sorted by probability descending.
@@ -164,7 +168,9 @@ class ECGDiagnoser:
 
         probabilities = self._forward_probabilities(signal)
         if apply_rate_adjustments:
-            probabilities = self._apply_rate_consistency_adjustments(probabilities, signal)
+            probabilities = self._apply_rate_consistency_adjustments(
+                probabilities, signal, rhythm_strip=rhythm_strip
+            )
         else:
             self.last_estimated_hr_bpm = None
 
@@ -217,6 +223,7 @@ class ECGDiagnoser:
         layout: str = DEFAULT_SEGMENT_LAYOUT,
         aggregation: str = DEFAULT_SEGMENT_AGGREGATION,
         apply_rate_adjustments: bool = True,
+        rhythm_strip: np.ndarray | None = None,
     ) -> list[DiagnosisResult]:
         """Diagnose each printed paper column independently and aggregate.
 
@@ -232,7 +239,10 @@ class ECGDiagnoser:
             layout: Paper layout substring ("3x4" or "6x2").
             aggregation: How to combine per-column probabilities ("mean" or "max").
             apply_rate_adjustments: Apply heart-rate consistency heuristics on the
-                aggregated vector using the full signal's rhythm strip.
+                aggregated vector.
+            rhythm_strip: Optional full-duration rhythm strip (uncropped) used
+                for heart-rate estimation. When provided, HR comes from the true
+                10 s RR sequence instead of the tiled diagnosis signal.
 
         Returns:
             Diagnosis results above threshold, sorted by probability descending.
@@ -247,7 +257,9 @@ class ECGDiagnoser:
         probabilities = aggregate_probability_vectors(column_probabilities, aggregation)
 
         if apply_rate_adjustments:
-            probabilities = self._apply_rate_consistency_adjustments(probabilities, signal)
+            probabilities = self._apply_rate_consistency_adjustments(
+                probabilities, signal, rhythm_strip=rhythm_strip
+            )
         else:
             self.last_estimated_hr_bpm = None
 
@@ -260,6 +272,7 @@ class ECGDiagnoser:
         layout: str = DEFAULT_SEGMENT_LAYOUT,
         aggregation: str = DEFAULT_SEGMENT_AGGREGATION,
         apply_rate_adjustments: bool = True,
+        rhythm_strip: np.ndarray | None = None,
     ) -> list[DiagnosisResult]:
         """Segment-ensemble variant of diagnose_all (no threshold filtering)."""
         return self.diagnose_segment_ensemble(
@@ -268,6 +281,7 @@ class ECGDiagnoser:
             layout=layout,
             aggregation=aggregation,
             apply_rate_adjustments=apply_rate_adjustments,
+            rhythm_strip=rhythm_strip,
         )
 
     def diagnose_all(
@@ -275,11 +289,13 @@ class ECGDiagnoser:
         signal: np.ndarray,
         *,
         apply_rate_adjustments: bool = True,
+        rhythm_strip: np.ndarray | None = None,
     ) -> list[DiagnosisResult]:
         """Return all 150 diagnoses sorted by probability (no threshold filtering).
 
         Args:
             signal: Z-score normalized array with shape (12, 5000).
+            rhythm_strip: Optional full-duration rhythm strip for HR estimation.
 
         Returns:
             All 150 diagnosis results sorted by probability descending.
@@ -288,16 +304,27 @@ class ECGDiagnoser:
             signal,
             threshold=0.0,
             apply_rate_adjustments=apply_rate_adjustments,
+            rhythm_strip=rhythm_strip,
         )
 
     def _apply_rate_consistency_adjustments(
         self,
         probabilities: np.ndarray,
         signal: np.ndarray,
+        rhythm_strip: np.ndarray | None = None,
     ) -> np.ndarray:
-        """Down-weight diagnoses that contradict an obvious heart-rate regime."""
+        """Down-weight diagnoses that contradict an obvious heart-rate regime.
+
+        Heart rate is read from the full-duration rhythm strip when available
+        (the genuine 10 s RR sequence); otherwise it falls back to the tiled
+        diagnosis signal, whose repeated ~2.5 s segment is far less reliable.
+        """
         adjusted = probabilities.copy()
-        estimated_hr = estimate_heart_rate_bpm(signal)
+        estimated_hr: float | None = None
+        if rhythm_strip is not None:
+            estimated_hr = estimate_rhythm_hr(rhythm_strip)
+        if estimated_hr is None:
+            estimated_hr = estimate_heart_rate_bpm(signal)
         self.last_estimated_hr_bpm = estimated_hr
         if estimated_hr is None:
             return adjusted

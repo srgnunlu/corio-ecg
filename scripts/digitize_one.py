@@ -35,6 +35,12 @@ def main() -> None:
         action="store_true",
         help="Disable orientation/dewarping retries for a single cheap pass.",
     )
+    parser.add_argument(
+        "--rhythm-output",
+        type=Path,
+        default=None,
+        help="Optional path to save the uncropped full-duration rhythm strip.",
+    )
     args = parser.parse_args()
 
     digitiser = ECGDigitiser(
@@ -44,7 +50,11 @@ def main() -> None:
     signals = digitiser.digitize_with_calibrated(args.image, layout_hint=args.layout_hint)
     args.model_output.parent.mkdir(parents=True, exist_ok=True)
     np.save(args.model_output, signals.model_input)
+    args.calibrated_output.parent.mkdir(parents=True, exist_ok=True)
     np.save(args.calibrated_output, signals.calibrated_millivolts)
+    if args.rhythm_output is not None and signals.rhythm_strip is not None:
+        args.rhythm_output.parent.mkdir(parents=True, exist_ok=True)
+        np.save(args.rhythm_output, signals.rhythm_strip)
 
 
 if __name__ == "__main__":

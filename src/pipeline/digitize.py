@@ -93,6 +93,9 @@ class DigitizeInfo:
     signal_probability: np.ndarray | None = None  # (H, W) segmentation ink map
     raw_lines: np.ndarray | None = None  # (n_traces, W) extracted pixel-Y traces
     extraction_crop_x0: int = 0  # leading-column crop mapping raw_lines -> ink frame
+    # Full-duration rhythm strip for HR analysis (uncropped, z-scored). None
+    # when the layout prints no full-width rhythm lead.
+    rhythm_strip: np.ndarray | None = None
 
     @property
     def has_warnings(self) -> bool:
@@ -138,6 +141,10 @@ class DigitizedSignals:
 
     model_input: np.ndarray
     calibrated_millivolts: np.ndarray
+    # Full-duration rhythm strip (uncropped full-width leads, others zeroed),
+    # z-score normalized like model_input. Preserves the true 10 s RR sequence
+    # for heart-rate analysis. None when the layout has no full-width strip.
+    rhythm_strip: np.ndarray | None = None
 
 
 def _mock_ray_tune_if_missing() -> None:
@@ -477,6 +484,7 @@ class ECGDigitiser:
 
         outputs = self._postprocess_outputs(canonical)
         signal = outputs.model_input
+        self.last_info.rhythm_strip = outputs.rhythm_strip
         self.last_info.nonzero_leads_count = self._count_nonzero_leads(signal)
 
         # Per-lead energy (RMS) after z-score normalization
@@ -873,6 +881,11 @@ class ECGDigitiser:
         # Ensure exactly 12 leads before expanding the paper layout.
         signal = _pad_or_truncate_leads(signal, NUM_LEADS)
 
+        # Preserve the uncropped full-width rhythm strip BEFORE expansion crops
+        # it to a single column. This keeps the genuine 10 s RR sequence for
+        # heart-rate analysis (diagnosis still uses the cropped/tiled signal).
+        rhythm_canonical = _extract_rhythm_strip(signal)
+
         # Canonical NaNs encode where each printed lead segment begins and
         # ends. Expand those exact shared column windows before replacing
         # missing values so simultaneous leads retain their relative phase.
@@ -903,9 +916,16 @@ class ECGDigitiser:
 
         calibrated_millivolts = signal.astype(np.float32)
         model_input = _z_score_normalize(signal).astype(np.float32)
+
+        rhythm_strip = (
+            _process_rhythm_strip(rhythm_canonical)
+            if rhythm_canonical is not None
+            else None
+        )
         return DigitizedSignals(
             model_input=model_input,
             calibrated_millivolts=calibrated_millivolts,
+            rhythm_strip=rhythm_strip,
         )
 
 
@@ -1042,6 +1062,61 @@ def _expand_canonical_segments(signal: np.ndarray) -> np.ndarray:
         expanded[lead_idx] = np.tile(segment, repeats)[:total_len]
 
     return expanded
+
+
+def _extract_rhythm_strip(signal: np.ndarray) -> np.ndarray | None:
+    """Preserve full-width rhythm leads uncropped for heart-rate analysis.
+
+    Paper layouts print a continuous rhythm strip (usually Lead II) spanning the
+    full page width alongside short ~2.5 s lead segments. ``_expand_canonical_
+    segments`` crops that strip to a single column to keep diagnosis leads
+    temporally coherent — which discards the real beat-to-beat (RR) sequence.
+    For heart rate we want the opposite: the rhythm lead at full duration.
+
+    Args:
+        signal: (n_leads, samples) canonical array with NaNs outside each
+            printed lead's time window (pre-expansion).
+
+    Returns:
+        A (n_leads, samples) array with full-width leads interpolated over the
+        whole window and every other lead zeroed, or None when no full-width
+        rhythm strip exists (e.g. a pure-column 12x1 layout).
+    """
+    total_len = signal.shape[1]
+    if total_len == 0:
+        return None
+
+    strip = np.zeros_like(signal)
+    found = False
+    for lead_idx, lead in enumerate(signal):
+        finite_indices = np.flatnonzero(np.isfinite(lead))
+        if finite_indices.size == 0:
+            continue
+        span = int(finite_indices[-1] - finite_indices[0] + 1)
+        if span >= total_len * 0.8:
+            strip[lead_idx] = _interpolate_finite_values(lead)
+            found = True
+
+    return strip if found else None
+
+
+def _process_rhythm_strip(rhythm_canonical: np.ndarray) -> np.ndarray:
+    """Resample, filter and normalize the uncropped rhythm strip for HR.
+
+    Mirrors the model-input chain (uV->mV, 500 Hz/5000 pts, highpass, wavelet,
+    z-score) but skips the segment expansion that crops the strip, so the
+    genuine RR timing survives.
+    """
+    signal = rhythm_canonical / UV_TO_MV
+
+    n_points = signal.shape[1]
+    if n_points != TARGET_LENGTH:
+        signal = _resample_signal(signal, n_points, TARGET_LENGTH)
+    signal = _pad_or_truncate_time(signal, TARGET_LENGTH)
+
+    signal = highpass_filter(signal, TARGET_SAMPLE_RATE)
+    signal = wavelet_denoise(signal, TARGET_SAMPLE_RATE)
+    return _z_score_normalize(signal).astype(np.float32)
 
 
 def _interpolate_finite_values(values: np.ndarray) -> np.ndarray:

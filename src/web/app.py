@@ -158,13 +158,16 @@ def analyze_ecg(
             if SEGMENT_ENSEMBLE_ENABLED
             else None
         )
+        # Heart rate comes from the uncropped full-duration rhythm strip when
+        # the layout printed one — the tiled diagnosis signal lost the real RR.
+        rhythm_strip = debug_info.rhythm_strip
         if segment_layout is not None:
             all_results = diagnoser.diagnose_all_segment_ensemble(
-                signal, layout=segment_layout
+                signal, layout=segment_layout, rhythm_strip=rhythm_strip
             )
         else:
             # Tiled single-pass fallback (auto-detect / unsupported layouts).
-            all_results = diagnoser.diagnose_all(signal)
+            all_results = diagnoser.diagnose_all(signal, rhythm_strip=rhythm_strip)
         timing_breakdown["Diagnosis inference"] = _time.time() - diagnose_start
         results = [r for r in all_results if r.probability >= threshold]
         estimated_hr = diagnoser.last_estimated_hr_bpm

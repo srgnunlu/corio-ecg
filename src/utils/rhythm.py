@@ -50,6 +50,98 @@ def estimate_heart_rate_bpm(
     return None if best_result is None else best_result[0]
 
 
+def estimate_rhythm_hr(
+    rhythm_strip: np.ndarray,
+    sample_rate: int = TARGET_SAMPLE_RATE,
+) -> float | None:
+    """Estimate heart rate from a full-duration rhythm strip via RR intervals.
+
+    Unlike the tiled diagnosis signal (which repeats a ~2.5 s segment and so
+    carries no real RR sequence), the rhythm strip preserves the genuine 10 s
+    beat-to-beat timing. Detecting R-peaks over the whole window and taking the
+    median RR yields a clinically meaningful rate that holds up for irregular
+    rhythms (AF — median RR is the ventricular rate), tachycardia and
+    bradycardia alike.
+
+    Args:
+        rhythm_strip: (n_leads, samples) array; full-width rhythm leads filled,
+            other leads zeroed. Lead II (index 1) is preferred when present.
+        sample_rate: Sampling rate in Hz.
+
+    Returns:
+        Heart rate in bpm, or None when no usable rhythm lead is found.
+    """
+    if rhythm_strip.ndim != 2:
+        raise ValueError("rhythm_strip must have shape (n_leads, samples)")
+
+    for lead_idx in _candidate_leads(rhythm_strip):
+        lead = rhythm_strip[lead_idx]
+        if np.std(lead) < 0.1:
+            continue
+        bpm = _rpeak_rr_hr(lead, sample_rate)
+        if bpm is not None:
+            return bpm
+
+    # Autocorrelation is a robust fallback when discrete peak detection fails
+    # (very noisy strips where individual R-peaks are ambiguous).
+    for lead_idx in _candidate_leads(rhythm_strip):
+        lead = rhythm_strip[lead_idx]
+        if np.std(lead) < 0.1:
+            continue
+        bpm = _autocorrelation_hr(lead, sample_rate)
+        if bpm is not None:
+            return bpm
+
+    return None
+
+
+def _rpeak_rr_hr(
+    lead: np.ndarray,
+    sample_rate: int,
+) -> float | None:
+    """Detect R-peaks (Pan-Tompkins style) and return the median-RR heart rate.
+
+    A 5-18 Hz bandpass isolates QRS energy, the squared derivative emphasizes
+    steep R upstrokes, and a moving-window integrator merges each QRS into one
+    lobe. Peaks are taken above an adaptive threshold with a refractory gap, and
+    the rate is 60 / median(RR) over physiologically plausible intervals.
+    """
+    from scipy.signal import butter, sosfiltfilt
+
+    if lead.size < sample_rate:  # need at least ~1 s of signal
+        return None
+
+    nyquist = sample_rate / 2.0
+    sos = butter(N=3, Wn=[5.0 / nyquist, 18.0 / nyquist], btype="bandpass", output="sos")
+    filtered = sosfiltfilt(sos, lead)
+
+    derivative = np.diff(filtered)
+    squared = derivative ** 2
+
+    # Moving-window integration over ~120 ms (typical QRS width) so each
+    # complex collapses into a single detectable lobe.
+    window = max(int(sample_rate * 0.12), 1)
+    integrated = np.convolve(squared, np.ones(window) / window, mode="same")
+
+    threshold = float(np.mean(integrated) + 0.5 * np.std(integrated))
+    refractory = int(sample_rate * 60.0 / _MAX_HR)  # min RR (~272 ms at 220 bpm)
+    peaks, _ = find_peaks(integrated, distance=max(refractory, 1), height=threshold)
+    if len(peaks) < 2:
+        return None
+
+    rr_seconds = np.diff(peaks) / sample_rate
+    min_rr = 60.0 / _MAX_HR
+    max_rr = 60.0 / _MIN_HR
+    rr_seconds = rr_seconds[(rr_seconds >= min_rr) & (rr_seconds <= max_rr)]
+    if rr_seconds.size == 0:
+        return None
+
+    bpm = 60.0 / float(np.median(rr_seconds))
+    if bpm < _MIN_HR or bpm > _MAX_HR:
+        return None
+    return bpm
+
+
 def _autocorrelation_hr(
     lead: np.ndarray,
     sample_rate: int,
