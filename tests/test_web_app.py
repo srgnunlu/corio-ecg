@@ -21,6 +21,23 @@ class TestDigitizePayloadTrim:
         assert result["layout_name"] == "3x4+1R"
 
 
+class TestResolveSegmentLayout:
+    def test_prefers_explicit_user_layout_choice(self) -> None:
+        from src.web.app import _resolve_segment_layout
+
+        assert _resolve_segment_layout("3x4+1R (standard)", "unknown") == "3x4"
+
+    def test_falls_back_to_detected_layout_when_auto_detect(self) -> None:
+        from src.web.app import _resolve_segment_layout
+
+        assert _resolve_segment_layout("Auto-detect", "standard_6x2+1R") == "6x2"
+
+    def test_returns_none_when_layout_is_unresolvable(self) -> None:
+        from src.web.app import _resolve_segment_layout
+
+        assert _resolve_segment_layout("Auto-detect", "unknown") is None
+
+
 class TestEcgPlot:
     def test_fig_to_pil_returns_loaded_image(self) -> None:
         signal = np.zeros((12, 5000), dtype=np.float32)

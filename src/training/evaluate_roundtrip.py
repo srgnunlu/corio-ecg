@@ -6,13 +6,20 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import cast
 
 import numpy as np
 from scipy.spatial.distance import cosine as cosine_distance
 from tqdm import tqdm
 
-from src.pipeline.diagnose import ECGDiagnoser
+from src.pipeline.diagnose import (
+    ECGDiagnoser,
+)
+from src.pipeline.diagnose import (
+    aggregate_probability_vectors as _aggregate_probability_vectors,
+)
+from src.pipeline.diagnose import (
+    build_paper_column_signals as _build_layout_column_signals,
+)
 from src.pipeline.lead_assignment import LAYOUT_3X4, LAYOUT_6X2
 from src.training.evaluate import (
     DEFAULT_OFFICIAL_LABELS_PATH,
@@ -60,45 +67,6 @@ def _extract_probabilities(
     for result in results:
         probabilities[result.index] = result.probability
     return probabilities
-
-
-def _build_layout_column_signals(
-    signal: np.ndarray,
-    layout_name: str,
-) -> list[np.ndarray]:
-    """Build one sparse 12-lead model input for each printed paper column."""
-    matched_layout = next(
-        (lead_rows for name, lead_rows in PAPER_LAYOUTS.items() if name in layout_name),
-        None,
-    )
-    if matched_layout is None:
-        raise ValueError(f"Unsupported paper layout: {layout_name}")
-    if signal.ndim != 2 or signal.shape[0] != 12:
-        raise ValueError("signal must have shape (12, samples)")
-
-    column_signals: list[np.ndarray] = []
-    for column_index in range(len(matched_layout[0])):
-        column_signal = np.zeros_like(signal)
-        lead_indices = [row[column_index] for row in matched_layout]
-        column_signal[lead_indices] = signal[lead_indices]
-        column_signals.append(column_signal)
-    return column_signals
-
-
-def _aggregate_probability_vectors(
-    probability_vectors: list[np.ndarray],
-    method: str,
-) -> np.ndarray:
-    """Aggregate independent paper-column diagnosis probabilities."""
-    if not probability_vectors:
-        raise ValueError("At least one probability vector is required")
-
-    stacked = np.stack(probability_vectors)
-    if method == "mean":
-        return cast(np.ndarray, np.mean(stacked, axis=0))
-    if method == "max":
-        return cast(np.ndarray, np.max(stacked, axis=0))
-    raise ValueError(f"Unsupported probability aggregation: {method}")
 
 
 def _extract_segment_ensemble_probabilities(

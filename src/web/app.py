@@ -75,6 +75,34 @@ _LAYOUT_MAP: dict[str, str | None] = {
     "6x2+1R": "standard_6x2+1R",
 }
 
+# Segment-ensemble diagnosis is the production default: it diagnoses each
+# printed paper column independently and averages, recovering the accuracy
+# lost when all 12 (temporally misaligned, tiled) leads are fed at once
+# (PTB-XL round-trip macro AUROC ~0.75 tiled -> ~0.87 segment-ensemble).
+# Set CORIO_SEGMENT_ENSEMBLE=0 to fall back to the single-pass tiled path.
+SEGMENT_ENSEMBLE_ENABLED: bool = _env_flag("CORIO_SEGMENT_ENSEMBLE", True)
+
+
+def _resolve_segment_layout(
+    layout_choice: str,
+    detected_layout_name: str | None,
+) -> str | None:
+    """Resolve a segment-ensemble column layout ("3x4"/"6x2") or None.
+
+    Prefers the user's explicit layout choice, then the digitizer's detected
+    layout. Returns None when neither resolves to a supported column layout,
+    signalling the caller to fall back to the tiled single-pass path.
+    """
+    hint = _LAYOUT_MAP.get(layout_choice)
+    for candidate in (hint, detected_layout_name):
+        if not candidate:
+            continue
+        if "3x4" in candidate:
+            return "3x4"
+        if "6x2" in candidate:
+            return "6x2"
+    return None
+
 
 def analyze_ecg(
     image: Image.Image | None,
@@ -125,7 +153,18 @@ def analyze_ecg(
             timing_breakdown["Load diagnoser"] = _time.time() - diagnoser_load_start
 
         diagnose_start = _time.time()
-        all_results = diagnoser.diagnose_all(signal)
+        segment_layout = (
+            _resolve_segment_layout(layout_choice, debug_info.layout_name)
+            if SEGMENT_ENSEMBLE_ENABLED
+            else None
+        )
+        if segment_layout is not None:
+            all_results = diagnoser.diagnose_all_segment_ensemble(
+                signal, layout=segment_layout
+            )
+        else:
+            # Tiled single-pass fallback (auto-detect / unsupported layouts).
+            all_results = diagnoser.diagnose_all(signal)
         timing_breakdown["Diagnosis inference"] = _time.time() - diagnose_start
         results = [r for r in all_results if r.probability >= threshold]
         estimated_hr = diagnoser.last_estimated_hr_bpm
