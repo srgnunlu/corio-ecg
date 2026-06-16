@@ -18,6 +18,7 @@ from src.pipeline.digitize import (
     MIN_REQUIRED_NONZERO_LEADS,
     NUM_LEADS,
     TARGET_LENGTH,
+    DigitizeInfo,
     ECGDigitiser,
 )
 
@@ -30,13 +31,29 @@ DEFAULT_LAYOUT_HINT = "3x4+1R"
 DIGITIZATION_PIPELINE_VERSION = 4
 
 
+# Bulky DigitizeInfo arrays kept only for in-memory reprojection probes —
+# they are huge (H×W ink maps, full-width pixel traces) and have no place in
+# a per-record audit file, so we drop them before serializing.
+_NON_AUDIT_DIAGNOSTIC_FIELDS: tuple[str, ...] = ("signal_probability", "raw_lines")
+
+
 def _json_default(value: object) -> object:
     """Convert vendor/PyTorch diagnostic values into JSON-compatible values."""
     if isinstance(value, torch.Tensor):
         return value.item() if value.numel() == 1 else value.detach().cpu().tolist()
     if isinstance(value, np.generic):
         return value.item()
+    if isinstance(value, np.ndarray):
+        return value.tolist()
     raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")
+
+
+def _audit_diagnostics(info: DigitizeInfo) -> dict:
+    """Return DigitizeInfo as a JSON-friendly dict without bulky array fields."""
+    diagnostics = asdict(info)
+    for field_name in _NON_AUDIT_DIAGNOSTIC_FIELDS:
+        diagnostics.pop(field_name, None)
+    return diagnostics
 
 
 def _metadata_path(signal_path: Path) -> Path:
@@ -168,7 +185,7 @@ def digitize_batch(
                 "layout_hint": layout_hint,
                 "dewarping_retry_enabled": digitiser.enable_dewarping_retry,
                 "orientation_retry_enabled": digitiser.enable_orientation_retry,
-                "diagnostics": asdict(digitiser.last_info),
+                "diagnostics": _audit_diagnostics(digitiser.last_info),
             }
             _metadata_path(output_path).write_text(
                 json.dumps(metadata, indent=2, default=_json_default)

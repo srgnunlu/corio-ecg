@@ -10,6 +10,7 @@ import torch
 
 from scripts.digitize_synthetic_images import (
     DIGITIZATION_PIPELINE_VERSION,
+    _audit_diagnostics,
     _is_current_saved_signal,
     _json_default,
     _metadata_path,
@@ -64,6 +65,27 @@ def test_json_default_converts_tensor_and_numpy_scalar() -> None:
     assert _json_default(torch.tensor(1.5)) == pytest.approx(1.5)
     assert _json_default(torch.tensor([1, 2])) == [1, 2]
     assert _json_default(np.float32(2.5)) == pytest.approx(2.5)
+
+
+def test_audit_diagnostics_drops_bulky_arrays_and_serializes() -> None:
+    # raw_lines / signal_probability are H×W debug arrays the audit JSON must
+    # not contain — leaving them in made json.dumps raise, failing every
+    # metadata write while the .npy signal saved fine.
+    info = DigitizeInfo(nonzero_leads_count=11)
+    info.raw_lines = np.zeros((4, 2200), dtype=np.float32)
+    info.signal_probability = np.zeros((1800, 2400), dtype=np.float32)
+
+    diagnostics = _audit_diagnostics(info)
+
+    assert "raw_lines" not in diagnostics
+    assert "signal_probability" not in diagnostics
+    # Must round-trip through json without raising.
+    payload = json.dumps({"diagnostics": diagnostics}, default=_json_default)
+    assert json.loads(payload)["diagnostics"]["nonzero_leads_count"] == 11
+
+
+def test_json_default_handles_multidim_ndarray() -> None:
+    assert _json_default(np.zeros((2, 2), dtype=np.float32)) == [[0.0, 0.0], [0.0, 0.0]]
 
 
 def test_collect_image_paths_sorts_numeric_ecg_ids_before_limiting(
