@@ -1,0 +1,109 @@
+{
+  "records_scored": 500,
+  "arms": {
+    "genuine": {
+      "semantic_scp_subset": {
+        "macro_auroc": 0.8772000061463436,
+        "macro_average_precision": 0.49287293038506275,
+        "micro_f1": 0.6459074733096085,
+        "macro_f1": 0.3767299318709119,
+        "key_class_f1": {
+          "NORMAL ECG": 0.7515657620041754,
+          "SINUS RHYTHM": 0.8838951310861424,
+          "SINUS BRADYCARDIA": 0.3300970873786408,
+          "SINUS TACHYCARDIA": 0.9142857142857143,
+          "ATRIAL FIBRILLATION": 0.7906976744186046,
+          "PREMATURE VENTRICULAR COMPLEXES": 0.8235294117647058
+        }
+      },
+      "official_150_class": {
+        "macro_auroc": 0.833580405431377,
+        "macro_average_precision": 0.48405488690112386,
+        "micro_f1": 0.6435417617526243,
+        "macro_f1": 0.3624736895763732,
+        "key_class_f1": {
+          "NORMAL ECG": 0.750524109014675,
+          "SINUS RHYTHM": 0.8836045056320401,
+          "SINUS BRADYCARDIA": 0.3300970873786408,
+          "SINUS TACHYCARDIA": 0.9142857142857143,
+          "ATRIAL FIBRILLATION": 0.7906976744186046,
+          "PREMATURE VENTRICULAR COMPLEXES": 0.8235294117647058
+        }
+      }
+    },
+    "tile_2_5s": {
+      "semantic_scp_subset": {
+        "macro_auroc": 0.8322696300280886,
+        "macro_average_precision": 0.41160310535241407,
+        "micro_f1": 0.528952772073922,
+        "macro_f1": 0.29169661415376047,
+        "key_class_f1": {
+          "NORMAL ECG": 0.5736040609137056,
+          "SINUS RHYTHM": 0.8822115384615384,
+          "SINUS BRADYCARDIA": 0.25210084033613445,
+          "SINUS TACHYCARDIA": 0.8387096774193549,
+          "ATRIAL FIBRILLATION": 0.6181818181818182,
+          "PREMATURE VENTRICULAR COMPLEXES": 0.25
+        }
+      },
+      "official_150_class": {
+        "macro_auroc": 0.8215255746349933,
+        "macro_average_precision": 0.4329440213152814,
+        "micro_f1": 0.5742485419470614,
+        "macro_f1": 0.3121802773258091,
+        "key_class_f1": {
+          "NORMAL ECG": 0.5714285714285714,
+          "SINUS RHYTHM": 0.8819277108433735,
+          "SINUS BRADYCARDIA": 0.25210084033613445,
+          "SINUS TACHYCARDIA": 0.8387096774193549,
+          "ATRIAL FIBRILLATION": 0.6181818181818182,
+          "PREMATURE VENTRICULAR COMPLEXES": 0.25
+        }
+      },
+      "heart_rate_vs_genuine": {
+        "n_compared": 500,
+        "within_5_bpm_frac": 0.552,
+        "over_20_bpm_frac": 0.316,
+        "median_abs_diff_bpm": 3.16605550629086,
+        "max_abs_diff_bpm": 159.19452887537994
+      }
+    },
+    "tile_5s": {
+      "semantic_scp_subset": {
+        "macro_auroc": 0.8606552429911707,
+        "macro_average_precision": 0.44264239034782826,
+        "micro_f1": 0.5713101160862355,
+        "macro_f1": 0.3240226459291896,
+        "key_class_f1": {
+          "NORMAL ECG": 0.636144578313253,
+          "SINUS RHYTHM": 0.9015795868772782,
+          "SINUS BRADYCARDIA": 0.3076923076923077,
+          "SINUS TACHYCARDIA": 0.8823529411764706,
+          "ATRIAL FIBRILLATION": 0.68,
+          "PREMATURE VENTRICULAR COMPLEXES": 0.3917525773195876
+        }
+      },
+      "official_150_class": {
+        "macro_auroc": 0.8252125465603352,
+        "macro_average_precision": 0.46481932000480625,
+        "micro_f1": 0.6094808126410836,
+        "macro_f1": 0.3337777087057497,
+        "key_class_f1": {
+          "NORMAL ECG": 0.6376811594202898,
+          "SINUS RHYTHM": 0.9013398294762485,
+          "SINUS BRADYCARDIA": 0.3076923076923077,
+          "SINUS TACHYCARDIA": 0.8823529411764706,
+          "ATRIAL FIBRILLATION": 0.68,
+          "PREMATURE VENTRICULAR COMPLEXES": 0.3917525773195876
+        }
+      },
+      "heart_rate_vs_genuine": {
+        "n_compared": 500,
+        "within_5_bpm_frac": 0.692,
+        "over_20_bpm_frac": 0.224,
+        "median_abs_diff_bpm": 1.420374347989764,
+        "max_abs_diff_bpm": 142.50834620559073
+      }
+    }
+  }
+}
