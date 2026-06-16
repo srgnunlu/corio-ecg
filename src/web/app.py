@@ -15,6 +15,7 @@ import numpy as np
 from PIL import Image
 import torch
 
+from src.measurement.intervals import IntervalMeasurements, interpret_intervals
 from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser
 from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
 from src.utils.ecg_labels import CRITICAL_DIAGNOSIS_INDICES, ECG_FOUNDER_LABELS
@@ -171,6 +172,7 @@ def analyze_ecg(
         timing_breakdown["Diagnosis inference"] = _time.time() - diagnose_start
         results = [r for r in all_results if r.probability >= threshold]
         estimated_hr = diagnoser.last_estimated_hr_bpm
+        intervals = diagnoser.last_interval_measurements
 
         # Step 3: Generate ECG paper visualization
         plot_start = _time.time()
@@ -184,7 +186,7 @@ def analyze_ecg(
         wrapper_times["Total (end-to-end)"] = _time.time() - total_start
 
         # Step 5: Format results
-        critical_html = _format_critical(
+        critical_html = _format_intervals(intervals) + _format_critical(
             results=results,
             all_results=all_results,
             threshold=threshold,
@@ -227,6 +229,63 @@ def analyze_ecg(
         elif torch.backends.mps.is_available():
             torch.mps.empty_cache()
         gc.collect()
+
+
+def _format_intervals(measurements: IntervalMeasurements | None) -> str:
+    """Render PR/QRS/QT/QTc as a measurement card with abnormality flags."""
+    if measurements is None or measurements.quality == "unmeasurable":
+        return (
+            "<div style='padding:10px 14px; margin-bottom:12px; background:#F8FAFC; "
+            "border-radius:8px; border-left:4px solid #94A3B8; color:#475569; "
+            "font-size:13px;'><b>Intervals</b> — could not be measured on this signal."
+            "</div>"
+        )
+
+    flags = interpret_intervals(measurements)
+    abnormal_colors = {"normal": "#166534"}
+
+    def cell(label: str, value: float | None, unit: str, flag_key: str) -> str:
+        text = f"{value:.0f} {unit}" if value is not None else "n/a"
+        flag = flags.get(flag_key, "")
+        is_abnormal = bool(flag) and flag != "normal"
+        color = "#B91C1C" if is_abnormal else abnormal_colors.get(flag, "#0F172A")
+        note = (
+            f"<div style='font-size:11px; color:{color}; margin-top:2px;'>{flag}</div>"
+            if flag
+            else ""
+        )
+        return (
+            "<td style='padding:8px 12px; text-align:center; vertical-align:top;'>"
+            f"<div style='font-size:12px; color:#64748B;'>{label}</div>"
+            f"<div style='font-size:18px; font-weight:bold; color:{color}; "
+            f"font-family:monospace;'>{text}</div>{note}</td>"
+        )
+
+    qtc = measurements.qtc_preferred_ms
+    qtc_label = f"QTc<br><span style='font-size:10px;'>({measurements.qtc_formula})</span>"
+    cells = (
+        cell("PR", measurements.pr_ms, "ms", "pr")
+        + cell("QRS", measurements.qrs_ms, "ms", "qrs")
+        + cell("QT", measurements.qt_ms, "ms", "")
+        + cell(qtc_label, qtc, "ms", "qtc")
+    )
+
+    qual_color = "#22C55E" if measurements.quality == "good" else "#F59E0B"
+    footer = (
+        f"Lead {measurements.measured_lead or '?'} · {measurements.n_beats} beats · "
+        f"<span style='color:{qual_color};'>{measurements.quality} confidence</span> · "
+        "research use — verify against the tracing"
+    )
+
+    return (
+        "<div style='padding:12px 16px; margin-bottom:12px; background:#F8FAFC; "
+        "border-radius:8px; border-left:4px solid #3B82F6;'>"
+        "<b style='color:#1E3A8A;'>Interval Measurements</b>"
+        "<table style='width:100%; border-collapse:collapse; margin-top:6px;'>"
+        f"<tr>{cells}</tr></table>"
+        f"<div style='font-size:11px; color:#64748B; margin-top:8px;'>{footer}</div>"
+        "</div>"
+    )
 
 
 def _format_critical(

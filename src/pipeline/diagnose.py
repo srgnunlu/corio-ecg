@@ -12,6 +12,7 @@ from typing import cast
 import numpy as np
 import torch
 
+from src.measurement.intervals import IntervalMeasurements, measure_intervals
 from src.models.net1d import Net1D
 from src.pipeline.lead_assignment import LAYOUT_3X4, LAYOUT_6X2
 from src.utils.ecg_labels import DEFAULT_THRESHOLD, ECG_FOUNDER_LABELS, NUM_CLASSES
@@ -100,6 +101,7 @@ class ECGDiagnoser:
         self.device = device or get_device()
         self.threshold = threshold
         self.last_estimated_hr_bpm: float | None = None
+        self.last_interval_measurements: IntervalMeasurements | None = None
         self.model = self._load_model(Path(checkpoint_path))
         logger.info(
             "ECGDiagnoser ready — device=%s, threshold=%.2f",
@@ -173,6 +175,7 @@ class ECGDiagnoser:
             )
         else:
             self.last_estimated_hr_bpm = None
+            self.last_interval_measurements = None
 
         return self._collect_results(probabilities, effective_threshold)
 
@@ -262,6 +265,7 @@ class ECGDiagnoser:
             )
         else:
             self.last_estimated_hr_bpm = None
+            self.last_interval_measurements = None
 
         return self._collect_results(probabilities, effective_threshold)
 
@@ -326,6 +330,17 @@ class ECGDiagnoser:
         if estimated_hr is None:
             estimated_hr = estimate_heart_rate_bpm(signal)
         self.last_estimated_hr_bpm = estimated_hr
+
+        # Interval measurement is best-effort: a delineation failure must never
+        # break diagnosis, so it is isolated and its result merely stored.
+        try:
+            self.last_interval_measurements = measure_intervals(
+                signal, rhythm_strip=rhythm_strip
+            )
+        except Exception:  # noqa: BLE001 — diagnosis must survive any measurement error
+            logger.exception("Interval measurement failed")
+            self.last_interval_measurements = None
+
         if estimated_hr is None:
             return adjusted
 
