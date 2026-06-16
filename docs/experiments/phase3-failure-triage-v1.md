@@ -128,3 +128,17 @@ A **temporal-registration consistency anchor**, reference-free:
 **Fallback (plan §9):** if the registration anchor also fails feasibility, the
 interpretation-layer errors are not detectable from the current artifacts, which
 motivates the data-first path (a larger labelled fidelity set for a learned gate).
+
+### Quick negative probe (recorded so it is not repeated)
+
+The cheapest reference-free registration feature — per-lead **energy-centroid /
+active-window** of the canonical signal — does **not** separate `iphone/26` from
+controls. Each lead's content is resampled to span the full 5000-sample slot, so
+every lead's energy centroid clusters at ≈ 2500 samples (≈ 5 s) for the false
+accept *and* both clean controls alike. The misregistration is a **phase shift**
+in the resampled signal, not a change in gross energy distribution. A working
+registration detector therefore needs cross-lead/rhythm-strip **phase**
+consistency (e.g. locate each column's lead-II segment within the 10 s rhythm
+strip and check the lag), not an energy statistic — a real build with uncertain
+payoff. This raises the bar for the registration anchor and strengthens the
+data-first fallback.
