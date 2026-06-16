@@ -109,21 +109,53 @@ but it also pinpoints a *new*, more promising anchor.
    misregistration — just degraded V4–V6 morphology). Treat as a marginal
    near-miss, not a gross interpretation-layer false accept.
 
-## Recommended next direction (replaces Tracks A/B)
+## The temporal-registration anchor is also dead (feasibility killed it)
 
-A **temporal-registration consistency anchor**, reference-free:
+The natural next idea was a reference-free **temporal-registration consistency
+anchor** (lead-II column vs rhythm-strip alignment, or same-column R-wave
+coherence). A cheap feasibility check on the per-lead best-alignment offsets of
+`iphone/26` kills it:
 
-- For rhythm-strip layouts (`3x4+1R`/`3x4+3R`), lead II appears both as a column
-  segment and as the full-length rhythm strip. The column segment must temporally
-  align with the matching window of the rhythm strip; a per-cell horizontal
-  registration error breaks that alignment **without any reference signal**.
-- More generally: cells in the same printed column share one acquisition window;
-  their R-wave timings must be mutually consistent. A cell shifted ~5 s
-  (`iphone/26`) violates same-column temporal coherence and/or rhythm-strip
-  registration.
-- Feasibility gate before building: confirm that the lead-II column-vs-rhythm
-  registration (and/or same-column R-wave coherence) actually separates
-  `iphone/26` from the clean controls.
+| lead | col | best offset | | lead | col | best offset |
+|---|---|---|---|---|---|---|
+| I | 0 | 0.04 s | | aVF | 1 | 5.10 s |
+| II | 0 | 1.86 s (corr 0.46) | | V1 | 2 | 5.12 s |
+| III | 0 | 0.04 s | | V2 | 2 | 5.12 s |
+| aVR | 1 | 0.10 s | | V3 | 2 | **0.14 s** |
+| aVL | 1 | 2.60 s | | V4 | 3 | 5.16 s |
+| | | | | V5/V6 | 3 | 2.68 s |
+
+The misregistration is **irregular**, not exploitable:
+- **No single global shift** and **no consistent column shift** — col 2 has V1, V2
+  at 5.1 s but V3 at 0.14 s (same printed column, different offsets).
+- **The rhythm-strip lead (II) is itself misregistered** (offset 1.86 s, corr
+  0.46), so it cannot serve as a clean temporal anchor.
+- Same-column R-wave coherence is therefore broken irregularly, with no structure
+  a reference-free detector could lock onto.
+
+## Conclusion — reference-free detection space is exhausted
+
+This is the **fifth** reference-free probe to fail against the surviving false
+accepts (after shadow stability, geometric perturbation, Goldberger redundancy,
+and image-space re-projection), and all five fail for one principled reason: the
+residual errors live in the **interpretation / extraction-geometry layer**, where
+the digitizer's outputs are internally self-consistent but wrong. Amplitude is
+right, lead labels are right, and the temporal misregistration is irregular and
+anchorless — nothing in the available artifacts exposes the error without an
+external reference.
+
+**Decision (made with Sergen's delegation):** stop chasing reference-free anchors;
+ship the current frozen gate with `iphone/26` and `doogee/74` documented as known
+residual false accepts. The proper fix is **data-first** — a learned gate trained
+on a labelled real-photo↔reference fidelity set — but that is deferred: it needs
+labelled data that does not exist without burning the locked 60-group test split.
+The locked test split stays **closed**. This negative result is itself a
+methodological finding worth reporting (reference-free quality gates cannot detect
+interpretation-layer registration/assignment errors in paper-ECG digitization).
+
+**Next:** advance the publishable pipeline (Phase 4 VT/SVT or Phase 5 LLM report),
+and revisit the gate via the data-first path once a labelled fidelity set is
+available.
 
 **Fallback (plan §9):** if the registration anchor also fails feasibility, the
 interpretation-layer errors are not detectable from the current artifacts, which
