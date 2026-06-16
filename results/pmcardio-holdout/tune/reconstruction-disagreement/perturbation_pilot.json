@@ -1,0 +1,645 @@
+{
+  "generated_at_utc": "2026-06-16T09:23:57.869347+00:00",
+  "fidelity_source": "results/pmcardio-holdout/tune/pmcardio_reference_fidelity.json",
+  "perturbations": [
+    "translate_+12_-8",
+    "scale_1.03",
+    "scale_0.97_translate_-10_+10"
+  ],
+  "summary": {
+    "false_accept_min_median_correlation": [
+      0.8467724345021119,
+      0.797158012925991
+    ],
+    "control_worst_case_count": 10,
+    "control_min_median_correlation_min": 0.7891777821233794,
+    "control_min_median_correlation_median": 0.9897414238873261,
+    "separation_margin": -0.057594652378732514
+  },
+  "records": [
+    {
+      "category": "photos_doogee",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "false_accept",
+      "true_median_correlation": 0.8937304901314367,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.9944078437675312,
+          "minimum_correlation": 0.9680866709247596,
+          "median_normalized_rmse": 0.10531319313696977,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.03387702529877737,
+            "median_gain_error": 0.0035824830019115517,
+            "maximum_gain_error": 0.06502128083259429
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.8467724345021119,
+          "minimum_correlation": 0.4399099441535649,
+          "median_normalized_rmse": 0.5535507931283138,
+          "unstable_leads_below_0_8": 4,
+          "calibrated": {
+            "median_rmse_mv": 0.17073223632321016,
+            "median_gain_error": 0.05924120127691007,
+            "maximum_gain_error": 0.2733065537126175
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9297409226056818,
+          "minimum_correlation": 0.5805595088792186,
+          "median_normalized_rmse": 0.37461090116921547,
+          "unstable_leads_below_0_8": 3,
+          "calibrated": {
+            "median_rmse_mv": 0.12519553715504533,
+            "median_gain_error": 0.01967397936649029,
+            "maximum_gain_error": 0.2845069160946154
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_1.03",
+        "min_median_correlation": 0.8467724345021119,
+        "min_minimum_correlation": 0.4399099441535649,
+        "max_unstable_leads_below_0_8": 4,
+        "max_calibrated_median_rmse_mv": 0.17073223632321016
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 26,
+      "layout": "3x4+1R",
+      "role": "false_accept",
+      "true_median_correlation": 0.5145751453168269,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.797158012925991,
+          "minimum_correlation": 0.012170248918306516,
+          "median_normalized_rmse": 0.6364157994502276,
+          "unstable_leads_below_0_8": 6,
+          "calibrated": {
+            "median_rmse_mv": 0.15194427043023628,
+            "median_gain_error": 0.020416920510273828,
+            "maximum_gain_error": 0.11037095062742552
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.8134741194772696,
+          "minimum_correlation": 0.012387322702230343,
+          "median_normalized_rmse": 0.6107742379109244,
+          "unstable_leads_below_0_8": 4,
+          "calibrated": {
+            "median_rmse_mv": 0.1513007612579825,
+            "median_gain_error": 0.013425208619506857,
+            "maximum_gain_error": 0.0604308045182389
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.8121654503903474,
+          "minimum_correlation": 0.011826779059193033,
+          "median_normalized_rmse": 0.6129177448892299,
+          "unstable_leads_below_0_8": 4,
+          "calibrated": {
+            "median_rmse_mv": 0.15141729149485178,
+            "median_gain_error": 0.015198356841671867,
+            "maximum_gain_error": 0.06131936525042159
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "translate_+12_-8",
+        "min_median_correlation": 0.797158012925991,
+        "min_minimum_correlation": 0.011826779059193033,
+        "max_unstable_leads_below_0_8": 6,
+        "max_calibrated_median_rmse_mv": 0.15194427043023628
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 26,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9871335730214988,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.998520439523671,
+          "minimum_correlation": 0.8565740418800056,
+          "median_normalized_rmse": 0.05438279754069902,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.010431131402469245,
+            "median_gain_error": 0.0037609848365611764,
+            "maximum_gain_error": 0.12164650846876213
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9985663054785284,
+          "minimum_correlation": 0.9952055231229936,
+          "median_normalized_rmse": 0.05354665406282087,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.013653763484369509,
+            "median_gain_error": 0.0028023906209426186,
+            "maximum_gain_error": 0.005386137268058366
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9941118730818252,
+          "minimum_correlation": 0.9902780032294509,
+          "median_normalized_rmse": 0.10846205785392632,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.020318738824001,
+            "median_gain_error": 0.004509899970717046,
+            "maximum_gain_error": 0.009807496542662664
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_0.97_translate_-10_+10",
+        "min_median_correlation": 0.9941118730818252,
+        "min_minimum_correlation": 0.8565740418800056,
+        "max_unstable_leads_below_0_8": 0,
+        "max_calibrated_median_rmse_mv": 0.020318738824001
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9809350302294423,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.9995254578722894,
+          "minimum_correlation": 0.4686375017594696,
+          "median_normalized_rmse": 0.030794507987475774,
+          "unstable_leads_below_0_8": 1,
+          "calibrated": {
+            "median_rmse_mv": 0.006863369984723051,
+            "median_gain_error": 0.0024823607290470617,
+            "maximum_gain_error": 0.5344529176739299
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9218306375482308,
+          "minimum_correlation": 0.3249982758128322,
+          "median_normalized_rmse": 0.3952613824760335,
+          "unstable_leads_below_0_8": 5,
+          "calibrated": {
+            "median_rmse_mv": 0.13545109983054748,
+            "median_gain_error": 0.010017403628559185,
+            "maximum_gain_error": 0.29421578025910855
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9996958976653135,
+          "minimum_correlation": 0.1380723224523362,
+          "median_normalized_rmse": 0.024617284138193155,
+          "unstable_leads_below_0_8": 2,
+          "calibrated": {
+            "median_rmse_mv": 0.00911017941682712,
+            "median_gain_error": 0.0024899726173153724,
+            "maximum_gain_error": 0.8846228255880966
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_1.03",
+        "min_median_correlation": 0.9218306375482308,
+        "min_minimum_correlation": 0.1380723224523362,
+        "max_unstable_leads_below_0_8": 5,
+        "max_calibrated_median_rmse_mv": 0.13545109983054748
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9803258209868684,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.9991711364625921,
+          "minimum_correlation": 0.05395468976371236,
+          "median_normalized_rmse": 0.04060573587606332,
+          "unstable_leads_below_0_8": 2,
+          "calibrated": {
+            "median_rmse_mv": 0.0074513451918118275,
+            "median_gain_error": 0.0027106694171045165,
+            "maximum_gain_error": 13.218413267430467
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9983709637789375,
+          "minimum_correlation": 0.0,
+          "median_normalized_rmse": 0.0569787845423608,
+          "unstable_leads_below_0_8": 2,
+          "calibrated": {
+            "median_rmse_mv": 0.011793537369273074,
+            "median_gain_error": 0.004003592910348186,
+            "maximum_gain_error": 1.0
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.991903002624718,
+          "minimum_correlation": -0.003960861699628326,
+          "median_normalized_rmse": 0.12654556377172038,
+          "unstable_leads_below_0_8": 4,
+          "calibrated": {
+            "median_rmse_mv": 0.03381684088658255,
+            "median_gain_error": 0.021259944435132627,
+            "maximum_gain_error": 1.0706081166091517
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_0.97_translate_-10_+10",
+        "min_median_correlation": 0.991903002624718,
+        "min_minimum_correlation": -0.003960861699628326,
+        "max_unstable_leads_below_0_8": 4,
+        "max_calibrated_median_rmse_mv": 0.03381684088658255
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 100,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.979725713571791,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.9969467285896327,
+          "minimum_correlation": 0.17678046158715163,
+          "median_normalized_rmse": 0.0781247599359016,
+          "unstable_leads_below_0_8": 2,
+          "calibrated": {
+            "median_rmse_mv": 0.012185298269013716,
+            "median_gain_error": 0.006582960443111796,
+            "maximum_gain_error": 0.402362912344002
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9467623250648922,
+          "minimum_correlation": 0.8221990899537611,
+          "median_normalized_rmse": 0.326143223387307,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.05621671827376262,
+            "median_gain_error": 0.01859539495479645,
+            "maximum_gain_error": 0.19378154916547885
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9972190973145918,
+          "minimum_correlation": 0.6987209222040144,
+          "median_normalized_rmse": 0.07457742428741868,
+          "unstable_leads_below_0_8": 1,
+          "calibrated": {
+            "median_rmse_mv": 0.013810646008719528,
+            "median_gain_error": 0.005783397149845382,
+            "maximum_gain_error": 0.4089486841580836
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_1.03",
+        "min_median_correlation": 0.9467623250648922,
+        "min_minimum_correlation": 0.17678046158715163,
+        "max_unstable_leads_below_0_8": 2,
+        "max_calibrated_median_rmse_mv": 0.05621671827376262
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 28,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9756090349978344,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.9961763371449139,
+          "minimum_correlation": 0.9765578636208068,
+          "median_normalized_rmse": 0.08594257916444767,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.018028412964161487,
+            "median_gain_error": 0.011535499752614253,
+            "maximum_gain_error": 0.08080862779241604
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9949483732560085,
+          "minimum_correlation": 0.9605224945776331,
+          "median_normalized_rmse": 0.09588859609024827,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.017539667272713853,
+            "median_gain_error": 0.016383759777508666,
+            "maximum_gain_error": 0.10824969237437565
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9976849342567169,
+          "minimum_correlation": 0.9896289552834445,
+          "median_normalized_rmse": 0.06772521821498736,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.012353914629856143,
+            "median_gain_error": 0.011673497802317911,
+            "maximum_gain_error": 0.04599199555823619
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_1.03",
+        "min_median_correlation": 0.9949483732560085,
+        "min_minimum_correlation": 0.9605224945776331,
+        "max_unstable_leads_below_0_8": 0,
+        "max_calibrated_median_rmse_mv": 0.018028412964161487
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 83,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.9751991649242392,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.9961390882199752,
+          "minimum_correlation": 0.6053774479852266,
+          "median_normalized_rmse": 0.08780662813301404,
+          "unstable_leads_below_0_8": 2,
+          "calibrated": {
+            "median_rmse_mv": 0.012909512982753233,
+            "median_gain_error": 0.00934990170770128,
+            "maximum_gain_error": 0.4503679902609863
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9937963932587297,
+          "minimum_correlation": 0.4302806546154111,
+          "median_normalized_rmse": 0.11135387297139078,
+          "unstable_leads_below_0_8": 2,
+          "calibrated": {
+            "median_rmse_mv": 0.013637570236524739,
+            "median_gain_error": 0.01988450853752216,
+            "maximum_gain_error": 0.6108995020657602
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9944739872360513,
+          "minimum_correlation": 0.4029564598921019,
+          "median_normalized_rmse": 0.10447912664317596,
+          "unstable_leads_below_0_8": 3,
+          "calibrated": {
+            "median_rmse_mv": 0.015121668838271832,
+            "median_gain_error": 0.019572637077354182,
+            "maximum_gain_error": 0.48649877150766485
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_1.03",
+        "min_median_correlation": 0.9937963932587297,
+        "min_minimum_correlation": 0.4029564598921019,
+        "max_unstable_leads_below_0_8": 3,
+        "max_calibrated_median_rmse_mv": 0.015121668838271832
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9736602400462777,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.9966832770112286,
+          "minimum_correlation": -0.08512311111443453,
+          "median_normalized_rmse": 0.08124154886232383,
+          "unstable_leads_below_0_8": 1,
+          "calibrated": {
+            "median_rmse_mv": 0.025189962933297005,
+            "median_gain_error": 0.003651443086412909,
+            "maximum_gain_error": 2.4131251322096046
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9954338240641647,
+          "minimum_correlation": -0.11450879694022874,
+          "median_normalized_rmse": 0.09548586307233767,
+          "unstable_leads_below_0_8": 1,
+          "calibrated": {
+            "median_rmse_mv": 0.02117980574918035,
+            "median_gain_error": 0.0031363528685595665,
+            "maximum_gain_error": 2.392633304702984
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9984640392462871,
+          "minimum_correlation": -0.09205501460681162,
+          "median_normalized_rmse": 0.05494880329522912,
+          "unstable_leads_below_0_8": 1,
+          "calibrated": {
+            "median_rmse_mv": 0.015004091020884899,
+            "median_gain_error": 0.010935645516276071,
+            "maximum_gain_error": 2.1788985104962686
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_1.03",
+        "min_median_correlation": 0.9954338240641647,
+        "min_minimum_correlation": -0.11450879694022874,
+        "max_unstable_leads_below_0_8": 1,
+        "max_calibrated_median_rmse_mv": 0.025189962933297005
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9642596520111708,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.999161820622926,
+          "minimum_correlation": 0.8419805380985361,
+          "median_normalized_rmse": 0.04094321849865555,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.012989774983517461,
+            "median_gain_error": 0.003951937772123215,
+            "maximum_gain_error": 0.19742492925088984
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9663046248468262,
+          "minimum_correlation": 0.6900337106792369,
+          "median_normalized_rmse": 0.25959479214876874,
+          "unstable_leads_below_0_8": 1,
+          "calibrated": {
+            "median_rmse_mv": 0.08447962572545001,
+            "median_gain_error": 0.014680887174199131,
+            "maximum_gain_error": 0.35980428289801725
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9981384925756637,
+          "minimum_correlation": 0.8486621410821675,
+          "median_normalized_rmse": 0.06093781066869005,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.020355672254704915,
+            "median_gain_error": 0.0031435749626683718,
+            "maximum_gain_error": 0.17631699330400896
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_1.03",
+        "min_median_correlation": 0.9663046248468262,
+        "min_minimum_correlation": 0.6900337106792369,
+        "max_unstable_leads_below_0_8": 1,
+        "max_calibrated_median_rmse_mv": 0.08447962572545001
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 38,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.9629234248151953,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.996481333752269,
+          "minimum_correlation": 0.8862930209847126,
+          "median_normalized_rmse": 0.08384469495470792,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.020262481242788496,
+            "median_gain_error": 0.008347045975931777,
+            "maximum_gain_error": 0.09507294619627293
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9958256267456521,
+          "minimum_correlation": 0.8629445277474659,
+          "median_normalized_rmse": 0.09135376920603025,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.027650819171530124,
+            "median_gain_error": 0.013413107161967086,
+            "maximum_gain_error": 0.11228245099689138
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.9875798451499342,
+          "minimum_correlation": 0.8889924416993203,
+          "median_normalized_rmse": 0.15686011669086958,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.05080021785452228,
+            "median_gain_error": 0.01110931443738783,
+            "maximum_gain_error": 0.09051102104219533
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_0.97_translate_-10_+10",
+        "min_median_correlation": 0.9875798451499342,
+        "min_minimum_correlation": 0.8629445277474659,
+        "max_unstable_leads_below_0_8": 0,
+        "max_calibrated_median_rmse_mv": 0.05080021785452228
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9598267054059292,
+      "per_perturbation": [
+        {
+          "perturbation": "translate_+12_-8",
+          "median_correlation": 0.9982332163367655,
+          "minimum_correlation": 0.9206733909174634,
+          "median_normalized_rmse": 0.059382804011346976,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.019223716412394246,
+            "median_gain_error": 0.002082108321996845,
+            "maximum_gain_error": 0.01595217516473657
+          }
+        },
+        {
+          "perturbation": "scale_1.03",
+          "median_correlation": 0.9994771086970515,
+          "minimum_correlation": 0.9664496322714,
+          "median_normalized_rmse": 0.032126155858744856,
+          "unstable_leads_below_0_8": 0,
+          "calibrated": {
+            "median_rmse_mv": 0.009801171234911935,
+            "median_gain_error": 0.002772303474747051,
+            "maximum_gain_error": 0.015740915374600428
+          }
+        },
+        {
+          "perturbation": "scale_0.97_translate_-10_+10",
+          "median_correlation": 0.7891777821233794,
+          "minimum_correlation": 0.5393198804388641,
+          "median_normalized_rmse": 0.6492660546411728,
+          "unstable_leads_below_0_8": 7,
+          "calibrated": {
+            "median_rmse_mv": 0.19609200965387452,
+            "median_gain_error": 0.02236329674387383,
+            "maximum_gain_error": 0.17592132835070995
+          }
+        }
+      ],
+      "worst_case": {
+        "worst_perturbation": "scale_0.97_translate_-10_+10",
+        "min_median_correlation": 0.7891777821233794,
+        "min_minimum_correlation": 0.5393198804388641,
+        "max_unstable_leads_below_0_8": 7,
+        "max_calibrated_median_rmse_mv": 0.19609200965387452
+      }
+    }
+  ]
+}

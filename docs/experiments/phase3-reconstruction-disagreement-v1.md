@@ -55,3 +55,13 @@ normalization is therefore rejected as the perturbation for this feature.
 Evaluate a bounded grid-preserving scale or translation perturbation on tune
 records. Select it only if disagreement separates failures without
 destabilizing good records or adding unacceptable runtime.
+
+### Outcome (2026-06-16): rejected
+
+The grid-preserving perturbation pilot (`phase3-perturbation-pilot-v1.md`) also
+failed. Geometric disagreement measures perturbation sensitivity, which tracks
+capture condition and layout rather than fidelity: the least stable record was
+a genuinely faithful `samsung` extraction, and the false accepts did not stand
+out (separation margin `-0.058`). Both stability probes are therefore rejected
+as gate features. The next direction is an absolute physiological-plausibility
+check (full limb-lead derivation redundancy), not a stability probe.
