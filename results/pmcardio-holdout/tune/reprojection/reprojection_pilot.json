@@ -1,0 +1,258 @@
+{
+  "generated_at_utc": "2026-06-16T12:58:47.707821+00:00",
+  "fidelity_source": "results/pmcardio-holdout/tune/pmcardio_reference_fidelity.json",
+  "metric": "image-space re-projection overlay (precision/recall/f1)",
+  "summary": {
+    "residual": {
+      "false_accept_values": [
+        0.1583233319703733,
+        0.10345810390360732
+      ],
+      "control_count": 10,
+      "control_min": 0.06606130220509043,
+      "control_max": 0.19053933812990465,
+      "control_median": 0.1466706072945983,
+      "separation_margin_residual": -0.08708123422629732
+    },
+    "precision": {
+      "false_accept_values": [
+        0.9979110089826614,
+        0.9990610328638497
+      ],
+      "control_count": 10,
+      "control_min": 0.9911993681597653,
+      "control_max": 0.9989719337925362,
+      "control_median": 0.9952575672165421,
+      "separation_margin_residual": -0.0010609248098748525
+    },
+    "recall": {
+      "false_accept_values": [
+        0.7277405857740585,
+        0.8131047538914599
+      ],
+      "control_count": 10,
+      "control_min": 0.6834049052594298,
+      "control_max": 0.8773274311799696,
+      "control_median": 0.7489350217649615,
+      "separation_margin_residual": -0.14958684540591105
+    }
+  },
+  "records": [
+    {
+      "category": "photos_doogee",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "false_accept",
+      "true_median_correlation": 0.8937304901314367,
+      "scores": {
+        "precision": 0.9979110089826614,
+        "recall": 0.7277405857740585,
+        "f1": 0.8416766680296267,
+        "residual": 0.1583233319703733,
+        "ink_pixels": 71700,
+        "reconstructed_pixels": 9574,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.20388542168395551
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 26,
+      "layout": "3x4+1R",
+      "role": "false_accept",
+      "true_median_correlation": 0.5145751453168269,
+      "scores": {
+        "precision": 0.9990610328638497,
+        "recall": 0.8131047538914599,
+        "f1": 0.8965418960963927,
+        "residual": 0.10345810390360732,
+        "ink_pixels": 47540,
+        "reconstructed_pixels": 9585,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.2196816132184371
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 26,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9871335730214988,
+      "scores": {
+        "precision": 0.9978527607361963,
+        "recall": 0.8205964789349216,
+        "f1": 0.9005854484051551,
+        "residual": 0.09941455159484491,
+        "ink_pixels": 45668,
+        "reconstructed_pixels": 9780,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 4.825610789548414
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9809350302294423,
+      "scores": {
+        "precision": 0.9919238853855515,
+        "recall": 0.7446467127547888,
+        "f1": 0.8506799105619967,
+        "residual": 0.14932008943800334,
+        "ink_pixels": 50483,
+        "reconstructed_pixels": 9039,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.09247667926390914
+      }
+    },
+    {
+      "category": "photos_doogee",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9803258209868684,
+      "scores": {
+        "precision": 0.9911993681597653,
+        "recall": 0.7532233307751343,
+        "f1": 0.8559788748488067,
+        "residual": 0.14402112515119325,
+        "ink_pixels": 52120,
+        "reconstructed_pixels": 8863,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.3379647879005364
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 100,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.979725713571791,
+      "scores": {
+        "precision": 0.9950654366015876,
+        "recall": 0.7028853177501826,
+        "f1": 0.8238364791150246,
+        "residual": 0.17616352088497544,
+        "ink_pixels": 65712,
+        "reconstructed_pixels": 13983,
+        "trace_count": 6,
+        "layout_name": "6x4",
+        "layout_cost": 0.4888167442450135
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 28,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9756090349978344,
+      "scores": {
+        "precision": 0.9983598154792415,
+        "recall": 0.8773274311799696,
+        "f1": 0.9339386977949096,
+        "residual": 0.06606130220509043,
+        "ink_pixels": 36145,
+        "reconstructed_pixels": 9755,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 5.7685229871127435
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 83,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.9751991649242392,
+      "scores": {
+        "precision": 0.9927351979658554,
+        "recall": 0.6844554877709581,
+        "f1": 0.8102633289459412,
+        "residual": 0.18973667105405878,
+        "ink_pixels": 53929,
+        "reconstructed_pixels": 13765,
+        "trace_count": 6,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.33202647221888204
+      }
+    },
+    {
+      "category": "photos_iphone",
+      "image_id": 16,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9736602400462777,
+      "scores": {
+        "precision": 0.9917210820895522,
+        "recall": 0.6837920375405013,
+        "f1": 0.8094606618700954,
+        "residual": 0.19053933812990465,
+        "ink_pixels": 53702,
+        "reconstructed_pixels": 8576,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.11323498896874587
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9642596520111708,
+      "scores": {
+        "precision": 0.9989719337925362,
+        "recall": 0.8333716675378986,
+        "f1": 0.9086886386197105,
+        "residual": 0.0913113613802895,
+        "ink_pixels": 47825,
+        "reconstructed_pixels": 9727,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.3882739306097779
+      }
+    },
+    {
+      "category": "photos_scans",
+      "image_id": 38,
+      "layout": "3x4+3R",
+      "role": "control",
+      "true_median_correlation": 0.9629234248151953,
+      "scores": {
+        "precision": 0.9954496978314966,
+        "recall": 0.6834049052594298,
+        "f1": 0.8104277823518197,
+        "residual": 0.18957221764818033,
+        "ink_pixels": 90352,
+        "reconstructed_pixels": 14065,
+        "trace_count": 6,
+        "layout_name": "3x4+1R",
+        "layout_cost": 1.4884728823644473
+      }
+    },
+    {
+      "category": "photos_samsung",
+      "image_id": 74,
+      "layout": "3x4+1R",
+      "role": "control",
+      "true_median_correlation": 0.9598267054059292,
+      "scores": {
+        "precision": 0.9975736186169626,
+        "recall": 0.8009758792119315,
+        "f1": 0.8885297927189614,
+        "residual": 0.11147020728103862,
+        "ink_pixels": 54310,
+        "reconstructed_pixels": 9067,
+        "trace_count": 4,
+        "layout_name": "3x4+1R",
+        "layout_cost": 0.5059493422437196
+      }
+    }
+  ]
+}

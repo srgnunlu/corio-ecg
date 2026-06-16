@@ -85,7 +85,7 @@ index 431d75f..bbe67fe 100644
 +  total_rows: 7
 \ No newline at end of file
 diff --git a/src/model/inference_wrapper.py b/src/model/inference_wrapper.py
-index 329ef6a..6fdeaa8 100644
+index 329ef6a..2eccaba 100644
 --- a/src/model/inference_wrapper.py
 +++ b/src/model/inference_wrapper.py
 @@ -103,11 +103,26 @@ class InferenceWrapper(Module):
@@ -116,7 +116,7 @@ index 329ef6a..6fdeaa8 100644
 
          with timed_section("Pixel size search", self.times):
              mm_per_pixel_x, mm_per_pixel_y = self.pixel_size_finder(aligned_grid_prob)
-@@ -119,16 +134,41 @@ class InferenceWrapper(Module):
+@@ -119,16 +134,48 @@ class InferenceWrapper(Module):
                  aligned_signal_prob = self.dewarper.transform(aligned_signal_prob.squeeze())
 
          with timed_section("Signal extraction", self.times):
@@ -135,6 +135,13 @@ index 329ef6a..6fdeaa8 100644
 +                    align_corners=False,
 +                ).squeeze(0).squeeze(0)
 +            signals = self.signal_extractor(extraction_prob)
++
++        # Corio: keep a CPU copy of the segmentation probability map (the exact
++        # frame the signals were extracted from) plus the extractor's column
++        # crop offset, so downstream code can overlay the reconstructed traces
++        # on the detected ink for a reference-free re-projection fidelity check.
++        signal_probability = extraction_prob.detach().to("cpu")
++        extraction_crop_x0 = int(getattr(self.signal_extractor, "crop_x0", 0))
 
          self._print_profiling_results()
 
@@ -160,7 +167,7 @@ index 329ef6a..6fdeaa8 100644
          try:
              layout_str = layout["layout"]
              layout_is_flipped = str(layout["flip"])
-@@ -138,21 +178,20 @@ class InferenceWrapper(Module):
+@@ -138,21 +185,22 @@ class InferenceWrapper(Module):
              layout_is_flipped = "False"
              layout_cost = 1.0
 
@@ -185,10 +192,12 @@ index 329ef6a..6fdeaa8 100644
                  "layout_is_flipped": layout_is_flipped,
 +                "n_detected": layout.get("n_detected", 0),
 +                "detected_lead_names": layout.get("detected_lead_names", []),
++                "signal_probability": signal_probability,
++                "extraction_crop_x0": extraction_crop_x0,
              },
              "pixel_spacing_mm": {
                  "x": mm_per_pixel_x,
-@@ -282,12 +321,43 @@ class InferenceWrapper(Module):
+@@ -282,12 +330,43 @@ class InferenceWrapper(Module):
 
      def _get_feature_maps(self, image: Tensor) -> tuple[Tensor, Tensor, Tensor]:
          with timed_section("Segmentation", self.times):
@@ -409,3 +418,38 @@ index 62c8845..5a682f5 100644
              **match,
              "canonical_lines": canonical_lines,
              "lines": lines,
+diff --git a/src/model/signal_extractor.py b/src/model/signal_extractor.py
+index 96360a9..b855c7a 100644
+--- a/src/model/signal_extractor.py
++++ b/src/model/signal_extractor.py
+@@ -21,6 +21,7 @@ class SignalExtractor:
+     lam: float
+     min_line_width: int
+     num_peaks: Optional[int]
++    crop_x0: int  # Corio: leading-column crop offset from preprocess_lines
+
+     def __init__(
+         self,
+@@ -44,8 +45,12 @@ class SignalExtractor:
+         self.lam = lam
+         self.min_line_width = min_line_width
+         self.num_peaks = None
++        self.crop_x0 = 0
+
+     def __call__(self, feature_map: torch.Tensor) -> torch.Tensor:
++        # Corio: reset the column-crop offset so a stale value from a prior
++        # call cannot mis-align the re-projection fidelity overlay.
++        self.crop_x0 = 0
+         fmap = feature_map.cpu().clone()
+         lines_list = self._iterative_extraction(fmap)
+         self.num_peaks = self._autodetect_num_peaks(fmap)
+@@ -218,6 +223,9 @@ class SignalExtractor:
+         lines[lines == 0] = float("nan")
+         valid_cols = lines.nan_to_num(0.0).abs().sum(0) > 0
+         first, last = torch.nonzero(valid_cols, as_tuple=True)[0][[0, -1]].tolist()
++        # Corio: record the leading-column crop so callers can map the cropped
++        # output columns back to the full feature-map (segmentation) frame.
++        self.crop_x0 = int(first)
+         return lines[:, first : last + 1]
+
+     def extract_endpoints(self, lines: torch.Tensor) -> tuple[list[int], list[int], list[float], list[float]]:

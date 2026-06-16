@@ -11,6 +11,7 @@ import sys
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import torch
@@ -87,6 +88,11 @@ class DigitizeInfo:
     shadow_normalization_applied: bool = False
     shadow_score: float = 0.0
     shadow_normalization_version: str = "disabled"
+    # Re-projection fidelity artifacts (image-space ink overlay). Populated only
+    # when the digitizer exposes them; large arrays kept off the summary output.
+    signal_probability: np.ndarray | None = None  # (H, W) segmentation ink map
+    raw_lines: np.ndarray | None = None  # (n_traces, W) extracted pixel-Y traces
+    extraction_crop_x0: int = 0  # leading-column crop mapping raw_lines -> ink frame
 
     @property
     def has_warnings(self) -> bool:
@@ -508,6 +514,14 @@ class ECGDigitiser:
         raw_lines = signal_dict.get("raw_lines")
         if raw_lines is not None:
             info.raw_lines_count = raw_lines.shape[0]
+            info.raw_lines = _to_numpy(raw_lines)
+
+        # Re-projection fidelity inputs: the segmentation ink map plus the
+        # column-crop offset that aligns raw_lines to that map's frame.
+        signal_probability = signal_dict.get("signal_probability")
+        if signal_probability is not None:
+            info.signal_probability = _to_numpy(signal_probability)
+        info.extraction_crop_x0 = int(signal_dict.get("extraction_crop_x0", 0))
 
         pixel_info = raw_result.get("pixel_spacing_mm", {})
         info.pixel_spacing_x_mm = pixel_info.get("x", 0.0)
@@ -915,6 +929,13 @@ def _sharpen_image(image: torch.Tensor, strength: float = 0.3) -> torch.Tensor:
     blurred = F_torch.conv2d(img_float, kernel, padding=1, groups=3)
     sharpened = img_float + strength * (img_float - blurred)
     return sharpened.clamp(0, 255).squeeze(0).to(image.dtype)
+
+
+def _to_numpy(array: Any) -> np.ndarray:
+    """Convert a torch tensor or array-like to a detached float32 numpy array."""
+    if isinstance(array, torch.Tensor):
+        return array.detach().cpu().numpy().astype(np.float32)
+    return np.asarray(array, dtype=np.float32)
 
 
 def _pad_or_truncate_leads(signal: np.ndarray, target_leads: int) -> np.ndarray:
