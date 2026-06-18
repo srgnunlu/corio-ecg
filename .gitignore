@@ -58,6 +58,9 @@ results/digitization-experiments/*/operational/
 results/digitization-experiments/*/signals/
 results/digitization-experiments/*/signals-calibrated/
 results/digitization-experiments/*-pilot/
+results/hr-accuracy/model/
+results/hr-accuracy/rhythm-strips/
+results/hr-accuracy/scratch/
 
 # Logs
 *.log
