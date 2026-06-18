@@ -22,10 +22,10 @@ from src.report.structured_report import ECGReport, report_to_dict
 
 logger = logging.getLogger(__name__)
 
-# Latest, most capable Claude model (per the project roadmap). Adaptive thinking
-# is unnecessary here — this is short, grounded summarization, not reasoning —
-# so we leave thinking off for speed and cost on an auto-run-per-analysis path.
-NARRATIVE_MODEL: str = "claude-opus-4-8"
+# Sonnet 4.6 — fast and cost-efficient. Adaptive thinking is unnecessary here:
+# this is short, grounded summarization (not reasoning) that runs automatically
+# on every analysis, so we favor Sonnet's speed/cost and leave thinking off.
+NARRATIVE_MODEL: str = "claude-sonnet-4-6"
 _MAX_TOKENS: int = 1024
 
 SUPPORTED_LANGUAGES: dict[str, str] = {"tr": "Turkish", "en": "English"}

@@ -91,7 +91,7 @@ def test_generate_narrative_with_fake_client() -> None:
 
     assert result == "Sinüs ritmi, hız 72/dk. Normal EKG."
     assert client.messages.last_kwargs is not None
-    assert client.messages.last_kwargs["model"] == "claude-opus-4-8"
+    assert client.messages.last_kwargs["model"] == llm_narrative.NARRATIVE_MODEL
 
 
 def test_generate_narrative_skips_without_key(monkeypatch: pytest.MonkeyPatch) -> None:
