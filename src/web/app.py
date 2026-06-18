@@ -20,6 +20,7 @@ from src.measurement.intervals import IntervalMeasurements, interpret_intervals
 from src.measurement.rhythm_analysis import analyze_rhythm
 from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser
 from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
+from src.report.diagnosis_reconciliation import ReconciliationResult, reconcile_diagnoses
 from src.report.llm_narrative import generate_narrative, narrative_available
 from src.report.pdf_report import build_pdf_report
 from src.report.structured_report import ECGReport, build_report
@@ -210,7 +211,6 @@ def analyze_ecg(
             # Tiled single-pass fallback (auto-detect / unsupported layouts).
             all_results = diagnoser.diagnose_all(signal, rhythm_strip=rhythm_strip)
         timing_breakdown["Diagnosis inference"] = _time.time() - diagnose_start
-        results = [r for r in all_results if r.probability >= threshold]
         estimated_hr = diagnoser.last_estimated_hr_bpm
         intervals = diagnoser.last_interval_measurements
 
@@ -221,6 +221,18 @@ def analyze_ecg(
         except Exception:  # noqa: BLE001
             logger.exception("Rhythm analysis failed")
             rhythm = None
+
+        # Reconcile clinically contradictory multi-label diagnoses (e.g. sinus vs
+        # atrial fibrillation, RBBB vs LBBB) before anything consumes them, so the
+        # report, cards, and LLM narrative all see one consistent set. Best-effort.
+        reconciliation: ReconciliationResult | None = None
+        try:
+            reconciliation = reconcile_diagnoses(all_results, rhythm, threshold=threshold)
+            all_results = reconciliation.kept
+        except Exception:  # noqa: BLE001
+            logger.exception("Diagnosis reconciliation failed")
+
+        results = [r for r in all_results if r.probability >= threshold]
         try:
             report = build_report(
                 all_results,
@@ -255,6 +267,7 @@ def analyze_ecg(
         # Step 5: Format results
         critical_html = (
             _format_report_headline(report)
+            + _format_reconciliation_note(reconciliation)
             + _format_narrative(narrative)
             + _format_intervals(intervals)
             + _format_critical(
@@ -437,6 +450,25 @@ def _format_intervals(measurements: IntervalMeasurements | None) -> str:
         f"<tr>{cells}</tr></table>"
         f"<div style='font-size:11px; color:#64748B; margin-top:8px;'>{footer}</div>"
         "</div>"
+    )
+
+
+def _format_reconciliation_note(reconciliation: ReconciliationResult | None) -> str:
+    """Render the audit trail of diagnoses withheld as clinically contradictory."""
+    if reconciliation is None or not reconciliation.suppressed:
+        return ""
+    items = "".join(
+        f"<li style='margin-bottom:2px;'><b>{s.label}</b> "
+        f"(prob {s.probability:.2f}) — {s.reason}</li>"
+        for s in reconciliation.suppressed
+    )
+    return (
+        "<div style='padding:10px 16px; margin-bottom:12px; background:#F8FAFC; "
+        "border-radius:8px; border-left:4px solid #94A3B8; color:#475569; "
+        "font-size:13px;'>"
+        "<b>Reconciled findings</b> — withheld as mutually exclusive with a "
+        "higher-confidence finding:"
+        f"<ul style='margin:6px 0 0 18px; padding:0;'>{items}</ul></div>"
     )
 
 
