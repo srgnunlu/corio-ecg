@@ -58,6 +58,24 @@ MAX_IMAGE_DIMENSION: int = 2400
 MIN_REQUIRED_RAW_LINES: int = 3
 MIN_REQUIRED_NONZERO_LEADS: int = 8
 LEAD_ACTIVITY_THRESHOLD: float = 5e-2
+MAX_LINEAR_GAP_FRACTION: float = 0.012
+MIN_LINEAR_GAP_SAMPLES: int = 5
+NEIGHBOR_GAP_MIN_COVERAGE: float = 0.55
+NEIGHBOR_FIT_MIN_SAMPLES: int = 12
+LEAD_NEIGHBORS: dict[int, tuple[int, ...]] = {
+    0: (1, 2),
+    1: (0, 2),
+    2: (1, 0),
+    3: (4, 5),
+    4: (3, 5),
+    5: (4, 3),
+    6: (7, 8),
+    7: (6, 8),
+    8: (7, 9),
+    9: (8, 10, 11),
+    10: (11, 9, 8),
+    11: (10, 9),
+}
 
 
 @dataclass
@@ -1027,6 +1045,7 @@ def _expand_canonical_segments(signal: np.ndarray) -> np.ndarray:
     else:
         n_columns = 1
     column_edges = np.linspace(0, total_len, n_columns + 1, dtype=int)
+    signal = _repair_long_gaps_from_neighbor_leads(signal, column_edges)
 
     for lead_idx, finite_indices in enumerate(finite_indices_by_lead):
         if finite_indices.size == 0:
@@ -1036,7 +1055,10 @@ def _expand_canonical_segments(signal: np.ndarray) -> np.ndarray:
         span = int(finite_indices[-1] - finite_indices[0] + 1)
         if span >= total_len * 0.8:
             if n_columns == 1:
-                expanded[lead_idx] = _interpolate_finite_values(lead)
+                expanded[lead_idx] = _interpolate_finite_values(
+                    lead,
+                    max_linear_gap=_max_linear_gap_samples(lead.size),
+                )
                 continue
             leads_per_column = int(np.ceil(signal.shape[0] / n_columns))
             column_idx = min(n_columns - 1, lead_idx // leads_per_column)
@@ -1047,7 +1069,10 @@ def _expand_canonical_segments(signal: np.ndarray) -> np.ndarray:
             start = int(finite_indices[0])
             end = int(finite_indices[-1] + 1)
             segment = lead[start:end]
-            segment = _interpolate_finite_values(segment)
+            segment = _interpolate_finite_values(
+                segment,
+                max_linear_gap=_max_linear_gap_samples(segment.size),
+            )
             repeats = (total_len + len(segment) - 1) // len(segment)
             expanded[lead_idx] = np.tile(segment, repeats)[:total_len]
             continue
@@ -1057,7 +1082,10 @@ def _expand_canonical_segments(signal: np.ndarray) -> np.ndarray:
         segment = lead[start:end]
         if not np.isfinite(segment).any():
             segment = lead[finite_indices[0] : finite_indices[-1] + 1]
-        segment = _interpolate_finite_values(segment)
+        segment = _interpolate_finite_values(
+            segment,
+            max_linear_gap=_max_linear_gap_samples(segment.size),
+        )
         repeats = (total_len + len(segment) - 1) // len(segment)
         expanded[lead_idx] = np.tile(segment, repeats)[:total_len]
 
@@ -1094,10 +1122,100 @@ def _extract_rhythm_strip(signal: np.ndarray) -> np.ndarray | None:
             continue
         span = int(finite_indices[-1] - finite_indices[0] + 1)
         if span >= total_len * 0.8:
-            strip[lead_idx] = _interpolate_finite_values(lead)
+            strip[lead_idx] = _interpolate_finite_values(
+                lead,
+                max_linear_gap=_max_linear_gap_samples(lead.size),
+            )
             found = True
 
     return strip if found else None
+
+
+def _repair_long_gaps_from_neighbor_leads(
+    signal: np.ndarray,
+    column_edges: np.ndarray,
+) -> np.ndarray:
+    """Use synchronous neighboring leads before falling back to flat gap fill."""
+    repaired = signal.copy()
+    for column_start, column_end in zip(column_edges[:-1], column_edges[1:]):
+        for lead_idx in range(min(repaired.shape[0], NUM_LEADS)):
+            lead = repaired[lead_idx, column_start:column_end]
+            finite = np.isfinite(lead)
+            if finite.all() or not finite.any():
+                continue
+            max_gap = _max_linear_gap_samples(lead.size)
+            for start, end in _contiguous_true_runs(~finite):
+                is_internal = start > 0 and end < lead.size
+                if not is_internal or end - start <= max_gap:
+                    continue
+                fill = _neighbor_gap_fill(
+                    lead,
+                    repaired[:, column_start:column_end],
+                    lead_idx,
+                    start,
+                    end,
+                )
+                if fill is not None:
+                    lead[start:end] = fill
+    return repaired
+
+
+def _neighbor_gap_fill(
+    lead: np.ndarray,
+    column: np.ndarray,
+    lead_idx: int,
+    start: int,
+    end: int,
+) -> np.ndarray | None:
+    """Map a neighboring lead into a missing interval using local overlap."""
+    for neighbor_idx in LEAD_NEIGHBORS.get(lead_idx, ()):
+        if neighbor_idx >= column.shape[0]:
+            continue
+        reference = column[neighbor_idx]
+        gap_reference = reference[start:end]
+        gap_finite = np.isfinite(gap_reference)
+        if float(np.mean(gap_finite)) < NEIGHBOR_GAP_MIN_COVERAGE:
+            continue
+
+        fit_mask = _neighbor_fit_mask(lead, reference, start, end)
+        if int(np.sum(fit_mask)) < NEIGHBOR_FIT_MIN_SAMPLES:
+            continue
+        ref_values = reference[fit_mask]
+        lead_values = lead[fit_mask]
+        if float(np.nanstd(ref_values)) <= 1e-6:
+            continue
+
+        slope, intercept = np.polyfit(ref_values, lead_values, deg=1)
+        if not np.isfinite(slope) or not np.isfinite(intercept):
+            continue
+        if abs(float(slope)) > 8.0:
+            continue
+
+        fill = slope * gap_reference + intercept
+        if not np.isfinite(fill).all():
+            return None
+        return fill
+    return None
+
+
+def _neighbor_fit_mask(
+    lead: np.ndarray,
+    reference: np.ndarray,
+    start: int,
+    end: int,
+) -> np.ndarray:
+    """Prefer local before/after overlap, with whole segment as fallback."""
+    gap_len = end - start
+    context_start = max(0, start - gap_len)
+    context_end = min(lead.size, end + gap_len)
+    local = np.zeros(lead.size, dtype=bool)
+    local[context_start:start] = True
+    local[end:context_end] = True
+    finite_overlap = np.isfinite(lead) & np.isfinite(reference)
+    fit_mask = finite_overlap & local
+    if int(np.sum(fit_mask)) >= NEIGHBOR_FIT_MIN_SAMPLES:
+        return fit_mask
+    return finite_overlap
 
 
 def _process_rhythm_strip(rhythm_canonical: np.ndarray) -> np.ndarray:
@@ -1119,8 +1237,11 @@ def _process_rhythm_strip(rhythm_canonical: np.ndarray) -> np.ndarray:
     return _z_score_normalize(signal).astype(np.float32)
 
 
-def _interpolate_finite_values(values: np.ndarray) -> np.ndarray:
-    """Linearly fill NaNs, extending edge values over missing boundaries."""
+def _interpolate_finite_values(
+    values: np.ndarray,
+    max_linear_gap: int | None = None,
+) -> np.ndarray:
+    """Fill NaNs without inventing long straight-line waveform bridges."""
     finite = np.isfinite(values)
     if not finite.any():
         return np.zeros_like(values)
@@ -1133,7 +1254,33 @@ def _interpolate_finite_values(values: np.ndarray) -> np.ndarray:
         positions[finite],
         values[finite],
     )
+    if max_linear_gap is None:
+        return interpolated
+
+    baseline = float(np.median(values[finite]))
+    missing_runs = _contiguous_true_runs(~finite)
+    for start, end in missing_runs:
+        is_internal = start > 0 and end < len(values)
+        if is_internal and end - start > max_linear_gap:
+            interpolated[start:end] = baseline
     return interpolated
+
+
+def _max_linear_gap_samples(length: int) -> int:
+    """Largest NaN run we trust linear interpolation to bridge."""
+    return max(MIN_LINEAR_GAP_SAMPLES, int(round(length * MAX_LINEAR_GAP_FRACTION)))
+
+
+def _contiguous_true_runs(mask: np.ndarray) -> list[tuple[int, int]]:
+    """Return half-open [start, end) runs for a boolean mask."""
+    indices = np.flatnonzero(mask)
+    if indices.size == 0:
+        return []
+    splits = np.where(np.diff(indices) > 1)[0] + 1
+    return [
+        (int(run[0]), int(run[-1]) + 1)
+        for run in np.split(indices, splits)
+    ]
 
 
 def _bandpass_filter(

@@ -24,6 +24,7 @@ from src.pipeline.digitize import (  # noqa: E402
     ECGDigitiser,
     _crop_likely_landscape_page,
     _expand_canonical_segments,
+    _interpolate_finite_values,
     _pad_or_truncate_leads,
     _pad_or_truncate_time,
     _resample_signal,
@@ -58,6 +59,21 @@ class TestNanHandling:
         result = np.nan_to_num(signal, nan=0.0)
         assert result[0, 0] == 1.0
         assert result[0, 2] == 3.0
+
+    def test_short_internal_gaps_are_linearly_interpolated(self) -> None:
+        signal = np.array([0.0, 1.0, np.nan, np.nan, 4.0, 5.0])
+
+        result = _interpolate_finite_values(signal, max_linear_gap=3)
+
+        np.testing.assert_allclose(result, [0.0, 1.0, 2.0, 3.0, 4.0, 5.0])
+
+    def test_long_internal_gaps_do_not_create_linear_bridge_artifacts(self) -> None:
+        signal = np.array([0.0, 0.0, np.nan, np.nan, np.nan, np.nan, 8.0, 8.0])
+
+        result = _interpolate_finite_values(signal, max_linear_gap=2)
+
+        assert not np.all(np.diff(result[1:7]) > 0.0)
+        np.testing.assert_allclose(result[2:6], np.full(4, 4.0))
 
 
 class TestUvToMvConversion:
@@ -172,6 +188,38 @@ class TestExpandCanonicalSegments:
 
         rhythm = np.linspace(-1, 1, 100)
         np.testing.assert_allclose(expanded[1], rhythm)
+
+    def test_long_gaps_inside_segment_are_not_drawn_as_diagonal_ramps(self) -> None:
+        canonical = np.full((12, 100), np.nan)
+        canonical[9, 50:65] = 4.0
+        canonical[9, 85:100] = -4.0
+
+        expanded = _expand_canonical_segments(canonical)
+        segment = expanded[9, :50]
+
+        # The missing 20-sample gap should be suppressed to local baseline instead
+        # of bridged as a long descending straight line between the two islands.
+        assert np.max(np.abs(segment[15:35])) < 1.0
+
+    def test_long_gaps_borrow_synchronous_precordial_neighbor_waveform(self) -> None:
+        canonical = np.full((12, 100), np.nan)
+        reference = np.zeros(50, dtype=np.float64)
+        reference[4:10] = np.linspace(0.0, 2.0, 6)
+        reference[10:16] = np.linspace(2.0, -1.0, 6)
+        reference[18:28] = [0.0, 1.0, 4.0, 10.0, -6.0, -2.0, 0.5, 2.0, 1.0, 0.0]
+        reference[34:42] = np.linspace(0.0, 3.0, 8)
+        reference[42:48] = np.linspace(3.0, 0.0, 6)
+        target = 2.0 * reference + 1.0
+
+        canonical[11, 50:100] = reference
+        canonical[10, 50:100] = target
+        canonical[10, 65:85] = np.nan
+
+        expanded = _expand_canonical_segments(canonical)
+        segment = expanded[10, :50]
+
+        assert np.max(segment[15:35]) > 8.0
+        assert np.min(segment[15:35]) < -8.0
 
 
 class TestPadOrTruncateTime:

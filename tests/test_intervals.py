@@ -33,6 +33,7 @@ def _synthetic_ecg(
     pr_ms: float = 160.0,
     qrs_ms: float = 90.0,
     qt_ms: float = 380.0,
+    pr_tail_amp: float = 0.0,
     jitter: float = 0.0,
     seed: int = 0,
     lead_idx: int = 1,
@@ -61,6 +62,9 @@ def _synthetic_ecg(
         # P wave: ends ~30 ms before QRS onset, onset = qrs_on - PR.
         p_on = qrs_on - pr_n
         p_off = p_on + p_dur
+        if pr_tail_amp > 0.0:
+            tail_on = qrs_on - ms(250.0)
+            lead[max(tail_on, 0):max(p_on, 0)] += pr_tail_amp
         _triangle(lead, p_on, (p_on + p_off) // 2, p_off, amp=0.18)
         # QRS: sharp triangle, R peak at the center.
         _triangle(lead, qrs_on, qrs_on + qrs_n // 2, qrs_on + qrs_n, amp=1.6)
@@ -99,6 +103,16 @@ class TestIntervalMeasurement:
         assert m.qrs_ms is not None and abs(m.qrs_ms - 90.0) < 30.0
         assert m.qt_ms is not None and abs(m.qt_ms - 380.0) < 40.0
         assert m.measured_lead == "II"
+
+    def test_pr_onset_does_not_stick_to_search_boundary(self) -> None:
+        # Digitized paper traces often carry residual T-tail/baseline energy before
+        # the P wave. PR should follow the P wave itself, not the left edge of the
+        # 250 ms search window.
+        ecg = _synthetic_ecg(bpm=60.0, pr_ms=150.0, qrs_ms=80.0, pr_tail_amp=0.10)
+        m = measure_intervals(ecg)
+
+        assert m.pr_ms is not None
+        assert abs(m.pr_ms - 150.0) < 35.0
 
     def test_qtc_bazett_equals_qt_at_60bpm(self) -> None:
         # At 60 bpm RR = 1 s, so Bazett QTc == QT.

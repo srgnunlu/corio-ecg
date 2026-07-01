@@ -15,6 +15,8 @@ from scipy.signal import butter, find_peaks, sosfiltfilt
 
 _MAX_HR: float = 220.0
 _MIN_HR: float = 25.0
+_MAX_P_PEAK_RISE_S: float = 0.07
+_P_ONSET_FALLBACK_FRACTION: float = 0.15
 
 
 @dataclass
@@ -158,7 +160,30 @@ def _p_onset(
     onset = p_peak_local
     while onset > 0 and abs_seg[onset] > onset_threshold:
         onset -= 1
+    max_peak_rise = max(int(sample_rate * _MAX_P_PEAK_RISE_S), 1)
+    if onset == 0 or p_peak_local - onset > max_peak_rise:
+        onset = _p_onset_from_peak_window(segment, p_peak_local, max_peak_rise)
     return win_start + onset
+
+
+def _p_onset_from_peak_window(
+    segment: np.ndarray,
+    p_peak_local: int,
+    max_peak_rise: int,
+) -> int:
+    """Fallback P onset when residual baseline energy prevents threshold crossing."""
+    polarity = 1.0 if segment[p_peak_local] >= 0 else -1.0
+    signed = segment * polarity
+    peak_amp = float(signed[p_peak_local])
+    if peak_amp <= 0.0:
+        return max(0, p_peak_local - max_peak_rise)
+
+    lo = max(0, p_peak_local - max_peak_rise)
+    threshold = _P_ONSET_FALLBACK_FRACTION * peak_amp
+    below = np.flatnonzero(signed[lo : p_peak_local + 1] <= threshold)
+    if below.size == 0:
+        return lo
+    return lo + int(below[-1])
 
 
 def _t_end(
