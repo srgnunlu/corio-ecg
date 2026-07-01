@@ -1,0 +1,17 @@
+# Development manifest template for deterministic VT/SVT criteria audits.
+version: vtsvt-audit-manifest-v1
+sample_rate: 500
+cohort_description: >
+  Development-only audit manifest for wide-complex tachycardia criteria trigger
+  behavior. Populate records with adjudicated VT, SVT with aberrancy, paced
+  rhythm, and bundle-branch-block examples before using aggregate metrics.
+
+# Record schema:
+# - record_id: stable local identifier
+#   clinical_label: VT | SVT with aberrancy | paced rhythm | BBB | ...
+#   expected_supports_vt: true | false | null
+#   signal_path: path/to/signal.npy      # shape (12, samples) or (samples, 12)
+#   record_path: path/to/wfdb/record     # alternative to signal_path
+#   rhythm_strip_path: path/to/strip.npy # optional; shape (12, samples)
+#   sample_rate: 500                     # optional per-record override
+records: []

@@ -4,6 +4,12 @@ from src.measurement.intervals import IntervalMeasurements
 from src.measurement.rhythm_analysis import RhythmAnalysis
 from src.pipeline.diagnose import DiagnosisResult
 from src.report.structured_report import build_report, report_to_dict
+from src.vtsvt.models import (
+    BrugadaCriteriaResult,
+    VereckeiCriteriaResult,
+    VTSVTAssessment,
+    WCTFeatures,
+)
 
 
 def _normal_intervals() -> IntervalMeasurements:
@@ -33,6 +39,47 @@ def _af_rhythm() -> RhythmAnalysis:
         rr_cv=0.25, rr_rmssd_ms=120.0, regular=False, p_wave_fraction=0.1,
         p_waves_present=False, pvc_count=0, ectopy_present=False,
         n_beats=12, measured_lead="II", quality="good",
+    )
+
+
+def _vt_supported_assessment() -> VTSVTAssessment:
+    features = WCTFeatures(
+        heart_rate_bpm=130.0,
+        qrs_ms=160.0,
+        regular=True,
+        n_beats=16,
+        anchor_lead="II",
+        precordial_leads=(),
+        avr=None,
+        max_precordial_rs_interval_ms=128.0,
+    )
+    brugada = BrugadaCriteriaResult(
+        supports_vt=True,
+        positive_criteria=("brugada_rs_interval_gt_100ms",),
+        rs_absent_all_precordial=False,
+        max_rs_interval_ms=128.0,
+        av_dissociation_present=None,
+        capture_or_fusion_beats_present=None,
+    )
+    vereckei = VereckeiCriteriaResult(
+        supports_vt=False,
+        positive_criteria=(),
+        initial_r_in_avr=False,
+        initial_r_or_q_width_gt_40ms=False,
+        initial_downstroke_notched=False,
+        vi_vt_ratio_leq_1=False,
+        vi_vt_ratio=1.4,
+    )
+    return VTSVTAssessment(
+        classification="vt_supported",
+        in_scope=True,
+        supports_vt=True,
+        supports_svt=False,
+        evidence=("brugada_rs_interval_gt_100ms",),
+        limitations=("av_dissociation_not_assessed",),
+        features=features,
+        brugada=brugada,
+        vereckei=vereckei,
     )
 
 
@@ -89,6 +136,21 @@ class TestNormalDetection:
         assert not report.is_normal
         assert report.overall_assessment == "Indeterminate ECG"
 
+    def test_vtsvt_vt_support_blocks_normal(self) -> None:
+        diagnoses = [DiagnosisResult("NORMAL SINUS RHYTHM", 1, 0.9)]
+        report = build_report(
+            diagnoses,
+            _normal_intervals(),
+            _sinus_rhythm(),
+            threshold=0.5,
+            vtsvt_assessment=_vt_supported_assessment(),
+        )
+        assert not report.is_normal
+        assert report.overall_assessment == "Abnormal ECG"
+        assert report.vtsvt_assessment is not None
+        assert not report.normal_criteria["no_vtsvt_vt_support"]
+        assert any("VT criteria" in reason for reason in report.abnormal_reasons)
+
 
 class TestReportStructure:
     def test_top_diagnoses_capped_at_five(self) -> None:
@@ -120,3 +182,15 @@ class TestReportStructure:
             diagnoses, _normal_intervals(), rhythm, threshold=0.5, estimated_hr_bpm=68.0
         )
         assert report.heart_rate_bpm == 68.0
+
+    def test_to_dict_includes_vtsvt_audit(self) -> None:
+        report = build_report(
+            [DiagnosisResult("NORMAL SINUS RHYTHM", 1, 0.9)],
+            _normal_intervals(),
+            _sinus_rhythm(),
+            threshold=0.5,
+            vtsvt_assessment=_vt_supported_assessment(),
+        )
+        payload = report_to_dict(report)
+        assert payload["vtsvt_assessment"]["classification"] == "vt_supported"
+        assert payload["vtsvt_assessment"]["evidence"] == ["brugada_rs_interval_gt_100ms"]

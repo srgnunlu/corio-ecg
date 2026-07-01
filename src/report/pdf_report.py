@@ -36,6 +36,7 @@ from reportlab.platypus import (
 
 from src.measurement.intervals import IntervalMeasurements
 from src.report.structured_report import ECGReport
+from src.report.vtsvt_pdf import vtsvt_pdf_section
 
 # Verdict palette mirrors the web headline card so print and screen agree.
 _VERDICT_COLORS: dict[str, tuple[str, str]] = {
@@ -206,6 +207,8 @@ def build_pdf_report(
 
     story.append(Paragraph("Interval Measurements", styles["section"]))
     story.append(_intervals_table(report, intervals))
+
+    story.extend(vtsvt_pdf_section(report, styles))
 
     story.append(Paragraph("AI Diagnoses (ECGFounder top-5)", styles["section"]))
     story.append(_diagnoses_table(report))

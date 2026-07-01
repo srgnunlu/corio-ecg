@@ -16,6 +16,7 @@ from dataclasses import asdict, dataclass, field
 from src.measurement.intervals import IntervalMeasurements, interpret_intervals
 from src.measurement.rhythm_analysis import RhythmAnalysis
 from src.pipeline.diagnose import DiagnosisResult
+from src.vtsvt.models import VTSVTAssessment
 
 # Labels that, on their own, do NOT make an ECG abnormal. Rate/rhythm-normal
 # descriptors plus the model's own "normal/borderline" verdicts. Sinus brady/
@@ -67,6 +68,7 @@ class ECGReport:
     overall_assessment: str       # "Normal ECG" | "Abnormal ECG" | "Indeterminate ECG"
     abnormal_reasons: list[str] = field(default_factory=list)
     normal_criteria: dict[str, bool] = field(default_factory=dict)
+    vtsvt_assessment: VTSVTAssessment | None = None
 
 
 def build_report(
@@ -77,6 +79,7 @@ def build_report(
     threshold: float,
     estimated_hr_bpm: float | None = None,
     sex: str | None = None,
+    vtsvt_assessment: VTSVTAssessment | None = None,
 ) -> ECGReport:
     """Assemble a structured report from the pipeline outputs.
 
@@ -88,13 +91,14 @@ def build_report(
         estimated_hr_bpm: HR shown elsewhere in the UI; used when the rhythm
             analysis itself produced no rate (keeps the report consistent).
         sex: "male"/"female" for the QTc cutoff (passed to interval interpretation).
+        vtsvt_assessment: optional deterministic WCT/VT criteria audit.
     """
     flags = interpret_intervals(intervals, sex=sex) if intervals is not None else {}
     top = _top_diagnoses(diagnoses, threshold)
     heart_rate = _resolve_hr(rhythm, estimated_hr_bpm)
 
     criteria, reasons = _evaluate_normality(
-        diagnoses, intervals, rhythm, flags, heart_rate, threshold
+        diagnoses, intervals, rhythm, flags, heart_rate, threshold, vtsvt_assessment
     )
     is_normal = all(criteria.values()) and bool(criteria)
     overall = _overall_assessment(is_normal, criteria, rhythm)
@@ -117,6 +121,7 @@ def build_report(
         overall_assessment=overall,
         abnormal_reasons=reasons,
         normal_criteria=criteria,
+        vtsvt_assessment=vtsvt_assessment,
     )
 
 
@@ -130,6 +135,8 @@ def report_to_dict(report: ECGReport) -> dict:
             payload[key] = round(value, 1)
     for entry in payload["top_diagnoses"]:
         entry["probability"] = round(entry["probability"], 4)
+    if payload.get("vtsvt_assessment") is not None:
+        payload["vtsvt_assessment"] = _tuples_to_lists(payload["vtsvt_assessment"])
     return payload
 
 
@@ -173,6 +180,7 @@ def _evaluate_normality(
     flags: dict[str, str],
     heart_rate: float | None,
     threshold: float,
+    vtsvt_assessment: VTSVTAssessment | None,
 ) -> tuple[dict[str, bool], list[str]]:
     """Check the NORMAL-ECG criteria and collect plain-language failure reasons.
 
@@ -229,6 +237,11 @@ def _evaluate_normality(
         more = "…" if len(pathologies) > 3 else ""
         reasons.append(f"AI-flagged finding(s): {shown}{more}")
 
+    no_vtsvt_vt_support = not (vtsvt_assessment and vtsvt_assessment.supports_vt)
+    criteria["no_vtsvt_vt_support"] = no_vtsvt_vt_support
+    if not no_vtsvt_vt_support and vtsvt_assessment is not None:
+        reasons.append(_vtsvt_reason(vtsvt_assessment))
+
     return criteria, reasons
 
 
@@ -267,7 +280,23 @@ def _overall_assessment(
         not criteria.get("sinus_rhythm", True)
         or not criteria.get("no_ectopy", True)
         or not criteria.get("no_significant_pathology", True)
+        or not criteria.get("no_vtsvt_vt_support", True)
         or (rhythm is not None and rhythm.heart_rate_bpm is not None
             and not criteria.get("normal_rate", True))
     )
     return "Abnormal ECG" if positively_abnormal else "Indeterminate ECG"
+
+
+def _vtsvt_reason(assessment: VTSVTAssessment) -> str:
+    evidence = ", ".join(assessment.evidence)
+    return f"VT criteria support wide-complex tachycardia as VT ({evidence})"
+
+
+def _tuples_to_lists(value: object) -> object:
+    if isinstance(value, tuple):
+        return [_tuples_to_lists(item) for item in value]
+    if isinstance(value, list):
+        return [_tuples_to_lists(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _tuples_to_lists(item) for key, item in value.items()}
+    return value

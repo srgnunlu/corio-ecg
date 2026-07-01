@@ -25,7 +25,10 @@ from src.report.llm_narrative import generate_narrative, narrative_available
 from src.report.pdf_report import build_pdf_report
 from src.report.structured_report import ECGReport, build_report
 from src.utils.ecg_labels import CRITICAL_DIAGNOSIS_INDICES
+from src.vtsvt.criteria import assess_vtsvt
+from src.vtsvt.models import VTSVTAssessment
 from src.web.ecg_plot import fig_to_pil, plot_ecg_paper
+from src.web.vtsvt_card import format_vtsvt_card
 
 logger = logging.getLogger(__name__)
 
@@ -182,7 +185,9 @@ def analyze_ecg(
             timing_breakdown["Load digitizer"] = _time.time() - digitiser_load_start
 
         digitize_start = _time.time()
-        signal = digitiser.digitize(tmp_path, layout_hint=layout_hint)
+        digitized = digitiser.digitize_with_calibrated(tmp_path, layout_hint=layout_hint)
+        signal = digitized.model_input
+        display_signal = digitized.calibrated_millivolts
         timing_breakdown["Digitization"] = _time.time() - digitize_start
         debug_info = digitiser.last_info
 
@@ -202,7 +207,7 @@ def analyze_ecg(
         )
         # Heart rate comes from the uncropped full-duration rhythm strip when
         # the layout printed one — the tiled diagnosis signal lost the real RR.
-        rhythm_strip = debug_info.rhythm_strip
+        rhythm_strip = digitized.rhythm_strip
         if segment_layout is not None:
             all_results = diagnoser.diagnose_all_segment_ensemble(
                 signal, layout=segment_layout, rhythm_strip=rhythm_strip
@@ -233,6 +238,17 @@ def analyze_ecg(
             logger.exception("Diagnosis reconciliation failed")
 
         results = [r for r in all_results if r.probability >= threshold]
+        vtsvt_assessment: VTSVTAssessment | None = None
+        try:
+            vtsvt_assessment = assess_vtsvt(
+                signal,
+                rhythm_strip=rhythm_strip,
+                intervals=intervals,
+                rhythm=rhythm,
+            )
+        except Exception:  # noqa: BLE001
+            logger.exception("VT/SVT criteria assessment failed")
+
         try:
             report = build_report(
                 all_results,
@@ -240,6 +256,7 @@ def analyze_ecg(
                 rhythm,
                 threshold=threshold,
                 estimated_hr_bpm=estimated_hr,
+                vtsvt_assessment=vtsvt_assessment,
             )
         except Exception:  # noqa: BLE001
             logger.exception("Report assembly failed")
@@ -255,7 +272,7 @@ def analyze_ecg(
         # Step 3: Generate ECG paper visualization
         progress(0.85, desc="Rendering digitized signal…")
         plot_start = _time.time()
-        fig = plot_ecg_paper(signal)
+        fig = plot_ecg_paper(display_signal)
         ecg_image = fig_to_pil(fig)
         timing_breakdown["Plot rendering"] = _time.time() - plot_start
 
@@ -268,6 +285,7 @@ def analyze_ecg(
         critical_html = (
             _format_report_headline(report)
             + _format_reconciliation_note(reconciliation)
+            + format_vtsvt_card(report.vtsvt_assessment if report else None)
             + _format_narrative(narrative)
             + _format_intervals(intervals)
             + _format_critical(
@@ -289,7 +307,7 @@ def analyze_ecg(
             narrative=narrative,
         )
         response = (ecg_image, critical_html, diagnoses_html, debug_html, context, image)
-        del signal, all_results, results, debug_info, wrapper_times, fig
+        del signal, display_signal, all_results, results, debug_info, wrapper_times, fig
         return response
 
     except RuntimeError as exc:
