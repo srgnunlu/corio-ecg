@@ -1,0 +1,512 @@
+{
+  "fold": 9,
+  "total_records": 2193,
+  "successful_records": 2193,
+  "failed_records": 0,
+  "rate_adjustments_applied": false,
+  "probability_stats": {
+    "mean": 0.05744490027427673,
+    "std": 0.16464652121067047,
+    "max": 0.9999966621398926,
+    "min": 2.205993951065466e-06
+  },
+  "semantic_scp_subset_evaluation": {
+    "mapping_version": 1,
+    "mapped_scp_codes": 42,
+    "mapped_model_outputs": 39,
+    "records_with_mapped_labels": 2164,
+    "mapped_label_assignments": 5058,
+    "classification": {
+      "threshold": 0.5,
+      "minimum_positive_examples": 5,
+      "evaluated_classes": 35,
+      "skipped_classes": 4,
+      "macro_auroc": 0.8839919878833862,
+      "macro_average_precision": 0.4184758960330553,
+      "micro_f1": 0.5908402725208176,
+      "macro_f1": 0.3462045831209243,
+      "per_class": {
+        "NORMAL ECG": {
+          "positives": 957,
+          "negatives": 1236,
+          "auroc": 0.8579767375800185,
+          "average_precision": 0.8057929903757496,
+          "f1": 0.6890173410404624
+        },
+        "SINUS RHYTHM": {
+          "positives": 1678,
+          "negatives": 515,
+          "auroc": 0.8368810534964186,
+          "average_precision": 0.9342684879755083,
+          "f1": 0.8674275680421423
+        },
+        "SINUS BRADYCARDIA": {
+          "positives": 64,
+          "negatives": 2129,
+          "auroc": 0.9398852160638799,
+          "average_precision": 0.25703436316022577,
+          "f1": 0.28440366972477066
+        },
+        "ATRIAL FIBRILLATION": {
+          "positives": 151,
+          "negatives": 2042,
+          "auroc": 0.9941201652710302,
+          "average_precision": 0.9408316005901097,
+          "f1": 0.8605341246290801
+        },
+        "SINUS TACHYCARDIA": {
+          "positives": 83,
+          "negatives": 2110,
+          "auroc": 0.9866784674241991,
+          "average_precision": 0.8225175269643177,
+          "f1": 0.7330316742081447
+        },
+        "PREMATURE VENTRICULAR COMPLEXES": {
+          "positives": 115,
+          "negatives": 2078,
+          "auroc": 0.9886282797003809,
+          "average_precision": 0.8795254088296448,
+          "f1": 0.7816901408450704
+        },
+        "RIGHT BUNDLE BRANCH BLOCK": {
+          "positives": 55,
+          "negatives": 2138,
+          "auroc": 0.9878646143379539,
+          "average_precision": 0.5021986487079947,
+          "f1": 0.47368421052631576
+        },
+        "LEFT ATRIAL ENLARGEMENT": {
+          "positives": 43,
+          "negatives": 2150,
+          "auroc": 0.781308815575987,
+          "average_precision": 0.09518525981314216,
+          "f1": 0.15254237288135594
+        },
+        "NONSPECIFIC T WAVE ABNORMALITY": {
+          "positives": 206,
+          "negatives": 1987,
+          "auroc": 0.8239210206145774,
+          "average_precision": 0.310275292805776,
+          "f1": 0.35251798561151076
+        },
+        "LOW VOLTAGE QRS": {
+          "positives": 19,
+          "negatives": 2174,
+          "auroc": 0.7997385367743185,
+          "average_precision": 0.10344715861447958,
+          "f1": 0.07476635514018691
+        },
+        "PREMATURE ATRIAL COMPLEXES": {
+          "positives": 40,
+          "negatives": 2153,
+          "auroc": 0.9776242452392011,
+          "average_precision": 0.29513917800036465,
+          "f1": 0.43820224719101125
+        },
+        "ANTERIOR INFARCT": {
+          "positives": 36,
+          "negatives": 2157,
+          "auroc": 0.5385695152732705,
+          "average_precision": 0.01675781038116652,
+          "f1": 0.0
+        },
+        "INCOMPLETE RIGHT BUNDLE BRANCH BLOCK": {
+          "positives": 112,
+          "negatives": 2081,
+          "auroc": 0.9304764193039061,
+          "average_precision": 0.5281595762502904,
+          "f1": 0.5145631067961165
+        },
+        "LEFT BUNDLE BRANCH BLOCK": {
+          "positives": 54,
+          "negatives": 2139,
+          "auroc": 0.9810312884179176,
+          "average_precision": 0.8690548263371329,
+          "f1": 0.6993006993006993
+        },
+        "LATERAL INFARCT": {
+          "positives": 20,
+          "negatives": 2173,
+          "auroc": 0.6933732167510355,
+          "average_precision": 0.02781555781726443,
+          "f1": 0.04316546762589928
+        },
+        "NONSPECIFIC ST ABNORMALITY": {
+          "positives": 77,
+          "negatives": 2116,
+          "auroc": 0.7673477278864803,
+          "average_precision": 0.13782083201891138,
+          "f1": 0.19095477386934673
+        },
+        "LEFT VENTRICULAR HYPERTROPHY": {
+          "positives": 213,
+          "negatives": 1980,
+          "auroc": 0.902122160572865,
+          "average_precision": 0.5369920807082117,
+          "f1": 0.5
+        },
+        "ATRIAL FLUTTER": {
+          "positives": 7,
+          "negatives": 2186,
+          "auroc": 0.9984315775715592,
+          "average_precision": 0.7717948717948717,
+          "f1": 0.375
+        },
+        "WITH SINUS ARRHYTHMIA": {
+          "positives": 77,
+          "negatives": 2116,
+          "auroc": 0.9304065499717675,
+          "average_precision": 0.4099859844862045,
+          "f1": 0.45454545454545453
+        },
+        "LEFT ANTERIOR FASCICULAR BLOCK": {
+          "positives": 163,
+          "negatives": 2030,
+          "auroc": 0.9619783009459337,
+          "average_precision": 0.6762475511130832,
+          "f1": 0.2857142857142857
+        },
+        "ANTEROSEPTAL INFARCT": {
+          "positives": 237,
+          "negatives": 1956,
+          "auroc": 0.9145548048631067,
+          "average_precision": 0.6638112514053524,
+          "f1": 0.5
+        },
+        "ANTEROLATERAL INFARCT": {
+          "positives": 29,
+          "negatives": 2164,
+          "auroc": 0.9466983236662629,
+          "average_precision": 0.3675710474538896,
+          "f1": 0.3
+        },
+        "RIGHT ATRIAL ENLARGEMENT": {
+          "positives": 10,
+          "negatives": 2183,
+          "auroc": 0.9925790196976638,
+          "average_precision": 0.5743263473921626,
+          "f1": 0.37037037037037035
+        },
+        "INFERIOR INFARCT": {
+          "positives": 269,
+          "negatives": 1924,
+          "auroc": 0.8101374537248143,
+          "average_precision": 0.3908773888825268,
+          "f1": 0.029197080291970802
+        },
+        "INCOMPLETE LEFT BUNDLE BRANCH BLOCK": {
+          "positives": 7,
+          "negatives": 2186,
+          "auroc": 0.9070056201803687,
+          "average_precision": 0.07569691441711515,
+          "f1": 0.0
+        },
+        "VOLTAGE CRITERIA FOR LEFT VENTRICULAR HYPERTROPHY": {
+          "positives": 87,
+          "negatives": 2106,
+          "auroc": 0.8768870550479747,
+          "average_precision": 0.3129304679141428,
+          "f1": 0.21568627450980393
+        },
+        "OR DIGITALIS EFFECT": {
+          "positives": 18,
+          "negatives": 2175,
+          "auroc": 0.7251340996168582,
+          "average_precision": 0.06037174019231572,
+          "f1": 0.13636363636363635
+        },
+        "LEFT POSTERIOR FASCICULAR BLOCK": {
+          "positives": 18,
+          "negatives": 2175,
+          "auroc": 0.8966794380587484,
+          "average_precision": 0.21893838837274035,
+          "f1": 0.23076923076923078
+        },
+        "WITH 1ST DEGREE AV BLOCK": {
+          "positives": 80,
+          "negatives": 2113,
+          "auroc": 0.8932796971131093,
+          "average_precision": 0.30076009880839993,
+          "f1": 0.0
+        },
+        "PROLONGED QT": {
+          "positives": 12,
+          "negatives": 2181,
+          "auroc": 0.909254164756228,
+          "average_precision": 0.10473981783766147,
+          "f1": 0.13333333333333333
+        },
+        "RIGHT VENTRICULAR HYPERTROPHY": {
+          "positives": 12,
+          "negatives": 2181,
+          "auroc": 0.8762799938865964,
+          "average_precision": 0.08434564179072235,
+          "f1": 0.10526315789473684
+        },
+        "NONSPECIFIC INTRAVENTRICULAR CONDUCTION DELAY": {
+          "positives": 79,
+          "negatives": 2114,
+          "auroc": 0.7197166568865789,
+          "average_precision": 0.14334558840492748,
+          "f1": 0.04819277108433735
+        },
+        "IN A PATTERN OF BIGEMINY": {
+          "positives": 8,
+          "negatives": 2185,
+          "auroc": 0.9238558352402746,
+          "average_precision": 0.18466496619047618,
+          "f1": 0.2
+        },
+        "SUPRAVENTRICULAR TACHYCARDIA": {
+          "positives": 5,
+          "negatives": 2188,
+          "auroc": 0.9978976234003656,
+          "average_precision": 0.6658333333333333,
+          "f1": 0.46153846153846156
+        },
+        "WOLFF-PARKINSON-WHITE": {
+          "positives": 8,
+          "negatives": 2185,
+          "auroc": 0.8713958810068649,
+          "average_precision": 0.5775983620167183,
+          "f1": 0.6153846153846154
+        }
+      }
+    }
+  },
+  "official_ground_truth_evaluation": {
+    "source": "PKUDigitalHealth/ECGFounder csv/ptbxl_label.csv",
+    "source_commit": "04edac702b61c91face519774ddcc0cd712fef23",
+    "matched_records": 2183,
+    "records_missing_labels": 10,
+    "classification": {
+      "threshold": 0.5,
+      "minimum_positive_examples": 5,
+      "evaluated_classes": 31,
+      "skipped_classes": 119,
+      "macro_auroc": 0.876638938646075,
+      "macro_average_precision": 0.46583818904029395,
+      "micro_f1": 0.5929686031208874,
+      "macro_f1": 0.36973946994664647,
+      "per_class": {
+        "NORMAL ECG": {
+          "positives": 955,
+          "negatives": 1228,
+          "auroc": 0.8586464177908144,
+          "average_precision": 0.806997238869739,
+          "f1": 0.6902552204176334
+        },
+        "SINUS RHYTHM": {
+          "positives": 1670,
+          "negatives": 513,
+          "auroc": 0.8363477722916739,
+          "average_precision": 0.9340289054253524,
+          "f1": 0.8670588235294118
+        },
+        "SINUS BRADYCARDIA": {
+          "positives": 64,
+          "negatives": 2119,
+          "auroc": 0.9401103114676734,
+          "average_precision": 0.262064476197722,
+          "f1": 0.2850574712643678
+        },
+        "ATRIAL FIBRILLATION": {
+          "positives": 151,
+          "negatives": 2032,
+          "auroc": 0.9941140428638473,
+          "average_precision": 0.9409137749576348,
+          "f1": 0.8605341246290801
+        },
+        "SINUS TACHYCARDIA": {
+          "positives": 83,
+          "negatives": 2100,
+          "auroc": 0.986649454962708,
+          "average_precision": 0.8225254096077281,
+          "f1": 0.7330316742081447
+        },
+        "PREMATURE VENTRICULAR COMPLEXES": {
+          "positives": 114,
+          "negatives": 2069,
+          "auroc": 0.9885697811469224,
+          "average_precision": 0.879278133848201,
+          "f1": 0.7801418439716312
+        },
+        "RIGHT BUNDLE BRANCH BLOCK": {
+          "positives": 166,
+          "negatives": 2017,
+          "auroc": 0.9666569102388731,
+          "average_precision": 0.7833156419327159,
+          "f1": 0.7492625368731564
+        },
+        "SEPTAL INFARCT": {
+          "positives": 236,
+          "negatives": 1947,
+          "auroc": 0.8920307644093912,
+          "average_precision": 0.4887326420040308,
+          "f1": 0.5085324232081911
+        },
+        "LEFT ATRIAL ENLARGEMENT": {
+          "positives": 43,
+          "negatives": 2140,
+          "auroc": 0.7806563790480331,
+          "average_precision": 0.09520903910838723,
+          "f1": 0.15254237288135594
+        },
+        "LOW VOLTAGE QRS": {
+          "positives": 322,
+          "negatives": 1861,
+          "auroc": 0.5873987470838159,
+          "average_precision": 0.18418432036662122,
+          "f1": 0.15087040618955513
+        },
+        "ANTERIOR INFARCT": {
+          "positives": 36,
+          "negatives": 2147,
+          "auroc": 0.5380375718056203,
+          "average_precision": 0.01680956622379875,
+          "f1": 0.0
+        },
+        "LEFT BUNDLE BRANCH BLOCK": {
+          "positives": 61,
+          "negatives": 2122,
+          "auroc": 0.9778742602864604,
+          "average_precision": 0.8566835006514256,
+          "f1": 0.7248322147651006
+        },
+        "LATERAL INFARCT": {
+          "positives": 101,
+          "negatives": 2082,
+          "auroc": 0.8360962897442482,
+          "average_precision": 0.2763761961981674,
+          "f1": 0.3181818181818182
+        },
+        "LEFT VENTRICULAR HYPERTROPHY": {
+          "positives": 237,
+          "negatives": 1946,
+          "auroc": 0.9060953768630665,
+          "average_precision": 0.5704639290528415,
+          "f1": 0.503562945368171
+        },
+        "QT HAS LENGTHENED": {
+          "positives": 12,
+          "negatives": 2171,
+          "auroc": 0.9706356517733763,
+          "average_precision": 0.3299827587562599,
+          "f1": 0.41379310344827586
+        },
+        "ATRIAL FLUTTER": {
+          "positives": 7,
+          "negatives": 2176,
+          "auroc": 0.998424369747899,
+          "average_precision": 0.7717948717948717,
+          "f1": 0.375
+        },
+        "LEFT ANTERIOR FASCICULAR BLOCK": {
+          "positives": 163,
+          "negatives": 2020,
+          "auroc": 0.9620360809087043,
+          "average_precision": 0.6770114068057324,
+          "f1": 0.2857142857142857
+        },
+        "ANTEROSEPTAL INFARCT": {
+          "positives": 236,
+          "negatives": 1947,
+          "auroc": 0.9141660790612243,
+          "average_precision": 0.6635373086728521,
+          "f1": 0.5014749262536873
+        },
+        "ELECTRONIC ATRIAL PACEMAKER": {
+          "positives": 29,
+          "negatives": 2154,
+          "auroc": 0.8951269490602888,
+          "average_precision": 0.142787582486265,
+          "f1": 0.0625
+        },
+        "ANTEROLATERAL INFARCT": {
+          "positives": 29,
+          "negatives": 2154,
+          "auroc": 0.946498895399097,
+          "average_precision": 0.36757400883744795,
+          "f1": 0.3
+        },
+        "RIGHT ATRIAL ENLARGEMENT": {
+          "positives": 10,
+          "negatives": 2173,
+          "auroc": 0.9925448688449149,
+          "average_precision": 0.5743263473921627,
+          "f1": 0.37037037037037035
+        },
+        "INFERIOR INFARCT": {
+          "positives": 266,
+          "negatives": 1917,
+          "auroc": 0.8096591243366632,
+          "average_precision": 0.3899686698673768,
+          "f1": 0.02952029520295203
+        },
+        "LEFT POSTERIOR FASCICULAR BLOCK": {
+          "positives": 18,
+          "negatives": 2165,
+          "auroc": 0.8965101360020529,
+          "average_precision": 0.21896075236200596,
+          "f1": 0.23076923076923078
+        },
+        "WITH QRS WIDENING": {
+          "positives": 322,
+          "negatives": 1861,
+          "auroc": 0.5229506610017323,
+          "average_precision": 0.15865601090254708,
+          "f1": 0.028089887640449437
+        },
+        "WITH 1ST DEGREE AV BLOCK": {
+          "positives": 80,
+          "negatives": 2103,
+          "auroc": 0.8931110318592487,
+          "average_precision": 0.30088372390087853,
+          "f1": 0.0
+        },
+        "RIGHT VENTRICULAR HYPERTROPHY": {
+          "positives": 12,
+          "negatives": 2171,
+          "auroc": 0.8761323506832489,
+          "average_precision": 0.08436822992662318,
+          "f1": 0.10526315789473684
+        },
+        "SUPRAVENTRICULAR TACHYCARDIA": {
+          "positives": 5,
+          "negatives": 2178,
+          "auroc": 0.9978879706152433,
+          "average_precision": 0.6658333333333333,
+          "f1": 0.46153846153846156
+        },
+        "VENTRICULAR TACHYCARDIA": {
+          "positives": 5,
+          "negatives": 2178,
+          "auroc": 0.9952249770431588,
+          "average_precision": 0.46411238825031925,
+          "f1": 0.42857142857142855
+        },
+        "ANTEROLATERAL LEADS": {
+          "positives": 66,
+          "negatives": 2117,
+          "auroc": 0.8156052733284664,
+          "average_precision": 0.09418046869022495,
+          "f1": 0.0
+        },
+        "WOLFF-PARKINSON-WHITE": {
+          "positives": 7,
+          "negatives": 2176,
+          "auroc": 0.8529411764705883,
+          "average_precision": 0.5078909947361322,
+          "f1": 0.5454545454545454
+        },
+        "NONSPECIFIC INTRAVENTRICULAR BLOCK": {
+          "positives": 78,
+          "negatives": 2105,
+          "auroc": 0.7470674218892746,
+          "average_precision": 0.11153222908971738,
+          "f1": 0.0
+        }
+      }
+    }
+  }
+}
