@@ -1,0 +1,61 @@
+{
+  "difficulty": "clean",
+  "fold": 0,
+  "records_attempted": 460,
+  "records_scored": 460,
+  "failures": [],
+  "positives": 230,
+  "prevalence": 0.5,
+  "prevalence_note": "balanced subset \u2014 not the natural 6.4% rate",
+  "threshold": 0.6423,
+  "arms": {
+    "clean": {
+      "auroc": 0.9100378071833649,
+      "auprc": 0.8964109021646421,
+      "sensitivity": 0.8,
+      "specificity": 0.8739130434782608,
+      "ppv": 0.863849765258216,
+      "npv": 0.8137651821862348,
+      "accuracy": 0.8369565217391305,
+      "f1": 0.8306997742663658,
+      "true_positive": 184,
+      "false_positive": 29,
+      "true_negative": 201,
+      "false_negative": 46
+    },
+    "digitised": {
+      "auroc": 0.7556710775047257,
+      "auprc": 0.755345788714717,
+      "sensitivity": 0.5608695652173913,
+      "specificity": 0.8173913043478261,
+      "ppv": 0.7543859649122807,
+      "npv": 0.6505190311418685,
+      "accuracy": 0.6891304347826087,
+      "f1": 0.6433915211970075,
+      "true_positive": 129,
+      "false_positive": 42,
+      "true_negative": 188,
+      "false_negative": 101
+    },
+    "digitised_segment": {
+      "auroc": 0.8612098298676749,
+      "auprc": 0.8486823338186193,
+      "sensitivity": 0.6434782608695652,
+      "specificity": 0.8956521739130435,
+      "ppv": 0.8604651162790697,
+      "npv": 0.7152777777777778,
+      "accuracy": 0.7695652173913043,
+      "f1": 0.736318407960199,
+      "true_positive": 148,
+      "false_positive": 24,
+      "true_negative": 206,
+      "false_negative": 82
+    }
+  },
+  "score_correlation": 0.6505398868843631,
+  "score_correlation_segment": 0.8542748639532745,
+  "detected_layouts": {
+    "3x4+1R": 460
+  },
+  "segment_ensemble_unavailable": 0
+}

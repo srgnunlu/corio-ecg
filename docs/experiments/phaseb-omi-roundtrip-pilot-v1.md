@@ -8,19 +8,48 @@
 **Zincir:** temiz WFDB → ECG-Image-Kit render (`clean` zorluk) → Open-ECG-Digitizer → v2a
 **Eşik:** 0.6423 (Gate 2'den, değiştirilmedi)
 
-## Sonuç: kayıp ciddi
+## Sonuç: kayıp ciddi, ama segment-ensemble üçte ikisini geri alıyor
 
 | Kol | AUROC | AUPRC | **Sens** | Spec | F1 |
 |---|---:|---:|---:|---:|---:|
 | Temiz sinyal | 0.9100 | 0.8964 | **0.8000** | 0.8739 | 0.8307 |
-| Digitize edilmiş | 0.7559 | 0.7579 | **0.5435** | 0.8087 | 0.6266 |
-| **Δ** | **−0.154** | **−0.139** | **−0.257** | −0.065 | **−0.204** |
+| Digitize, tek parça | 0.7557 | 0.7553 | **0.5609** | 0.8174 | 0.6434 |
+| **Digitize + segment-ensemble** | **0.8612** | **0.8487** | **0.6435** | **0.8957** | **0.7363** |
 
-**Duyarlılık 0.800'den 0.544'e düşüyor** — kâğıttan geçen her dört oklüzyondan
-birini daha kaybediyoruz. 460 kaydın tamamı başarıyla işlendi, yani bu bir
-"başarısız digitizasyon" sorunu değil; sessizce bozulan sinyalin sorunu.
+Temiz sinyale göre kayıp:
 
-Kayıt-başına skor korelasyonu (temiz vs digitize): **0.644**.
+| | AUROC | AUPRC | Sens | Spec | F1 |
+|---|---:|---:|---:|---:|---:|
+| Tek parça | −0.154 | −0.141 | −0.239 | −0.057 | −0.187 |
+| **Segment-ensemble** | **−0.049** | **−0.048** | **−0.157** | **+0.022** | **−0.094** |
+
+**Segment-ensemble AUROC kaybını %68 azaltıyor** (−0.154 → −0.049). 460 kaydın
+tamamı işlendi, hepsi 3x4+1R olarak tespit edildi, hiçbirinde ensemble
+uygulanamama durumu olmadı.
+
+Kayıt-başına skor korelasyonu: tek parça **0.651**, segment-ensemble **0.854**.
+
+### Bu, ilk okumayı revize ediyor
+
+Bu deneyin ilk turunda (segment-ensemble olmadan) korelasyon 0.644 çıkmış ve
+"sıralama gerçekten bozuluyor, yeniden kalibrasyon yetmez" sonucuna varılmıştı.
+Segment-ensemble ile korelasyon **0.854**'e çıkıyor — yani kaybın büyük kısmı
+modelin digitize edilmiş sinyali anlamamasından değil, **kâğıt kolonlarının
+zaman-kaydırmalı yapısının tek parça beslenmesinden** geliyordu.
+
+Bu, PTB-XL'de 150-sınıf tanı yolunda görülen etkinin (macro AUROC 0.75 → 0.87)
+OMI'de de geçerli olduğunu doğruluyor.
+
+### Kalan kaybın karakteri: eşik, model değil
+
+Segment-ensemble kolunda **spesifisite temiz sinyalden bile yüksek** (0.896 vs
+0.874) ama duyarlılık düşük (0.644 vs 0.800). Bu klasik bir kaymış-eşik
+imzasıdır: skorlar aşağı kaymış, Gate 2'den devralınan 0.6423 eşiği artık çok
+yukarıda kalıyor.
+
+Yani kalan −0.157 duyarlılık kaybının bir kısmı **eşiği digitize edilmiş
+dağılımda yeniden seçerek bedavaya geri alınabilir** — ve korelasyon 0.854
+olduğu için bu sefer kalibrasyon gerçekten işe yarayacak bölgedeyiz.
 
 ## Bu neden önemli
 
@@ -33,18 +62,19 @@ Aynı zamanda [strateji dokümanının](../research/2026-07-06-specialization-st
 tezini **doğruluyor**: savunulabilir niş clean-signal OMI değil, fotoğraf
 dayanıklılığı — çünkü orada gerçek ve büyük bir problem var.
 
-## Skor korelasyonu 0.644 ne anlatıyor
+## Skor korelasyonu ne anlatıyor
 
-Bu sayı, düzeltmenin hangi türden olması gerektiğini söylüyor:
+Bu sayı düzeltmenin türünü belirliyor:
 
-- **Korelasyon yüksek olsaydı (≳0.9):** model sıralamayı koruyup yalnızca
-  ölçeği kaydırıyor demekti; çözüm ucuz olurdu — digitize edilmiş dağılım
-  üzerinde yeniden kalibrasyon ve yeni bir eşik.
-- **Gerçekleşen (0.644):** sıralama gerçekten bozuluyor. Yeniden kalibrasyon
-  tek başına yetmez; modelin digitize edilmiş sinyali görmesi gerekiyor.
+- **≳0.9:** model sıralamayı koruyup ölçeği kaydırıyor → yeniden kalibrasyon ve
+  yeni eşik yeter, ucuz iş.
+- **≲0.65:** sıralama bozuluyor → modelin digitize edilmiş sinyali eğitim
+  sırasında görmesi gerekir.
 
-Yani strateji dokümanının Aşama B planı (clean / render / re-digitized
-olasılıklarını tutarlı olmaya zorlayan eğitim) gerekli görünüyor — kestirme yok.
+Tek parça beslemede 0.651 çıktı (kötü haber), segment-ensemble ile **0.854**
+(iyi haber). Yani doğru besleme biçimiyle model **eşik ayarıyla kurtarılabilir
+bölgede**. Strateji dokümanının tutarlılık-eğitimi planı hâlâ değerli ama artık
+tek çare değil; önce ucuz kazançlar var.
 
 ## ⚠️ Bu sayılar iyimser
 
@@ -53,10 +83,8 @@ olasılıklarını tutarlı olmaya zorlayan eğitim) gerekli görünüyor — ke
 1. **`clean` zorluk seviyesi kullanıldı** — sentetik, düz, gölgesiz, mükemmel
    hizalı render. Gerçek telefon fotoğrafı `moderate`/`hard` seviyesine daha
    yakın. Bu pilot **en kolay senaryo**.
-2. **Segment-ensemble kullanılmadı.** Üretim tanı yolu kâğıt kolonlarını ayrı
-   ayrı skorlayıp ortalıyor (PTB-XL'de macro AUROC 0.75→0.87 kazandırmıştı);
-   bu pilot digitize edilmiş sinyali tek parça olarak modele verdi. Kaybın bir
-   kısmı buradan geri alınabilir — **ilk denenmesi gereken şey bu**.
+2. ~~Segment-ensemble kullanılmadı~~ → **eklendi ve kaybın üçte ikisini geri
+   aldı** (yukarıdaki tabloya bakın).
 3. **Digitizasyon uyarıları gözlendi.** Çalışma sırasında birçok kayıtta
    "Einthoven consistency low — lead assignment may be incorrect" ve
    "digitization quality concerns" uyarıları çıktı. Lead ataması bozulduğunda
@@ -75,9 +103,11 @@ korelasyon 0.644 olduğu için tamamını değil.
 
 ## Sıradaki adımlar (öncelik sırasıyla)
 
-1. **Segment-ensemble'ı OMI yoluna bağla ve pilotu tekrarla.** En ucuz kazanç
-   adayı; üretim tanı yolunda zaten kanıtlanmış.
-2. **Digitize edilmiş dağılımda eşik yeniden seçimi** — ucuz, ama kısmi.
+1. ~~Segment-ensemble'ı OMI yoluna bağla~~ ✅ **YAPILDI** — AUROC kaybı
+   −0.154'ten −0.049'a indi, korelasyon 0.651'den 0.854'e çıktı.
+2. **Digitize edilmiş dağılımda eşik yeniden seçimi** — artık en ucuz kazanç.
+   Segment kolunun spesifisitesi temiz sinyalden yüksek, duyarlılığı düşük:
+   eşik kaymış, düşürmek bedava duyarlılık getirir.
 3. **Zorluk seviyesi taraması** (`moderate`, `hard`) — kaybın gerçek fotoğrafta
    ne kadar büyüdüğünü ölç.
 4. **Digitizasyon kalitesine göre ayrıştırma** — Einthoven skoru / layout cost
@@ -92,6 +122,7 @@ korelasyon 0.644 olduğu için tamamını değil.
 TQDM_DISABLE=1 CORIO_CALIBRATION=0 python scripts/evaluate_omi_roundtrip.py
 ```
 
-Süre ~55 dk (M4). Render'lar `data/processed/omi-roundtrip/images/` altında
-önbelleklenir, tekrar çalıştırmada yeniden üretilmez. Rapor
-`results/omi/roundtrip_pilot.json`.
+Süre ~55 dk ilk çalıştırma, ~40 dk sonrakiler (render'lar
+`data/processed/omi-roundtrip/images/` altında önbelleklenir). Raporlar:
+`results/omi/roundtrip_pilot.json` (segment-ensemble öncesi) ve
+`results/omi/roundtrip_pilot_v2.json` (üç kollu, güncel).
