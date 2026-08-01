@@ -28,6 +28,9 @@ class TrainingConfig:
     seed: int = 20260801
     # Stop when validation AUPRC has not improved for this many epochs.
     patience: int = 4
+    # How much the auxiliary heads pull on the shared representation. Small:
+    # they are there to regularise, not to compete with the OMI objective.
+    auxiliary_weight: float = 0.3
 
 
 @dataclass
@@ -51,21 +54,43 @@ class TrainingHistory:
 
 
 class SignalDataset(Dataset):
-    """Serves cached signals and OMI labels by row index."""
+    """Serves cached signals, OMI labels and optional auxiliary targets by row.
 
-    def __init__(self, signals: np.ndarray, labels: np.ndarray, rows: np.ndarray) -> None:
+    Every item is (signal, omi_label, auxiliary_targets, sample_weight). When
+    auxiliary targets are not in use the third element is an empty tensor, so
+    the collate and training loop stay uniform.
+    """
+
+    def __init__(
+        self,
+        signals: np.ndarray,
+        labels: np.ndarray,
+        rows: np.ndarray,
+        auxiliary: np.ndarray | None = None,
+        weights: np.ndarray | None = None,
+    ) -> None:
         self.signals = signals
         self.labels = labels
         self.rows = rows
+        self.auxiliary = auxiliary
+        self.weights = weights
 
     def __len__(self) -> int:
         return len(self.rows)
 
-    def __getitem__(self, index: int) -> tuple[torch.Tensor, torch.Tensor]:
+    def __getitem__(
+        self, index: int
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         row = self.rows[index]
         # The cache is float16 on disk; the model runs in float32.
         signal = torch.from_numpy(np.asarray(self.signals[row], dtype=np.float32))
-        return signal, torch.tensor(float(self.labels[row]))
+        auxiliary = (
+            torch.from_numpy(np.asarray(self.auxiliary[row], dtype=np.float32))
+            if self.auxiliary is not None
+            else torch.empty(0)
+        )
+        weight = float(self.weights[row]) if self.weights is not None else 1.0
+        return signal, torch.tensor(float(self.labels[row])), auxiliary, torch.tensor(weight)
 
 
 def positive_weight(labels: np.ndarray) -> float:
@@ -79,6 +104,28 @@ def positive_weight(labels: np.ndarray) -> float:
     return float((len(labels) - positives) / positives)
 
 
+def nstemi_sample_weights(
+    omi_labels: np.ndarray, nstemi_labels: np.ndarray, weight: float
+) -> np.ndarray:
+    """Up-weight the occlusions hiding behind an NSTEMI label.
+
+    STEMI-OMI is visible from ST elevation; NSTEMI-OMI is the group this project
+    exists to catch, and the group where the model is weakest. Weighting those
+    examples pushes capacity toward them.
+
+    Args:
+        omi_labels: Binary OMI labels.
+        nstemi_labels: Binary NSTEMI labels.
+        weight: Multiplier for records that are both OMI and NSTEMI.
+
+    Returns:
+        Per-sample weights, 1.0 everywhere else.
+    """
+    weights = np.ones(len(omi_labels), dtype=np.float32)
+    weights[(omi_labels == 1) & (nstemi_labels == 1)] = weight
+    return weights
+
+
 @torch.no_grad()
 def predict(
     model: OmiClassifier, loader: DataLoader, device: torch.device
@@ -86,7 +133,7 @@ def predict(
     """Return OMI probabilities for every row the loader serves, in order."""
     model.eval()
     scores: list[np.ndarray] = []
-    for signals, _ in loader:
+    for signals, *_ in loader:
         logits = model(signals.to(device))
         scores.append(torch.sigmoid(logits).detach().cpu().numpy())
     return np.concatenate(scores)
@@ -99,15 +146,26 @@ def _run_epoch(
     criterion: nn.Module,
     device: torch.device,
     description: str,
+    auxiliary_criterion: nn.Module | None = None,
+    auxiliary_weight: float = 0.0,
 ) -> float:
     """Train for one epoch and return the mean loss."""
     model.train()
     total_loss = 0.0
     batches = 0
-    for signals, labels in tqdm(loader, desc=description, leave=False):
+    for signals, labels, auxiliary, weights in tqdm(loader, desc=description, leave=False):
         optimizer.zero_grad()
-        logits = model(signals.to(device))
-        loss = criterion(logits, labels.to(device))
+        omi_logits, auxiliary_logits = model.forward_with_auxiliary(signals.to(device))
+
+        # criterion has reduction="none" so per-sample weights can be applied.
+        per_sample = criterion(omi_logits, labels.to(device))
+        loss = (per_sample * weights.to(device)).mean()
+
+        if auxiliary_logits is not None and auxiliary_criterion is not None:
+            loss = loss + auxiliary_weight * auxiliary_criterion(
+                auxiliary_logits, auxiliary.to(device)
+            )
+
         loss.backward()
         optimizer.step()
         total_loss += float(loss.item())
@@ -123,6 +181,8 @@ def train_omi_classifier(
     validation_rows: np.ndarray,
     device: torch.device,
     config: TrainingConfig,
+    auxiliary: np.ndarray | None = None,
+    sample_weights: np.ndarray | None = None,
 ) -> tuple[dict, TrainingHistory]:
     """Run the two-stage schedule and return the best weights and history.
 
@@ -130,26 +190,32 @@ def train_omi_classifier(
     stages at a much lower rate. Selection is on validation AUPRC, which unlike
     AUROC does not flatter a model on this 6% prevalence.
 
+    Args:
+        auxiliary: Optional (n_records, n_targets) matrix of auxiliary labels.
+        sample_weights: Optional per-record weights for the OMI loss.
+
     Returns:
         (best_state_dict, history)
     """
     torch.manual_seed(config.seed)
 
     train_loader = DataLoader(
-        SignalDataset(signals, labels, train_rows),
+        SignalDataset(signals, labels, train_rows, auxiliary, sample_weights),
         batch_size=config.batch_size,
         shuffle=True,
     )
     validation_loader = DataLoader(
-        SignalDataset(signals, labels, validation_rows),
+        SignalDataset(signals, labels, validation_rows, auxiliary),
         batch_size=config.batch_size,
         shuffle=False,
     )
     validation_labels = labels[validation_rows]
 
     criterion = nn.BCEWithLogitsLoss(
-        pos_weight=torch.tensor(positive_weight(labels[train_rows]), device=device)
+        pos_weight=torch.tensor(positive_weight(labels[train_rows]), device=device),
+        reduction="none",
     )
+    auxiliary_criterion = nn.BCEWithLogitsLoss() if auxiliary is not None else None
     history = TrainingHistory()
     best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
     epochs_without_improvement = 0
@@ -181,7 +247,10 @@ def train_omi_classifier(
         weight_decay=config.weight_decay,
     )
     for epoch in range(1, config.head_epochs + 1):
-        loss = _run_epoch(model, train_loader, optimizer, criterion, device, f"head e{epoch}")
+        loss = _run_epoch(
+            model, train_loader, optimizer, criterion, device, f"head e{epoch}",
+            auxiliary_criterion, config.auxiliary_weight,
+        )
         if not evaluate_and_record("head", epoch, loss):
             print("  early stop")
             break
@@ -195,7 +264,7 @@ def train_omi_classifier(
     # 14k records cannot wash out what 10M ECGs taught the encoder.
     optimizer = torch.optim.AdamW(
         [
-            {"params": model.head.parameters(), "lr": config.head_learning_rate},
+            {"params": model.head_parameters(), "lr": config.head_learning_rate},
             {
                 "params": [
                     p for stage in list(model.backbone.stage_list)[-config.unfrozen_stages :]
@@ -208,7 +277,10 @@ def train_omi_classifier(
     )
     epochs_without_improvement = 0
     for epoch in range(1, config.finetune_epochs + 1):
-        loss = _run_epoch(model, train_loader, optimizer, criterion, device, f"ft e{epoch}")
+        loss = _run_epoch(
+            model, train_loader, optimizer, criterion, device, f"ft e{epoch}",
+            auxiliary_criterion, config.auxiliary_weight,
+        )
         if not evaluate_and_record("finetune", epoch, loss):
             print("  early stop")
             break

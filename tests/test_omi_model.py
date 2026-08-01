@@ -105,14 +105,37 @@ class TestSignalDataset:
         dataset = SignalDataset(signals, labels, np.array([1, 3]))
 
         assert len(dataset) == 2
-        _, first_label = dataset[0]
+        _, first_label, _, _ = dataset[0]
         assert float(first_label) == 1.0
 
     def test_converts_float16_cache_to_float32(self) -> None:
         signals = np.ones((2, 12, 5000), dtype=np.float16)
         dataset = SignalDataset(signals, np.array([0, 1]), np.array([0, 1]))
-        signal, _ = dataset[0]
+        signal, _, _, _ = dataset[0]
         assert signal.dtype == torch.float32
+
+    def test_auxiliary_is_empty_when_not_supplied(self) -> None:
+        """Single-task runs must keep working through the same interface."""
+        dataset = SignalDataset(
+            np.ones((2, 12, 5000), dtype=np.float16), np.array([0, 1]), np.array([0, 1])
+        )
+        _, _, auxiliary, weight = dataset[0]
+        assert auxiliary.numel() == 0
+        assert float(weight) == 1.0
+
+    def test_serves_auxiliary_targets_and_weights(self) -> None:
+        auxiliary = np.array([[1.0, 0.0], [0.0, 1.0]], dtype=np.float32)
+        weights = np.array([1.0, 3.0], dtype=np.float32)
+        dataset = SignalDataset(
+            np.ones((2, 12, 5000), dtype=np.float16),
+            np.array([0, 1]),
+            np.array([0, 1]),
+            auxiliary,
+            weights,
+        )
+        _, _, aux_row, weight = dataset[1]
+        assert aux_row.tolist() == [0.0, 1.0]
+        assert float(weight) == 3.0
 
 
 class TestTrainingConfig:
@@ -122,3 +145,91 @@ class TestTrainingConfig:
         config = TrainingConfig()
         assert config.head_epochs > 0
         assert config.backbone_learning_rate < config.head_learning_rate
+
+
+class TestMultiTaskHeads:
+    """Tests for the MLP head and auxiliary branches."""
+
+    def test_mlp_head_still_returns_one_logit(self) -> None:
+        model = OmiClassifier(Net1D(**SMALL_CONFIG), hidden_dim=32)
+        assert model(torch.zeros(2, 12, 5000)).shape == (2,)
+
+    def test_mlp_head_has_more_capacity_than_linear(self) -> None:
+        linear = OmiClassifier(Net1D(**SMALL_CONFIG))
+        mlp = OmiClassifier(Net1D(**SMALL_CONFIG), hidden_dim=32)
+        linear_params = sum(p.numel() for p in linear.head.parameters())
+        mlp_params = sum(p.numel() for p in mlp.head.parameters())
+        assert mlp_params > linear_params
+
+    def test_auxiliary_head_returns_one_logit_per_target(self) -> None:
+        model = OmiClassifier(Net1D(**SMALL_CONFIG), auxiliary_targets=7)
+        omi, auxiliary = model.forward_with_auxiliary(torch.zeros(2, 12, 5000))
+        assert omi.shape == (2,)
+        assert auxiliary.shape == (2, 7)
+
+    def test_auxiliary_is_none_when_disabled(self) -> None:
+        """Single-task runs must not grow an unused branch."""
+        _, auxiliary = _classifier().forward_with_auxiliary(torch.zeros(2, 12, 5000))
+        assert auxiliary is None
+
+    def test_forward_matches_forward_with_auxiliary(self) -> None:
+        model = OmiClassifier(Net1D(**SMALL_CONFIG), auxiliary_targets=3)
+        model.eval()
+        signals = torch.zeros(2, 12, 5000)
+        with torch.no_grad():
+            assert torch.allclose(model(signals), model.forward_with_auxiliary(signals)[0])
+
+    def test_head_parameters_include_the_auxiliary_branch(self) -> None:
+        """Stage 2's optimiser group must not silently drop the aux head."""
+        model = OmiClassifier(Net1D(**SMALL_CONFIG), hidden_dim=32, auxiliary_targets=3)
+        counted = sum(p.numel() for p in model.head_parameters())
+        expected = sum(p.numel() for p in model.head.parameters()) + sum(
+            p.numel() for p in model.auxiliary_head.parameters()
+        )
+        assert counted == expected
+
+
+class TestAuxiliaryMatrix:
+    """Tests for assembling auxiliary targets from the label table."""
+
+    def _table(self):
+        import pandas as pd
+
+        return pd.DataFrame(
+            {
+                "STEMI": [1, 0], "NSTEMI": [0, 1], "AMI": [1, 1], "CTO": [0, 0],
+                "PLAD": [1, 0], "MLAD": [0, 0], "DLAD": [0, 0], "DB": [0, 0],
+                "PLCX": [0, 0], "MLCX": [0, 0], "DLCX": [0, 0], "OM": [0, 0],
+                "PRCA": [0, 1], "MRCA": [0, 0], "DRCA": [0, 0],
+            }
+        )
+
+    def test_collapses_segments_into_territories(self) -> None:
+        from src.omi.model import build_auxiliary_matrix
+
+        matrix, names = build_auxiliary_matrix(self._table())
+        assert names == ["STEMI", "NSTEMI", "AMI", "CTO",
+                         "culprit_lad", "culprit_lcx", "culprit_rca"]
+        assert matrix.shape == (2, 7)
+        # Record 0 has a proximal LAD culprit, record 1 a proximal RCA one.
+        assert matrix[0, names.index("culprit_lad")] == 1.0
+        assert matrix[1, names.index("culprit_rca")] == 1.0
+        assert matrix[0, names.index("culprit_rca")] == 0.0
+
+
+class TestNstemiSampleWeights:
+    """Tests for NSTEMI-OMI up-weighting."""
+
+    def test_only_nstemi_omi_records_are_weighted(self) -> None:
+        from src.omi.training import nstemi_sample_weights
+
+        omi = np.array([1, 1, 0, 0])
+        nstemi = np.array([1, 0, 1, 0])
+        weights = nstemi_sample_weights(omi, nstemi, 3.0)
+        assert weights.tolist() == [3.0, 1.0, 1.0, 1.0]
+
+    def test_weight_one_is_a_no_op(self) -> None:
+        from src.omi.training import nstemi_sample_weights
+
+        weights = nstemi_sample_weights(np.array([1, 0]), np.array([1, 1]), 1.0)
+        assert weights.tolist() == [1.0, 1.0]

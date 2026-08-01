@@ -1,0 +1,355 @@
+{
+  "tag": "v2a",
+  "validation_fold": 0,
+  "config": {
+    "head_epochs": 8,
+    "finetune_epochs": 6,
+    "unfrozen_stages": 2,
+    "head_learning_rate": 0.001,
+    "backbone_learning_rate": 1e-05,
+    "weight_decay": 0.0001,
+    "batch_size": 32,
+    "seed": 20260801,
+    "patience": 4,
+    "auxiliary_weight": 0.3
+  },
+  "variant": {
+    "hidden_dim": 256,
+    "multi_task": false,
+    "auxiliary_targets": [],
+    "nstemi_weight": 1.0
+  },
+  "train_records": 14366,
+  "validation_records": 3592,
+  "threshold": 0.6423184871673584,
+  "threshold_source": "training folds, F2-max",
+  "ranking": {
+    "auroc": 0.9116636060316063,
+    "auprc": 0.44938669337714326
+  },
+  "operating_point": {
+    "sensitivity": 0.8,
+    "specificity": 0.8774538964901845,
+    "ppv": 0.3087248322147651,
+    "npv": 0.9846461949265688,
+    "accuracy": 0.8724944320712695,
+    "f1": 0.44552058111380144,
+    "true_positive": 184,
+    "false_positive": 412,
+    "true_negative": 2950,
+    "false_negative": 46
+  },
+  "confidence_intervals": {
+    "auroc": {
+      "point": 0.9116636060316063,
+      "lower": 0.8939512248445823,
+      "upper": 0.9285550517813445,
+      "rounds": 2000
+    },
+    "auprc": {
+      "point": 0.44938669337714326,
+      "lower": 0.3812721520895612,
+      "upper": 0.5200092989532331,
+      "rounds": 2000
+    },
+    "f1": {
+      "point": 0.44552058111380144,
+      "lower": 0.4021147084527366,
+      "upper": 0.48616938237876867,
+      "rounds": 2000
+    }
+  },
+  "baseline_f1": 0.396,
+  "beats_baseline_on_validation": true,
+  "subgroups": {
+    "overall": {
+      "records": 3592,
+      "omi": 230,
+      "auroc": 0.9116636060316063,
+      "auprc": 0.44938669337714326,
+      "sensitivity": 0.8,
+      "specificity": 0.8774538964901845,
+      "ppv": 0.3087248322147651,
+      "npv": 0.9846461949265688,
+      "accuracy": 0.8724944320712695,
+      "f1": 0.44552058111380144,
+      "true_positive": 184,
+      "false_positive": 412,
+      "true_negative": 2950,
+      "false_negative": 46
+    },
+    "acs_positive": {
+      "records": 526,
+      "omi": 229,
+      "auroc": 0.6770911443400527,
+      "auprc": 0.5932951547072687,
+      "sensitivity": 0.7991266375545851,
+      "specificity": 0.4882154882154882,
+      "ppv": 0.5462686567164179,
+      "npv": 0.7591623036649214,
+      "accuracy": 0.623574144486692,
+      "f1": 0.648936170212766,
+      "true_positive": 183,
+      "false_positive": 152,
+      "true_negative": 145,
+      "false_negative": 46
+    },
+    "stemi_labelled": {
+      "records": 295,
+      "omi": 152,
+      "auroc": 0.6541682002208318,
+      "auprc": 0.6567224630379811,
+      "sensitivity": 0.9013157894736842,
+      "specificity": 0.3006993006993007,
+      "ppv": 0.5780590717299579,
+      "npv": 0.7413793103448276,
+      "accuracy": 0.6101694915254238,
+      "f1": 0.7043701799485861,
+      "true_positive": 137,
+      "false_positive": 100,
+      "true_negative": 43,
+      "false_negative": 15
+    },
+    "nstemi_labelled": {
+      "records": 231,
+      "omi": 77,
+      "auroc": 0.6510372744138978,
+      "auprc": 0.43782491910475,
+      "sensitivity": 0.5974025974025974,
+      "specificity": 0.6623376623376623,
+      "ppv": 0.46938775510204084,
+      "npv": 0.7669172932330827,
+      "accuracy": 0.6406926406926406,
+      "f1": 0.5257142857142857,
+      "true_positive": 46,
+      "false_positive": 52,
+      "true_negative": 102,
+      "false_negative": 31
+    },
+    "interval_le_12h": {
+      "records": 1098,
+      "omi": 136,
+      "auroc": 0.8731579430108842,
+      "auprc": 0.47653463850842775,
+      "sensitivity": 0.7867647058823529,
+      "specificity": 0.814968814968815,
+      "ppv": 0.37543859649122807,
+      "npv": 0.964329643296433,
+      "accuracy": 0.8114754098360656,
+      "f1": 0.5083135391923991,
+      "true_positive": 107,
+      "false_positive": 178,
+      "true_negative": 784,
+      "false_negative": 29
+    },
+    "interval_gt_12h": {
+      "records": 2494,
+      "omi": 94,
+      "auroc": 0.9272163120567376,
+      "auprc": 0.44247095738493475,
+      "sensitivity": 0.8191489361702128,
+      "specificity": 0.9025,
+      "ppv": 0.24758842443729903,
+      "npv": 0.9922125515345854,
+      "accuracy": 0.8993584603047313,
+      "f1": 0.38024691358024687,
+      "true_positive": 77,
+      "false_positive": 234,
+      "true_negative": 2166,
+      "false_negative": 17
+    },
+    "cto": {
+      "records": 190,
+      "omi": 0
+    },
+    "paced": {
+      "records": 72,
+      "omi": 5,
+      "auroc": 0.8895522388059702,
+      "auprc": 0.6366666666666667,
+      "sensitivity": 0.6,
+      "specificity": 0.8955223880597015,
+      "ppv": 0.3,
+      "npv": 0.967741935483871,
+      "accuracy": 0.875,
+      "f1": 0.4,
+      "true_positive": 3,
+      "false_positive": 7,
+      "true_negative": 60,
+      "false_negative": 2
+    },
+    "vf_vt": {
+      "records": 194,
+      "omi": 23,
+      "auroc": 0.7971014492753623,
+      "auprc": 0.40593092853102053,
+      "sensitivity": 0.7391304347826086,
+      "specificity": 0.7894736842105263,
+      "ppv": 0.32075471698113206,
+      "npv": 0.9574468085106383,
+      "accuracy": 0.7835051546391752,
+      "f1": 0.4473684210526316,
+      "true_positive": 17,
+      "false_positive": 36,
+      "true_negative": 135,
+      "false_negative": 6
+    },
+    "prior_pci": {
+      "records": 273,
+      "omi": 20,
+      "auroc": 0.8373517786561265,
+      "auprc": 0.3301962702314186,
+      "sensitivity": 0.75,
+      "specificity": 0.7865612648221344,
+      "ppv": 0.21739130434782608,
+      "npv": 0.9754901960784313,
+      "accuracy": 0.7838827838827839,
+      "f1": 0.33707865168539325,
+      "true_positive": 15,
+      "false_positive": 54,
+      "true_negative": 199,
+      "false_negative": 5
+    },
+    "age_lt_65": {
+      "records": 1658,
+      "omi": 105,
+      "auroc": 0.92269953699445,
+      "auprc": 0.49271231181183434,
+      "sensitivity": 0.8285714285714286,
+      "specificity": 0.8847392144236961,
+      "ppv": 0.32706766917293234,
+      "npv": 0.9870689655172413,
+      "accuracy": 0.8811821471652593,
+      "f1": 0.46900269541778977,
+      "true_positive": 87,
+      "false_positive": 179,
+      "true_negative": 1374,
+      "false_negative": 18
+    },
+    "age_ge_65": {
+      "records": 1934,
+      "omi": 125,
+      "auroc": 0.9020674405749032,
+      "auprc": 0.42505709648667406,
+      "sensitivity": 0.776,
+      "specificity": 0.871199557766722,
+      "ppv": 0.29393939393939394,
+      "npv": 0.9825436408977556,
+      "accuracy": 0.8650465356773527,
+      "f1": 0.4263736263736264,
+      "true_positive": 97,
+      "false_positive": 233,
+      "true_negative": 1576,
+      "false_negative": 28
+    },
+    "female": {
+      "records": 1430,
+      "omi": 53,
+      "auroc": 0.9307079924911963,
+      "auprc": 0.4387850958092806,
+      "sensitivity": 0.8113207547169812,
+      "specificity": 0.9222948438634713,
+      "ppv": 0.2866666666666667,
+      "npv": 0.9921875,
+      "accuracy": 0.9181818181818182,
+      "f1": 0.4236453201970444,
+      "true_positive": 43,
+      "false_positive": 107,
+      "true_negative": 1270,
+      "false_negative": 10
+    },
+    "male": {
+      "records": 2162,
+      "omi": 177,
+      "auroc": 0.8955271883760976,
+      "auprc": 0.4598560355258644,
+      "sensitivity": 0.7966101694915254,
+      "specificity": 0.8463476070528967,
+      "ppv": 0.31614349775784756,
+      "npv": 0.9790209790209791,
+      "accuracy": 0.8422756706753006,
+      "f1": 0.45264847512038525,
+      "true_positive": 141,
+      "false_positive": 305,
+      "true_negative": 1680,
+      "false_negative": 36
+    }
+  },
+  "history": [
+    {
+      "stage": "head",
+      "epoch": 1,
+      "train_loss": 0.8641226500405501,
+      "validation_auprc": 0.4209988770491852
+    },
+    {
+      "stage": "head",
+      "epoch": 2,
+      "train_loss": 0.7783060716029531,
+      "validation_auprc": 0.43964803112959144
+    },
+    {
+      "stage": "head",
+      "epoch": 3,
+      "train_loss": 0.7294797149625812,
+      "validation_auprc": 0.43872172942983867
+    },
+    {
+      "stage": "head",
+      "epoch": 4,
+      "train_loss": 0.6907159151107006,
+      "validation_auprc": 0.44938669337714326
+    },
+    {
+      "stage": "head",
+      "epoch": 5,
+      "train_loss": 0.646572445293179,
+      "validation_auprc": 0.44609811227044693
+    },
+    {
+      "stage": "head",
+      "epoch": 6,
+      "train_loss": 0.5911032047230577,
+      "validation_auprc": 0.4331736547643126
+    },
+    {
+      "stage": "head",
+      "epoch": 7,
+      "train_loss": 0.5491654699987717,
+      "validation_auprc": 0.44501340773194875
+    },
+    {
+      "stage": "head",
+      "epoch": 8,
+      "train_loss": 0.519201369736269,
+      "validation_auprc": 0.4234212365931887
+    },
+    {
+      "stage": "finetune",
+      "epoch": 1,
+      "train_loss": 0.5005926970052295,
+      "validation_auprc": 0.4320514551625401
+    },
+    {
+      "stage": "finetune",
+      "epoch": 2,
+      "train_loss": 0.43296190747837715,
+      "validation_auprc": 0.4326987015715117
+    },
+    {
+      "stage": "finetune",
+      "epoch": 3,
+      "train_loss": 0.4049453307233568,
+      "validation_auprc": 0.42851150260013876
+    },
+    {
+      "stage": "finetune",
+      "epoch": 4,
+      "train_loss": 0.3599329838375737,
+      "validation_auprc": 0.41562926427849217
+    }
+  ],
+  "best_stage": "head",
+  "best_epoch": 4,
+  "weights": "models/omi/omi_finetuned_v2a.pt"
+}

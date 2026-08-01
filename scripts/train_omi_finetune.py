@@ -12,7 +12,6 @@ import torch
 from sklearn.metrics import average_precision_score, roc_auc_score
 from torch.utils.data import DataLoader
 
-from src.calibration.fit import select_threshold
 from src.omi.dataset import load_labels
 from src.omi.evaluation import (
     operating_point_metrics,
@@ -20,11 +19,13 @@ from src.omi.evaluation import (
     ranking_metrics,
     subgroup_report,
 )
-from src.omi.model import build_classifier
+from src.omi.model import build_auxiliary_matrix, build_classifier
 from src.omi.signal_cache import build_signal_cache, open_signal_cache
+from src.omi.threshold import select_threshold_fbeta
 from src.omi.training import (
     SignalDataset,
     TrainingConfig,
+    nstemi_sample_weights,
     predict,
     train_omi_classifier,
 )
@@ -55,6 +56,23 @@ def main() -> None:
     parser.add_argument("--finetune-epochs", type=int, default=6)
     parser.add_argument("--unfrozen-stages", type=int, default=2)
     parser.add_argument("--batch-size", type=int, default=32)
+    parser.add_argument(
+        "--hidden-dim",
+        type=int,
+        default=None,
+        help="Add an MLP head with this hidden width (default: single linear layer)",
+    )
+    parser.add_argument(
+        "--multi-task",
+        action="store_true",
+        help="Train auxiliary STEMI/NSTEMI/AMI/CTO and culprit-territory heads",
+    )
+    parser.add_argument(
+        "--nstemi-weight",
+        type=float,
+        default=1.0,
+        help="Loss multiplier for NSTEMI-labelled OMI records (default: 1.0 = off)",
+    )
     parser.add_argument("--bootstrap-rounds", type=int, default=2000)
     parser.add_argument("--tag", type=str, default="v1")
     args = parser.parse_args()
@@ -84,9 +102,30 @@ def main() -> None:
         unfrozen_stages=args.unfrozen_stages,
         batch_size=args.batch_size,
     )
-    model = build_classifier(args.model, device)
+    auxiliary = None
+    auxiliary_names: list[str] = []
+    if args.multi_task:
+        auxiliary, auxiliary_names = build_auxiliary_matrix(table)
+        print(f"Auxiliary targets ({len(auxiliary_names)}): {', '.join(auxiliary_names)}")
+
+    sample_weights = None
+    if args.nstemi_weight != 1.0:
+        sample_weights = nstemi_sample_weights(
+            labels, table.NSTEMI.to_numpy(), args.nstemi_weight
+        )
+        upweighted = int((sample_weights[train_rows] > 1.0).sum())
+        print(f"NSTEMI-OMI up-weighting: {upweighted} training records x{args.nstemi_weight}")
+
+    model = build_classifier(
+        args.model,
+        device,
+        hidden_dim=args.hidden_dim,
+        auxiliary_targets=len(auxiliary_names),
+    )
+    print(f"Head: {'MLP ' + str(args.hidden_dim) if args.hidden_dim else 'linear'}")
     best_state, history = train_omi_classifier(
-        model, signals, labels, train_rows, validation_rows, device, config
+        model, signals, labels, train_rows, validation_rows, device, config,
+        auxiliary=auxiliary, sample_weights=sample_weights,
     )
     model.load_state_dict(best_state)
     model.to(device)
@@ -102,8 +141,12 @@ def main() -> None:
     )
     train_scores = predict(model, train_loader, device)
     validation_scores = predict(model, validation_loader, device)
-    threshold, train_f1 = select_threshold(labels[train_rows], train_scores)
-    print(f"\nThreshold from training folds: {threshold:.4f} (train F1 {train_f1:.4f})")
+    choice = select_threshold_fbeta(labels[train_rows], train_scores, beta=2.0)
+    threshold = choice.threshold
+    print(
+        f"\nThreshold from training folds (F2): {threshold:.4f} "
+        f"(train sens {choice.sensitivity:.4f}, spec {choice.specificity:.4f})"
+    )
 
     y_validation = labels[validation_rows]
     ranking = ranking_metrics(y_validation, validation_scores)
@@ -171,10 +214,16 @@ def main() -> None:
         "tag": args.tag,
         "validation_fold": args.validation_fold,
         "config": vars(config),
+        "variant": {
+            "hidden_dim": args.hidden_dim,
+            "multi_task": bool(args.multi_task),
+            "auxiliary_targets": auxiliary_names,
+            "nstemi_weight": args.nstemi_weight,
+        },
         "train_records": int(len(train_rows)),
         "validation_records": int(len(validation_rows)),
         "threshold": threshold,
-        "threshold_source": "training folds",
+        "threshold_source": "training folds, F2-max",
         "ranking": ranking,
         "operating_point": operating,
         "confidence_intervals": confidence,
