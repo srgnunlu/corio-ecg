@@ -62,8 +62,13 @@ Aşılacak eşik — yayımlanmış baseline:
 kalibrasyon eğrisi. Bunlar test setinde ölçülemediği için yalnızca iç
 karşılaştırma ve eşik seçimi amaçlıdır.
 
-**Eşik seçimi:** fold 0'da, Gate 0'daki precision-tabanlı F1 optimizasyonuyla
-(`src/calibration/fit.py::select_threshold`). Test setinde eşik aranmaz.
+**Eşik seçimi:** ~~Gate 0'daki precision-tabanlı F1 optimizasyonuyla~~ →
+**DEĞİŞTİRİLDİ 2026-08-01: F2-maks** (`src/omi/threshold.py::select_threshold_fbeta`,
+β=2). Gerekçe ve şeffaflık notu:
+[gate2-omi-threshold-strategy-v1.md](../experiments/gate2-omi-threshold-strategy-v1.md).
+F1, duyarlılık ile precision'a eşit ağırlık verdiği için OMI'nin asimetrik
+maliyetini yansıtmıyordu. Eşikler **eğitim fold'larında** seçilir; test setinde
+eşik aranmaz.
 
 **Belirsizlik:** tüm nokta tahminleri için 2.000 tekrarlı bootstrap %95 GA,
 hasta düzeyinde yeniden örnekleme (aynı hastanın kayıtları birlikte).
