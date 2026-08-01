@@ -1,0 +1,14 @@
+version: 1
+seed: 20260801
+n_splits: 5
+group_column: Patient_id
+record_column: ecg_row_record
+stratify_column: OMI
+source_table: CSV/train.csv
+records: 17960
+patients: 17018
+assignment_file: omi_folds_v1.csv
+status: frozen
+note: Fold 0 is the primary validation fold for model and threshold selection. The
+  dataset's own test.csv stays untouched and is scored only through the authors' online
+  platform.

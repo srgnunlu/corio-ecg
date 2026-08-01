@@ -1,0 +1,104 @@
+{
+  "fold": 0,
+  "records": 3592,
+  "omi_positives": 230,
+  "prevalence": 0.06403118040089087,
+  "calibration": "disabled (raw model outputs)",
+  "per_head": {
+    "ACUTE MI / STEMI": {
+      "auroc": 0.7269547112226161,
+      "auprc": 0.19301015282323525
+    },
+    "ACUTE MI": {
+      "auroc": 0.730498797299744,
+      "auprc": 0.1984796621824609
+    },
+    "ST ELEVATION NOW PRESENT IN": {
+      "auroc": 0.6713466363189614,
+      "auprc": 0.13381494481938333
+    },
+    "ANTERIOR INFARCT": {
+      "auroc": 0.6761218736259472,
+      "auprc": 0.12462502576985522
+    },
+    "ANTEROSEPTAL INFARCT": {
+      "auroc": 0.6473049168455629,
+      "auprc": 0.13815932428795372
+    },
+    "ANTEROLATERAL INFARCT": {
+      "auroc": 0.7117088689444689,
+      "auprc": 0.14505138033450232
+    },
+    "INFERIOR INFARCT": {
+      "auroc": 0.6670356671753355,
+      "auprc": 0.14200943983578385
+    },
+    "LATERAL INFARCT": {
+      "auroc": 0.679255360422109,
+      "auprc": 0.11816985809648732
+    },
+    "SEPTAL INFARCT": {
+      "auroc": 0.640449525386028,
+      "auprc": 0.12738970767716262
+    },
+    "POSTERIOR INFARCT": {
+      "auroc": 0.5933786824612678,
+      "auprc": 0.1425809383582945
+    },
+    "INFERIOR-POSTERIOR INFARCT": {
+      "auroc": 0.6026252489460208,
+      "auprc": 0.14148976402330196
+    },
+    "ANTERIOR INJURY PATTERN": {
+      "auroc": 0.701541525489486,
+      "auprc": 0.13978972302810422
+    },
+    "INFERIOR INJURY PATTERN": {
+      "auroc": 0.7478946279388563,
+      "auprc": 0.19560984593403355
+    },
+    "LATERAL INJURY PATTERN": {
+      "auroc": 0.7498338204484909,
+      "auprc": 0.20577657799001398
+    },
+    "INFEROLATERAL INJURY PATTERN": {
+      "auroc": 0.673697074722603,
+      "auprc": 0.1594492617019005
+    },
+    "ANTEROLATERAL INJURY PATTERN": {
+      "auroc": 0.7269456586400435,
+      "auprc": 0.17774929004671475
+    }
+  },
+  "combinations": {
+    "max_of_candidates": {
+      "auroc": 0.7499495641828104,
+      "auprc": 0.15726062037823113
+    },
+    "mean_of_candidates": {
+      "auroc": 0.7817874970902413,
+      "auprc": 0.20483570962155906
+    }
+  },
+  "best_head": "LATERAL INJURY PATTERN",
+  "subgroups": {
+    "stemi_labelled": {
+      "records": 295,
+      "omi": 152,
+      "auroc": 0.5656974604343026,
+      "auprc": 0.5529973359112865
+    },
+    "nstemi_labelled": {
+      "records": 231,
+      "omi": 77,
+      "auroc": 0.5904031033901163,
+      "auprc": 0.4329973488040978
+    },
+    "neither_stemi_nor_nstemi": {
+      "records": 3066,
+      "omi": 1,
+      "auroc": 0.9876019575856444,
+      "auprc": 0.02564102564102564
+    }
+  }
+}
