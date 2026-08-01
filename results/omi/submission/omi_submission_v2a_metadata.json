@@ -1,0 +1,12 @@
+{
+  "tag": "v2a",
+  "weights": "models/omi/omi_finetuned_v2a.pt",
+  "threshold": 0.6423,
+  "threshold_source": "F2-max on training folds (fold 1-4)",
+  "hidden_dim": 256,
+  "records": 1995,
+  "predicted_positives": 304,
+  "predicted_positive_rate": 0.1523809523809524,
+  "undecodable_records": 0,
+  "submission_file": "omi_submission_v2a.csv"
+}

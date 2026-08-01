@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Acute Coronary Syndrome (ACS) ECG Prediction Model Evaluation</title>
+    <link rel="stylesheet" href="/static/style.css?v=1784296433">
+  </head>
+  <body>
+    <main class="container">
+      <section class="hero">
+        <h1>Acute Coronary Syndrome (ACS) ECG Prediction Model Evaluation</h1>
+        <p class="hero-lead">
+          Upload your prediction results for the 12-lead ECG ACS dataset and receive the corresponding evaluation metrics.
+        </p>
+        <ul class="hero-bullets">
+          <li>Metrics: Sensitivity, Specificity, PPV, NPV, Accuracy, F1-score.</li>
+          <li>Dataset size: Train 17,960; Test 1,995; Total 19,955.</li>
+          <li>Tasks covered: AMI/OMI, STEMI/NSTEMI/UA, CTO/PCI, among others.</li>
+        </ul>
+      </section>
+
+      <section class="grid">
+        <section class="card card-format">
+          <h2>Submission Format</h2>
+          <ol>
+            <li>Upload a <strong>CSV</strong> file.</li>
+            <li>
+              The submission must include at least one identifier column: <strong>ecg_row_record</strong> or <strong>ecg_med_record</strong>. The identifier column(s) must match the corresponding column(s) in the test set <strong>test.csv</strong>: exactly the same number of samples and identical record names.
+            </li>
+            <li>
+              The submission must include one or more label prediction columns, with values 0 or 1. Column names can be any subset of: <strong>AMI</strong>, <strong>OMI</strong>, <strong>CTO</strong>, <strong>PCI</strong>, <strong>NSTEMI</strong>, <strong>STEMI</strong>, <strong>UA</strong>, <strong>LM</strong>, <strong>PLAD</strong>, <strong>MLAD</strong>, <strong>DLAD</strong>, <strong>DB</strong>, <strong>PLCX</strong>, <strong>MLCX</strong>, <strong>DLCX</strong>, <strong>OM</strong>, <strong>PRCA</strong>, <strong>MRCA</strong>, <strong>DRCA</strong>, <strong>VF_VT</strong>, <strong>Paced</strong>, <strong>Prior_PCI</strong>.
+            </li>
+          </ol>
+          <p>Example (submission.csv):</p>
+          <div class="table-wrapper">
+            <table>
+              <tr>
+                <th>ecg_row_record</th>
+                <th>ecg_med_record</th>
+                <th>AMI</th>
+                <th>OMI</th>
+              </tr>
+              <tr>
+                <td>00001.dat</td>
+                <td>00001.med</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>00002.dat</td>
+                <td>00002.med</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>00003.dat</td>
+                <td>00003.med</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+            </table>
+          </div>
+        </section>
+
+        <section class="card card-upload">
+          <h2>Upload &amp; Evaluate</h2>
+
+          
+            
+          
+
+          
+
+          <form action="/submit" method="post" enctype="multipart/form-data">
+            <div class="file-picker" style="margin-bottom: 16px;">
+              <input id="submission-file" class="file-input" type="file" name="file" accept=".csv" required />
+              <label class="file-label" for="submission-file">
+                <span class="file-button">Choose file</span>
+                <span id="selected-file-name" class="file-name">No file selected</span>
+              </label>
+            </div>
+            <button type="submit">Submit &amp; Evaluate</button>
+          </form>
+        </section>
+
+        <section class="card card-links">
+          <h2>Links</h2>
+          <ol>
+            <li>Paper: <span class="placeholder">(TBD)</span></li>
+            <li>Dataset: <span class="placeholder">(TBD)</span></li>
+            <li>Contact: <span class="placeholder">(TBD)</span></li>
+          </ol>
+        </section>
+      </section>
+
+      
+        <section id="results" class="card" style="margin-top: 16px;">
+          <h2>Evaluation Results</h2>
+          <div class="table-wrapper">
+            <table>
+              <tr>
+                <th>Label</th>
+                <th>Samples</th>
+                <th>Sensitivity</th>
+                <th>Specificity</th>
+                <th>PPV</th>
+                <th>NPV</th>
+                <th>Accuracy</th>
+                <th>F1-score</th>
+              </tr>
+              
+                <tr>
+                  <td>OMI</td>
+                  <td>1995</td>
+                  <td>0.7812</td>
+                  <td>0.8907</td>
+                  <td>0.3289</td>
+                  <td>0.9834</td>
+                  <td>0.8837</td>
+                  <td>0.4630</td>
+                </tr>
+              
+            </table>
+          </div>
+        </section>
+
+        <script>
+          (function () {
+            var el = document.getElementById('results');
+            if (el && typeof el.scrollIntoView === 'function') {
+              el.scrollIntoView();
+            }
+          })();
+        </script>
+      
+
+      <div class="footer">
+        Health check: <a href="/health">/health</a>
+      </div>
+
+      <script>
+        (function () {
+          var input = document.getElementById('submission-file');
+          var nameEl = document.getElementById('selected-file-name');
+          if (!input || !nameEl) return;
+
+          function update() {
+            var file = input.files && input.files[0];
+            if (file && file.name) {
+              nameEl.textContent = file.name;
+              nameEl.classList.add('selected');
+            } else {
+              nameEl.textContent = 'No file selected';
+              nameEl.classList.remove('selected');
+            }
+          }
+
+          input.addEventListener('change', update);
+          update();
+        })();
+      </script>
+    </main>
+  </body>
+</html>
