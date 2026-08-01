@@ -228,12 +228,24 @@ class Net1D(nn.Module):
         # Classification head
         self.dense = nn.Linear(in_ch, n_classes)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward_features(self, x: torch.Tensor) -> torch.Tensor:
+        """Return the pooled representation the classifier head sees.
+
+        Args:
+            x: Input batch of shape (batch, 12, n_samples).
+
+        Returns:
+            Tensor of shape (batch, filter_list[-1]) — the backbone's output
+            after global average pooling, before the 150-class projection.
+            Used for linear probing and transfer to new targets.
+        """
         out = self.first_conv(x)
         if self.use_bn:
             out = self.first_bn(out)
         out = self.first_act(out)
         for stage in self.stage_list:
             out = stage(out)
-        out = out.mean(dim=-1)  # global average pooling
-        return cast(torch.Tensor, self.dense(out))
+        return cast(torch.Tensor, out.mean(dim=-1))  # global average pooling
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return cast(torch.Tensor, self.dense(self.forward_features(x)))

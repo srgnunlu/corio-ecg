@@ -75,3 +75,6 @@ external/
 tmp/
 temp/
 *.tmp
+
+# Cached backbone features — regenerable, ~140 MB per input mode
+results/omi/features/
