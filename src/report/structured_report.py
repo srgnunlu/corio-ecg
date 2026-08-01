@@ -15,7 +15,7 @@ from dataclasses import asdict, dataclass, field
 
 from src.measurement.intervals import IntervalMeasurements, interpret_intervals
 from src.measurement.rhythm_analysis import RhythmAnalysis
-from src.pipeline.diagnose import DiagnosisResult
+from src.pipeline.diagnose import DiagnosisResult, is_above_threshold
 from src.vtsvt.models import VTSVTAssessment
 
 # Labels that, on their own, do NOT make an ECG abnormal. Rate/rhythm-normal
@@ -155,7 +155,7 @@ def _top_diagnoses(
         DiagnosisEntry(
             label=r.label,
             probability=r.probability,
-            above_threshold=r.probability >= threshold,
+            above_threshold=is_above_threshold(r, threshold),
         )
         for r in ranked[:_TOP_DIAGNOSES_COUNT]
     ]
@@ -169,7 +169,7 @@ def _significant_pathologies(
     return [
         r.label
         for r in diagnoses
-        if r.probability >= threshold and r.label not in _BENIGN_LABELS
+        if is_above_threshold(r, threshold) and r.label not in _BENIGN_LABELS
     ]
 
 

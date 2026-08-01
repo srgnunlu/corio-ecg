@@ -18,7 +18,8 @@ from PIL import Image
 
 from src.measurement.intervals import IntervalMeasurements, interpret_intervals
 from src.measurement.rhythm_analysis import analyze_rhythm
-from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser
+from src.calibration.tiers import TIER_PROVISIONAL, TIER_RESEARCH_ONLY, TIER_VALIDATED
+from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser, is_above_threshold
 from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
 from src.report.diagnosis_reconciliation import ReconciliationResult, reconcile_diagnoses
 from src.report.llm_narrative import generate_narrative, narrative_available
@@ -237,7 +238,11 @@ def analyze_ecg(
         except Exception:  # noqa: BLE001
             logger.exception("Diagnosis reconciliation failed")
 
-        results = [r for r in all_results if r.probability >= threshold]
+        results = [
+            r
+            for r in all_results
+            if is_above_threshold(r, threshold) and not _is_hidden_research_output(r)
+        ]
         vtsvt_assessment: VTSVTAssessment | None = None
         try:
             vtsvt_assessment = assess_vtsvt(
@@ -581,7 +586,7 @@ def _format_rhythm_considerations(
         "<td style='padding:4px 8px; text-align:right; font-family:monospace;'>"
         f"{result.probability:.3f}</td>"
         "<td style='padding:4px 8px; text-align:right;'>"
-        f"{'above threshold' if result.probability >= threshold else 'below threshold'}</td>"
+        f"{'above threshold' if is_above_threshold(result, threshold) else 'below threshold'}</td>"
         "</tr>"
         for result in ranked
     )
@@ -599,17 +604,54 @@ def _format_rhythm_considerations(
     )
 
 
+_TIER_BADGES: dict[str, tuple[str, str]] = {
+    TIER_VALIDATED: ("#22C55E", "validated"),
+    TIER_PROVISIONAL: ("#F59E0B", "provisional"),
+    TIER_RESEARCH_ONLY: ("#9CA3AF", "research"),
+}
+
+
+def _is_hidden_research_output(result: DiagnosisResult) -> bool:
+    """Whether a head is too unproven to state as a finding.
+
+    Research-only heads had too few positives on the calibration fold to be
+    measured at all. Critical diagnoses are deliberately exempt: PTB-XL
+    contains no STEMI, VT or complete-heart-block positives, so tiering alone
+    would silence exactly the labels a clinician must never miss.
+    """
+    return (
+        result.tier == TIER_RESEARCH_ONLY
+        and result.index not in CRITICAL_DIAGNOSIS_INDICES
+    )
+
+
+def _tier_badge(result: DiagnosisResult) -> str:
+    """Small coloured chip showing how much evidence backs this head."""
+    if result.tier is None:
+        return ""
+    color, text = _TIER_BADGES.get(result.tier, ("#9CA3AF", result.tier))
+    return (
+        f"<span style='background:{color}; color:white; padding:1px 6px; "
+        f"border-radius:4px; font-size:10px; margin-left:6px; "
+        f"vertical-align:middle;'>{text}</span>"
+    )
+
+
 def _format_diagnoses(
     all_results: list[DiagnosisResult],
     threshold: float,
 ) -> str:
-    """Format all diagnoses as an HTML table with probability bars."""
-    top = sorted(all_results, key=lambda r: r.probability, reverse=True)[:20]
+    """Format diagnoses as HTML tables, separating unproven research heads."""
+    ranked = sorted(all_results, key=lambda r: r.probability, reverse=True)
+    reportable = [r for r in ranked if not _is_hidden_research_output(r)][:20]
+    research = [
+        r for r in ranked if _is_hidden_research_output(r) and is_above_threshold(r, threshold)
+    ][:10]
 
     rows = []
-    for r in top:
+    for r in reportable:
         bar_width = int(r.probability * 100)
-        is_above = r.probability >= threshold
+        is_above = is_above_threshold(r, threshold)
         is_critical = r.index in CRITICAL_DIAGNOSIS_INDICES
 
         if is_critical and is_above:
@@ -624,7 +666,8 @@ def _format_diagnoses(
 
         rows.append(
             f"<tr>"
-            f"<td style='padding:6px 8px; font-weight:{text_weight};'>{r.label}</td>"
+            f"<td style='padding:6px 8px; font-weight:{text_weight};'>{r.label}"
+            f"{_tier_badge(r)}</td>"
             f"<td style='padding:6px 8px; width:200px;'>"
             f"<div style='background:#F3F4F6; border-radius:4px; overflow:hidden;'>"
             f"<div style='background:{bar_color}; height:20px; width:{bar_width}%; "
@@ -634,7 +677,7 @@ def _format_diagnoses(
             f"</tr>"
         )
 
-    return (
+    main_table = (
         "<div style='margin-top:8px;'>"
         "<table style='width:100%; border-collapse:collapse; font-size:14px;'>"
         "<thead><tr style='border-bottom:2px solid #E5E7EB;'>"
@@ -644,6 +687,32 @@ def _format_diagnoses(
         f"</tr></thead>"
         f"<tbody>{''.join(rows)}</tbody>"
         "</table></div>"
+    )
+    return main_table + _format_research_outputs(research)
+
+
+def _format_research_outputs(research: list[DiagnosisResult]) -> str:
+    """Render unproven heads in a clearly separated, de-emphasised block."""
+    if not research:
+        return ""
+
+    rows = "".join(
+        "<tr>"
+        f"<td style='padding:4px 8px;'>{r.label}</td>"
+        "<td style='padding:4px 8px; text-align:right; font-family:monospace;'>"
+        f"{r.probability:.3f}</td>"
+        "</tr>"
+        for r in research
+    )
+    return (
+        "<div style='margin-top:16px; padding:12px 16px; background:#F9FAFB; "
+        "border-radius:8px; border-left:4px solid #9CA3AF; color:#6B7280;'>"
+        "<b>Research output — not a finding</b><br>"
+        "<span style='font-size:13px;'>These heads had too few positive examples on the "
+        "PTB-XL calibration fold to be measured or calibrated. They are shown for "
+        "transparency only and must not be read as diagnoses.</span>"
+        "<table style='width:100%; border-collapse:collapse; font-size:13px; margin-top:8px;'>"
+        f"<tbody>{rows}</tbody></table></div>"
     )
 
 

@@ -28,6 +28,11 @@ DEFAULT_OUTPUT_DIR = Path("results/metrics")
 DEFAULT_OFFICIAL_LABELS_PATH = DEFAULT_DATA_DIR / "ecgfounder_ptbxl_label.csv"
 ECGFOUNDER_OFFICIAL_EVAL_COMMIT = "04edac702b61c91face519774ddcc0cd712fef23"
 
+# PTB-XL convention: fold 10 is the held-out test fold, fold 9 the validation
+# fold. Calibration must be fitted on 9 so that 10 stays a clean final audit.
+DEFAULT_TEST_FOLD = 10
+DEFAULT_CALIBRATION_FOLD = 9
+
 
 def build_ground_truth_evaluation(
     records_scp_codes: list[dict[str, float]],
@@ -133,25 +138,30 @@ def evaluate_ptbxl(
     minimum_positive_examples: int = 5,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     official_labels_path: Path = DEFAULT_OFFICIAL_LABELS_PATH,
+    fold: int = DEFAULT_TEST_FOLD,
+    output_prefix: str = "ptbxl_baseline",
 ) -> dict:
-    """Run ECGFounder evaluation on PTB-XL test fold.
+    """Run ECGFounder evaluation on one PTB-XL stratified fold.
 
     Args:
         data_dir: Path to PTB-XL dataset root directory.
         model_path: Path to ECGFounder checkpoint file.
         max_samples: Optional limit on number of records to evaluate.
+        fold: PTB-XL strat_fold to evaluate. Fold 10 is the held-out test
+            fold; fold 9 is the calibration/validation fold.
+        output_prefix: Basename prefix for saved artefacts, so calibration
+            runs never overwrite the locked test-fold baseline.
 
     Returns:
         Summary dictionary with evaluation statistics.
     """
-    # Load metadata and filter to test fold (strat_fold == 10)
     metadata = load_ptbxl_metadata(data_dir)
-    test_records = metadata[metadata.strat_fold == 10]
+    test_records = metadata[metadata.strat_fold == fold]
 
     if max_samples is not None:
         test_records = test_records.head(max_samples)
 
-    print(f"Evaluating {len(test_records)} test records from PTB-XL...")
+    print(f"Evaluating {len(test_records)} records from PTB-XL fold {fold}...")
 
     # Load the diagnosis model
     diagnoser = ECGDiagnoser(checkpoint_path=model_path)
@@ -195,10 +205,10 @@ def evaluate_ptbxl(
     # Save probability matrix and row IDs so outputs remain traceable.
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    npy_path = output_dir / "ptbxl_baseline_probabilities.npy"
+    npy_path = output_dir / f"{output_prefix}_probabilities.npy"
     np.save(npy_path, probability_matrix)
     print(f"Saved probability matrix to {npy_path}")
-    np.save(output_dir / "ptbxl_baseline_record_ids.npy", np.array(successful_record_ids))
+    np.save(output_dir / f"{output_prefix}_record_ids.npy", np.array(successful_record_ids))
 
     # Build summary statistics
     probability_stats = {
@@ -208,6 +218,7 @@ def evaluate_ptbxl(
         "min": float(np.min(probability_matrix)) if probability_matrix.size else 0.0,
     }
     summary = {
+        "fold": fold,
         "total_records": len(test_records),
         "successful_records": len(successful_record_ids),
         "failed_records": len(test_records) - len(successful_record_ids),
@@ -235,7 +246,7 @@ def evaluate_ptbxl(
             "python scripts/download_ecgfounder_eval_labels.py"
         )
 
-    json_path = output_dir / "ptbxl_baseline_summary.json"
+    json_path = output_dir / f"{output_prefix}_summary.json"
     with open(json_path, "w") as f:
         json.dump(summary, f, indent=2)
     print(f"Saved summary to {json_path}")
@@ -290,6 +301,21 @@ def main() -> None:
         default=DEFAULT_OFFICIAL_LABELS_PATH,
         help=f"Official ECGFounder PTB-XL label CSV (default: {DEFAULT_OFFICIAL_LABELS_PATH})",
     )
+    parser.add_argument(
+        "--fold",
+        type=int,
+        default=DEFAULT_TEST_FOLD,
+        help=(
+            f"PTB-XL strat_fold to evaluate (default: {DEFAULT_TEST_FOLD} = test fold; "
+            f"use {DEFAULT_CALIBRATION_FOLD} for calibration)"
+        ),
+    )
+    parser.add_argument(
+        "--output-prefix",
+        type=str,
+        default="ptbxl_baseline",
+        help="Basename prefix for saved artefacts (default: ptbxl_baseline)",
+    )
 
     args = parser.parse_args()
     summary = evaluate_ptbxl(
@@ -300,9 +326,12 @@ def main() -> None:
         minimum_positive_examples=args.minimum_positive_examples,
         output_dir=args.output_dir,
         official_labels_path=args.official_labels,
+        fold=args.fold,
+        output_prefix=args.output_prefix,
     )
 
     print("\n=== Evaluation Summary ===")
+    print(f"Fold: {summary['fold']}")
     print(f"Total records: {summary['total_records']}")
     print(f"Successful: {summary['successful_records']}")
     stats = summary["probability_stats"]

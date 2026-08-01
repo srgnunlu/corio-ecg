@@ -26,7 +26,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from src.measurement.rhythm_analysis import RhythmAnalysis
-from src.pipeline.diagnose import DiagnosisResult
+from src.pipeline.diagnose import DiagnosisResult, is_above_threshold
 
 # Sinus-family rhythm labels — compatible with one another (refinements of "sinus"),
 # mutually exclusive with every non-sinus mechanism below.
@@ -163,7 +163,7 @@ def _reconcile_rhythm(
     for diagnosis in diagnoses:
         if (
             diagnosis.label in targets
-            and diagnosis.probability >= threshold
+            and is_above_threshold(diagnosis, threshold)
             and diagnosis.label not in suppressed
         ):
             suppressed[diagnosis.label] = Suppression(
@@ -185,7 +185,7 @@ def _reconcile_static_group(
         d
         for d in diagnoses
         if d.label in group.members
-        and d.probability >= threshold
+        and is_above_threshold(d, threshold)
         and d.label not in suppressed
     ]
     if len(members) < 2:

@@ -12,6 +12,7 @@ from typing import cast
 import numpy as np
 import torch
 
+from src.calibration.artifact import CalibrationArtifact, load_default_calibration
 from src.measurement.intervals import IntervalMeasurements, measure_intervals
 from src.models.net1d import Net1D
 from src.pipeline.lead_assignment import LAYOUT_3X4, LAYOUT_6X2
@@ -78,6 +79,23 @@ class DiagnosisResult:
     label: str
     index: int
     probability: float
+    # Populated only when a calibration artefact is active. `probability` then
+    # holds the calibrated value and these carry what the report layer needs
+    # to decide how loudly to state the finding.
+    class_threshold: float | None = None
+    tier: str | None = None
+
+
+def is_above_threshold(result: DiagnosisResult, threshold: float) -> bool:
+    """Whether a diagnosis clears its cutoff.
+
+    Uses the calibrated per-class cutoff when the result carries one, and the
+    caller's global threshold otherwise. Every display and report decision
+    goes through here so calibrated and uncalibrated runs stay consistent.
+    """
+    if result.class_threshold is not None:
+        return result.probability >= result.class_threshold
+    return result.probability >= threshold
 
 
 def get_device() -> torch.device:
@@ -97,17 +115,31 @@ class ECGDiagnoser:
         checkpoint_path: str | Path,
         device: torch.device | None = None,
         threshold: float = DEFAULT_THRESHOLD,
+        calibration: CalibrationArtifact | None = None,
     ) -> None:
         self.device = device or get_device()
         self.threshold = threshold
+        self.calibration = calibration if calibration is not None else load_default_calibration()
         self.last_estimated_hr_bpm: float | None = None
         self.last_interval_measurements: IntervalMeasurements | None = None
         self.model = self._load_model(Path(checkpoint_path))
         logger.info(
-            "ECGDiagnoser ready — device=%s, threshold=%.2f",
+            "ECGDiagnoser ready — device=%s, threshold=%.2f, calibration=%s",
             self.device,
             self.threshold,
+            f"fold {self.calibration.fold}" if self.calibration else "off",
         )
+
+    def _calibrate(self, probabilities: np.ndarray) -> np.ndarray:
+        """Map raw sigmoid outputs onto the calibrated probability scale.
+
+        Applied before the rate-consistency heuristics so the transform sees
+        the same distribution it was fitted on; the heuristics are multiplicative
+        and stay meaningful on either scale.
+        """
+        if self.calibration is None:
+            return probabilities
+        return self.calibration.apply(probabilities, ECG_FOUNDER_LABELS)
 
     def _load_model(self, checkpoint_path: Path) -> Net1D:
         """Load Net1D from checkpoint, handling multiple saved formats."""
@@ -168,7 +200,7 @@ class ECGDiagnoser:
         """
         effective_threshold = threshold if threshold is not None else self.threshold
 
-        probabilities = self._forward_probabilities(signal)
+        probabilities = self._calibrate(self._forward_probabilities(signal))
         if apply_rate_adjustments:
             probabilities = self._apply_rate_consistency_adjustments(
                 probabilities, signal, rhythm_strip=rhythm_strip
@@ -198,21 +230,33 @@ class ECGDiagnoser:
             probabilities = torch.sigmoid(logits).squeeze(0).cpu().numpy()
         return probabilities
 
-    @staticmethod
     def _collect_results(
+        self,
         probabilities: np.ndarray,
         threshold: float,
     ) -> list[DiagnosisResult]:
-        """Build sorted DiagnosisResult list for probabilities above threshold."""
+        """Build sorted DiagnosisResult list for probabilities above threshold.
+
+        When calibration is active each result also carries its learned cutoff
+        and evidence tier; callers filter on those rather than one global
+        threshold.
+        """
         results: list[DiagnosisResult] = []
         for index in range(NUM_CLASSES):
             probability = float(probabilities[index])
             if probability >= threshold:
+                label = ECG_FOUNDER_LABELS[index]
                 results.append(
                     DiagnosisResult(
-                        label=ECG_FOUNDER_LABELS[index],
+                        label=label,
                         index=index,
                         probability=probability,
+                        class_threshold=(
+                            self.calibration.threshold_for(label)
+                            if self.calibration
+                            else None
+                        ),
+                        tier=self.calibration.tier_for(label) if self.calibration else None,
                     )
                 )
         results.sort(key=lambda r: r.probability, reverse=True)
@@ -257,7 +301,9 @@ class ECGDiagnoser:
             self._forward_probabilities(column_signal)
             for column_signal in column_signals
         ]
-        probabilities = aggregate_probability_vectors(column_probabilities, aggregation)
+        probabilities = self._calibrate(
+            aggregate_probability_vectors(column_probabilities, aggregation)
+        )
 
         if apply_rate_adjustments:
             probabilities = self._apply_rate_consistency_adjustments(

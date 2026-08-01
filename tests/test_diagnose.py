@@ -13,6 +13,8 @@ def _mock_diagnoser() -> ECGDiagnoser:
     diagnoser = object.__new__(ECGDiagnoser)
     diagnoser.device = torch.device("cpu")
     diagnoser.threshold = 0.5
+    # These tests cover raw-model behaviour, so calibration stays off.
+    diagnoser.calibration = None
     diagnoser.last_estimated_hr_bpm = None
     diagnoser.model = MagicMock(return_value=torch.zeros((1, NUM_CLASSES)))
     diagnoser._apply_rate_consistency_adjustments = MagicMock(

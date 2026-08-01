@@ -321,3 +321,70 @@ class TestGeneratePdf:
         assert pdf.read_bytes()[:4] == b"%PDF"
         # the helper builds straight to disk too
         assert build_pdf_report is not None
+
+
+class TestEvidenceTierDisplay:
+    """Tests for how calibration tiers gate what is shown as a finding."""
+
+    @staticmethod
+    def _result(label: str, index: int, tier: str, probability: float = 0.9):
+        from src.pipeline.diagnose import DiagnosisResult
+
+        return DiagnosisResult(
+            label=label,
+            index=index,
+            probability=probability,
+            class_threshold=0.3,
+            tier=tier,
+        )
+
+    def test_research_only_head_is_hidden(self) -> None:
+        from src.calibration.tiers import TIER_RESEARCH_ONLY
+        from src.web.app import _is_hidden_research_output
+
+        result = self._result("SOME RARE PATTERN", 3, TIER_RESEARCH_ONLY)
+        assert _is_hidden_research_output(result) is True
+
+    def test_critical_head_is_never_hidden(self) -> None:
+        """PTB-XL has no STEMI/VT positives, so tiering must not silence them."""
+        from src.calibration.tiers import TIER_RESEARCH_ONLY
+        from src.utils.ecg_labels import CRITICAL_DIAGNOSIS_INDICES
+        from src.web.app import _is_hidden_research_output
+
+        for index in CRITICAL_DIAGNOSIS_INDICES:
+            result = self._result("CRITICAL", index, TIER_RESEARCH_ONLY)
+            assert _is_hidden_research_output(result) is False, index
+
+    def test_validated_head_is_shown(self) -> None:
+        from src.calibration.tiers import TIER_VALIDATED
+        from src.web.app import _is_hidden_research_output
+
+        assert _is_hidden_research_output(self._result("AFIB", 5, TIER_VALIDATED)) is False
+
+    def test_uncalibrated_run_hides_nothing(self) -> None:
+        """Without a calibration artefact every head keeps its old behaviour."""
+        from src.pipeline.diagnose import DiagnosisResult
+        from src.web.app import _is_hidden_research_output
+
+        result = DiagnosisResult(label="ANY", index=42, probability=0.9)
+        assert _is_hidden_research_output(result) is False
+
+
+class TestIsAboveThreshold:
+    """Tests for the shared cutoff helper."""
+
+    def test_uses_class_threshold_when_calibrated(self) -> None:
+        from src.pipeline.diagnose import DiagnosisResult, is_above_threshold
+
+        result = DiagnosisResult(
+            label="INFERIOR INFARCT", index=1, probability=0.25, class_threshold=0.20
+        )
+        # Below the global 0.5 slider but above its own learned cutoff.
+        assert is_above_threshold(result, 0.5) is True
+
+    def test_falls_back_to_global_threshold(self) -> None:
+        from src.pipeline.diagnose import DiagnosisResult, is_above_threshold
+
+        result = DiagnosisResult(label="ANY", index=1, probability=0.25)
+        assert is_above_threshold(result, 0.5) is False
+        assert is_above_threshold(result, 0.2) is True
