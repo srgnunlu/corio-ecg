@@ -97,9 +97,10 @@ prevalansla duyarlılık düşüşünü ölçecek kadar pozitif kalmıyor. Preva
 kolda da aynı olduğu için **round-trip deltası geçerli**; ancak mutlak PPV ve
 AUPRC değerleri fold 0 veya test seti rakamlarıyla karşılaştırılamaz.
 
-Eşik Gate 2'den olduğu gibi alındı (0.6423). Digitize edilmiş dağılıma göre
-yeniden seçilmiş bir eşik duyarlılık kaybının bir kısmını geri alabilir — ama
-korelasyon 0.644 olduğu için tamamını değil.
+Eşik Gate 2'den olduğu gibi alındı (0.6423), digitize edilmiş dağılıma göre
+yeniden seçilmedi. Segment-ensemble kolundaki yüksek spesifisite / düşük
+duyarlılık dengesi bu eşiğin artık yanlış yerde durduğunu gösteriyor; yeniden
+seçim sıradaki adım.
 
 ## Sıradaki adımlar (öncelik sırasıyla)
 
