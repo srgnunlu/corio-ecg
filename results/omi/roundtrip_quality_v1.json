@@ -1,0 +1,184 @@
+{
+  "scores_file": "/Users/sergenunlu/Developer/active/apps/Corio ECG/results/omi/roundtrip_pilot_v3_scores.csv",
+  "records": 460,
+  "positives": 230,
+  "threshold": 0.6423,
+  "einthoven_warning_level": 0.7,
+  "layout_cost_warning_level": 1.0,
+  "strata": [
+    {
+      "stratum": "all",
+      "records": 460,
+      "positives": 230,
+      "mean_absolute_score_error": 0.17921043791790472,
+      "median_absolute_score_error": 0.16611765883862967,
+      "mean_signed_shift": 0.02078357881767696,
+      "score_correlation": 0.8553620795959118,
+      "auroc_clean": 0.9100378071833649,
+      "auroc_segment": 0.8636672967863894,
+      "sensitivity_clean": 0.8,
+      "sensitivity_segment": 0.6347826086956522
+    },
+    {
+      "stratum": "einthoven_below_0.7",
+      "records": 19,
+      "positives": 12,
+      "mean_absolute_score_error": 0.19026514360877245,
+      "median_absolute_score_error": 0.1808735728263854,
+      "mean_signed_shift": -0.04541847009309812,
+      "score_correlation": 0.798891279901696,
+      "auroc_clean": 0.9285714285714286,
+      "auroc_segment": 0.8928571428571428,
+      "sensitivity_clean": 0.9166666666666666,
+      "sensitivity_segment": 0.75
+    },
+    {
+      "stratum": "einthoven_at_or_above_0.7",
+      "records": 441,
+      "positives": 218,
+      "mean_absolute_score_error": 0.17873415808088322,
+      "median_absolute_score_error": 0.16554892063140858,
+      "mean_signed_shift": 0.02363582128775571,
+      "score_correlation": 0.857236743914842,
+      "auroc_clean": 0.9088739869173489,
+      "auroc_segment": 0.8622413296581233,
+      "sensitivity_clean": 0.7935779816513762,
+      "sensitivity_segment": 0.6284403669724771
+    },
+    {
+      "stratum": "layout_cost_at_or_below_1.0",
+      "records": 460,
+      "positives": 230,
+      "mean_absolute_score_error": 0.17921043791790472,
+      "median_absolute_score_error": 0.16611765883862967,
+      "mean_signed_shift": 0.02078357881767696,
+      "score_correlation": 0.8553620795959118,
+      "auroc_clean": 0.9100378071833649,
+      "auroc_segment": 0.8636672967863894,
+      "sensitivity_clean": 0.8,
+      "sensitivity_segment": 0.6347826086956522
+    },
+    {
+      "stratum": "einthoven_q1_worst",
+      "records": 115,
+      "positives": 61,
+      "mean_absolute_score_error": 0.18727575074552316,
+      "median_absolute_score_error": 0.18061721324920654,
+      "mean_signed_shift": -0.006912984532233243,
+      "score_correlation": 0.8469553620300984,
+      "auroc_clean": 0.9013357619914997,
+      "auroc_segment": 0.8506375227686703,
+      "sensitivity_clean": 0.8524590163934426,
+      "sensitivity_segment": 0.7049180327868853
+    },
+    {
+      "stratum": "einthoven_q2",
+      "records": 115,
+      "positives": 58,
+      "mean_absolute_score_error": 0.17544709679812354,
+      "median_absolute_score_error": 0.14582803845405573,
+      "mean_signed_shift": 0.04028391309345709,
+      "score_correlation": 0.8666624743053357,
+      "auroc_clean": 0.895946763460375,
+      "auroc_segment": 0.8614640048396854,
+      "sensitivity_clean": 0.7758620689655172,
+      "sensitivity_segment": 0.5862068965517241
+    },
+    {
+      "stratum": "einthoven_q3",
+      "records": 115,
+      "positives": 50,
+      "mean_absolute_score_error": 0.17324986097316825,
+      "median_absolute_score_error": 0.1540332287549972,
+      "mean_signed_shift": 0.027587335288231058,
+      "score_correlation": 0.8481681258394519,
+      "auroc_clean": 0.9433846153846155,
+      "auroc_segment": 0.9024615384615384,
+      "sensitivity_clean": 0.82,
+      "sensitivity_segment": 0.68
+    },
+    {
+      "stratum": "einthoven_q4_best",
+      "records": 115,
+      "positives": 61,
+      "mean_absolute_score_error": 0.18086904315480395,
+      "median_absolute_score_error": 0.18217605352401728,
+      "mean_signed_shift": 0.022176051421252937,
+      "score_correlation": 0.8589845293251261,
+      "auroc_clean": 0.9068002428658166,
+      "auroc_segment": 0.8406193078324226,
+      "sensitivity_clean": 0.7540983606557377,
+      "sensitivity_segment": 0.5737704918032787
+    },
+    {
+      "stratum": "layout_cost_q1_best",
+      "records": 115,
+      "positives": 62,
+      "mean_absolute_score_error": 0.1740335645801995,
+      "median_absolute_score_error": 0.1565303951501846,
+      "mean_signed_shift": 0.005029139821620095,
+      "score_correlation": 0.8709025957924791,
+      "auroc_clean": 0.8715763846622033,
+      "auroc_segment": 0.8472306755934267,
+      "sensitivity_clean": 0.7741935483870968,
+      "sensitivity_segment": 0.6129032258064516
+    },
+    {
+      "stratum": "layout_cost_q2",
+      "records": 115,
+      "positives": 53,
+      "mean_absolute_score_error": 0.17573347189058752,
+      "median_absolute_score_error": 0.13689470291137684,
+      "mean_signed_shift": 0.0402572023500081,
+      "score_correlation": 0.8208204053452188,
+      "auroc_clean": 0.9297017650639074,
+      "auroc_segment": 0.8752282410225198,
+      "sensitivity_clean": 0.7547169811320755,
+      "sensitivity_segment": 0.6226415094339622
+    },
+    {
+      "stratum": "layout_cost_q3",
+      "records": 115,
+      "positives": 47,
+      "mean_absolute_score_error": 0.18201918583008986,
+      "median_absolute_score_error": 0.17989975214004517,
+      "mean_signed_shift": 0.05112104396912796,
+      "score_correlation": 0.8929631325802851,
+      "auroc_clean": 0.938360450563204,
+      "auroc_segment": 0.9045682102628285,
+      "sensitivity_clean": 0.851063829787234,
+      "sensitivity_segment": 0.723404255319149
+    },
+    {
+      "stratum": "layout_cost_q4_worst",
+      "records": 115,
+      "positives": 68,
+      "mean_absolute_score_error": 0.185055529370742,
+      "median_absolute_score_error": 0.1781497430056334,
+      "mean_signed_shift": -0.013273070870048318,
+      "score_correlation": 0.8301382839875115,
+      "auroc_clean": 0.8967459324155194,
+      "auroc_segment": 0.8207133917396746,
+      "sensitivity_clean": 0.8235294117647058,
+      "sensitivity_segment": 0.6029411764705882
+    }
+  ],
+  "damage_predictors": {
+    "einthoven_score": {
+      "rho": -0.012594782953893309,
+      "p_value": 0.7876190212097853
+    },
+    "layout_cost": {
+      "rho": 0.059406297021622326,
+      "p_value": 0.20345132526511742
+    },
+    "detected_leads_count": {
+      "rho": 0.05006707414787443,
+      "p_value": 0.28391338913577663
+    },
+    "avg_pixel_per_mm": {
+      "rho": -0.023531969655633287,
+      "p_value": 0.6146823422036704
+    }
+  }
+}

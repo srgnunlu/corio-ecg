@@ -28,6 +28,25 @@ DEFAULT_WEIGHTS = PROJECT_ROOT / "models" / "omi" / "omi_finetuned_v2a.pt"
 DEFAULT_WORK_DIR = PROJECT_ROOT / "data" / "processed" / "omi-roundtrip"
 DEFAULT_OUTPUT = PROJECT_ROOT / "results" / "omi" / "roundtrip_pilot.json"
 
+# Per-record scores are what let a later analysis re-select the threshold or
+# stratify by digitisation quality without paying for another round-trip run.
+PER_RECORD_COLUMNS = [
+    "ecg_row_record",
+    "patient_id",
+    "omi",
+    "stemi",
+    "nstemi",
+    "clean_score",
+    "digitised_score",
+    "segment_score",
+    "layout_name",
+    "layout_cost",
+    "einthoven_score",
+    "detected_leads_count",
+    "avg_pixel_per_mm",
+    "segment_ensemble_available",
+]
+
 DEFAULT_THRESHOLD = 0.6423
 DEFAULT_HIDDEN_DIM = 256
 
@@ -93,6 +112,12 @@ def main() -> None:
     parser.add_argument("--weights", type=Path, default=DEFAULT_WEIGHTS)
     parser.add_argument("--work-dir", type=Path, default=DEFAULT_WORK_DIR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--scores-output",
+        type=Path,
+        default=None,
+        help="Per-record score CSV (default: <output stem>_scores.csv)",
+    )
     parser.add_argument("--fold", type=int, default=0)
     parser.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD)
     parser.add_argument("--hidden-dim", type=int, default=DEFAULT_HIDDEN_DIM)
@@ -135,6 +160,7 @@ def main() -> None:
     failures: list[str] = []
     layouts: dict[str, int] = {}
     ensemble_unavailable = 0
+    per_record: list[dict] = []
 
     for record in tqdm(list(subset.itertuples(index=False)), desc="round-trip"):
         stem = record.ecg_row_record.removesuffix(".dat")
@@ -155,22 +181,43 @@ def main() -> None:
             failures.append(f"{stem}: {type(error).__name__}: {error}")
             continue
 
-        layout_name = getattr(digitiser.last_info, "layout_name", "unknown")
+        info = digitiser.last_info
+        layout_name = getattr(info, "layout_name", "unknown")
         layouts[layout_name] = layouts.get(layout_name, 0) + 1
 
         digitised_score = _score(model, digitised_signal, device)
         ensemble_score = _score_segment_ensemble(
             model, digitised_signal, device, layout_name
         )
+        ensemble_available = ensemble_score is not None
         if ensemble_score is None:
             # Fall back to the whole-signal score so the arms stay aligned.
             ensemble_score = digitised_score
             ensemble_unavailable += 1
 
-        clean_scores.append(_score(model, clean_signal, device))
+        clean_score = _score(model, clean_signal, device)
+        clean_scores.append(clean_score)
         digitised_scores.append(digitised_score)
         ensemble_scores.append(ensemble_score)
         labels.append(int(record.OMI))
+        per_record.append(
+            {
+                "ecg_row_record": record.ecg_row_record,
+                "patient_id": getattr(record, "Patient_id", ""),
+                "omi": int(record.OMI),
+                "stemi": int(getattr(record, "STEMI", 0)),
+                "nstemi": int(getattr(record, "NSTEMI", 0)),
+                "clean_score": clean_score,
+                "digitised_score": digitised_score,
+                "segment_score": ensemble_score,
+                "layout_name": layout_name,
+                "layout_cost": float(getattr(info, "layout_cost", -1.0)),
+                "einthoven_score": float(getattr(info, "einthoven_score", -1.0)),
+                "detected_leads_count": int(getattr(info, "detected_leads_count", 0)),
+                "avg_pixel_per_mm": float(getattr(info, "avg_pixel_per_mm", 0.0)),
+                "segment_ensemble_available": int(ensemble_available),
+            }
+        )
 
     if failures:
         print(f"\n[WARN] {len(failures)} records failed the round-trip:")
@@ -245,6 +292,12 @@ def main() -> None:
     with open(args.output, "w") as handle:
         json.dump(report, handle, indent=2)
     print(f"\nSaved → {args.output}")
+
+    scores_path = args.scores_output or args.output.with_name(
+        f"{args.output.stem}_scores.csv"
+    )
+    pd.DataFrame(per_record, columns=PER_RECORD_COLUMNS).to_csv(scores_path, index=False)
+    print(f"Saved per-record scores → {scores_path}")
 
 
 if __name__ == "__main__":
