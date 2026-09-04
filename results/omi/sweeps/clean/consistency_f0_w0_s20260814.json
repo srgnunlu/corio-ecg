@@ -1,0 +1,146 @@
+{
+  "corpus": "/Users/sergenunlu/Developer/active/apps/Corio ECG/data/processed/omi-corpus/clean/manifest.csv",
+  "training_records": 460,
+  "training_positives": 230,
+  "training_folds": [
+    1
+  ],
+  "validation_fold": 0,
+  "validation_records": 460,
+  "consistency_weight": 0.0,
+  "clean_weight": 0.5,
+  "teacher_logit_median_positive": 2.061924457550049,
+  "teacher_logit_median_negative": -2.385758876800537,
+  "epochs_run": 5,
+  "best_epoch": {
+    "auprc": 0.7772994245405247,
+    "epoch": 1,
+    "auroc": 0.7958223062381853
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "total_loss": 0.798144512135407,
+      "digitised_loss": 0.6113575892201786,
+      "clean_loss": 0.3735738468581232,
+      "consistency_loss": 5.512591181130245,
+      "validation_auprc": 0.7772994245405247,
+      "validation_auroc": 0.7958223062381853
+    },
+    {
+      "epoch": 2,
+      "total_loss": 0.6603707424525557,
+      "digitised_loss": 0.4926408087385112,
+      "clean_loss": 0.33545986717117243,
+      "consistency_loss": 4.985985632600455,
+      "validation_auprc": 0.7697099979160419,
+      "validation_auroc": 0.794007561436673
+    },
+    {
+      "epoch": 3,
+      "total_loss": 0.6019587002951523,
+      "digitised_loss": 0.442138415986094,
+      "clean_loss": 0.31964055988295326,
+      "consistency_loss": 4.736718001036809,
+      "validation_auprc": 0.7733423302141802,
+      "validation_auroc": 0.794952741020794
+    },
+    {
+      "epoch": 4,
+      "total_loss": 0.523581574703085,
+      "digitised_loss": 0.3778893331001545,
+      "clean_loss": 0.2913844880872759,
+      "consistency_loss": 4.269699955808705,
+      "validation_auprc": 0.7715008993669559,
+      "validation_auroc": 0.7913799621928167
+    },
+    {
+      "epoch": 5,
+      "total_loss": 0.4929375571423563,
+      "digitised_loss": 0.3563649233045249,
+      "clean_loss": 0.27314527332782745,
+      "consistency_loss": 4.428636004184854,
+      "validation_auprc": 0.766394522405267,
+      "validation_auroc": 0.7841587901701323
+    }
+  ],
+  "baseline": {
+    "auroc": 0.7579395085066162,
+    "auprc": 0.7591746330653977,
+    "at_inherited_threshold": {
+      "sensitivity": 0.5565217391304348,
+      "specificity": 0.808695652173913,
+      "ppv": 0.7441860465116279,
+      "npv": 0.6458333333333334,
+      "accuracy": 0.6826086956521739,
+      "f1": 0.63681592039801,
+      "true_positive": 128,
+      "false_positive": 44,
+      "true_negative": 186,
+      "false_negative": 102
+    },
+    "crossfit": {
+      "strategy": "f2_max_crossfit",
+      "threshold": 0.7261397838592529,
+      "sensitivity": 0.49043478260869566,
+      "specificity": 0.8443478260869567,
+      "precision": 0.18520955910160397,
+      "fold_thresholds": [
+        0.7827218770980835,
+        0.5260490775108337,
+        0.7263599634170532,
+        0.7827218770980835,
+        0.7393821477890015,
+        0.6919643878936768,
+        0.7259196043014526,
+        0.5251913070678711,
+        0.6753720045089722,
+        0.7408971786499023
+      ],
+      "repeats": 5,
+      "folds": 2
+    }
+  },
+  "trained": {
+    "auroc": 0.7958223062381853,
+    "auprc": 0.7772994245405247,
+    "at_inherited_threshold": {
+      "sensitivity": 0.48695652173913045,
+      "specificity": 0.8956521739130435,
+      "ppv": 0.8235294117647058,
+      "npv": 0.6358024691358025,
+      "accuracy": 0.691304347826087,
+      "f1": 0.6120218579234973,
+      "true_positive": 112,
+      "false_positive": 24,
+      "true_negative": 206,
+      "false_negative": 118
+    },
+    "crossfit": {
+      "strategy": "f2_max_crossfit",
+      "threshold": 0.526475727558136,
+      "sensitivity": 0.6391304347826086,
+      "specificity": 0.7860869565217391,
+      "precision": 0.17389648827527462,
+      "fold_thresholds": [
+        0.5122171640396118,
+        0.5654391646385193,
+        0.5171990990638733,
+        0.5473183989524841,
+        0.5283857583999634,
+        0.5578048825263977,
+        0.5245656967163086,
+        0.3980138301849365,
+        0.5109044313430786,
+        0.549657940864563
+      ],
+      "repeats": 5,
+      "folds": 2
+    }
+  },
+  "median_score_separation": {
+    "before": 0.3883730173110962,
+    "after": 0.306473970413208
+  },
+  "weights": "/private/tmp/claude-501/-Users-sergenunlu-Developer-active-apps-Corio-ECG/e2ce794a-6301-477d-b411-07a1808911c6/scratchpad/weights/f0_w0_s20260814.pt"
+}

@@ -1,0 +1,182 @@
+{
+  "corpus": "/Users/sergenunlu/Developer/active/apps/Corio ECG/data/processed/omi-corpus/clean/manifest.csv",
+  "training_records": 460,
+  "training_positives": 230,
+  "training_folds": [
+    1
+  ],
+  "validation_fold": 0,
+  "validation_records": 460,
+  "consistency_weight": 1.0,
+  "clean_weight": 0.5,
+  "teacher_logit_median_positive": 2.061924457550049,
+  "teacher_logit_median_negative": -2.385758876800537,
+  "epochs_run": 9,
+  "best_epoch": {
+    "auprc": 0.812518534587848,
+    "epoch": 5,
+    "auroc": 0.8317391304347825
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "total_loss": 6.164012160794488,
+      "digitised_loss": 0.6259070737608547,
+      "clean_loss": 0.38214610054575165,
+      "consistency_loss": 5.34703199616794,
+      "validation_auprc": 0.7879497965921061,
+      "validation_auroc": 0.8111153119092628
+    },
+    {
+      "epoch": 2,
+      "total_loss": 5.101246356964111,
+      "digitised_loss": 0.5501836579421471,
+      "clean_loss": 0.3849602855485061,
+      "consistency_loss": 4.3585825295283875,
+      "validation_auprc": 0.8046329432425456,
+      "validation_auroc": 0.8247069943289226
+    },
+    {
+      "epoch": 3,
+      "total_loss": 4.11873566693273,
+      "digitised_loss": 0.5003387794412416,
+      "clean_loss": 0.4011080462870927,
+      "consistency_loss": 3.4178428608795692,
+      "validation_auprc": 0.8059306850762387,
+      "validation_auroc": 0.8273534971644614
+    },
+    {
+      "epoch": 4,
+      "total_loss": 4.047326942970013,
+      "digitised_loss": 0.4786765816910514,
+      "clean_loss": 0.3943156037351181,
+      "consistency_loss": 3.371492566733525,
+      "validation_auprc": 0.8107470238087132,
+      "validation_auroc": 0.8314366729678638
+    },
+    {
+      "epoch": 5,
+      "total_loss": 3.411086892259532,
+      "digitised_loss": 0.46848669956470357,
+      "clean_loss": 0.40379161901515104,
+      "consistency_loss": 2.7407043843433776,
+      "validation_auprc": 0.812518534587848,
+      "validation_auroc": 0.8317391304347825
+    },
+    {
+      "epoch": 6,
+      "total_loss": 3.318474658604326,
+      "digitised_loss": 0.45506984920337284,
+      "clean_loss": 0.37892667178449957,
+      "consistency_loss": 2.6739414519277114,
+      "validation_auprc": 0.8068134632578146,
+      "validation_auroc": 0.8279962192816634
+    },
+    {
+      "epoch": 7,
+      "total_loss": 2.8813122305376777,
+      "digitised_loss": 0.42663069018002214,
+      "clean_loss": 0.39130008991422327,
+      "consistency_loss": 2.2590314889776297,
+      "validation_auprc": 0.8105872483087869,
+      "validation_auroc": 0.831984877126654
+    },
+    {
+      "epoch": 8,
+      "total_loss": 2.5739561360457848,
+      "digitised_loss": 0.410022411880822,
+      "clean_loss": 0.38331521019853393,
+      "consistency_loss": 1.9722761080182831,
+      "validation_auprc": 0.8084066054934707,
+      "validation_auroc": 0.8306805293005671
+    },
+    {
+      "epoch": 9,
+      "total_loss": 2.5502317362818223,
+      "digitised_loss": 0.40249523880152865,
+      "clean_loss": 0.38139321218276845,
+      "consistency_loss": 1.9570399029501553,
+      "validation_auprc": 0.8111879894086421,
+      "validation_auroc": 0.8314177693761815
+    }
+  ],
+  "baseline": {
+    "auroc": 0.7579395085066162,
+    "auprc": 0.7591746330653977,
+    "at_inherited_threshold": {
+      "sensitivity": 0.5565217391304348,
+      "specificity": 0.808695652173913,
+      "ppv": 0.7441860465116279,
+      "npv": 0.6458333333333334,
+      "accuracy": 0.6826086956521739,
+      "f1": 0.63681592039801,
+      "true_positive": 128,
+      "false_positive": 44,
+      "true_negative": 186,
+      "false_negative": 102
+    },
+    "crossfit": {
+      "strategy": "f2_max_crossfit",
+      "threshold": 0.7261397838592529,
+      "sensitivity": 0.49043478260869566,
+      "specificity": 0.8443478260869567,
+      "precision": 0.18520955910160397,
+      "fold_thresholds": [
+        0.7827218770980835,
+        0.5260490775108337,
+        0.7263599634170532,
+        0.7827218770980835,
+        0.7393821477890015,
+        0.6919643878936768,
+        0.7259196043014526,
+        0.5251913070678711,
+        0.6753720045089722,
+        0.7408971786499023
+      ],
+      "repeats": 5,
+      "folds": 2
+    }
+  },
+  "trained": {
+    "auroc": 0.8317391304347825,
+    "auprc": 0.812518534587848,
+    "at_inherited_threshold": {
+      "sensitivity": 0.6521739130434783,
+      "specificity": 0.8478260869565217,
+      "ppv": 0.8108108108108109,
+      "npv": 0.7090909090909091,
+      "accuracy": 0.75,
+      "f1": 0.7228915662650603,
+      "true_positive": 150,
+      "false_positive": 35,
+      "true_negative": 195,
+      "false_negative": 80
+    },
+    "crossfit": {
+      "strategy": "f2_max_crossfit",
+      "threshold": 0.6348339021205902,
+      "sensitivity": 0.62,
+      "specificity": 0.8521739130434783,
+      "precision": 0.22436064257282,
+      "fold_thresholds": [
+        0.6794462203979492,
+        0.6301852464675903,
+        0.6732543706893921,
+        0.6313710808753967,
+        0.5818494558334351,
+        0.6301852464675903,
+        0.7421019077301025,
+        0.6382967233657837,
+        0.6301852464675903,
+        0.7582622766494751
+      ],
+      "repeats": 5,
+      "folds": 2
+    }
+  },
+  "median_score_separation": {
+    "before": 0.3883730173110962,
+    "after": 0.5930876135826111
+  },
+  "weights": "models/omi/omi_consistency_v1.pt"
+}

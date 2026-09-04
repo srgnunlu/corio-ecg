@@ -1,0 +1,146 @@
+{
+  "corpus": "/Users/sergenunlu/Developer/active/apps/Corio ECG/data/processed/omi-corpus/clean/manifest.csv",
+  "training_records": 460,
+  "training_positives": 230,
+  "training_folds": [
+    0
+  ],
+  "validation_fold": 1,
+  "validation_records": 460,
+  "consistency_weight": 1.0,
+  "clean_weight": 0.5,
+  "teacher_logit_median_positive": 2.0919742584228516,
+  "teacher_logit_median_negative": -2.5465481281280518,
+  "epochs_run": 5,
+  "best_epoch": {
+    "auprc": 0.793500478426395,
+    "epoch": 1,
+    "auroc": 0.8065217391304347
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "total_loss": 6.027186862353621,
+      "digitised_loss": 0.6112581846015207,
+      "clean_loss": 0.43129965046356467,
+      "consistency_loss": 5.200278902875966,
+      "validation_auprc": 0.793500478426395,
+      "validation_auroc": 0.8065217391304347
+    },
+    {
+      "epoch": 2,
+      "total_loss": 4.752861080498531,
+      "digitised_loss": 0.5493270127937712,
+      "clean_loss": 0.41201274508032304,
+      "consistency_loss": 3.9975276897693504,
+      "validation_auprc": 0.7876151816688729,
+      "validation_auroc": 0.806578449905482
+    },
+    {
+      "epoch": 3,
+      "total_loss": 3.961599752820771,
+      "digitised_loss": 0.4958911692274028,
+      "clean_loss": 0.41831569630524207,
+      "consistency_loss": 3.2565507601047385,
+      "validation_auprc": 0.7880258243031302,
+      "validation_auroc": 0.8065028355387523
+    },
+    {
+      "epoch": 4,
+      "total_loss": 3.707335792738816,
+      "digitised_loss": 0.4582915583561207,
+      "clean_loss": 0.3956051792564063,
+      "consistency_loss": 3.05124163216558,
+      "validation_auprc": 0.7879241630078448,
+      "validation_auroc": 0.8063894139886577
+    },
+    {
+      "epoch": 5,
+      "total_loss": 3.199993766587356,
+      "digitised_loss": 0.4758599868108486,
+      "clean_loss": 0.41710296401689795,
+      "consistency_loss": 2.515582296355017,
+      "validation_auprc": 0.7888743889839878,
+      "validation_auroc": 0.8100189035916825
+    }
+  ],
+  "baseline": {
+    "auroc": 0.76,
+    "auprc": 0.7525770884210224,
+    "at_inherited_threshold": {
+      "sensitivity": 0.5347826086956522,
+      "specificity": 0.8043478260869565,
+      "ppv": 0.7321428571428571,
+      "npv": 0.6335616438356164,
+      "accuracy": 0.6695652173913044,
+      "f1": 0.6180904522613065,
+      "true_positive": 123,
+      "false_positive": 45,
+      "true_negative": 185,
+      "false_negative": 107
+    },
+    "crossfit": {
+      "strategy": "f2_max_crossfit",
+      "threshold": 0.5373037755489349,
+      "sensitivity": 0.6556521739130434,
+      "specificity": 0.7078260869565217,
+      "precision": 0.1333879214484676,
+      "fold_thresholds": [
+        0.5197252035140991,
+        0.5474008321762085,
+        0.6209384202957153,
+        0.5018460750579834,
+        0.618421733379364,
+        0.44365012645721436,
+        0.5272067189216614,
+        0.611296534538269,
+        0.47292929887771606,
+        0.5688486099243164
+      ],
+      "repeats": 5,
+      "folds": 2
+    }
+  },
+  "trained": {
+    "auroc": 0.8065217391304347,
+    "auprc": 0.793500478426395,
+    "at_inherited_threshold": {
+      "sensitivity": 0.5869565217391305,
+      "specificity": 0.8478260869565217,
+      "ppv": 0.7941176470588235,
+      "npv": 0.6724137931034483,
+      "accuracy": 0.717391304347826,
+      "f1": 0.675,
+      "true_positive": 135,
+      "false_positive": 35,
+      "true_negative": 195,
+      "false_negative": 95
+    },
+    "crossfit": {
+      "strategy": "f2_max_crossfit",
+      "threshold": 0.45860517024993896,
+      "sensitivity": 0.6904347826086956,
+      "specificity": 0.7773913043478261,
+      "precision": 0.17506357609258627,
+      "fold_thresholds": [
+        0.45823413133621216,
+        0.45897620916366577,
+        0.45784249901771545,
+        0.6241906881332397,
+        0.5066012740135193,
+        0.45823413133621216,
+        0.4881449341773987,
+        0.45823413133621216,
+        0.6513392925262451,
+        0.455139696598053
+      ],
+      "repeats": 5,
+      "folds": 2
+    }
+  },
+  "median_score_separation": {
+    "before": 0.3851226568222046,
+    "after": 0.4991530776023865
+  },
+  "weights": "models/omi/omi_consistency_v1_fold1.pt"
+}
