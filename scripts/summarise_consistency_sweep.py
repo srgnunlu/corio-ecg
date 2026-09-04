@@ -103,6 +103,13 @@ def main() -> None:
     parser.add_argument("results_dir", type=Path)
     parser.add_argument("--reference", default="0", help="weight of the reference arm")
     parser.add_argument("--arm", default="1.0", help="weight of the arm to compare")
+    parser.add_argument(
+        "--reference-dir",
+        type=Path,
+        default=None,
+        help="take the reference arm from another sweep directory, e.g. to pair "
+        "an unlabelled-mix sweep against the plain sweep at the same weight",
+    )
     args = parser.parse_args()
 
     cells = _load_cells(args.results_dir)
@@ -110,7 +117,14 @@ def main() -> None:
         raise SystemExit(f"No consistency_f*_w*_s*.json under {args.results_dir}")
     print(f"Sweep: {args.results_dir}")
     _print_arms(cells)
-    if args.reference in cells and args.arm in cells:
+    if args.reference_dir is not None:
+        # Keyed as "<dir>:w=<weight>" so a cross-directory pairing at the same
+        # weight does not collide with the arm being compared.
+        reference_key = f"{args.reference_dir.name}:w={args.reference}"
+        cells[reference_key] = _load_cells(args.reference_dir)[args.reference]
+        print(f"\nReference arm from {args.reference_dir}")
+        _print_paired(cells, reference_key, args.arm)
+    elif args.reference in cells and args.arm in cells:
         _print_paired(cells, args.reference, args.arm)
 
 
