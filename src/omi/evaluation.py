@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import numpy as np
 import pandas as pd
 from sklearn.metrics import average_precision_score, roc_auc_score
@@ -24,7 +26,7 @@ def operating_point_metrics(
     true_negative = int(np.sum(~predicted & (y_true == 0)))
     false_negative = int(np.sum(~predicted & (y_true == 1)))
 
-    def _ratio(numerator: int, denominator: int) -> float:
+    def _ratio(numerator: float, denominator: float) -> float:
         return float(numerator / denominator) if denominator else 0.0
 
     sensitivity = _ratio(true_positive, true_positive + false_negative)
@@ -59,7 +61,7 @@ def patient_bootstrap_ci(
     y_true: np.ndarray,
     scores: np.ndarray,
     patient_ids: np.ndarray,
-    metric: callable,
+    metric: Callable[[np.ndarray, np.ndarray], float],
     rounds: int = DEFAULT_BOOTSTRAP_ROUNDS,
     alpha: float = DEFAULT_ALPHA,
     seed: int = 20260801,
