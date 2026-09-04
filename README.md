@@ -91,9 +91,6 @@ cp .env.example .env
 # Activate environment
 source .venv/bin/activate
 
-# Interpret a WFDB signal
-python -m src.pipeline.run --signal path/to/record_without_extension
-
 # Run PTB-XL ground-truth evaluation
 python -m src.training.evaluate --max-samples 500 --threshold 0.5
 

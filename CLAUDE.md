@@ -71,8 +71,8 @@ Paper ECG photograph interpretation AI pipeline. Takes a photo of a paper ECG, d
 # Activate environment
 source .venv/bin/activate
 
-# Run diagnosis on a WFDB signal file
-python -m src.pipeline.run --signal data/raw/ptb-xl/records500/00000/00001_hr --threshold 0.5
+# Launch the web UI (http://localhost:7860) — photo in, verdict + PDF out
+python -m src.web.app
 
 # Run baseline evaluation on PTB-XL (quick test with 20 samples)
 python -m src.training.evaluate --max-samples 20
