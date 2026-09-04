@@ -23,6 +23,7 @@ from src.omi.evaluation import operating_point_metrics, ranking_metrics
 from src.omi.model import build_classifier
 from src.omi.threshold import select_threshold_crossfit
 from src.pipeline.diagnose import get_device
+from src.utils.wfdb_helpers import read_ecg_signal
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATA_DIR = PROJECT_ROOT / "data" / "raw" / "omi-chongqing"
@@ -51,6 +52,32 @@ def _load_pairs(
         clean.append(load_raw_signal(data_dir, row.ecg_row_record).astype(np.float16))
         labels.append(int(row.omi))
     return np.stack(clean), np.stack(digitised), np.array(labels)
+
+
+def _load_unlabelled_pairs(
+    manifest: pd.DataFrame, max_records: int | None, seed: int
+) -> tuple[np.ndarray, np.ndarray]:
+    """Load (clean, digitised) for an unlabelled corpus such as PTB-XL.
+
+    The manifest comes from build_ptbxl_consistency_corpus.py: one row per
+    recording with `record_path` (WFDB stem) and `signal_path` (digitised .npy).
+    Both go through the same reader as the OMI data, so the two corpora share
+    lead order, sample rate and normalisation.
+    """
+    if max_records is not None and len(manifest) > max_records:
+        manifest = manifest.sample(n=max_records, random_state=seed)
+    clean: list[np.ndarray] = []
+    digitised: list[np.ndarray] = []
+    for row in manifest.itertuples(index=False):
+        signal_path = Path(row.signal_path)
+        record_path = Path(row.record_path)
+        if not signal_path.is_absolute():
+            signal_path = PROJECT_ROOT / signal_path
+        if not record_path.is_absolute():
+            record_path = PROJECT_ROOT / record_path
+        digitised.append(np.load(signal_path).astype(np.float16))
+        clean.append(read_ecg_signal(str(record_path))[0].astype(np.float16))
+    return np.stack(clean), np.stack(digitised)
 
 
 def _evaluate(
@@ -97,6 +124,15 @@ def main() -> None:
         help="0 turns this into plain digitised fine-tuning — the ablation arm",
     )
     parser.add_argument("--clean-weight", type=float, default=0.5)
+    parser.add_argument(
+        "--unlabelled-corpus",
+        type=Path,
+        default=None,
+        help="manifest of NaN-label pairs (build_ptbxl_consistency_corpus.py) "
+        "mixed into every batch to scale the consistency term without labels",
+    )
+    parser.add_argument("--unlabelled-batch-size", type=int, default=16)
+    parser.add_argument("--max-unlabelled", type=int, default=None)
     parser.add_argument("--seed", type=int, default=20260802)
     args = parser.parse_args()
 
@@ -125,6 +161,16 @@ def main() -> None:
     )
     validation_patients = validation_manifest.patient_id.to_numpy()
 
+    unlabelled_clean = unlabelled_digitised = None
+    if args.unlabelled_corpus is not None:
+        unlabelled_clean, unlabelled_digitised = _load_unlabelled_pairs(
+            pd.read_csv(args.unlabelled_corpus), args.max_unlabelled, args.seed
+        )
+        print(
+            f"Mixing {len(unlabelled_clean)} unlabelled pairs from "
+            f"{args.unlabelled_corpus.name}, {args.unlabelled_batch_size} per batch"
+        )
+
     device = get_device()
     model = build_classifier(args.model, device, hidden_dim=args.hidden_dim)
     model.load_state_dict(torch.load(args.weights, map_location=device, weights_only=True))
@@ -149,6 +195,23 @@ def main() -> None:
         f"median negative {np.median(teacher_logits[train_labels == 0]):+.3f}"
     )
 
+    unlabelled_dataset = None
+    if unlabelled_clean is not None and unlabelled_digitised is not None:
+        # Same frozen-target rule: the unlabelled pairs aim at what the clean
+        # model said about them before any weight moved.
+        unlabelled_teacher = predict_logits(model, unlabelled_clean, device)
+        unlabelled_dataset = PairedSignalDataset(
+            unlabelled_clean,
+            unlabelled_digitised,
+            np.full(len(unlabelled_clean), np.nan),
+            unlabelled_teacher,
+        )
+        print(
+            f"  Teacher logits on unlabelled clean signals: "
+            f"median {np.median(unlabelled_teacher):+.3f}, "
+            f"share above 0 {float(np.mean(unlabelled_teacher > 0)):.3f}"
+        )
+
     config = ConsistencyConfig(
         epochs=args.epochs,
         learning_rate=args.learning_rate,
@@ -156,6 +219,7 @@ def main() -> None:
         seed=args.seed,
         consistency_weight=args.consistency_weight,
         clean_weight=args.clean_weight,
+        unlabelled_batch_size=args.unlabelled_batch_size,
     )
     positives = int(train_labels.sum())
     positive_weight = (len(train_labels) - positives) / max(positives, 1)
@@ -167,6 +231,7 @@ def main() -> None:
         device,
         config,
         positive_weight=positive_weight,
+        unlabelled=unlabelled_dataset,
     )
 
     print(f"\n  {'EPOCH':>5} {'TOTAL':>8} {'DIGIT':>8} {'CLEAN':>8} {'CONS':>8} {'AUPRC':>8}")
@@ -225,6 +290,13 @@ def main() -> None:
         "validation_records": int(len(validation_manifest)),
         "consistency_weight": args.consistency_weight,
         "clean_weight": args.clean_weight,
+        "unlabelled_corpus": (
+            str(args.unlabelled_corpus) if args.unlabelled_corpus is not None else None
+        ),
+        "unlabelled_records": (
+            int(len(unlabelled_dataset)) if unlabelled_dataset is not None else 0
+        ),
+        "unlabelled_batch_size": args.unlabelled_batch_size,
         "teacher_logit_median_positive": float(np.median(teacher_logits[train_labels == 1])),
         "teacher_logit_median_negative": float(np.median(teacher_logits[train_labels == 0])),
         "epochs_run": len(history),

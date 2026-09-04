@@ -9,6 +9,7 @@ from src.omi.consistency import (
     ConsistencyConfig,
     PairedSignalDataset,
     consistency_penalty,
+    consistency_target,
     predict_logits,
     predict_scores,
     train_consistency,
@@ -201,3 +202,102 @@ class TestPredictScores:
 
         assert logits.shape == scores.shape
         assert np.allclose(1.0 / (1.0 + np.exp(-logits)), scores, atol=1e-6)
+
+
+class TestConsistencyTarget:
+    """Tests for the per-row penalty target."""
+
+    def test_teacher_where_present_clean_logit_elsewhere(self) -> None:
+        teacher = torch.tensor([2.0, float("nan"), -1.0])
+        clean = torch.tensor([0.5, 0.7, 0.9], requires_grad=True)
+
+        target = consistency_target(teacher, clean)
+
+        assert target.tolist() == pytest.approx([2.0, 0.7, -1.0])
+        assert not target.requires_grad, "the clean fallback must be detached"
+
+
+def _unlabelled_pairs(n: int = 64, leads: int = 12, samples: int = 64, seed: int = 9):
+    """Pairs with no ground truth: NaN labels, one teacher logit per row."""
+    rng = np.random.default_rng(seed)
+    clean = rng.normal(0, 1, (n, leads, samples)).astype(np.float16)
+    digitised = (clean + rng.normal(0, 0.3, clean.shape)).astype(np.float16)
+    labels = np.full(n, np.nan)
+    teacher = rng.normal(0, 2, n)
+    return clean, digitised, labels, teacher
+
+
+class TestUnlabelledPairs:
+    """Tests for scaling the consistency term with pairs that carry no label."""
+
+    def test_dataset_serves_nan_for_a_missing_label(self) -> None:
+        clean, digitised, labels, teacher = _unlabelled_pairs(n=4)
+
+        _, _, label, served = PairedSignalDataset(clean, digitised, labels, teacher)[1]
+
+        assert torch.isnan(label)
+        assert served.item() == pytest.approx(teacher[1])
+
+    def test_unlabelled_rows_train_only_the_consistency_term(self) -> None:
+        clean, digitised, labels, teacher = _unlabelled_pairs()
+        _, validation, validation_labels = _separable_pairs(n=16)
+
+        history, _ = train_consistency(
+            _seeded_stub(),
+            PairedSignalDataset(clean, digitised, labels, teacher),
+            validation,
+            validation_labels,
+            torch.device("cpu"),
+            ConsistencyConfig(epochs=1, batch_size=8),
+        )
+
+        assert history[0].digitised_loss == 0.0
+        assert history[0].clean_loss == 0.0
+        assert history[0].consistency_loss > 0.0
+
+    def test_unlabelled_corpus_is_mixed_in_without_drowning_supervision(self) -> None:
+        """The reason for a fixed ratio: a large unlabelled set must not empty the BCE.
+
+        Pooled into one loader, 200 unlabelled rows against 48 labelled would
+        leave most batches with no label at all. Appended at a fixed size per
+        batch, every step still carries its supervised terms.
+        """
+        clean, digitised, labels = _separable_pairs()
+        teacher = np.where(labels == 1, 3.0, -3.0)
+        model = _seeded_stub()
+        device = torch.device("cpu")
+        extra_clean, extra_digitised, extra_labels, _ = _unlabelled_pairs(n=200)
+        # As in the real script, the unlabelled teacher is what the untouched
+        # model said about the clean view.
+        extra_teacher = predict_logits(model, extra_clean, device)
+        extra = PairedSignalDataset(extra_clean, extra_digitised, extra_labels, extra_teacher)
+
+        history, best = train_consistency(
+            model,
+            PairedSignalDataset(clean, digitised, labels, teacher),
+            digitised,
+            labels,
+            device,
+            ConsistencyConfig(epochs=4, batch_size=8, unlabelled_batch_size=8),
+            unlabelled=extra,
+        )
+
+        assert all(record.digitised_loss > 0.0 for record in history)
+        assert all(np.isfinite(record.total_loss) for record in history)
+        assert best["auprc"] > 0.9
+
+    def test_an_empty_unlabelled_set_is_ignored(self) -> None:
+        clean, digitised, labels = _separable_pairs()
+        empty = PairedSignalDataset(clean[:0], digitised[:0], labels[:0])
+
+        history, _ = train_consistency(
+            _seeded_stub(),
+            PairedSignalDataset(clean, digitised, labels),
+            digitised,
+            labels,
+            torch.device("cpu"),
+            ConsistencyConfig(epochs=1, batch_size=8),
+            unlabelled=empty,
+        )
+
+        assert len(history) == 1

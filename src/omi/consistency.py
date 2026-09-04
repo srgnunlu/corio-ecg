@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from dataclasses import dataclass
 
 import numpy as np
@@ -35,6 +36,11 @@ class ConsistencyConfig:
     # The clean view keeps its own supervision so the model does not drift into
     # a digitised-only specialist that forgets the signal it started good at.
     clean_weight: float = DEFAULT_CLEAN_WEIGHT
+    # Rows drawn from an unlabelled corpus and appended to every labelled batch.
+    # A fixed ratio keeps the supervised terms present in each step; pooling
+    # both corpora in one loader would let 20K unlabelled rows swamp 460
+    # labelled ones and leave most batches with no supervision at all.
+    unlabelled_batch_size: int = 16
 
 
 @dataclass
@@ -57,6 +63,10 @@ class PairedSignalDataset(Dataset):
     recording. Without it the penalty has a degenerate solution — a model that
     outputs the same logit for everything satisfies consistency perfectly while
     discriminating nothing. A fixed target removes that escape route.
+
+    A label may be NaN, marking a recording with no OMI ground truth. Such rows
+    still carry a teacher logit and so still train photograph-invariance; only
+    the supervised terms skip them.
     """
 
     def __init__(
@@ -107,6 +117,24 @@ def consistency_penalty(
     return torch.mean((target_logits - digitised_logits) ** 2)
 
 
+def consistency_target(teacher: torch.Tensor, clean_logits: torch.Tensor) -> torch.Tensor:
+    """Per-row target for the penalty: the teacher logit where one exists.
+
+    Rows without a precomputed teacher fall back to the live clean logit,
+    detached so the penalty cannot be paid by dragging the clean side down to
+    meet the digitised one. Row-wise rather than batch-wise so a mixed batch
+    never loses its teachers because one row arrived without one.
+    """
+    return torch.where(torch.isnan(teacher), clean_logits.detach(), teacher)
+
+
+def _endless_batches(dataset: Dataset, batch_size: int) -> Iterator[list[torch.Tensor]]:
+    """Reshuffle and start over whenever the loader runs dry."""
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    while True:
+        yield from loader
+
+
 @torch.no_grad()
 def predict_logits(
     model: OmiClassifier,
@@ -153,6 +181,7 @@ def train_consistency(
     device: torch.device,
     config: ConsistencyConfig,
     positive_weight: float = 1.0,
+    unlabelled: PairedSignalDataset | None = None,
 ) -> tuple[list[ConsistencyEpoch], dict]:
     """Train the head on paired views, selecting on digitised validation AUPRC.
 
@@ -167,6 +196,10 @@ def train_consistency(
         device: Where to run.
         config: Hyperparameters.
         positive_weight: BCE positive-class weight for an unbalanced corpus.
+        unlabelled: Optional pairs with NaN labels. Each labelled batch gets
+            `config.unlabelled_batch_size` of these appended; they train
+            photograph-invariance only. An epoch is still one pass over the
+            labelled set, and the unlabelled loader cycles underneath it.
 
     Returns:
         (per-epoch history, best-epoch summary). The model is left holding the
@@ -176,6 +209,11 @@ def train_consistency(
 
     torch.manual_seed(config.seed)
     loader = DataLoader(dataset, batch_size=config.batch_size, shuffle=True)
+    unlabelled_batches = (
+        _endless_batches(unlabelled, config.unlabelled_batch_size)
+        if unlabelled is not None and len(unlabelled) > 0
+        else None
+    )
     optimiser = torch.optim.AdamW(
         model.head_parameters(),
         lr=config.learning_rate,
@@ -196,6 +234,12 @@ def train_consistency(
         batches = 0
 
         for clean, digitised, labels, teacher in loader:
+            if unlabelled_batches is not None:
+                extra = next(unlabelled_batches)
+                clean = torch.cat([clean, extra[0]])
+                digitised = torch.cat([digitised, extra[1]])
+                labels = torch.cat([labels, extra[2]])
+                teacher = torch.cat([teacher, extra[3]])
             clean = clean.to(device)
             digitised = digitised.to(device)
             labels = labels.to(device)
@@ -204,15 +248,19 @@ def train_consistency(
             clean_logits = model(clean)
             digitised_logits = model(digitised)
 
-            digitised_loss = criterion(digitised_logits, labels)
-            clean_loss = criterion(clean_logits, labels)
-            # A precomputed teacher is a fixed target; without one the clean
-            # view stands in for it, detached so the penalty cannot be paid by
-            # dragging the clean side down to meet the digitised one.
-            target = (
-                teacher if not torch.isnan(teacher).any() else clean_logits.detach()
+            # A NaN label marks an unlabelled pair. Those rows carry only the
+            # consistency term — the pairing itself is the supervision — which
+            # is what lets an open dataset with no OMI labels scale this.
+            labelled = ~torch.isnan(labels)
+            if labelled.any():
+                digitised_loss = criterion(digitised_logits[labelled], labels[labelled])
+                clean_loss = criterion(clean_logits[labelled], labels[labelled])
+            else:
+                digitised_loss = torch.zeros((), device=device)
+                clean_loss = torch.zeros((), device=device)
+            penalty = consistency_penalty(
+                consistency_target(teacher, clean_logits), digitised_logits
             )
-            penalty = consistency_penalty(target, digitised_logits)
             loss = (
                 digitised_loss
                 + config.clean_weight * clean_loss
