@@ -88,11 +88,27 @@ def main() -> None:
     )
     parser.add_argument("--negatives-per-positive", type=float, default=1.0)
     parser.add_argument("--max-records", type=int, default=None)
+    parser.add_argument(
+        "--records-from",
+        type=Path,
+        default=None,
+        help="take exactly the ecg_row_record values of another corpus manifest "
+        "instead of sampling, so a second difficulty covers the same recordings",
+    )
     parser.add_argument("--seed", type=int, default=20260802)
     args = parser.parse_args()
 
     table = load_labels(args.data_dir, args.folds_file)
-    subset = _select_records(table, args.folds, args.negatives_per_positive, args.seed)
+    if args.records_from is not None:
+        # Negatives are a random sample, so two difficulties built independently
+        # would validate on different records. Pinning the list makes the
+        # clean-vs-paper comparison a paired one.
+        wanted = set(pd.read_csv(args.records_from).ecg_row_record)
+        subset = table[
+            table.fold.isin(args.folds) & table.ecg_row_record.isin(wanted)
+        ].reset_index(drop=True)
+    else:
+        subset = _select_records(table, args.folds, args.negatives_per_positive, args.seed)
     if args.max_records:
         subset = subset.head(args.max_records)
 
