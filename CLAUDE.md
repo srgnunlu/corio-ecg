@@ -6,7 +6,7 @@ Paper ECG photograph interpretation AI pipeline. Takes a photo of a paper ECG, d
 **Pipeline:** Photo → ECG-Digitiser (image→signal) → ECGFounder (signal→diagnosis) → LLM (diagnosis→report)
 
 ## Tech Stack
-- **Language:** Python 3.11
+- **Language:** Python 3.12
 - **Environment:** mise (Python) + venv
 - **ML Framework:** PyTorch >= 2.4.0
 - **Core Models:**

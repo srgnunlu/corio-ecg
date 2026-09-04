@@ -67,6 +67,16 @@ python scripts/download_ecgfounder_eval_labels.py
 python scripts/setup_phase2.py
 ```
 
+To reproduce a reported result exactly, install the pinned versions recorded
+in `requirements.lock` instead of the loose bounds in `pyproject.toml`:
+
+```bash
+pip install -r requirements.lock
+```
+
+Regenerate it after any dependency change with
+`pip freeze --exclude-editable > requirements.lock`.
+
 ### Environment Variables
 
 Copy `.env.example` to `.env` and fill in the values:

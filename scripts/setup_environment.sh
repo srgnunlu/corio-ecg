@@ -14,13 +14,13 @@ if ! command -v mise &> /dev/null; then
     exit 1
 fi
 
-echo "[1/6] Installing Python 3.11 via mise..."
-mise install python@3.11
-mise use python@3.11
+echo "[1/6] Installing Python 3.12 via mise..."
+mise install python@3.12
+mise use python@3.12
 
 # Step 2: Create virtual environment
 echo "[2/6] Creating virtual environment..."
-python3.11 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 
 # Step 3: Upgrade pip
