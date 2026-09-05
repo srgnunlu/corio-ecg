@@ -63,13 +63,22 @@ Bunun ucuz bir karşı denemesi var: PTB-XL'in SCP kodlarını kullanarak
 MI/iskemi kayıtlarından zenginleştirilmiş bir etiketsiz küme kurmak. Etiket
 olarak değil, teacher hedeflerinin pozitif bölgeyi de örneklemesi için.
 
-## 3. Eğitim doymamış olabilir
+## 3. Eğitim doymamış mıydı? Hayır.
 
 12 epoch'luk bütçede etiketsiz kol 6 hücrenin 5'inde en iyi epoch'u 10-12'de
-buluyor (yalnız etiketli kolda 3/6). Karışım her adımda iki kat satır
-gösterdiği hâlde daha geç doyuyor; yani bütçe kısıtlayıcı olabilir. 24 epoch'lu
-tekrar iki kol için kuyruğa alındı (`results/omi/sweeps/clean_e24/`,
-`ptbxl_unlabelled_e24/`).
+bulmuştu, bu da bütçenin kısıtlayıcı olabileceğini düşündürdü. 24 epoch'lu
+tekrar (`results/omi/sweeps/clean_e24/`, `ptbxl_unlabelled_e24/`) bunu
+çürüttü:
+
+| Kol | 12 epoch | 24 epoch | Δ |
+|---|---:|---:|---:|
+| yalnız etiketli | 0.8272 | 0.8272 | 0.0000 (6/6 birebir aynı) |
+| + PTB-XL | 0.8382 | 0.8393 | +0.0011 (2/6, p=0.22) |
+
+Sabır 4 olduğu için koşular zaten en iyi epoch'tan 4 epoch sonra duruyordu;
+"12/12" bir tavan değil, sabır penceresinin sonuydu. Tek hücre kıpırdadı
+(fold 1 / seed 20260802: en iyi epoch 18, +0.005). Eğitim bütçesi bu deneyin
+darboğazı değil; kazancı sınırlayan veri ve teacher dağılımı.
 
 ## 4. Kısıtlar
 
@@ -95,10 +104,10 @@ Etiketsiz ölçekleme çalışıyor ama tek başına Aşama B'yi kapatmıyor: 0.
 bölgede; pozitif bölgedeki sıkışma bu yolla açılmıyor. Sıradaki mantıklı
 adımlar, ucuzdan pahalıya:
 
-1. 24 epoch tekrarı (kuyrukta).
+1. ~~24 epoch tekrarı~~ — yapıldı, etkisiz (bölüm 3).
 2. Batch-boyutu kontrolü (etiketli küme iki kez örneklenerek 32'lik batch).
 3. PTB-XL'den MI-zenginleştirilmiş etiketsiz küme (pozitif bölge teacher'ları).
-4. Ölçek eğrisi 500/1000/5000 — yalnız 1-3 olumlu çıkarsa.
+4. Ölçek eğrisi 500/1000/5000 — yalnız 2-3 olumlu çıkarsa.
 
 ## Tekrar üretmek için
 
