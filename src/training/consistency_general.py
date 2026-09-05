@@ -86,6 +86,9 @@ class PtbxlPairs:
     strat_fold: np.ndarray
     layout_names: np.ndarray
 
+    def __len__(self) -> int:
+        return len(self.ecg_ids)
+
     def subset(self, mask: np.ndarray) -> PtbxlPairs:
         """Rows where `mask` is true."""
         return PtbxlPairs(
