@@ -116,6 +116,7 @@ class ECGDiagnoser:
         device: torch.device | None = None,
         threshold: float = DEFAULT_THRESHOLD,
         calibration: CalibrationArtifact | None = None,
+        head_weights: Path | None = None,
     ) -> None:
         self.device = device or get_device()
         self.threshold = threshold
@@ -123,6 +124,16 @@ class ECGDiagnoser:
         self.last_estimated_hr_bpm: float | None = None
         self.last_interval_measurements: IntervalMeasurements | None = None
         self.model = self._load_model(Path(checkpoint_path))
+        # A fine-tuned 150-class projection (scripts/train_general_consistency.py)
+        # over the shipped backbone. Research use: the calibration artefact was
+        # fit to the shipped head's outputs and does not transfer.
+        self.head_weights = head_weights
+        if head_weights is not None:
+            self.model.dense.load_state_dict(
+                torch.load(head_weights, map_location=self.device, weights_only=True)
+            )
+            self.model.eval()
+            logger.info("Classification head replaced from %s", head_weights)
         logger.info(
             "ECGDiagnoser ready — device=%s, threshold=%.2f, calibration=%s",
             self.device,

@@ -16,9 +16,9 @@ import gradio as gr
 import torch
 from PIL import Image
 
+from src.calibration.tiers import TIER_PROVISIONAL, TIER_RESEARCH_ONLY, TIER_VALIDATED
 from src.measurement.intervals import IntervalMeasurements, interpret_intervals
 from src.measurement.rhythm_analysis import analyze_rhythm
-from src.calibration.tiers import TIER_PROVISIONAL, TIER_RESEARCH_ONLY, TIER_VALIDATED
 from src.pipeline.diagnose import DiagnosisResult, ECGDiagnoser, is_above_threshold
 from src.pipeline.digitize import DigitizeInfo, ECGDigitiser
 from src.report.diagnosis_reconciliation import ReconciliationResult, reconcile_diagnoses
@@ -76,11 +76,23 @@ def _get_digitiser() -> ECGDigitiser:
 
 
 def _get_diagnoser() -> ECGDiagnoser:
-    """Get or create the diagnoser singleton."""
+    """Get or create the diagnoser singleton.
+
+    CORIO_GENERAL_HEAD=<path> swaps in a fine-tuned 150-class projection for
+    side-by-side testing. Calibration is forced off with it: the artefact was
+    fit to the shipped head's outputs and would mis-threshold the new one.
+    """
     global _diagnoser
     if _diagnoser is None:
         logger.info("Loading ECGDiagnoser (first request)...")
-        _diagnoser = ECGDiagnoser(checkpoint_path=MODEL_PATH)
+        head_override = os.environ.get("CORIO_GENERAL_HEAD", "").strip()
+        if head_override:
+            os.environ["CORIO_CALIBRATION"] = "0"
+            logger.info("Research head %s active — calibration disabled", head_override)
+        _diagnoser = ECGDiagnoser(
+            checkpoint_path=MODEL_PATH,
+            head_weights=Path(head_override) if head_override else None,
+        )
     return _diagnoser
 
 
@@ -1089,7 +1101,9 @@ def main() -> None:
     app = create_app()
     app.launch(
         server_name="0.0.0.0",
-        server_port=7860,
+        # A second instance (e.g. with CORIO_GENERAL_HEAD) can sit next to the
+        # launchd one on another port.
+        server_port=int(os.environ.get("CORIO_GRADIO_PORT", "7860")),
         share=args.share,
         theme=gr.themes.Soft(primary_hue="blue", neutral_hue="slate"),
         css=CUSTOM_CSS,
