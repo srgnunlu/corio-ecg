@@ -23,6 +23,7 @@ from src.training.consistency_general import (
     HEADLINE_LABELS,
     PtbxlPairs,
     build_general_classifier,
+    column_views,
     load_ptbxl_pairs,
     macro_scorer,
     macro_separation,
@@ -121,6 +122,12 @@ def main() -> None:
         help="dense-layer state to start from (e.g. a w=0 fine-tuned head); with a "
         "frozen teacher this makes the two-stage variant: fine-tune, then agree",
     )
+    parser.add_argument(
+        "--digitised-view", choices=["tiled", "columns"], default="tiled",
+        help="tiled: the corpus signal as stored; columns: the four paper-column "
+        "inputs the segment-ensemble path serves, with the loss on their mean "
+        "logit — train the way the app scores",
+    )
     parser.add_argument("--seed", type=int, default=20260802)
     args = parser.parse_args()
 
@@ -140,7 +147,8 @@ def main() -> None:
     )
 
     device = get_device()
-    model = build_general_classifier(args.model, device)
+    use_columns = args.digitised_view == "columns"
+    model = build_general_classifier(args.model, device, column_ensemble=use_columns)
     if args.init_head is not None:
         model.backbone.dense.load_state_dict(
             torch.load(args.init_head, map_location=device, weights_only=True)
@@ -165,15 +173,26 @@ def main() -> None:
         consistency_weight=args.consistency_weight,
         clean_weight=args.clean_weight,
     )
+    # Column views make the digitised side (N, 4, 12, 5000): the model averages
+    # the four column logits, so the loss and the in-loop metric sit on the
+    # segment-ensemble quantity the app serves.
+    train_digitised = (
+        column_views(train.digitised, train.layout_names) if use_columns else train.digitised
+    )
+    validation_digitised = (
+        column_views(validation.digitised, validation.layout_names)
+        if use_columns
+        else validation.digitised
+    )
     history, best = train_consistency(
         model,
         PairedSignalDataset(
             train.clean,
-            train.digitised,
+            train_digitised,
             mask_unsupported(train.targets, train_support),
             teacher_logits,
         ),
-        validation.digitised,
+        validation_digitised,
         mask_unsupported(validation.targets, scored),
         device,
         config,
@@ -220,6 +239,7 @@ def main() -> None:
         "clean_weight": args.clean_weight,
         "learning_rate": args.learning_rate,
         "teacher": args.teacher,
+        "digitised_view": args.digitised_view,
         "init_head": str(args.init_head) if args.init_head is not None else None,
         "epochs_run": len(history),
         "best_epoch": best,

@@ -68,11 +68,47 @@ class GeneralClassifier(nn.Module):
             parameter.requires_grad = name.startswith("dense.")
 
 
-def build_general_classifier(checkpoint_path: Path, device: torch.device) -> GeneralClassifier:
+class ColumnEnsembleClassifier(GeneralClassifier):
+    """GeneralClassifier that scores a stack of paper columns the way the app does.
+
+    A 4-D batch (batch, columns, 12, samples) is one recording per row seen as
+    its printed columns; the logits are averaged over the columns so the loss
+    lands on the same quantity the web app thresholds. A 3-D batch is a plain
+    forward, so clean signals and the tiled view still work.
+    """
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Return 150 logits per recording, column-averaged for a 4-D input."""
+        if x.dim() != 4:
+            return self.backbone(x)
+        batch, columns = x.shape[:2]
+        logits = self.backbone(x.reshape(batch * columns, *x.shape[2:]))
+        return logits.reshape(batch, columns, -1).mean(dim=1)
+
+
+def build_general_classifier(
+    checkpoint_path: Path, device: torch.device, column_ensemble: bool = False
+) -> GeneralClassifier:
     """Load ECGFounder and freeze all but its projection."""
-    classifier = GeneralClassifier(load_pretrained_backbone(checkpoint_path, device)).to(device)
+    backbone = load_pretrained_backbone(checkpoint_path, device)
+    classifier = (
+        ColumnEnsembleClassifier(backbone) if column_ensemble else GeneralClassifier(backbone)
+    ).to(device)
     classifier.freeze_backbone()
     return classifier
+
+
+def column_views(signals: np.ndarray, layout_names: np.ndarray) -> np.ndarray:
+    """(N, columns, 12, samples): each digitised recording as its paper columns.
+
+    Training on these instead of the tiled signal means the head is trained on
+    exactly the inputs the segment-ensemble path serves it at inference.
+    """
+    stacks = [
+        np.stack(build_paper_column_signals(np.asarray(signal, dtype=np.float32), str(layout)))
+        for signal, layout in zip(signals, layout_names, strict=True)
+    ]
+    return np.stack(stacks).astype(np.float16)
 
 
 @dataclass
