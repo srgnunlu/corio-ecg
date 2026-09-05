@@ -17,14 +17,18 @@ from src.omi.consistency import (
 
 
 class _StubClassifier(nn.Module):
-    """Minimal stand-in for OmiClassifier: one logit from the per-lead means."""
+    """Minimal stand-in for OmiClassifier: logits from the per-lead means.
 
-    def __init__(self, leads: int = 12) -> None:
+    One output mimics the OMI head; several mimic the 150-label general head.
+    """
+
+    def __init__(self, leads: int = 12, outputs: int = 1) -> None:
         super().__init__()
-        self.head = nn.Linear(leads, 1)
+        self.head = nn.Linear(leads, outputs)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.head(x.mean(dim=-1)).squeeze(-1)
+        logits = self.head(x.mean(dim=-1))
+        return logits.squeeze(-1) if logits.shape[-1] == 1 else logits
 
     def head_parameters(self) -> list[nn.Parameter]:
         return list(self.head.parameters())
@@ -215,6 +219,73 @@ class TestConsistencyTarget:
 
         assert target.tolist() == pytest.approx([2.0, 0.7, -1.0])
         assert not target.requires_grad, "the clean fallback must be detached"
+
+    def test_a_scalar_nan_teacher_falls_back_across_a_vector_head(self) -> None:
+        """An absent teacher is served per row; a 150-output head needs it per output."""
+        teacher = torch.tensor([float("nan"), float("nan")])
+        clean = torch.tensor([[0.1, 0.2, 0.3], [1.0, 2.0, 3.0]])
+
+        target = consistency_target(teacher, clean)
+
+        assert target.shape == clean.shape
+        assert torch.equal(target, clean)
+
+
+class TestMultiLabelHead:
+    """Tests for the general (many-output) head sharing the OMI training loop."""
+
+    @staticmethod
+    def _pairs(n: int = 48):
+        """Output 0 is separable, output 1 has no ground truth at all."""
+        clean, digitised, labels = _separable_pairs(n=n)
+        missing = np.full(n, np.nan, dtype=np.float32)
+        targets = np.stack([labels.astype(np.float32), missing], axis=1)
+        return clean, digitised, targets
+
+    def test_nan_outputs_are_skipped_and_the_rest_is_learned(self) -> None:
+        clean, digitised, targets = self._pairs()
+
+        def scorer(labels: np.ndarray, scores: np.ndarray) -> tuple[float, float]:
+            from sklearn.metrics import average_precision_score, roc_auc_score
+
+            return (
+                float(average_precision_score(labels[:, 0], scores[:, 0])),
+                float(roc_auc_score(labels[:, 0], scores[:, 0])),
+            )
+
+        torch.manual_seed(0)
+        history, best = train_consistency(
+            _StubClassifier(outputs=2),
+            PairedSignalDataset(clean, digitised, targets, np.zeros_like(targets)),
+            digitised,
+            targets,
+            torch.device("cpu"),
+            ConsistencyConfig(epochs=6, batch_size=8),
+            positive_weight=torch.tensor([1.0, 1.0]),
+            validation_scorer=scorer,
+        )
+
+        assert all(np.isfinite(record.total_loss) for record in history)
+        assert history[0].digitised_loss > 0.0
+        assert best["auprc"] > 0.9
+
+    def test_per_output_positive_weights_are_accepted(self) -> None:
+        clean, digitised, targets = self._pairs(n=16)
+        torch.manual_seed(0)
+
+        history, _ = train_consistency(
+            _StubClassifier(outputs=2),
+            PairedSignalDataset(clean, digitised, targets),
+            digitised,
+            targets,
+            torch.device("cpu"),
+            ConsistencyConfig(epochs=1, batch_size=8),
+            positive_weight=torch.tensor([3.0, 1.0]),
+            validation_scorer=lambda labels, scores: (0.5, 0.5),
+        )
+
+        assert len(history) == 1
+        assert np.isfinite(history[0].total_loss)
 
 
 def _unlabelled_pairs(n: int = 64, leads: int = 12, samples: int = 64, seed: int = 9):

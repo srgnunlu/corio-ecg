@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
 import numpy as np
@@ -91,17 +91,19 @@ class PairedSignalDataset(Dataset):
     def __getitem__(
         self, index: int
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-        # Both caches are float16 on disk; the model runs in float32.
+        # Both caches are float16 on disk; the model runs in float32. Labels and
+        # teacher logits may be scalars (one OMI target) or vectors (the 150
+        # ECGFounder targets); an absent teacher is a scalar NaN either way.
         teacher = (
-            float(self.teacher_logits[index])
+            torch.as_tensor(np.asarray(self.teacher_logits[index], dtype=np.float32))
             if self.teacher_logits is not None
-            else float("nan")
+            else torch.tensor(float("nan"))
         )
         return (
             torch.from_numpy(np.asarray(self.clean[index], dtype=np.float32)),
             torch.from_numpy(np.asarray(self.digitised[index], dtype=np.float32)),
-            torch.tensor(float(self.labels[index])),
-            torch.tensor(teacher),
+            torch.as_tensor(np.asarray(self.labels[index], dtype=np.float32)),
+            teacher,
         )
 
 
@@ -125,7 +127,23 @@ def consistency_target(teacher: torch.Tensor, clean_logits: torch.Tensor) -> tor
     meet the digitised one. Row-wise rather than batch-wise so a mixed batch
     never loses its teachers because one row arrived without one.
     """
+    if teacher.dim() < clean_logits.dim():
+        # An absent teacher is served as a scalar NaN per row; broadcast it
+        # across a vector-valued head so the fallback applies to every output.
+        teacher = teacher.reshape(-1, *([1] * (clean_logits.dim() - 1))).expand_as(
+            clean_logits
+        )
     return torch.where(torch.isnan(teacher), clean_logits.detach(), teacher)
+
+
+def _binary_scorer(labels: np.ndarray, scores: np.ndarray) -> tuple[float, float]:
+    """(AUPRC, AUROC) for a one-logit head."""
+    from sklearn.metrics import average_precision_score, roc_auc_score
+
+    return (
+        float(average_precision_score(labels, scores)),
+        float(roc_auc_score(labels, scores)),
+    )
 
 
 def _endless_batches(dataset: Dataset, batch_size: int) -> Iterator[list[torch.Tensor]]:
@@ -180,8 +198,9 @@ def train_consistency(
     validation_labels: np.ndarray,
     device: torch.device,
     config: ConsistencyConfig,
-    positive_weight: float = 1.0,
+    positive_weight: float | torch.Tensor = 1.0,
     unlabelled: PairedSignalDataset | None = None,
+    validation_scorer: Callable[[np.ndarray, np.ndarray], tuple[float, float]] | None = None,
 ) -> tuple[list[ConsistencyEpoch], dict]:
     """Train the head on paired views, selecting on digitised validation AUPRC.
 
@@ -195,18 +214,20 @@ def train_consistency(
         validation_labels: Their OMI labels.
         device: Where to run.
         config: Hyperparameters.
-        positive_weight: BCE positive-class weight for an unbalanced corpus.
+        positive_weight: BCE positive-class weight for an unbalanced corpus —
+            a scalar for a one-logit head, or one weight per output for a
+            multi-label head.
         unlabelled: Optional pairs with NaN labels. Each labelled batch gets
             `config.unlabelled_batch_size` of these appended; they train
             photograph-invariance only. An epoch is still one pass over the
             labelled set, and the unlabelled loader cycles underneath it.
+        validation_scorer: (labels, scores) -> (auprc, auroc). Defaults to the
+            binary sklearn pair; a multi-label head passes its own macro scorer.
 
     Returns:
         (per-epoch history, best-epoch summary). The model is left holding the
         best epoch's weights.
     """
-    from sklearn.metrics import average_precision_score, roc_auc_score
-
     torch.manual_seed(config.seed)
     loader = DataLoader(dataset, batch_size=config.batch_size, shuffle=True)
     unlabelled_batches = (
@@ -219,9 +240,23 @@ def train_consistency(
         lr=config.learning_rate,
         weight_decay=config.weight_decay,
     )
-    criterion = nn.BCEWithLogitsLoss(
-        pos_weight=torch.tensor(positive_weight, device=device)
-    )
+    pos_weight = torch.as_tensor(positive_weight, dtype=torch.float32, device=device)
+
+    def supervised_loss(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
+        # A NaN label marks a missing target: a whole unlabelled row, or one
+        # output a multi-label corpus has no positives for. Masking element-
+        # wise covers both, and for a fully labelled one-logit head this is
+        # exactly BCEWithLogitsLoss(pos_weight=...) averaged over the batch.
+        mask = ~torch.isnan(labels)
+        if not mask.any():
+            return torch.zeros((), device=device)
+        elementwise = nn.functional.binary_cross_entropy_with_logits(
+            logits, torch.nan_to_num(labels), pos_weight=pos_weight, reduction="none"
+        )
+        return elementwise[mask].mean()
+
+    if validation_scorer is None:
+        validation_scorer = _binary_scorer
 
     history: list[ConsistencyEpoch] = []
     best = {"auprc": -1.0, "epoch": 0, "auroc": 0.0}
@@ -251,13 +286,8 @@ def train_consistency(
             # A NaN label marks an unlabelled pair. Those rows carry only the
             # consistency term — the pairing itself is the supervision — which
             # is what lets an open dataset with no OMI labels scale this.
-            labelled = ~torch.isnan(labels)
-            if labelled.any():
-                digitised_loss = criterion(digitised_logits[labelled], labels[labelled])
-                clean_loss = criterion(clean_logits[labelled], labels[labelled])
-            else:
-                digitised_loss = torch.zeros((), device=device)
-                clean_loss = torch.zeros((), device=device)
+            digitised_loss = supervised_loss(digitised_logits, labels)
+            clean_loss = supervised_loss(clean_logits, labels)
             penalty = consistency_penalty(
                 consistency_target(teacher, clean_logits), digitised_logits
             )
@@ -278,8 +308,7 @@ def train_consistency(
             batches += 1
 
         scores = predict_scores(model, validation_signals, device)
-        auprc = float(average_precision_score(validation_labels, scores))
-        auroc = float(roc_auc_score(validation_labels, scores))
+        auprc, auroc = validation_scorer(validation_labels, scores)
         history.append(
             ConsistencyEpoch(
                 epoch=epoch,
