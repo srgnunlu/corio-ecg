@@ -1,0 +1,733 @@
+{
+  "manifest": "/Users/sergenunlu/Developer/active/apps/Corio ECG/data/processed/ptbxl-corpus/clean/manifest.csv",
+  "training_records": 1608,
+  "validation_records": 390,
+  "validation_folds": [
+    9,
+    10
+  ],
+  "trainable_labels": 23,
+  "scored_labels": 19,
+  "consistency_weight": 0.0,
+  "clean_weight": 0.5,
+  "learning_rate": 0.0001,
+  "teacher": "frozen",
+  "init_head": null,
+  "epochs_run": 60,
+  "best_epoch": {
+    "auprc": 0.5487252711122396,
+    "epoch": 59,
+    "auroc": 0.8643978230488876
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "total_loss": 2.549536441222276,
+      "digitised_loss": 1.7403695589244956,
+      "clean_loss": 1.6183337893816505,
+      "consistency_loss": 5.12767239136271,
+      "validation_auprc": 0.41920001905329096,
+      "validation_auroc": 0.7766843867187044
+    },
+    {
+      "epoch": 2,
+      "total_loss": 2.1094080935610404,
+      "digitised_loss": 1.405979883552778,
+      "clean_loss": 1.4068564329997149,
+      "consistency_loss": 5.230299708866837,
+      "validation_auprc": 0.42653383585280125,
+      "validation_auroc": 0.7820085489061396
+    },
+    {
+      "epoch": 3,
+      "total_loss": 1.809057616361297,
+      "digitised_loss": 1.1893395613325703,
+      "clean_loss": 1.2394361023855682,
+      "consistency_loss": 5.411874761675844,
+      "validation_auprc": 0.4337000612903157,
+      "validation_auroc": 0.7868887188743401
+    },
+    {
+      "epoch": 4,
+      "total_loss": 1.6018389221465235,
+      "digitised_loss": 1.052457994458699,
+      "clean_loss": 1.0987618716046361,
+      "consistency_loss": 5.620829782863654,
+      "validation_auprc": 0.44021600987540477,
+      "validation_auroc": 0.7923774924424802
+    },
+    {
+      "epoch": 5,
+      "total_loss": 1.455142338677208,
+      "digitised_loss": 0.9628381239305629,
+      "clean_loss": 0.9846084271327104,
+      "consistency_loss": 5.782386184918998,
+      "validation_auprc": 0.44643204100301337,
+      "validation_auroc": 0.7980619916879734
+    },
+    {
+      "epoch": 6,
+      "total_loss": 1.3513860914966849,
+      "digitised_loss": 0.9049363266123404,
+      "clean_loss": 0.8928995297686888,
+      "consistency_loss": 5.9036544809247005,
+      "validation_auprc": 0.45381095469685073,
+      "validation_auroc": 0.8034872705997147
+    },
+    {
+      "epoch": 7,
+      "total_loss": 1.2690418940959591,
+      "digitised_loss": 0.8575223465957263,
+      "clean_loss": 0.8230391000166978,
+      "consistency_loss": 5.990710924167444,
+      "validation_auprc": 0.4591533090283079,
+      "validation_auroc": 0.8089333922847566
+    },
+    {
+      "epoch": 8,
+      "total_loss": 1.2027940992081518,
+      "digitised_loss": 0.82360707710285,
+      "clean_loss": 0.7583740517349526,
+      "consistency_loss": 6.0505033955715675,
+      "validation_auprc": 0.4660798290487261,
+      "validation_auroc": 0.8134318333157009
+    },
+    {
+      "epoch": 9,
+      "total_loss": 1.154776410891278,
+      "digitised_loss": 0.7982388363026156,
+      "clean_loss": 0.7130751533083396,
+      "consistency_loss": 6.072456987777559,
+      "validation_auprc": 0.4732267055044139,
+      "validation_auroc": 0.817591572460368
+    },
+    {
+      "epoch": 10,
+      "total_loss": 1.114941407548319,
+      "digitised_loss": 0.7778100209070904,
+      "clean_loss": 0.6742627687088334,
+      "consistency_loss": 6.108758633679683,
+      "validation_auprc": 0.47770570377578236,
+      "validation_auroc": 0.8214580118564017
+    },
+    {
+      "epoch": 11,
+      "total_loss": 1.08152969874958,
+      "digitised_loss": 0.7599953734638667,
+      "clean_loss": 0.6430686557351952,
+      "consistency_loss": 6.119810194072157,
+      "validation_auprc": 0.4815845918896381,
+      "validation_auroc": 0.8252559666845968
+    },
+    {
+      "epoch": 12,
+      "total_loss": 1.0530033949578161,
+      "digitised_loss": 0.744375860041911,
+      "clean_loss": 0.6172550724874629,
+      "consistency_loss": 6.101844598751257,
+      "validation_auprc": 0.4860203256839452,
+      "validation_auroc": 0.8285749488134185
+    },
+    {
+      "epoch": 13,
+      "total_loss": 1.0283542712136071,
+      "digitised_loss": 0.7301886683643455,
+      "clean_loss": 0.5963312045182332,
+      "consistency_loss": 6.095326593606779,
+      "validation_auprc": 0.4905447651199808,
+      "validation_auroc": 0.8315181315652505
+    },
+    {
+      "epoch": 14,
+      "total_loss": 1.0046342434269366,
+      "digitised_loss": 0.7168105811175733,
+      "clean_loss": 0.5756473204877117,
+      "consistency_loss": 6.0838974065119675,
+      "validation_auprc": 0.49471488726703794,
+      "validation_auroc": 0.8346182825393867
+    },
+    {
+      "epoch": 15,
+      "total_loss": 0.9882793069475948,
+      "digitised_loss": 0.7065501230778081,
+      "clean_loss": 0.563458376886821,
+      "consistency_loss": 6.069631052489328,
+      "validation_auprc": 0.499682954580379,
+      "validation_auroc": 0.8373301730031046
+    },
+    {
+      "epoch": 16,
+      "total_loss": 0.964605186245229,
+      "digitised_loss": 0.6923277800035949,
+      "clean_loss": 0.5445548144012394,
+      "consistency_loss": 6.060144311130637,
+      "validation_auprc": 0.503208011444492,
+      "validation_auroc": 0.8398656960095767
+    },
+    {
+      "epoch": 17,
+      "total_loss": 0.9526182708173695,
+      "digitised_loss": 0.6846709493363258,
+      "clean_loss": 0.5358946394212175,
+      "consistency_loss": 6.050531127665303,
+      "validation_auprc": 0.5070915913818791,
+      "validation_auroc": 0.8419455982150958
+    },
+    {
+      "epoch": 18,
+      "total_loss": 0.9320693694718993,
+      "digitised_loss": 0.6717892820292181,
+      "clean_loss": 0.5205601717871015,
+      "consistency_loss": 6.022910330555226,
+      "validation_auprc": 0.5084795549203113,
+      "validation_auroc": 0.8438173751215466
+    },
+    {
+      "epoch": 19,
+      "total_loss": 0.9170366183365926,
+      "digitised_loss": 0.6618271266469861,
+      "clean_loss": 0.5104189872151554,
+      "consistency_loss": 6.013461363197553,
+      "validation_auprc": 0.5124048746587233,
+      "validation_auroc": 0.8455112394701403
+    },
+    {
+      "epoch": 20,
+      "total_loss": 0.9099408096016044,
+      "digitised_loss": 0.657468171107887,
+      "clean_loss": 0.5049452753645358,
+      "consistency_loss": 5.995248067497027,
+      "validation_auprc": 0.5164152196118511,
+      "validation_auroc": 0.8471461985722856
+    },
+    {
+      "epoch": 21,
+      "total_loss": 0.8908361718796267,
+      "digitised_loss": 0.6440801449341349,
+      "clean_loss": 0.4935120493173599,
+      "consistency_loss": 5.9775833564229535,
+      "validation_auprc": 0.5195810129366581,
+      "validation_auroc": 0.8486134060515936
+    },
+    {
+      "epoch": 22,
+      "total_loss": 0.8788577731293027,
+      "digitised_loss": 0.6358830164564718,
+      "clean_loss": 0.48594951968972044,
+      "consistency_loss": 5.962852563008224,
+      "validation_auprc": 0.5223336803739732,
+      "validation_auroc": 0.8501586603337947
+    },
+    {
+      "epoch": 23,
+      "total_loss": 0.8679981579875001,
+      "digitised_loss": 0.6285972202768421,
+      "clean_loss": 0.4788018709952288,
+      "consistency_loss": 5.961797242117401,
+      "validation_auprc": 0.5244806212152832,
+      "validation_auroc": 0.8515266197917262
+    },
+    {
+      "epoch": 24,
+      "total_loss": 0.8564344653398683,
+      "digitised_loss": 0.6199488790318517,
+      "clean_loss": 0.47297116937023576,
+      "consistency_loss": 5.931600452649711,
+      "validation_auprc": 0.5270745519780775,
+      "validation_auroc": 0.8527267585727071
+    },
+    {
+      "epoch": 25,
+      "total_loss": 0.8491673634784056,
+      "digitised_loss": 0.6144093950786212,
+      "clean_loss": 0.46951593163579997,
+      "consistency_loss": 5.929208519435165,
+      "validation_auprc": 0.5282761886917399,
+      "validation_auroc": 0.8535655378591133
+    },
+    {
+      "epoch": 26,
+      "total_loss": 0.8362881594365186,
+      "digitised_loss": 0.60587145756967,
+      "clean_loss": 0.46083340358616104,
+      "consistency_loss": 5.9237363645345855,
+      "validation_auprc": 0.5298508688668206,
+      "validation_auroc": 0.8544286139606921
+    },
+    {
+      "epoch": 27,
+      "total_loss": 0.8278107218223043,
+      "digitised_loss": 0.5991996458851465,
+      "clean_loss": 0.45722215821837436,
+      "consistency_loss": 5.887645438165948,
+      "validation_auprc": 0.5305857703537875,
+      "validation_auroc": 0.8552360073687456
+    },
+    {
+      "epoch": 28,
+      "total_loss": 0.8172918074201829,
+      "digitised_loss": 0.5919755080548843,
+      "clean_loss": 0.4506326018288584,
+      "consistency_loss": 5.907291412353516,
+      "validation_auprc": 0.533566416151935,
+      "validation_auroc": 0.8562223222620333
+    },
+    {
+      "epoch": 29,
+      "total_loss": 0.8104014134052957,
+      "digitised_loss": 0.5870063493747523,
+      "clean_loss": 0.44679013735587053,
+      "consistency_loss": 5.891900643263713,
+      "validation_auprc": 0.5348578987444528,
+      "validation_auroc": 0.856932796846017
+    },
+    {
+      "epoch": 30,
+      "total_loss": 0.8007953951854517,
+      "digitised_loss": 0.5799068935436777,
+      "clean_loss": 0.44177701095543287,
+      "consistency_loss": 5.879050391735417,
+      "validation_auprc": 0.5349724236871344,
+      "validation_auroc": 0.8575116906837685
+    },
+    {
+      "epoch": 31,
+      "total_loss": 0.7935325580068154,
+      "digitised_loss": 0.5745529228507882,
+      "clean_loss": 0.43795927178741684,
+      "consistency_loss": 5.865077925200509,
+      "validation_auprc": 0.5362870314325293,
+      "validation_auroc": 0.8580191028434239
+    },
+    {
+      "epoch": 32,
+      "total_loss": 0.7883600132300121,
+      "digitised_loss": 0.5706348422140178,
+      "clean_loss": 0.4354503436548875,
+      "consistency_loss": 5.857759810910366,
+      "validation_auprc": 0.5372727788095416,
+      "validation_auroc": 0.8584980730050581
+    },
+    {
+      "epoch": 33,
+      "total_loss": 0.7782845075177675,
+      "digitised_loss": 0.5630927690775087,
+      "clean_loss": 0.43038347186428483,
+      "consistency_loss": 5.842093774587801,
+      "validation_auprc": 0.5380388391132463,
+      "validation_auroc": 0.8589206509500469
+    },
+    {
+      "epoch": 34,
+      "total_loss": 0.7721102559330439,
+      "digitised_loss": 0.5586208140495981,
+      "clean_loss": 0.42697888111123944,
+      "consistency_loss": 5.836186777247061,
+      "validation_auprc": 0.5385841286990002,
+      "validation_auroc": 0.8596047955334708
+    },
+    {
+      "epoch": 35,
+      "total_loss": 0.7649766153628283,
+      "digitised_loss": 0.5529559773973899,
+      "clean_loss": 0.42404127843899303,
+      "consistency_loss": 5.829438034850772,
+      "validation_auprc": 0.5388506134482891,
+      "validation_auroc": 0.8598158399588198
+    },
+    {
+      "epoch": 36,
+      "total_loss": 0.7593996716607915,
+      "digitised_loss": 0.5491974280022158,
+      "clean_loss": 0.42040448289106386,
+      "consistency_loss": 5.831444461746972,
+      "validation_auprc": 0.5399392002678094,
+      "validation_auroc": 0.8602943452026001
+    },
+    {
+      "epoch": 37,
+      "total_loss": 0.7522915345017273,
+      "digitised_loss": 0.5438757001763523,
+      "clean_loss": 0.41683167956843237,
+      "consistency_loss": 5.798728154437376,
+      "validation_auprc": 0.5409555723229073,
+      "validation_auroc": 0.8606671145316556
+    },
+    {
+      "epoch": 38,
+      "total_loss": 0.7480874796314995,
+      "digitised_loss": 0.5409751746914174,
+      "clean_loss": 0.41422461120799037,
+      "consistency_loss": 5.815833304188039,
+      "validation_auprc": 0.5406551957290738,
+      "validation_auroc": 0.8608913878861161
+    },
+    {
+      "epoch": 39,
+      "total_loss": 0.7411189934994915,
+      "digitised_loss": 0.535542745696436,
+      "clean_loss": 0.4111524969339371,
+      "consistency_loss": 5.806750764941225,
+      "validation_auprc": 0.5407477884241694,
+      "validation_auroc": 0.8612278254237302
+    },
+    {
+      "epoch": 40,
+      "total_loss": 0.7341934961847739,
+      "digitised_loss": 0.5302227461101985,
+      "clean_loss": 0.40794150413262964,
+      "consistency_loss": 5.8112144611849645,
+      "validation_auprc": 0.5410854233400189,
+      "validation_auroc": 0.8613869126156144
+    },
+    {
+      "epoch": 41,
+      "total_loss": 0.7258037325769368,
+      "digitised_loss": 0.5241866426007582,
+      "clean_loss": 0.4032341756738058,
+      "consistency_loss": 5.79646633639194,
+      "validation_auprc": 0.5403272740133527,
+      "validation_auroc": 0.8616147393085706
+    },
+    {
+      "epoch": 42,
+      "total_loss": 0.7229556603596943,
+      "digitised_loss": 0.5217811267564793,
+      "clean_loss": 0.402349064255705,
+      "consistency_loss": 5.784388003963055,
+      "validation_auprc": 0.5412495332155717,
+      "validation_auroc": 0.8618355080689319
+    },
+    {
+      "epoch": 43,
+      "total_loss": 0.7176091378868217,
+      "digitised_loss": 0.5176361601541538,
+      "clean_loss": 0.3999459525146107,
+      "consistency_loss": 5.774681015770034,
+      "validation_auprc": 0.5417909849136815,
+      "validation_auroc": 0.8622011974310839
+    },
+    {
+      "epoch": 44,
+      "total_loss": 0.7111494529365313,
+      "digitised_loss": 0.5130183006277179,
+      "clean_loss": 0.39626230225704684,
+      "consistency_loss": 5.76627778534842,
+      "validation_auprc": 0.5415798130759576,
+      "validation_auroc": 0.8623215892231513
+    },
+    {
+      "epoch": 45,
+      "total_loss": 0.7060472248214307,
+      "digitised_loss": 0.5090462299856809,
+      "clean_loss": 0.3940019921796157,
+      "consistency_loss": 5.760758791819657,
+      "validation_auprc": 0.5425224648263416,
+      "validation_auroc": 0.8626212588972425
+    },
+    {
+      "epoch": 46,
+      "total_loss": 0.7005164714732973,
+      "digitised_loss": 0.5050690064925959,
+      "clean_loss": 0.39089492405995285,
+      "consistency_loss": 5.752361009616663,
+      "validation_auprc": 0.5430008703242785,
+      "validation_auroc": 0.8628543783869659
+    },
+    {
+      "epoch": 47,
+      "total_loss": 0.6957825608182662,
+      "digitised_loss": 0.501577364926291,
+      "clean_loss": 0.38841039030858787,
+      "consistency_loss": 5.760999825921389,
+      "validation_auprc": 0.5439224311944413,
+      "validation_auroc": 0.863122837950362
+    },
+    {
+      "epoch": 48,
+      "total_loss": 0.6909876312359725,
+      "digitised_loss": 0.49805410457129523,
+      "clean_loss": 0.38586705539486194,
+      "consistency_loss": 5.738625474495463,
+      "validation_auprc": 0.5446131128454088,
+      "validation_auroc": 0.8633420383906403
+    },
+    {
+      "epoch": 49,
+      "total_loss": 0.6870061946977483,
+      "digitised_loss": 0.49473170183672766,
+      "clean_loss": 0.3845489842466789,
+      "consistency_loss": 5.74832822308682,
+      "validation_auprc": 0.5444621876877248,
+      "validation_auroc": 0.8632688066036343
+    },
+    {
+      "epoch": 50,
+      "total_loss": 0.681652428195028,
+      "digitised_loss": 0.49099112604514206,
+      "clean_loss": 0.3813225927181763,
+      "consistency_loss": 5.733869146592546,
+      "validation_auprc": 0.545924221538936,
+      "validation_auroc": 0.8636970781191721
+    },
+    {
+      "epoch": 51,
+      "total_loss": 0.6760758217608575,
+      "digitised_loss": 0.4866822391453356,
+      "clean_loss": 0.3787871652310438,
+      "consistency_loss": 5.732041004860755,
+      "validation_auprc": 0.5457852009724842,
+      "validation_auroc": 0.863842996047851
+    },
+    {
+      "epoch": 52,
+      "total_loss": 0.6724801302546322,
+      "digitised_loss": 0.4837248750252299,
+      "clean_loss": 0.3775105095735871,
+      "consistency_loss": 5.732096445442426,
+      "validation_auprc": 0.546156009115882,
+      "validation_auroc": 0.8638303965540602
+    },
+    {
+      "epoch": 53,
+      "total_loss": 0.6670056817555191,
+      "digitised_loss": 0.47976558161253974,
+      "clean_loss": 0.37448019600740756,
+      "consistency_loss": 5.734151816604161,
+      "validation_auprc": 0.5463273185694065,
+      "validation_auroc": 0.8639541932895323
+    },
+    {
+      "epoch": 54,
+      "total_loss": 0.665721193103507,
+      "digitised_loss": 0.4779705301959916,
+      "clean_loss": 0.3755013258150308,
+      "consistency_loss": 5.728820456136571,
+      "validation_auprc": 0.5471239363079689,
+      "validation_auroc": 0.8641542153888623
+    },
+    {
+      "epoch": 55,
+      "total_loss": 0.6586542521963025,
+      "digitised_loss": 0.4732739397204748,
+      "clean_loss": 0.37076062804991655,
+      "consistency_loss": 5.721955219117722,
+      "validation_auprc": 0.5476369598693209,
+      "validation_auroc": 0.8641644434975138
+    },
+    {
+      "epoch": 56,
+      "total_loss": 0.6552744796960661,
+      "digitised_loss": 0.470735092859457,
+      "clean_loss": 0.3690787750010443,
+      "consistency_loss": 5.710891388430454,
+      "validation_auprc": 0.5482666437864723,
+      "validation_auroc": 0.8643008891120557
+    },
+    {
+      "epoch": 57,
+      "total_loss": 0.6502338998978681,
+      "digitised_loss": 0.46718499595575996,
+      "clean_loss": 0.3660978061137813,
+      "consistency_loss": 5.715720058667777,
+      "validation_auprc": 0.5485872399441799,
+      "validation_auroc": 0.8641951454487734
+    },
+    {
+      "epoch": 58,
+      "total_loss": 0.6485847187514352,
+      "digitised_loss": 0.46602862129117,
+      "clean_loss": 0.36511219447792165,
+      "consistency_loss": 5.709171266839055,
+      "validation_auprc": 0.548664461725856,
+      "validation_auroc": 0.8644116680337838
+    },
+    {
+      "epoch": 59,
+      "total_loss": 0.641981972031074,
+      "digitised_loss": 0.460896905696038,
+      "clean_loss": 0.3621701382764495,
+      "consistency_loss": 5.709723146835176,
+      "validation_auprc": 0.5487252711122396,
+      "validation_auroc": 0.8643978230488876
+    },
+    {
+      "epoch": 60,
+      "total_loss": 0.6381254830572864,
+      "digitised_loss": 0.45796650412059065,
+      "clean_loss": 0.36031795374237663,
+      "consistency_loss": 5.703624168244919,
+      "validation_auprc": 0.548672927294431,
+      "validation_auroc": 0.8644902435810145
+    }
+  ],
+  "baseline": {
+    "tiled": {
+      "auroc": 0.7688769179781925,
+      "auprc": 0.40541353780259554,
+      "separation": 0.24779118597507477,
+      "per_label_auroc": {
+        "NORMAL ECG": 0.7614691388276293,
+        "SINUS RHYTHM": 0.6629960058232858,
+        "ATRIAL FIBRILLATION": 0.7753424657534247,
+        "SINUS TACHYCARDIA": 0.7149561314017547,
+        "PREMATURE VENTRICULAR COMPLEXES": 0.7987837837837837,
+        "RIGHT BUNDLE BRANCH BLOCK": 0.9727432815251512,
+        "SEPTAL INFARCT": 0.8820994673529235,
+        "LOW VOLTAGE QRS": 0.5888157894736842,
+        "LEFT BUNDLE BRANCH BLOCK": 0.9558647157591749,
+        "LATERAL INFARCT": 0.8048648648648649,
+        "LEFT VENTRICULAR HYPERTROPHY": 0.7920747596369845,
+        "LEFT ANTERIOR FASCICULAR BLOCK": 0.9378332968076558,
+        "ANTEROSEPTAL INFARCT": 0.9230354898557663,
+        "ANTEROLATERAL INFARCT": 0.9171052631578948,
+        "INFERIOR INFARCT": 0.6937202600361906,
+        "WITH QRS WIDENING": 0.527534113060429,
+        "WITH 1ST DEGREE AV BLOCK": 0.6095945945945946,
+        "ANTEROLATERAL LEADS": 0.7160526315789474,
+        "NONSPECIFIC INTRAVENTRICULAR BLOCK": 0.5737753882915173
+      }
+    },
+    "segment_ensemble": {
+      "auroc": 0.8643220672018459,
+      "auprc": 0.5547336358492215,
+      "separation": 0.2701592445373535,
+      "per_label_auroc": {
+        "NORMAL ECG": 0.8537123254104386,
+        "SINUS RHYTHM": 0.7526970025010267,
+        "ATRIAL FIBRILLATION": 0.9848767123287672,
+        "SINUS TACHYCARDIA": 0.9861252805549888,
+        "PREMATURE VENTRICULAR COMPLEXES": 0.953918918918919,
+        "RIGHT BUNDLE BRANCH BLOCK": 0.9684557078324785,
+        "SEPTAL INFARCT": 0.9025674786043448,
+        "LOW VOLTAGE QRS": 0.5248538011695907,
+        "LEFT BUNDLE BRANCH BLOCK": 0.9781722235548094,
+        "LATERAL INFARCT": 0.879054054054054,
+        "LEFT VENTRICULAR HYPERTROPHY": 0.8518285560248,
+        "LEFT ANTERIOR FASCICULAR BLOCK": 0.9640587332895025,
+        "ANTEROSEPTAL INFARCT": 0.9312945119396733,
+        "ANTEROLATERAL INFARCT": 0.9660526315789474,
+        "INFERIOR INFARCT": 0.8337913008511494,
+        "WITH QRS WIDENING": 0.5704800194931774,
+        "WITH 1ST DEGREE AV BLOCK": 0.9145945945945945,
+        "ANTEROLATERAL LEADS": 0.875,
+        "NONSPECIFIC INTRAVENTRICULAR BLOCK": 0.7305854241338112
+      }
+    },
+    "clean": {
+      "auroc": 0.8774280749378006,
+      "auprc": 0.587880873917812,
+      "separation": 0.4325604736804962,
+      "per_label_auroc": {
+        "NORMAL ECG": 0.8580685561817637,
+        "SINUS RHYTHM": 0.7870394564933367,
+        "ATRIAL FIBRILLATION": 0.993972602739726,
+        "SINUS TACHYCARDIA": 0.9963272801469087,
+        "PREMATURE VENTRICULAR COMPLEXES": 0.9925675675675675,
+        "RIGHT BUNDLE BRANCH BLOCK": 0.9907357782711891,
+        "SEPTAL INFARCT": 0.9183074989526602,
+        "LOW VOLTAGE QRS": 0.5524488304093567,
+        "LEFT BUNDLE BRANCH BLOCK": 0.9925641640681219,
+        "LATERAL INFARCT": 0.9278378378378379,
+        "LEFT VENTRICULAR HYPERTROPHY": 0.9019678317908169,
+        "LEFT ANTERIOR FASCICULAR BLOCK": 0.9681496091752503,
+        "ANTEROSEPTAL INFARCT": 0.9265066730504519,
+        "ANTEROLATERAL INFARCT": 0.8818421052631579,
+        "INFERIOR INFARCT": 0.8460558943770525,
+        "WITH QRS WIDENING": 0.6048976608187134,
+        "WITH 1ST DEGREE AV BLOCK": 0.9133783783783783,
+        "ANTEROLATERAL LEADS": 0.8857894736842106,
+        "NONSPECIFIC INTRAVENTRICULAR BLOCK": 0.7326762246117084
+      }
+    },
+    "auroc": 0.7688769179781925,
+    "auprc": 0.40541353780259554
+  },
+  "trained": {
+    "tiled": {
+      "auroc": 0.8643978230488876,
+      "auprc": 0.5487252711122396,
+      "separation": 0.6034274101257324,
+      "per_label_auroc": {
+        "NORMAL ECG": 0.8838519970595442,
+        "SINUS RHYTHM": 0.8186195826645265,
+        "ATRIAL FIBRILLATION": 0.918027397260274,
+        "SINUS TACHYCARDIA": 0.9667414813303407,
+        "PREMATURE VENTRICULAR COMPLEXES": 0.9183783783783783,
+        "RIGHT BUNDLE BRANCH BLOCK": 0.9858356940509916,
+        "SEPTAL INFARCT": 0.9526602429828236,
+        "LOW VOLTAGE QRS": 0.7302631578947367,
+        "LEFT BUNDLE BRANCH BLOCK": 0.9695370592468218,
+        "LATERAL INFARCT": 0.8244594594594594,
+        "LEFT VENTRICULAR HYPERTROPHY": 0.8155270015275407,
+        "LEFT ANTERIOR FASCICULAR BLOCK": 0.9671268902038133,
+        "ANTEROSEPTAL INFARCT": 0.9529594829133999,
+        "ANTEROLATERAL INFARCT": 0.9352631578947369,
+        "INFERIOR INFARCT": 0.8015548555726828,
+        "WITH QRS WIDENING": 0.7255116959064327,
+        "WITH 1ST DEGREE AV BLOCK": 0.7356756756756757,
+        "ANTEROLATERAL LEADS": 0.8402631578947368,
+        "NONSPECIFIC INTRAVENTRICULAR BLOCK": 0.6813022700119474
+      }
+    },
+    "segment_ensemble": {
+      "auroc": 0.8897464271450299,
+      "auprc": 0.6044876148759231,
+      "separation": 0.42282721400260925,
+      "per_label_auroc": {
+        "NORMAL ECG": 0.9209344115004492,
+        "SINUS RHYTHM": 0.75736309679346,
+        "ATRIAL FIBRILLATION": 0.9823561643835617,
+        "SINUS TACHYCARDIA": 0.9881656804733727,
+        "PREMATURE VENTRICULAR COMPLEXES": 0.9735135135135136,
+        "RIGHT BUNDLE BRANCH BLOCK": 0.9795574611438634,
+        "SEPTAL INFARCT": 0.9443413729128014,
+        "LOW VOLTAGE QRS": 0.7037646198830408,
+        "LEFT BUNDLE BRANCH BLOCK": 0.9884864475893499,
+        "LATERAL INFARCT": 0.851891891891892,
+        "LEFT VENTRICULAR HYPERTROPHY": 0.8365531494294187,
+        "LEFT ANTERIOR FASCICULAR BLOCK": 0.9636204251588867,
+        "ANTEROSEPTAL INFARCT": 0.9429648692321503,
+        "ANTEROLATERAL INFARCT": 0.9436842105263159,
+        "INFERIOR INFARCT": 0.8616714697406339,
+        "WITH QRS WIDENING": 0.7083942495126706,
+        "WITH 1ST DEGREE AV BLOCK": 0.9404054054054054,
+        "ANTEROLATERAL LEADS": 0.8939473684210526,
+        "NONSPECIFIC INTRAVENTRICULAR BLOCK": 0.7235663082437277
+      }
+    },
+    "clean": {
+      "auroc": 0.9094680047579408,
+      "auprc": 0.650944744392274,
+      "separation": 0.7770245671272278,
+      "per_label_auroc": {
+        "NORMAL ECG": 0.9179395028451631,
+        "SINUS RHYTHM": 0.8973459255664638,
+        "ATRIAL FIBRILLATION": 0.9930958904109589,
+        "SINUS TACHYCARDIA": 0.9953070801877169,
+        "PREMATURE VENTRICULAR COMPLEXES": 0.9922972972972973,
+        "RIGHT BUNDLE BRANCH BLOCK": 0.991271724982773,
+        "SEPTAL INFARCT": 0.9584056496498894,
+        "LOW VOLTAGE QRS": 0.7148513645224172,
+        "LEFT BUNDLE BRANCH BLOCK": 0.9976013432477813,
+        "LATERAL INFARCT": 0.8771621621621621,
+        "LEFT VENTRICULAR HYPERTROPHY": 0.9069098751010873,
+        "LEFT ANTERIOR FASCICULAR BLOCK": 0.9732632040324347,
+        "ANTEROSEPTAL INFARCT": 0.9587647375665809,
+        "ANTEROLATERAL INFARCT": 0.9110526315789474,
+        "INFERIOR INFARCT": 0.8849272836941224,
+        "WITH QRS WIDENING": 0.7259381091617935,
+        "WITH 1ST DEGREE AV BLOCK": 0.960945945945946,
+        "ANTEROLATERAL LEADS": 0.8989473684210526,
+        "NONSPECIFIC INTRAVENTRICULAR BLOCK": 0.7238649940262843
+      }
+    },
+    "auroc": 0.8643978230488876,
+    "auprc": 0.5487252711122396
+  },
+  "median_score_separation": {
+    "before": 0.24779118597507477,
+    "after": 0.6034274101257324
+  },
+  "head_weights": "models/general/variants/ref_w0_e60.pt"
+}
