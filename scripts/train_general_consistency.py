@@ -109,6 +109,18 @@ def main() -> None:
     )
     parser.add_argument("--consistency-weight", type=float, default=1.0)
     parser.add_argument("--clean-weight", type=float, default=0.5)
+    parser.add_argument(
+        "--teacher", choices=["frozen", "live"], default="frozen",
+        help="frozen: clean logits of the model as initialised, computed once; "
+        "live: the model's own current clean logits, detached, each step. The "
+        "shipped head is a weaker clean model than the fine-tuned one, so a "
+        "frozen teacher anchors the digitised view to a stale target",
+    )
+    parser.add_argument(
+        "--init-head", type=Path, default=None,
+        help="dense-layer state to start from (e.g. a w=0 fine-tuned head); with a "
+        "frozen teacher this makes the two-stage variant: fine-tune, then agree",
+    )
     parser.add_argument("--seed", type=int, default=20260802)
     args = parser.parse_args()
 
@@ -129,13 +141,21 @@ def main() -> None:
 
     device = get_device()
     model = build_general_classifier(args.model, device)
+    if args.init_head is not None:
+        model.backbone.dense.load_state_dict(
+            torch.load(args.init_head, map_location=device, weights_only=True)
+        )
+        print(f"Head initialised from {args.init_head}")
 
     baseline = _evaluate(model, validation, scored, device)
-    print("\nBefore training (ECGFounder as shipped):")
+    print("\nBefore training (model as initialised):")
     _print_views("before", baseline)
 
-    # Frozen targets from the untouched model on the clean recordings.
-    teacher_logits = predict_logits(model, train.clean, device)
+    # Frozen targets from the model as initialised on the clean recordings; a
+    # live teacher passes no targets and falls back to detached clean logits.
+    teacher_logits = (
+        predict_logits(model, train.clean, device) if args.teacher == "frozen" else None
+    )
 
     config = ConsistencyConfig(
         epochs=args.epochs,
@@ -199,6 +219,8 @@ def main() -> None:
         "consistency_weight": args.consistency_weight,
         "clean_weight": args.clean_weight,
         "learning_rate": args.learning_rate,
+        "teacher": args.teacher,
+        "init_head": str(args.init_head) if args.init_head is not None else None,
         "epochs_run": len(history),
         "best_epoch": best,
         "history": [vars(record) for record in history],
