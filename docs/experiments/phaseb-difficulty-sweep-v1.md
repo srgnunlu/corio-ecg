@@ -1,130 +1,158 @@
-<!-- Purpose: Phase B step 7 — does the consistency-training gain survive when the paper render is degraded (moderate, then hard)? -->
+<!-- Purpose: Phase B step 7 — does the consistency-training gain survive when the paper render is degraded (moderate and hard regimes, same recordings)? -->
 
-# Aşama B — zorluk taraması: `moderate` render (v1)
+# Aşama B — zorluk taraması: `moderate` ve `hard` render (v1)
 
-**Tarih:** 2026-09-04 (eşleşmemiş korpus), 2026-09-05 (eşleşmiş korpus)
-**Girdi:** `data/processed/omi-corpus/moderate/manifest_matched.csv` — clean korpusla **aynı 920 kayıt** (460 OMI, 2 fold × 460), ECG-Image-Kit `moderate`: gürültü 25, ±2° dönme, %1 kırpma, 8000 K renk sıcaklığı
-**Model:** v2a (Gate 2 kazananı), backbone frozen, yalnız head
-**Çıktı:** `results/omi/sweeps/moderate_matched/` (12 JSON, asıl sonuç); `results/omi/sweeps/moderate/` (eşleşmemiş ilk deneme, bölüm 4); karşılaştırma `results/omi/sweeps/clean/`
-**Araçlar:** `scripts/build_digitised_corpus.py --records-from`, `scripts/run_consistency_sweep.sh`, `scripts/summarise_consistency_sweep.py`
+**Tarih:** 2026-09-04 → 2026-09-05
+**Girdi:** clean korpusla **aynı 920 kayıt** (460 OMI, 2 fold × 460) üç render rejiminde:
+`clean` (200 dpi, yalnız grid), `moderate` (gürültü 25, ±2° dönme, %1 kırpma, 8000 K),
+`hard` (150 dpi, gürültü 50, ±8° dönme, %3 kırpma, rastgele grid rengi). Manifestler
+`data/processed/omi-corpus/{clean/manifest,moderate/manifest_matched,hard/manifest_matched}.csv`
+**Model:** v2a (Gate 2 kazananı), backbone frozen, yalnız head; 2 fold × {w=0, w=1} × 3 seed
+**Çıktı:** `results/omi/sweeps/{clean,moderate_matched,hard}/` (12'şer JSON); `results/omi/sweeps/moderate/` eşleşmemiş ilk deneme (bölüm 5)
+**Araçlar:** `scripts/build_digitised_corpus.py --records-from [--render-only] [--no-dewarping-retry]`, `scripts/run_consistency_sweep.sh`, `scripts/summarise_consistency_sweep.py`
 
-## Özet: kazanç `moderate`'ta tamamen korunuyor
+## Özet: kazanç üç rejimde de aynı büyüklükte, 18/18 hücre lehte
 
-Tutarlılık eğitimi v1 yalnız `clean` render üzerinde ölçülmüştü. Soru: render
-bozulunca tutarlılık teriminin ablasyona üstünlüğü kalıyor mu, yoksa temiz
-render'ın artefaktı mıydı? Aynı 920 kayıt, aynı fold'lar, aynı seed'ler:
+Tutarlılık eğitimi v1 yalnız `clean` render'da ölçülmüştü. Soru: render bozulunca
+tutarlılık teriminin ablasyona üstünlüğü kalıyor mu? Aynı kayıtlar, aynı fold'lar,
+aynı seed'ler:
 
-| Kol (6 hücre) | clean AUROC | moderate AUROC | clean ayrım | moderate ayrım |
-|---|---:|---:|---:|---:|
-| v2a başlangıç (digitize sinyalde) | 0.7590 ±0.001 | 0.7565 ±0.000 | 0.387 | 0.380 |
-| + digitize eğitim (w=0) | 0.8033 ±0.011 | 0.7993 ±0.010 | 0.413 ±0.118 | 0.387 ±0.053 |
-| + tutarlılık terimi (w=1) | **0.8272** ±0.011 | **0.8251** ±0.003 | 0.575 ±0.040 | **0.580** ±0.025 |
+| Kol (6 hücre) | clean | moderate | hard |
+|---|---:|---:|---:|
+| v2a başlangıç, AUROC | 0.7590 ±0.001 | 0.7565 ±0.000 | **0.7268** ±0.001 |
+| + digitize eğitim (w=0) | 0.8033 ±0.011 | 0.7993 ±0.010 | 0.7853 ±0.008 |
+| + tutarlılık terimi (w=1) | **0.8272** ±0.011 | **0.8251** ±0.003 | **0.8097** ±0.009 |
+| başlangıç ayrımı | 0.387 | 0.380 | 0.337 |
+| w=0 ayrımı | 0.413 ±0.118 | 0.387 ±0.053 | 0.327 ±0.082 |
+| w=1 ayrımı | **0.575** ±0.040 | **0.580** ±0.025 | **0.540** ±0.052 |
 
 Eşleştirilmiş fark w=1 − w=0, aynı fold ve seed içinde:
 
 | | ΔAUROC | ΔAUPRC | Δayrım |
 |---|---:|---:|---:|
 | clean | +0.0239 (5/6, t p=0.020) | +0.0226 (5/6) | +0.162 (5/6) |
-| **moderate (eşleşmiş)** | **+0.0258 (6/6, t p=0.003, Wilcoxon p=0.031)** | **+0.0215 (6/6, p=0.017)** | **+0.193 (6/6, p=0.001)** |
+| moderate | +0.0258 (6/6, t p=0.003) | +0.0215 (6/6) | +0.193 (6/6, p=0.001) |
+| **hard** | **+0.0244 (6/6, t p=0.013, Wilcoxon p=0.031)** | +0.0253 (5/6, p=0.042) | **+0.213 (6/6, p=0.001)** |
 
-Üç sonuç:
+Dört sonuç:
 
-1. **Kazanç render'a bağlı bir artefakt değil.** Moderate'ta fark clean'dekinden
-   küçük değil, hatta biraz daha büyük ve daha tutarlı (6/6, kol içi sapma
-   ±0.003). Tutarlılık terimi bozuk render'da da skor ayrımını ~0.19 açıyor.
-2. **Moderate render digitizer'ı neredeyse hiç zorlamıyor.** Eğitimsiz v2a aynı
-   kayıtlarda clean-digitize'de 0.7590, moderate-digitize'de 0.7565: fark
-   **0.0025**. Eğitilmiş kollar arasındaki fark da bunun içinde (w=1: −0.002,
-   anlamsız). ±2° dönme ve gürültü 25, Open-ECG-Digitizer'ın zaten telafi
-   ettiği bant. Bu yüzden moderate, "gerçek fotoğrafa yaklaşma" iddiası için
-   zayıf bir test; `hard` (gürültü 50, ±8°, rastgele grid rengi, 150 dpi) asıl
-   sınav ve kuyrukta (`results/omi/sweeps/hard/`).
-3. **Düz digitize eğitimi ayrımı ne açıyor ne kapatıyor.** w=0 her iki
-   rejimde ayrımı yerinde bırakıyor (clean +0.03, moderate +0.006) ama
-   savrularak (±0.118, ±0.053). Ayrımı istikrarlı biçimde açan tek şey
-   tutarlılık terimi. Eşleşmemiş ilk denemede görünen "w=0 ayrımı daraltıyor"
-   bulgusu (bölüm 4) eşleşmiş örneklemde **tekrarlanmadı**; o, negatif
-   örnekleminin bir özelliğiydi, yöntemin değil.
+1. **Kazanç render'a bağlı değil.** Üç rejimde ΔAUROC +0.024/+0.026/+0.024; render
+   bozuldukça küçülmüyor. Ayrımı açma etkisi hard'da en büyük (+0.21).
+2. **Hard gerçekten zor; moderate değil.** Eğitimsiz v2a aynı kayıtlarda clean'e göre
+   moderate'ta −0.0025, hard'da **−0.032** kaybediyor. Digitizer'ın kendi ölçüleri de
+   ancak hard'da bozuluyor (bölüm 2).
+3. **Tutarlılık eğitimi hard'ın cezasının yarısını geri alıyor.** Eğitimsiz clean→hard
+   açığı −0.032; tutarlılık kolunda aynı açık **−0.0175** (p=0.003). Hard'da toplam
+   kazanç +0.083 (0.727 → 0.810), clean'deki +0.068'den büyük: render ne kadar
+   bozuksa head'in geri alacağı o kadar çok.
+4. **Ayrımı yalnız tutarlılık terimi açıyor.** w=0 üç rejimde de ayrımı yerinde
+   bırakıyor (clean +0.03, moderate +0.006, hard −0.01) ama savrularak (±0.05…0.12);
+   w=1 üçünde de +0.16…0.21 açıyor ve savrulmuyor. Eşleşmemiş ilk denemede görünen
+   "w=0 daraltıyor" bulgusu (bölüm 5) hiçbir eşleşmiş rejimde tekrarlanmadı.
 
-## 1. Hücre düzeyinde sonuç (moderate, eşleşmiş)
+## 1. Hücre düzeyinde sonuç (hard)
 
 | fold | seed | ΔAUROC | ΔAUPRC | Δayrım |
 |---|---|---:|---:|---:|
-| 0 | 20260802 | +0.0417 | +0.0397 | +0.204 |
-| 0 | 20260814 | +0.0269 | +0.0331 | +0.241 |
-| 0 | 20260815 | +0.0373 | +0.0318 | +0.260 |
-| 1 | 20260802 | +0.0185 | +0.0078 | +0.208 |
-| 1 | 20260814 | +0.0184 | +0.0108 | +0.103 |
-| 1 | 20260815 | +0.0122 | +0.0059 | +0.143 |
+| 0 | 20260802 | +0.0397 | +0.0464 | +0.162 |
+| 0 | 20260814 | +0.0406 | +0.0453 | +0.187 |
+| 0 | 20260815 | +0.0358 | +0.0453 | +0.121 |
+| 1 | 20260802 | +0.0065 | −0.0036 | +0.319 |
+| 1 | 20260814 | +0.0106 | +0.0075 | +0.227 |
+| 1 | 20260815 | +0.0132 | +0.0109 | +0.264 |
 
-v1'deki örüntü tekrar ediyor: fold 0'da etki büyük (+0.035), fold 1'de küçük
-(+0.016); seed içi sapma küçük. Belirsizliğin kaynağı yine seed değil, veri.
+Örüntü üç rejimde aynı: fold 0'da etki büyük (+0.039), fold 1'de küçük (+0.010);
+seed içi sapma küçük. Belirsizliğin kaynağı seed değil, veri. Fold 1'de AUROC az
+kıpırdarken ayrımın çok açılması (+0.32) dikkat çekici: sıralama zaten iyiyken
+terim güveni geri getiriyor.
 
-## 2. Bu ne anlama geliyor
+## 2. Digitizer rejimlere nasıl tepki verdi?
 
-Tutarlılık eğitimi render bozulmasına dayanıklı; en azından digitizer'ın
-telafi ettiği bozulma bandında. Bu, yöntemin kendisi için iyi haber ve
-"fotoğraf-native OMI" iddiasının bir parçası olarak yayınlanabilir: **aynı
-kayıtlarda, aynı seed'lerle, iki render rejiminde de 6/6 hücre.**
+| Rejim (920 kayıt) | Düzen 3×4+1R | Yanlış düzen | Einthoven medyan / p10 | Layout cost medyan / p90 | Algılanan lead medyan |
+|---|---:|---:|---:|---:|---:|
+| clean | 920 | 0 | 0.996 / 0.950 | 0.049 / 0.237 | 11 |
+| moderate | 917 | 3 | 0.994 / 0.933 | 0.067 / 0.306 | 11 |
+| **hard** | 845 | **75** | 0.989 / **0.563** | **0.133 / 0.521** | **10** |
 
-Ama Aşama B'nin asıl sorusu olan "gerçek telefon fotoğrafında ne olur?" hâlâ
-açık. Moderate o soruyu sormuyor. Hard soracak; hard'da digitizer'ın kendi
-hatası devreye girecek ve orada head'in tek başına ne kadar toparlayabileceği
-ilk kez ölçülecek. Temiz sinyaldeki ~0.91'e karşı clean/moderate'ta kapanan
-açık kabaca %45; gerisi digitizer tarafında.
+Moderate, Open-ECG-Digitizer'ın zaten telafi ettiği bant. Hard'da 75 kayıtta
+(%8) düzen yanlış çözülüyor (çoğu 3×4+3R), Einthoven'in alt onda biri 0.56'ya
+düşüyor ve layout cost 2.7 katına çıkıyor. Bu, gerçek telefon fotoğrafına
+benzeyen ilk rejim. Sıfır digitizasyon başarısızlığı: 920/920.
 
-## 3. Kısıtlar
+## 3. Yöntem notu: hard korpus dewarp yeniden denemesi KAPALI derlendi
 
-- **Tek render seed'i.** Her görüntü ECG-Image-Kit'e aynı `-se 20260802` ile
-  verildi; dönme açısı ve gürültü çekilişi görüntüler arasında çeşitlenmemiş
-  olabilir. Korpus çeşitliliği açısından bir kısıt; yönü değiştirmesi
-  beklenmiyor ama hard için farklı seed'lerle bir kontrol yapılmalı.
+Digitizer, ilk geçişi zayıf bulduğu görüntülerde (layout cost > 1.2 ya da
+algılanan lead < 10) bir dewarping yeniden denemesi çalıştırır. Hard render'da bu
+yol patolojik: yalıtılmış ölçümde altı kayıt (17781, 00568, 12337, 16183, 14847,
+07803) 19 saniyede swap'ı 13-14 GB büyüttü, `/usr/bin/time -l` tek kayıt için
+**99.9 GB** bellek izi gösterdi ve macOS süreci traceback'siz öldürdü. İşlenen
+ilk ~48 kayıtta 6 patlama, yani **~%12**. Aynı kayıtlar `enable_dewarping_retry=False`
+ile 8 saniyede, sıfır swap ile bitiyor.
+
+İki seçenek vardı: patlayan kayıtları atlamak (korpus "ilk geçişi iyi olan"
+kayıtlara kayar, seçilim yanlılığı) ya da yeniden denemeyi kapatmak (920/920
+geçer, %12'lik alt küme yalnız ilk geçiş sonucunu alır, hard biraz daha zorlaşır).
+İkincisi seçildi. Karşılaştırılabilirlik notu: clean korpusta bu yeniden deneme
+kayıtların **%1.1**'inde, moderate'ta **%3.4**'ünde tetiklenmiş olabilir (aynı
+eşik koşulları); hard'da hiç çalışmadı. Yani hard, öteki iki rejime göre hafifçe
+handikaplı; bu, iddianın aleyhine değil lehine bir kısıt.
+
+Diğer inşa detayları: normal bir kaydın bellek izi bile ~17.5 GB (RSS 8.6 GB,
+gerisi Metal/MPS), 24 GB makinede sınırda. Bu yüzden korpus, önce digitizer
+yüklü olmadan render geçişi (0.3 GB), sonra her 8 kayıtta bir süreç yeniden
+başlatma ve bekçi (kayıt > 60 s ya da swap +12 GB → kill, kayıt `poisoned.txt`'e)
+ile derlendi. Retry kapalıyken bekçi hiç tetiklenmedi. 920 kayıt 94 dakika.
+Tek render seed'i (`-se 20260802`) tüm görüntülerde; dönme/gürültü çekilişi
+görüntüler arasında çeşitlenmemiş olabilir.
+
+## 4. Kısıtlar
+
 - **İki fold.** Altı hücre bağımsız değil, fold düzeyinde n=2; p değerleri
-  iyimser. Yayında "2 fold × 3 seed, eşleştirilmiş, aynı kayıtlar" yazılmalı.
+  iyimser. Yayında "2 fold × 3 seed, eşleştirilmiş, aynı kayıtlar, üç rejim" yazılmalı.
+- **Hard hâlâ sentetik.** Gerçek telefon fotoğrafı değil; ECG-Image-Kit'in
+  bozulmaları. Layout hataları ve Einthoven düşüşü gerçek fotoğrafa yaklaştığını
+  gösteriyor ama eşitlemiyor.
+- **Hard'da dewarp retry kapalı** (bölüm 3).
 - **İşletim noktası raporlanmadı.** Crossfit eşik duyarlılıkları fold'lar arası
-  çok oynak (v1'deki gibi); AUROC/AUPRC/ayrım üzerinden okunmalı.
-- Sayılar `phaseb-threshold-and-quality-v1.md`'deki 460'lık pilot alt
-  kümesiyle doğrudan karşılaştırılamaz.
+  oynak; AUROC/AUPRC/ayrım üzerinden okunmalı.
+- Sayılar `phaseb-threshold-and-quality-v1.md`'deki 460'lık pilot alt kümesiyle
+  doğrudan karşılaştırılamaz.
 
-## 4. İlk deneme: eşleşmemiş korpus ve ondan çıkan ders
+## 5. İlk deneme: eşleşmemiş moderate korpus ve ondan çıkan ders
 
-Moderate korpusu ilk kez iki fold'u birlikte örnekleyerek kurdum; clean
-korpus fold fold kurulmuştu. Sonuç: 460 pozitif aynı, negatiflerin çoğu farklı
-(920 kaydın 484'ü ortak; fold büyüklükleri 480/440). O örneklemde:
+Moderate korpusu ilk kez iki fold'u birlikte örnekleyerek kurdum; clean korpus
+fold fold kurulmuştu. 460 pozitif aynı, negatiflerin çoğu farklıydı (920'nin 484'ü
+ortak). O örneklemde başlangıç 0.7537, w=0 0.7773 (ayrım 0.367 → **0.286**),
+w=1 0.7942; ΔAUROC +0.0169 (6/6). Yön aynıydı ama seviyeler ~0.03 düşük ve w=0
+ayrımı daraltıyordu; eşleşmiş korpusta ikisi de kayboldu. Ders: rejimler arası
+karşılaştırma **aynı kayıtlar** üzerinde yapılmalı; `--records-from` bunun için
+var. Eşleşmemiş sonuçlar `results/omi/sweeps/moderate/` altında duruyor.
 
-| Kol | AUROC | ayrım |
-|---|---:|---:|
-| başlangıç | 0.7537 | 0.367 |
-| w=0 | 0.7773 | **0.286** |
-| w=1 | 0.7942 | 0.484 |
+## 6. Bu ne anlama geliyor
 
-Eşleştirilmiş ΔAUROC +0.0169 (6/6, p=0.012), Δayrım +0.197 (6/6). Yön aynı,
-ama iki şey farklıydı: mutlak seviyeler ~0.03 düşük ve w=0 ayrımı daraltıyordu.
-Eşleşmiş korpusta ikisi de kayboldu. Yani negatif örneklemi hem seviyeyi hem
-de "w=0 ne yapar" sorusunun cevabını değiştirebiliyor; tutarlılık teriminin
-kazancı ise değişmiyor. Ders: rejimler arası karşılaştırma **aynı kayıtlar**
-üzerinde yapılmalı, `--records-from` bunun için var. Eşleşmemiş sonuçlar
-`results/omi/sweeps/moderate/` altında duruyor.
-
-## 5. Sıradaki
-
-1. Hard eşleşmiş sweep (zincir 4; ilk derleme ~15 kayıtta sessizce öldü,
-   yeniden başlatıldı).
-2. Hard için farklı render seed'leriyle çeşitlilik kontrolü.
-3. Etiketsiz PTB-XL ölçeklemesi: `phaseb-unlabelled-scale-v1.md`.
+"Fotoğraf-native OMI" iddiasının tutarlılık ayağı artık üç rejimde, aynı
+kayıtlarda, 18/18 hücrede destekli ve etki büyüklüğü render'dan bağımsız.
+Hard'da kalan açık (w=1 0.810 vs temiz sinyal ~0.91) hâlâ büyük ve iki parçalı:
+digitizer'ın düzen/Einthoven hataları (bölüm 2) ve head'in geri alamadığı kısım.
+Sıradaki müdahale ya digitizer tarafında (düzen tanıma, dewarp yolunun onarımı)
+ya da head'e görüntü kalitesini girdi olarak vermekte; head'i tek başına daha
+fazla eğitmekte değil (24 epoch tekrarı etkisizdi, bkz. `phaseb-unlabelled-scale-v1.md`).
 
 ## Tekrar üretmek için
 
 ```bash
-python scripts/build_digitised_corpus.py --folds 0 1 --difficulty moderate \
-  --records-from data/processed/omi-corpus/clean/manifest.csv
-# manifest_matched.csv = moderate satırlarının clean kayıt kümesiyle kesişimi
+# görüntüler (digitizer yüklü değil), sonra 8'lik turlarla digitize
+python scripts/build_digitised_corpus.py --folds 0 1 --difficulty hard \
+  --records-from data/processed/omi-corpus/clean/manifest.csv --render-only
+python scripts/build_digitised_corpus.py --folds 0 1 --difficulty hard \
+  --records-from data/processed/omi-corpus/clean/manifest.csv --stop-after 8 --no-dewarping-retry
+# manifest_matched.csv = hard satırlarının clean kayıt kümesiyle kesişimi
 scripts/run_consistency_sweep.sh \
-  data/processed/omi-corpus/moderate/manifest_matched.csv results/omi/sweeps/moderate_matched
-python scripts/summarise_consistency_sweep.py results/omi/sweeps/moderate_matched
-python scripts/summarise_consistency_sweep.py results/omi/sweeps/moderate_matched \
+  data/processed/omi-corpus/hard/manifest_matched.csv results/omi/sweeps/hard
+python scripts/summarise_consistency_sweep.py results/omi/sweeps/hard
+python scripts/summarise_consistency_sweep.py results/omi/sweeps/hard \
   --reference-dir results/omi/sweeps/clean --reference 1.0 --arm 1.0
 ```
 
-Korpus derlemesi ~7 s/kayıt (M4, makine boşken; eşzamanlı ağır iş swap'a
-sokup 100 s/kayıta düşürüyor). 12 koşuluk sweep ~8 dk.
+Render geçişi 920 görüntü ~23 dk; digitize ~6 s/kayıt + süreç başına ~20 s
+yükleme; 12 koşuluk sweep ~8 dk. Korpus derlerken eşzamanlı ağır iş koşma.
