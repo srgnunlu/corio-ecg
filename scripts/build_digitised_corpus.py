@@ -112,6 +112,14 @@ def main() -> None:
         "digitiser. Rendering next to a digitiser that holds ~15 GB between "
         "records is what tips the hard build into an OS kill",
     )
+    parser.add_argument(
+        "--no-dewarping-retry",
+        action="store_true",
+        help="digitise with the dewarping retry disabled. On hard renders that "
+        "retry path reaches a ~100 GB memory footprint on about one record in "
+        "eight and gets the process killed; with it off the same records finish "
+        "in 8 s. Clean/moderate corpora triggered the retry on 1-3%% of records",
+    )
     parser.add_argument("--seed", type=int, default=20260802)
     args = parser.parse_args()
 
@@ -167,7 +175,11 @@ def main() -> None:
 
     image_dir = args.work_dir / "images" / args.difficulty
     image_dir.mkdir(parents=True, exist_ok=True)
-    digitiser = None if args.render_only else ECGDigitiser()
+    digitiser = (
+        None
+        if args.render_only
+        else ECGDigitiser(enable_dewarping_retry=not args.no_dewarping_retry)
+    )
 
     rows: list[dict] = []
     failures: list[str] = []
