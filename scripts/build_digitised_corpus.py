@@ -95,6 +95,14 @@ def main() -> None:
         help="take exactly the ecg_row_record values of another corpus manifest "
         "instead of sampling, so a second difficulty covers the same recordings",
     )
+    parser.add_argument(
+        "--stop-after",
+        type=int,
+        default=None,
+        help="exit cleanly after building this many new records. The digitiser's "
+        "footprint grows across records and the hard-render build gets killed by "
+        "the OS after 10-20; a driver loop restarting the process avoids that",
+    )
     parser.add_argument("--seed", type=int, default=20260802)
     args = parser.parse_args()
 
@@ -174,11 +182,16 @@ def main() -> None:
             }
         )
 
-        # Flush every 25 records so a crash costs minutes, not hours.
-        if len(rows) % 25 == 0:
+        # Flush every 5 records: the hard-render build gets SIGKILLed by the OS
+        # every few minutes (Metal memory, invisible to RSS), and resuming only
+        # works from what reached the manifest.
+        if len(rows) % 5 == 0:
             pd.concat([manifest, pd.DataFrame(rows, columns=MANIFEST_COLUMNS)]).to_csv(
                 manifest_path, index=False
             )
+        if args.stop_after is not None and len(rows) >= args.stop_after:
+            print(f"\nStopping after {len(rows)} new records as requested")
+            break
 
     manifest = pd.concat([manifest, pd.DataFrame(rows, columns=MANIFEST_COLUMNS)])
     manifest.to_csv(manifest_path, index=False)
