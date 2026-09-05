@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import gc
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import torch
 from tqdm import tqdm
 
 from src.omi.dataset import load_labels, load_raw_signal
@@ -103,6 +105,13 @@ def main() -> None:
         "footprint grows across records and the hard-render build gets killed by "
         "the OS after 10-20; a driver loop restarting the process avoids that",
     )
+    parser.add_argument(
+        "--render-only",
+        action="store_true",
+        help="render the missing paper images and exit without loading the "
+        "digitiser. Rendering next to a digitiser that holds ~15 GB between "
+        "records is what tips the hard build into an OS kill",
+    )
     parser.add_argument("--seed", type=int, default=20260802)
     args = parser.parse_args()
 
@@ -158,15 +167,17 @@ def main() -> None:
 
     image_dir = args.work_dir / "images" / args.difficulty
     image_dir.mkdir(parents=True, exist_ok=True)
-    digitiser = ECGDigitiser()
+    digitiser = None if args.render_only else ECGDigitiser()
 
     rows: list[dict] = []
     failures: list[str] = []
+    rendered = 0
     for record in tqdm(list(pending.itertuples(index=False)), desc="digitise"):
         stem = record.ecg_row_record.removesuffix(".dat")
         image_path = image_dir / f"{stem}.png"
         signal_path = signal_dir / f"{stem}.npy"
-        in_flight_marker.write_text(record.ecg_row_record)
+        if digitiser is not None:
+            in_flight_marker.write_text(record.ecg_row_record)
 
         try:
             if not image_path.exists():
@@ -176,12 +187,22 @@ def main() -> None:
                     difficulty=DifficultyLevel(args.difficulty),
                     seed=args.seed,
                 )
+                rendered += 1
+            if digitiser is None:
+                continue
             digitised = digitiser.digitize(str(image_path))
             # Verify the clean side loads too, so no pair is half-usable later.
             load_raw_signal(args.data_dir, record.ecg_row_record)
         except Exception as error:  # noqa: BLE001 — one bad record must not stop a 5h build
             failures.append(f"{stem}: {type(error).__name__}: {error}")
             continue
+        finally:
+            # One record peaks at ~17 GB of footprint, most of it on Metal.
+            # Without this the MPS caching allocator keeps it resident between
+            # records and the next render subprocess tips the machine over.
+            if torch.backends.mps.is_available():
+                torch.mps.empty_cache()
+            gc.collect()
 
         # float16 halves the corpus on disk; the digitiser's own precision is
         # far coarser than that, so nothing measurable is lost.
@@ -213,6 +234,12 @@ def main() -> None:
         if args.stop_after is not None and len(rows) >= args.stop_after:
             print(f"\nStopping after {len(rows)} new records as requested")
             break
+
+    if args.render_only:
+        print(f"\nRendered {rendered} new images into {image_dir}")
+        if failures:
+            print(f"[WARN] {len(failures)} renders failed: {failures[:5]}")
+        return
 
     manifest = pd.concat([manifest, pd.DataFrame(rows, columns=MANIFEST_COLUMNS)])
     manifest.to_csv(manifest_path, index=False)
