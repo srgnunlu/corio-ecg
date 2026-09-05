@@ -127,10 +127,30 @@ def main() -> None:
     manifest = _load_manifest(manifest_path)
     already_done = set(manifest.ecg_row_record)
 
-    pending = subset[~subset.ecg_row_record.isin(already_done)]
+    # A record whose digitisation gets the process SIGKILLed (one hard-render
+    # image drove the dewarping retry to a 100 GB footprint) can never be
+    # caught in-process. The marker names the record in flight; finding it on
+    # start-up means the previous process died on it, so it is written down
+    # and skipped rather than retried forever.
+    in_flight_marker = corpus_root / "in_flight.txt"
+    poisoned_path = corpus_root / "poisoned.txt"
+    if in_flight_marker.exists():
+        killed = in_flight_marker.read_text().strip()
+        if killed and killed not in already_done:
+            with open(poisoned_path, "a") as handle:
+                handle.write(f"{killed}\n")
+            print(f"[WARN] previous process died on {killed}; recorded in {poisoned_path}")
+        in_flight_marker.unlink()
+    poisoned = (
+        set(poisoned_path.read_text().split()) if poisoned_path.exists() else set()
+    )
+
+    pending = subset[
+        ~subset.ecg_row_record.isin(already_done) & ~subset.ecg_row_record.isin(poisoned)
+    ]
     print(
         f"Corpus {corpus_root}: {len(subset)} requested, {len(already_done)} cached, "
-        f"{len(pending)} to build ({int(subset.OMI.sum())} OMI)"
+        f"{len(poisoned)} poisoned, {len(pending)} to build ({int(subset.OMI.sum())} OMI)"
     )
     if pending.empty:
         print("Nothing to do.")
@@ -146,6 +166,7 @@ def main() -> None:
         stem = record.ecg_row_record.removesuffix(".dat")
         image_path = image_dir / f"{stem}.png"
         signal_path = signal_dir / f"{stem}.npy"
+        in_flight_marker.write_text(record.ecg_row_record)
 
         try:
             if not image_path.exists():
@@ -195,6 +216,7 @@ def main() -> None:
 
     manifest = pd.concat([manifest, pd.DataFrame(rows, columns=MANIFEST_COLUMNS)])
     manifest.to_csv(manifest_path, index=False)
+    in_flight_marker.unlink(missing_ok=True)
 
     if failures:
         print(f"\n[WARN] {len(failures)} records failed:")
